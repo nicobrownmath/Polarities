@@ -43,7 +43,6 @@ namespace Polarities
 			}
 
 			IL.Terraria.GameContent.Drawing.TileDrawing.DrawMultiTileVines += TileDrawing_DrawMultiTileVines;
-			//IL_DrawMultiTileVines += TileDrawing_DrawMultiTileVines;
 		}
 
 		public static void Unload()
@@ -58,17 +57,7 @@ namespace Polarities
 			_AI_007_TownEntities_TeleportToHome = null;
 			_AI_007_TownEntities_GetWalkPrediction = null;
 			_AI_007_TryForcingSitting = null;
-
-			//IL_DrawMultiTileVines -= TileDrawing_DrawMultiTileVines;
 		}
-
-		//this does not actually need a manipulator
-		//left in for future reference on how they work in the event that I ever need one
-		/*private static event ILContext.Manipulator IL_DrawMultiTileVines
-		{
-			add => HookEndpointManager.Modify(typeof(Terraria.GameContent.Drawing.TileDrawing).GetMethod("DrawMultiTileVines", BindingFlags.NonPublic | BindingFlags.Instance), value);
-			remove => HookEndpointManager.Unmodify(typeof(Terraria.GameContent.Drawing.TileDrawing).GetMethod("DrawMultiTileVines", BindingFlags.NonPublic | BindingFlags.Instance), value);
-		}*/
 
 		private static void TileDrawing_DrawMultiTileVines(ILContext il)
 		{

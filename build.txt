@@ -1,6 +1,7 @@
-displayName = Polarities
+﻿displayName = Polarities
 author = turingcomplete30
 version = 0.11
-homepage = https://forums.terraria.org/index.php?threads/the-polarities-mod.88854/
-includeSource = true
+homepage = https://github.com/nicobrownmath/Polarities/
+includeSource = false
+includePDB = true
 buildIgnore = *.csproj, *.user, *.sln, *.gitignore, *.editorconfig, *.DS_Store, obj\*, bin\*, .vs\*

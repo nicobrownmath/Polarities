@@ -167,6 +167,8 @@ namespace Polarities.NPCs.StarConstruct
 			{
 				case 0:
 					//default running behavior with forced jumps for the player to go under
+					//TODO: Balance jump height
+					//TODO: Burst of dusts on jumping?
 					RunAbout(VelocityMultiplier, jumpSpeed: Main.getGoodWorld ? 12 : 15, forceJump: true);
 
 					NPC.ai[1]++;
@@ -326,6 +328,9 @@ namespace Polarities.NPCs.StarConstruct
 								NPC.ai[1] = 120;
 
 								NPC.velocity = new Vector2(player.Center.X > NPC.Center.X ? VelocityMultiplier : -VelocityMultiplier, -20);
+
+								//dusts on jumping
+								JumpDusts();
 							}
 							else
 							{
@@ -358,26 +363,8 @@ namespace Polarities.NPCs.StarConstruct
 
 							NPC.rotation += NPC.velocity.X > 0 ? 0.25f : -0.25f;
 
+							FallingConstructDusts();
 							//falling construct dusts
-							Vector2 value34 = new Vector2((float)Main.screenWidth, (float)Main.screenHeight);
-							for (int i = 0; i < 4; i++)
-							{
-								if (NPC.Hitbox.Intersects(Utils.CenteredRectangle(Main.screenPosition + value34 / 2f, value34 + new Vector2(400f))) && Main.rand.NextBool(6))
-								{
-									int[] array6 = new int[4] { 16, 17, 17, 17 };
-									int num855 = Utils.SelectRandom(Main.rand, array6);
-									if (Main.tenthAnniversaryWorld)
-									{
-										int[] array7 = new int[4] { 16, 16, 16, 17 };
-										num855 = Utils.SelectRandom(Main.rand, array7);
-									}
-									Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center - new Vector2(11) + new Vector2(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f)) * (NPC.Size - new Vector2(22)) / 2f, NPC.velocity * 0.2f, num855);
-								}
-								if (Main.rand.NextBool(20) || (Main.tenthAnniversaryWorld && Main.rand.NextBool(15)))
-								{
-									Dust.NewDust(NPC.position, NPC.width, NPC.height, 58, NPC.velocity.X * 0.5f, NPC.velocity.Y * 0.5f, 150, default(Color), 1.2f);
-								}
-							}
 
 							if (NPC.velocity.Y == 0)
 							{
@@ -419,6 +406,9 @@ namespace Polarities.NPCs.StarConstruct
 								NPC.ai[1] = 120;
 
 								NPC.velocity = new Vector2(player.Center.X > NPC.Center.X ? VelocityMultiplier : -VelocityMultiplier, -20);
+
+								//dusts on jumping
+								JumpDusts();
 							}
 							else
 							{
@@ -524,6 +514,9 @@ namespace Polarities.NPCs.StarConstruct
 							NPC.ai[1] = 120;
 
 							NPC.velocity.Y = -15;
+
+							//dusts on jumping
+							JumpDusts();
 						}
 						else
 						{
@@ -535,6 +528,9 @@ namespace Polarities.NPCs.StarConstruct
 						if (NPC.ai[1] == 120)
 						{
 							NPC.velocity.Y = -15;
+
+							//dusts on jumping
+							JumpDusts();
 						}
 
 						if (NPC.ai[1] == 170)
@@ -589,6 +585,9 @@ namespace Polarities.NPCs.StarConstruct
 							NPC.ai[1] = 120;
 
 							NPC.velocity.Y = -17;
+
+							//dusts on jumping
+							JumpDusts();
 						}
 						else
 						{
@@ -839,6 +838,9 @@ namespace Polarities.NPCs.StarConstruct
 							{
 								NPC.velocity.X = Main.player[NPC.target].Center.X > NPC.Center.X ? speed : -speed;
 							}
+
+							//dusts on jumping
+							JumpDusts();
 						}
 					}
 				}
@@ -910,6 +912,53 @@ namespace Polarities.NPCs.StarConstruct
 
 					int[] array18 = new int[8] { 16, 17, 17, 17, 17, 17, 17, 17 };
 					Gore.NewGore(NPC.GetSource_FromAI(), val29, val30, Utils.SelectRandom(Main.rand, array18));
+				}
+			}
+		}
+
+		private void FallingConstructDusts()
+		{
+			Vector2 value34 = new Vector2((float)Main.screenWidth, (float)Main.screenHeight);
+			for (int i = 0; i < 4; i++)
+			{
+				if (NPC.Hitbox.Intersects(Utils.CenteredRectangle(Main.screenPosition + value34 / 2f, value34 + new Vector2(400f))) && Main.rand.NextBool(6))
+				{
+					int[] array6 = new int[4] { 16, 17, 17, 17 };
+					int num855 = Utils.SelectRandom(Main.rand, array6);
+					if (Main.tenthAnniversaryWorld)
+					{
+						int[] array7 = new int[4] { 16, 16, 16, 17 };
+						num855 = Utils.SelectRandom(Main.rand, array7);
+					}
+					Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center - new Vector2(11) + new Vector2(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f)) * (NPC.Size - new Vector2(22)) / 2f, NPC.velocity * 0.2f, num855);
+				}
+				if (Main.rand.NextBool(20) || (Main.tenthAnniversaryWorld && Main.rand.NextBool(15)))
+				{
+					Dust.NewDust(NPC.position, NPC.width, NPC.height, 58, NPC.velocity.X * 0.5f, NPC.velocity.Y * 0.5f, 150, default(Color), 1.2f);
+				}
+			}
+		}
+
+		private void JumpDusts()
+        {
+			Vector2 value34 = new Vector2((float)Main.screenWidth, (float)Main.screenHeight);
+			for (int i = 0; i < 64; i++)
+			{
+				if (NPC.Hitbox.Intersects(Utils.CenteredRectangle(Main.screenPosition + value34 / 2f, value34 + new Vector2(400f))) && Main.rand.NextBool(6))
+				{
+					int[] array6 = new int[4] { 16, 17, 17, 17 };
+					int num855 = Utils.SelectRandom(Main.rand, array6);
+					if (Main.tenthAnniversaryWorld)
+					{
+						int[] array7 = new int[4] { 16, 16, 16, 17 };
+						num855 = Utils.SelectRandom(Main.rand, array7);
+					}
+					Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center - new Vector2(11) + new Vector2(Main.rand.NextFloat(-1f, 1f), 1f) * (NPC.Size - new Vector2(22)) / 2f, NPC.velocity * Main.rand.NextFloat(0.1f, 0.5f), num855);
+				}
+				if (Main.rand.NextBool(20) || (Main.tenthAnniversaryWorld && Main.rand.NextBool(15)))
+				{
+					float speedMult = Main.rand.NextFloat(0f, 0.9f);
+					Dust.NewDust(NPC.BottomLeft, NPC.width, 0, DustID.Enchanted_Pink, NPC.velocity.X * speedMult, NPC.velocity.Y * speedMult, 150, default(Color), 1.2f);
 				}
 			}
 		}
