@@ -1,0 +1,81 @@
+﻿using Terraria;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
+using Terraria.ID;
+using System.Collections.Generic;
+using Terraria.ObjectData;
+using Terraria.DataStructures;
+using Terraria.Enums;
+using Microsoft.Xna.Framework;
+using Polarities.NPCs;
+using Terraria.ModLoader.IO;
+using Terraria.Localization;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace Polarities.Items.Consumables.Crates
+{
+	public class CrateTile : ModTile
+	{
+		public override void SetStaticDefaults()
+		{
+			Main.tileLighted[Type] = true;
+			Main.tileSolidTop[Type] = true;
+			Main.tileTable[Type] = true;
+			Main.tileFrameImportant[Type] = true;
+			Main.tileLavaDeath[Type] = true;
+
+			TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
+			TileObjectData.newTile.StyleHorizontal = true;
+			TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
+			TileObjectData.addTile(Type);
+			AddMapEntry(new Color(160, 120, 92), CreateMapEntryName());
+			AnimationFrameHeight = 56;
+		}
+
+		public override void KillMultiTile(int i, int j, int frameX, int frameY)
+		{
+			int style = frameX / 36;
+			int itemType = CrateBase.crateIndexToItemType[style];
+			if (itemType != 0)
+			{
+				Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 32, itemType);
+			}
+		}
+	}
+
+	public abstract class CrateBase : ModItem
+	{
+		public abstract int CrateIndex { get; }
+
+		public static Dictionary<int, int> crateIndexToItemType = new Dictionary<int, int>();
+
+		public override void Unload()
+		{
+			crateIndexToItemType = null;
+		}
+
+		public override void SetStaticDefaults()
+		{
+			crateIndexToItemType.Add(CrateIndex, Type);
+
+			this.SetResearch(1);
+		}
+
+		public override void SetDefaults()
+		{
+			Item.DefaultToPlaceableTile(TileType<CrateTile>(), CrateIndex);
+
+			Item.width = 34;
+			Item.height = 34;
+			Item.maxStack = 99;
+			Item.value = 10000;
+			Item.rare = ItemRarityID.Green;
+		}
+
+        public override bool CanRightClick()
+        {
+			return true;
+        }
+    }
+}
+
