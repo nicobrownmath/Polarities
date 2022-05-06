@@ -1,0 +1,147 @@
+﻿A content mod which aims to add mechanically interesting bosses, enemies, items, and more! Currently adds ten new bosses, several new enemies, a variety of weapons and accessories, some tiles and armor sets, two new mini-biomes, a new subworld, and a new town NPC.
+
+Note that the music is contained in a separate music mod.
+
+IMPORTANT NOTE: THE MOD DOES NOT WORK IN MULTIPLAYER.
+
+Coders- turingcomplete30
+Wiki- bubbyboytoo
+Spriters- ElectroManiac, niker, triangle, Scratch Lunin, Squartron
+Bestiary- Danku (Jerry)
+Former team members- junk boy
+With sprites from- discord_account, yogu, Vega_1, Evolution, UnworthyPie, warrenmark_art, Masked Luigi, Darkpuppey, DeJuiceTD, Jimbo Animations, Le Supreme Slimelad, nalyddd, Hugekraken, Heart Plus Up!, MountainyBear49, Rocketlauncher269, Rednbloo, TRYAGAIN211 //IlluminatiJoe (drill sprites) //Danmaskino (flywheel + stormcore)
+
+v0.11 Changelog
+    The mod is now in 1.4
+    Warhammers now have a new swing animation and cause enemies to turn grey while affected by them
+    Warhammer tooltips now take into account bonuses to warhammer stats
+    Atlatls no longer actually spawn their projectile until it is fired
+    Rattlestaff and brood staff can now use any wood type, and ratlatl can now use any wooden atlatl in its recipe
+    Brood staff minions now take up half a sentry slot again
+    Rebalanced the sell values of several items
+    Adjusted some loot tables
+    Salt and limestone now have unique dusts, and falling salt no longer uses the item sprite
+    Several enemies now draw properly with tint-inducing debuffs such as ichor
+    Stellar remote is now non-consumable and generates in sky chests
+    Dormant construct now spawns using the same system as normal enemies
+    Decreased the recovery period after star construct's helicopter attack
+    Updated the visuals of star construct, some of its weapons, and stellated slimes
+    Strange clock now speeds up time faster
+    Buffed sunplate armor's dash
+    Cloud and stormcloud cichlids are now affected by wind
+    Shaking gem trees can now spawn gems, gemflies, gem squirrels, and bombs in for the worthy
+    Gemflies spawned from gem trees cannot spawn gigabat, and those which can now have visual and audio cues
+    Gigabat and sun pixie now have death animations
+    Crits inflicted against the player due to pinpointed now function more like player-inflicted crits, and the damage of swarm bats has been increased to compensate for this
+    Ghostwriter can now be damaged by poltergeists and dungeon spirits
+    Strange obituary is now bought in graveyards
+    Using a book while your books are maxed out will now cancel the first book you used and apply the new one rather than doing nothing, book buffs now remain after the player is killed, and using a book while you already have its associated buff will now clear its buff
+    Strange barometer can now be right clicked to toggle the wind
+    Salt and limestone furniture now require the same crafting stations as granite furniture
+    Stargel amulet now continuously varies its bonuses depending on the time of day
+    Great stellated slime now shows up on the lifeform analyzer
+    Proteolysis and blazing ire crits now attempt to spawn their projectiles away from tiles, and they can now pass through tiles for a short time after spawning
+    Reworked the desolate winds
+    All orbs which target enemies now at least partially target the cursor
+    Salt caves now only apply desiccation while in front of their walls
+    The limestone caves' stalactites are now expert-mode exclusive
+    Salt and limestone caves are now significantly larger, and salt caves can have waterfalls from the ceiling
+    Brood staff sentries now take up half a slot again
+    Brine dwellers now no longer show their healthbars while hidden and cannot pick up coins
+    Glow worms can no longer spawn too close to the player
+    Fixed the rhyolite shield not actually reducing damage
+    The alkali spirits spawned by alkalabominations now start with some horizontal velocity
+    Decreased the vertical homing of projectiles from the alkaline orb and eyeruption
+    The mod's worms are now single enemies with multiple hitboxes rather than several distinct enemies with a shared healthbar
+    Hooks from The Grape's Wrath will now attempt to target nearby enemies
+    Nerfed The Call Of The Moon Lord
+    Projectiles from the flailing kraken now bounce off tiles
+    Projectiles from the alkaline orb now cannot pass through tiles when below the player
+    Modified the way rapture enemies spawn
+    Most rapture enemies now flee rather than instantly disappearing when the event ends
+    The mod's slimes are now affected by the royal gel and can drop the slime staff
+    Bat slimes now inflict feral bite
+    Renamed the tentacle club to tentaclub
+    Changed rapture enemy spawning
+    Aequoreans now have a chance to teleport to their light clones
+    Resprited the starburst scepter
+    Reworked the luminous slime staff
+    Adjusted Sun Pixie's deathray attacks, and it now automatically recreates its arena if you leave it early
+    Flarecaller beams now have an enlarged hitbox at the point of impact to better match their visuals
+    Solar scarab minions now fall faster in their inactive state
+    Laser cutter now loses damage for each enemy hit in a swing, but no longer has a hit cooldown
+    Blazing ire now summons secondary javelins on normal hits, but the chance is still boosted on crits
+
+Thing I should do:
+  Replace using AIType to control platform falling with CanFallThroughPlatforms
+  Move more boss drops to being craftable
+  Disable mod in MP
+  Make bestiary entries for (most) normal enemies face left
+  Ensure non-buff critters can be hit by enemies
+  Give worms and other drawcode-intensive enemies custom bestiary portraits
+  Make salt, limestone, and fractal torches work with the torch god's favor
+  Make salt suffocate the player
+  Salt fishing outposts, limestone fortresses?
+  Trapped versions of chests
+  I should make weapons generally not go through walls as much
+  Make warhammers able to hit multiple enemies per swing
+  Fractal and nilmanifold menu styles (unlockable? it should notify you they're unlocked if that's the case (also change the transition screen to be based on nil geometry because it's cool))
+  Nonconsumable boss summons (including making torch god's favor summon torch god if already used and conditions are valid)
+    For the less conventional summons: Gemfly/lacewing statues?
+  Make stylist? and mechanic? like ghostwriter and dryad not, give happiness dialogue, fix princess' happiness dialogue for ghostwriter
+  Polarities-related emotes for NPCs to use:
+    Boss emotes: Used after the defeat of their respective boss
+      Additionally, sun pixie/esophage emotes should show up during their respective events
+    Ghostwriter emote
+    Fractal dimension emote: If the player is in the fractal dimension, probably mostly used by the regular NPC
+    Blood moon and eclipse emotes should be more common in between the defeats of their respective proto-bosses and bosses
+    Cichlid emote in rain
+    Uncommon snek emote
+  Ghostwriter should use the gravestone emote and mechanic emote, and boss emotes (when available) more often
+  Furniture smart interaction
+  Make the right click effects of autoswing warhammers also autoswing
+  Make stellated/great stellated slimes spawn (at all? more frequently?) during meteor showers
+  Boss titles maybe? (Would be a config option able to be turned off)
+  Maybe make prismatic lacewings spawn after sun pixie instead of plant?
+
+Planned FTW changes:
+  Long cloudfish
+  Tiny gigabat with big bats?
+  Giant rift denizen? Maybe w/ less attack delay? Possibly inflicts more fractalization?
+  Red giant sun pixie, spreads the hallow
+  Tiny esophage? Maybe w/ less attack delay or more legs, also spreads the corruption/crimson
+  Sentinel w/ smaller arena
+  Total eclipxie (eye is bigger)?
+  Hemorrphage?
+  Closer polarities? (Polarities but both do both types of attacks?)
+
+Consistency concerns for special seeds:
+  Drunk world:
+    Salt and limestone swap generation styles (done!)
+    Lava ocean generates in the middle of the underworld (this actually probably makes it easier to deal with than vanilla), convective spawns and mantellar gen also occur here
+    Fractus are much more common and can grow larger
+    We don't need to add an extra biome chest because it already exists
+  Not the bees:
+    Salt and limestone are replaced with honey above lava layer and crispy honey below lava layer (done!)
+    Fractal dimension is painted yellow
+  For the worthy:
+    Consider increasing projectile damage (make this a config option) (also probaly fix journey mode ftw damage/health (make the health fix a config option?))
+    Salt and limestone caves are more common
+    Stellar remotes must generate in locked gold cloud chests instead of skyware chests
+    Lava lake generation must have ash block lava pocket speckling
+    Sentinel caves are probably smaller
+    You probably acquire fractalization more quickly
+  Celebrationmk10:
+    Ghostwriter spawns immediately on world start
+    Fractal dimension is probably painted with rainbow fractals
+    Fractus are more common
+    Most bosses are smaller than normal
+  The Constant:
+    Fractus will hurt you
+
+Possible BG objects
+  Generic background objects: Falling star constructs (possibly more common during meteor showers (this could maybe apply to actual dormant constructs and both stellated slimes)), cloudfish
+  Rapture BG objects: Glowing sunbeams (even at night)
+  Pestilence BG objects: Red and purple spores floating up from the terrain (more red in corruption, more purple in crimson)
+  Hell BG objects: Post-golem flocks of lavafowl
+  Fractal background objects: Various fractal creatures? Rifts? I need to make the dimension feel more alive so it should probably feel like there's as much depth in random systems that don't do that much as there is in the overworld
