@@ -23,7 +23,7 @@ using Polarities;
 
 namespace Polarities.NPCs.StarConstruct
 {
-	//TODO: Boss checklist support
+	//TODO: ???
 	[AutoloadBossHead]
 	public class StarConstruct : ModNPC
 	{
