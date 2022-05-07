@@ -314,8 +314,8 @@ namespace Polarities.Biomes
                         //draw pillar
                         Color drawColor = Color.White * fadeOpacity;
 
-                        float xPosition = Main.screenWidth * 2 * pillars[i].Depth * pillars[i].XPosition - Main.screenPosition.X;
-                        xPosition = (float)Math.IEEERemainder(xPosition / pillars[i].Depth, Main.screenWidth * 2) + Main.screenWidth;
+                        float xPosition = (Main.screenWidth * 2 * pillars[i].Depth * pillars[i].XPosition - Main.screenPosition.X) / pillars[i].Depth;
+                        xPosition = (float)Math.IEEERemainder(xPosition, Main.screenWidth * 2) + Main.screenWidth / 2;
 
                         Vector2 position = new Vector2(xPosition, 0);
 

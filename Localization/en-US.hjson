@@ -260,6 +260,8 @@
 			"GigabatSummonItem": "Bat Whistle",
 			"HallowInvasionSummonItem": "Holy Light",
 			"SunPixieSummonItem": "Hallowed Star",
+			"WorldEvilInvasionSummonItem": "Putrid Lure",
+			"EsophageSummonItem": "Fleshy Capsid",
 
 			//critters
 			"GemflyItem": " Gemfly",
@@ -474,6 +476,9 @@
 			"HallowInvasionSummonItem": "Summons the Rapture when used in the hallow",
 			"SunPixieSummonItem": "Summons the Sun Pixie\nNot consumable",
 			"SunPixieSummonItemExtra": "It glimmers eerily under the dark sun...",
+			"WorldEvilInvasionSummonItem": "Summons the Pestilence when used in the world evil",
+			"EsophageSummonItem": "Summons the Esophage\nNot consumable",
+			"EsophageSummonItemExtra": "It oozes blood under the red moon...",
 
 			//critters
 			"GemflyItem": "May attract bats",

@@ -169,6 +169,14 @@ namespace Polarities
                 ));
 
             RecipeGroup.RegisterGroup(
+                "Polarities:RottenChunk",
+                new RecipeGroup(
+                    () => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.RottenChunk)}",
+                    ItemID.RottenChunk,
+                    ItemID.Vertebrae
+                ));
+
+            RecipeGroup.RegisterGroup(
                 "Polarities:ShadowScale",
                 new RecipeGroup(
                     () => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.ShadowScale)}",

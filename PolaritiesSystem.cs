@@ -192,6 +192,9 @@ namespace Polarities
 			esophageSpawnTimer = 0;
 			worldEvilInvasionSize = 0;
 			worldEvilInvasionSizeStart = 0;
+
+			disabledEvilSpread = false;
+			disabledHallowSpread = false;
 		}
 
         public override void OnWorldUnload()
@@ -221,6 +224,9 @@ namespace Polarities
 			esophageSpawnTimer = 0;
 			worldEvilInvasionSize = 0;
 			worldEvilInvasionSizeStart = 0;
+
+			disabledEvilSpread = false;
+			disabledHallowSpread = false;
 		}
 
         public override void SaveWorldData(TagCompound tag)
@@ -248,6 +254,9 @@ namespace Polarities
 			if (downedWorldEvilInvasion) tag["downedWorldEvilInvasion"] = true;
 			tag["worldEvilInvasionSize"] = worldEvilInvasionSize;
 			tag["worldEvilInvasionSizeStart"] = worldEvilInvasionSizeStart;
+
+			if (disabledEvilSpread) tag["disabledEvilSpread"] = true;
+			if (disabledHallowSpread) tag["disabledHallowSpread"] = true;
 		}
 
         public override void LoadWorldData(TagCompound tag)
@@ -275,6 +284,9 @@ namespace Polarities
 			downedWorldEvilInvasion = tag.ContainsKey("downedWorldEvilInvasion");
 			worldEvilInvasionSize = tag.ContainsKey("worldEvilInvasionSize") ? tag.GetAsInt("worldEvilInvasionSize") : 0;
 			worldEvilInvasionSizeStart = tag.ContainsKey("worldEvilInvasionSizeStart") ? tag.GetAsInt("worldEvilInvasionSizeStart") : 0;
+
+			disabledHallowSpread = tag.ContainsKey("disabledHallowSpread");
+			disabledEvilSpread = tag.ContainsKey("disabledEvilSpread");
 		}
 
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
