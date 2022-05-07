@@ -36,6 +36,7 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
 
 			PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.HallowInvasion;
+			PolaritiesNPC.npcTypeCap[Type] = 1;
 		}
 
 		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -78,20 +79,6 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 		public override void AI()
 		{
 			NPC.noGravity = true;
-
-			//there can only be one
-			if (NPC.localAI[0] == 0)
-			{
-				NPC.localAI[0] = 1;
-				for (int i = 0; i < Main.maxNPCs; i++)
-				{
-					if (Main.npc[i].active && Main.npc[i].type == NPC.type && i != NPC.whoAmI)
-					{
-						NPC.active = false;
-						return;
-					}
-				}
-			}
 
 			NPC.TargetClosest(false);
 			Player player = Main.player[NPC.target];
@@ -329,7 +316,7 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			}
 
 			//only spawns during the hallow event
-			if (spawnInfo.Player.InModBiome(GetInstance<Biomes.HallowInvasion>()) && spawnInfo.Player.ZoneHallow && spawnInfo.Player.ZoneOverworldHeight)
+			if (spawnInfo.Player.InModBiome(GetInstance<Biomes.HallowInvasion>()))
 			{
 				return Biomes.HallowInvasion.GetSpawnChance(2);
 			}

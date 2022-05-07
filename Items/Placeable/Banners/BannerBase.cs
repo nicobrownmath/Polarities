@@ -15,6 +15,7 @@ using Polarities.NPCs.Enemies;
 using Polarities.NPCs.Enemies.Salt;
 using Polarities.NPCs.Enemies.Limestone;
 using Polarities.NPCs.Enemies.HallowInvasion;
+using Polarities.NPCs.Enemies.WorldEvilInvasion;
 
 namespace Polarities.Items.Placeable.Banners
 {
@@ -179,6 +180,7 @@ namespace Polarities.Items.Placeable.Banners
 	public class BatSlimeBanner : BannerBase { public override int BannerIndex => 19; public override int NPCType => NPCType<BatSlime>(); }
 	public class NestGuardianBanner : BannerBase { public override int BannerIndex => 20; public override int NPCType => NPCType<NestGuardian>(); }
 	public class AlkalabominationBanner : BannerBase { public override int BannerIndex => 22; public override int NPCType => NPCType<Alkalabomination>(); }
+	public class UraraneidBanner : BannerBase { public override int BannerIndex => 29; public override int NPCType => NPCType<Uraraneid>(); }
 	public class FlowWormBanner : BannerBase { public override int BannerIndex => 34; public override int NPCType => NPCType<FlowWorm>(); }
 	public class GlowWormBanner : BannerBase { public override int BannerIndex => 35; public override int NPCType => NPCType<GlowWorm>(); }
 	public class IlluminantScourerBanner : BannerBase { public override int BannerIndex => 43; public override int NPCType => NPCType<IlluminantScourer>(); }

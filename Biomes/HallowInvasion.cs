@@ -227,6 +227,7 @@ namespace Polarities.Biomes
         }
     }
 
+    //TODO: Needs to take into account variable screen sizes better
     public class HallowInvasionSky : CustomSky, ILoadable
     {
         bool isActive;

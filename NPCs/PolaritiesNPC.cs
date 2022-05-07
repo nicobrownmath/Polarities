@@ -52,6 +52,8 @@ namespace Polarities.NPCs
 
         public static Dictionary<int, bool> bestiaryCritter = new Dictionary<int, bool>();
 
+        public static Dictionary<int, int> npcTypeCap = new Dictionary<int, int>();
+
         public static Dictionary<int, NPCCapSlotID> customNPCCapSlot = new Dictionary<int, NPCCapSlotID>();
         public static Dictionary<NPCCapSlotID, float> customNPCCapSlotCaps = new Dictionary<NPCCapSlotID, float>
         {
@@ -136,6 +138,22 @@ namespace Polarities.NPCs
         {
             //rapture enemies cannot spawn naturally if past their cap
             NPC realNPC = Main.npc[npc];
+            if (npcTypeCap.ContainsKey(realNPC.type))
+            {
+                int npcsOfType = 0;
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    if (Main.npc[i].active && Main.npc[i].type == realNPC.type)
+                    {
+                        npcsOfType++;
+                        if (npcsOfType > npcTypeCap[realNPC.type])
+                        {
+                            realNPC.active = false;
+                            return;
+                        }
+                    }
+                }
+            }
             if (customNPCCapSlot.ContainsKey(realNPC.type))
             {
                 //count enemies
@@ -150,6 +168,7 @@ namespace Polarities.NPCs
                 if (customNPCCapSlotCount > customNPCCapSlotCaps[customNPCCapSlot[realNPC.type]])
                 {
                     realNPC.active = false;
+                    return;
                 }
             }
         }

@@ -278,7 +278,7 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			}
 
 			//only spawns during the hallow event
-			if (spawnInfo.Player.InModBiome(GetInstance<Biomes.HallowInvasion>()) && spawnInfo.Player.ZoneHallow && spawnInfo.Player.ZoneOverworldHeight)
+			if (spawnInfo.Player.InModBiome(GetInstance<Biomes.HallowInvasion>()))
 			{
 				return ModUtils.Lerp(Biomes.HallowInvasion.GetSpawnChance(0), Biomes.HallowInvasion.GetSpawnChance(1), 0.66f);
 			}
