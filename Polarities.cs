@@ -120,6 +120,21 @@ namespace Polarities
             {
                 Main.musicFade[Main.curMusic] += 1 / 10f;
             }
+
+            if (PolaritiesSystem.esophageSpawnTimer > 300)
+            {
+                Main.newMusic = 0;
+                Main.musicFade[Main.curMusic] = 0f;
+            }
+            else if (PolaritiesSystem.esophageSpawnTimer > 0)
+            {
+                Main.newMusic = GetInstance<WorldEvilInvasion>().Music;
+                Main.musicFade[Main.curMusic] -= 1 / 120f;
+            }
+            else if (PolaritiesSystem.esophageSpawnTimer < 0)
+            {
+                Main.musicFade[Main.curMusic] += 1 / 10f;
+            }
         }
 
         public override void AddRecipeGroups()

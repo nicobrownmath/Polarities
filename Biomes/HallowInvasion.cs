@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.NPCs;
 using Polarities.NPCs.SunPixie;
 using ReLogic.Content;
 using Terraria;
@@ -68,7 +69,7 @@ namespace Polarities.Biomes
 
         public override bool IsBiomeActive(Player player)
 		{
-			return player.ZoneHallow && PolaritiesSystem.hallowInvasion;
+			return player.ZoneHallow && player.ZoneOverworldHeight && PolaritiesSystem.hallowInvasion;
 		}
 
         public override void SpecialVisuals(Player player)
@@ -79,6 +80,11 @@ namespace Polarities.Biomes
         public override void OnLeave(Player player)
         {
             player.ManageSpecialBiomeVisuals("Polarities:HallowInvasion", false);
+        }
+
+        public static bool ValidNPC(int npcType)
+        {
+            return PolaritiesNPC.customNPCCapSlot.ContainsKey(npcType) && PolaritiesNPC.customNPCCapSlot[npcType] == NPCCapSlotID.HallowInvasion;
         }
 
         public static float GetSpawnChance(int tier)
@@ -177,7 +183,7 @@ namespace Polarities.Biomes
             }
 
             Player player = Main.LocalPlayer;
-            bool flag = player.ZoneHallow && player.ZoneOverworldHeight;
+            bool flag = player.InModBiome(GetInstance<HallowInvasion>());
 
             Main.invasionProgressNearInvasion = flag;
             int progressMax = 1;

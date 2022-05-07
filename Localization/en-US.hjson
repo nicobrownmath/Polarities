@@ -818,7 +818,8 @@
 			"StopRain": "The skies begin to clear...",
 			"SpawnHallowInvasion": "The world's bright places grow brighter!",
 			"StartHallowSpread": "The Hallow's spread resumes...",
-			"StopHallowSpread": "The Hallow's spread halts..."
+			"StopHallowSpread": "The Hallow's spread halts...",
+			"SpawnWorldEvilInvasion": "The world's evils seethe with anger!"
 		},
 		"Prefix": {
 			"AutomaticPrefix": "Automatic",

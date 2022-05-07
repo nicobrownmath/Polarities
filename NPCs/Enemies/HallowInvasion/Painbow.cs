@@ -35,7 +35,7 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			};
 			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
 
-			PolaritiesNPC.hallowInvasionNPC.Add(Type);
+			PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.HallowInvasion;
 
 			/*Texture2D texture = new Texture2D(Main.spriteBatch.GraphicsDevice, 58, 58, false, SurfaceFormat.Color);
 			System.Collections.Generic.List<Color> list = new System.Collections.Generic.List<Color>();

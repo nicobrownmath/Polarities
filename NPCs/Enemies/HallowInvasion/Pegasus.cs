@@ -41,7 +41,7 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			};
 			NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifiers);
 
-			PolaritiesNPC.hallowInvasionNPC.Add(Type);
+			PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.HallowInvasion;
 		}
 
 		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

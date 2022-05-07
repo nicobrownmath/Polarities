@@ -26,9 +26,16 @@ using Polarities.Biomes;
 
 namespace Polarities.NPCs
 {
-	public class PolaritiesNPC : GlobalNPC
-	{
-		public override bool InstancePerEntity => true;
+    public enum NPCCapSlotID
+    {
+        HallowInvasion,
+        WorldEvilInvasion,
+        WorldEvilInvasionWorm,
+    }
+
+    public class PolaritiesNPC : GlobalNPC
+    {
+        public override bool InstancePerEntity => true;
 
         public Dictionary<int, int> hammerTimes = new Dictionary<int, int>();
         public bool flawless = true;
@@ -44,8 +51,16 @@ namespace Polarities.NPCs
         public bool coneVenom;
 
         public static Dictionary<int, bool> bestiaryCritter = new Dictionary<int, bool>();
-        public static HashSet<int> hallowInvasionNPC = new HashSet<int>();
-        public static List<int> customSlimes = new List<int>();
+
+        public static Dictionary<int, NPCCapSlotID> customNPCCapSlot = new Dictionary<int, NPCCapSlotID>();
+        public static Dictionary<NPCCapSlotID, float> customNPCCapSlotCaps = new Dictionary<NPCCapSlotID, float>
+        {
+            [NPCCapSlotID.HallowInvasion] = 6f,
+            [NPCCapSlotID.WorldEvilInvasion] = 2f,
+            [NPCCapSlotID.WorldEvilInvasionWorm] = 2f,
+        };
+
+        public static HashSet<int> customSlimes = new HashSet<int>();
 
         public override void Load()
         {
@@ -64,7 +79,8 @@ namespace Polarities.NPCs
         public override void Unload()
         {
             bestiaryCritter = null;
-            hallowInvasionNPC = null;
+            customNPCCapSlot = null;
+            customNPCCapSlotCaps = null;
             customSlimes = null;
 
             IL_ChooseSpawn -= PolaritiesNPC_IL_ChooseSpawn;
@@ -97,7 +113,17 @@ namespace Polarities.NPCs
                 {
                     foreach(int i in pool.Keys)
                     {
-                        if (!hallowInvasionNPC.Contains(i))
+                        if (!HallowInvasion.ValidNPC(i))
+                        {
+                            pool[i] = 0;
+                        }
+                    }
+                }
+                if (spawnInfo.Player.InModBiome(GetInstance<WorldEvilInvasion>()))
+                {
+                    foreach (int i in pool.Keys)
+                    {
+                        if (!WorldEvilInvasion.ValidNPC(i))
                         {
                             pool[i] = 0;
                         }
@@ -110,18 +136,18 @@ namespace Polarities.NPCs
         {
             //rapture enemies cannot spawn naturally if past their cap
             NPC realNPC = Main.npc[npc];
-            if (hallowInvasionNPC.Contains(realNPC.type))
+            if (customNPCCapSlot.ContainsKey(realNPC.type))
             {
                 //count enemies
-                float hallowInvasionNPCCount = 0;
+                float customNPCCapSlotCount = 0;
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
-                    if (Main.npc[i].active && hallowInvasionNPC.Contains(Main.npc[i].type) && !Main.npc[i].dontCountMe)
+                    if (Main.npc[i].active && customNPCCapSlot.ContainsKey(Main.npc[i].type) && customNPCCapSlot[Main.npc[i].type] == customNPCCapSlot[realNPC.type] && !Main.npc[i].dontCountMe)
                     {
-                        hallowInvasionNPCCount += Main.npc[i].npcSlots;
+                        customNPCCapSlotCount += Main.npc[i].npcSlots;
                     }
                 }
-                if (hallowInvasionNPCCount > 6f)
+                if (customNPCCapSlotCount > customNPCCapSlotCaps[customNPCCapSlot[realNPC.type]])
                 {
                     realNPC.active = false;
                 }
@@ -468,9 +494,14 @@ namespace Polarities.NPCs
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
-            if (hallowInvasionNPC.Contains(npc.type))
+            if (HallowInvasion.ValidNPC(npc.type))
             {
                 npcLoot.Add(ItemDropRule.ByCondition(new SunPixieSummonItemDropCondition(), ItemType<SunPixieSummonItem>()));
+            }
+            if (WorldEvilInvasion.ValidNPC(npc.type))
+            {
+                //TODO: Replace with capsid
+                npcLoot.Add(ItemDropRule.ByCondition(new EsophageSummonItemDropCondition(), ItemType<SunPixieSummonItem>()));
             }
 
             if (customSlimes.Contains(npc.type))

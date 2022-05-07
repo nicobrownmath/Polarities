@@ -157,6 +157,10 @@ namespace Polarities
 		public static int hallowInvasionSizeStart;
 
 		public static bool worldEvilInvasion;
+		public static bool downedWorldEvilInvasion;
+		public static int esophageSpawnTimer;
+		public static int worldEvilInvasionSize;
+		public static int worldEvilInvasionSizeStart;
 
 		public static bool disabledEvilSpread;
 		public static bool disabledHallowSpread;
@@ -179,10 +183,15 @@ namespace Polarities
 
 			hallowInvasion = false;
 			downedHallowInvasion = false;
+			sunPixieSpawnTimer = 0;
 			hallowInvasionSize = 0;
 			hallowInvasionSizeStart = 0;
 
 			worldEvilInvasion = false;
+			downedWorldEvilInvasion = false;
+			esophageSpawnTimer = 0;
+			worldEvilInvasionSize = 0;
+			worldEvilInvasionSizeStart = 0;
 		}
 
         public override void OnWorldUnload()
@@ -203,10 +212,15 @@ namespace Polarities
 
 			hallowInvasion = false;
 			downedHallowInvasion = false;
+			sunPixieSpawnTimer = 0;
 			hallowInvasionSize = 0;
 			hallowInvasionSizeStart = 0;
 
 			worldEvilInvasion = false;
+			downedWorldEvilInvasion = false;
+			esophageSpawnTimer = 0;
+			worldEvilInvasionSize = 0;
+			worldEvilInvasionSizeStart = 0;
 		}
 
         public override void SaveWorldData(TagCompound tag)
@@ -231,6 +245,9 @@ namespace Polarities
 			tag["hallowInvasionSizeStart"] = hallowInvasionSizeStart;
 
 			if (worldEvilInvasion) tag["worldEvilInvasion"] = true;
+			if (downedWorldEvilInvasion) tag["downedWorldEvilInvasion"] = true;
+			tag["worldEvilInvasionSize"] = worldEvilInvasionSize;
+			tag["worldEvilInvasionSizeStart"] = worldEvilInvasionSizeStart;
 		}
 
         public override void LoadWorldData(TagCompound tag)
@@ -255,6 +272,9 @@ namespace Polarities
 			hallowInvasionSizeStart = tag.ContainsKey("hallowInvasionSizeStart") ? tag.GetAsInt("hallowInvasionSizeStart") : 0;
 
 			worldEvilInvasion = tag.ContainsKey("worldEvilInvasion");
+			downedWorldEvilInvasion = tag.ContainsKey("downedWorldEvilInvasion");
+			worldEvilInvasionSize = tag.ContainsKey("worldEvilInvasionSize") ? tag.GetAsInt("worldEvilInvasionSize") : 0;
+			worldEvilInvasionSizeStart = tag.ContainsKey("worldEvilInvasionSizeStart") ? tag.GetAsInt("worldEvilInvasionSizeStart") : 0;
 		}
 
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
@@ -1011,10 +1031,29 @@ namespace Polarities
 
         public override void PostUpdateEverything()
 		{
-			if (NPC.downedMechBossAny && !downedHallowInvasion && Main.invasionType == 0 /*&& !SLWorld.subworld*/ && Main.rand.NextBool(2 * 24 * 60 * 60))
+			if (NPC.downedMechBossAny && !downedHallowInvasion && Main.invasionType == 0 /*TODO: && !SLWorld.subworld*/ && Main.rand.NextBool(2 * 24 * 60 * 60))
 			{
 				HallowInvasion.StartInvasion();
 			}
+			if (NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3 && !downedWorldEvilInvasion && Main.invasionType == 0 /*TODO: && !SLWorld.subworld*/ && Main.rand.NextBool(2 * 24 * 60 * 60))
+			{
+				WorldEvilInvasion.StartInvasion();
+			}
+
+			if (worldEvilInvasion)
+			{
+				WorldEvilInvasion.CheckInvasionProgress();
+				WorldEvilInvasion.UpdateInvasion();
+			}
+			if (esophageSpawnTimer > 0)
+			{
+				WorldEvilInvasion.UpdateEsophageSpawning();
+			}
+			else if (esophageSpawnTimer < 0)
+			{
+				esophageSpawnTimer++;
+			}
+
 			if (hallowInvasion)
 			{
 				HallowInvasion.CheckInvasionProgress();
@@ -1042,7 +1081,7 @@ namespace Polarities
 
 			if (worldEvilInvasion && (player.ZoneCorrupt || player.ZoneCrimson) && player.ZoneOverworldHeight)
 			{
-				//texture2D4 = WorldEvilInvasion.EventIcon.Value;
+				texture2D4 = WorldEvilInvasion.EventIcon.Value;
 				text7 = Language.GetTextValue("Mods.Polarities.BiomeName.WorldEvilInvasion");
 				c = new Color(128, 0, 96);
 				isInvasion = true;
