@@ -633,7 +633,11 @@
 			"Uraraneid": "Uraraneid",
 			"Crimago": "Crimago",
 			"LightEater": "Light Eater",
-			"TendrilAmalgam": "Tendril Amalgam"
+			"TendrilAmalgam": "Tendril Amalgam",
+			"LivingSpine": "Living Spine",
+			"RavenousCursed": "Ravenous Cursed",
+			"RavenousCursedSpark": "Cursed Spark",
+			"RavenousCursedFlame": "Cursed Fire",
 		},
 		"Bestiary": {
 			"Rattler": "This small, venomous snake prefers dry climates. It loudly rattles to ward off any predators, but it’s just too cute to avoid!",
@@ -678,7 +682,9 @@
 			"Uraraneid": "This creature belongs to a higher caliber than the typical arachnids that dot the Crimson. Using the ichor stored in its large swollen bulb, it can rapidly inflate its legs with the fluid, propelling itself great distances.",
 			"Crimago": "Soaring about on fell wings, this living nightmare hunts with its scythe-like claws. Close inspection reveals their claws to be literal bone matter erupting from their flesh... yet the Crimago cares not, the Crimson has long since stolen the sensation of true pain from all of its children.",
 			"LightEater": "If the Eater of Souls truly did consume souls, logically Light Eaters similarly consume light. This would explain their near ineffable hunting strategy of conjuring illusional copies of themselves.",
-			"TendrilAmalgam": "What is seen above ground is but a small piece of an even larger unseen hivemind, linked underground through a complex network of tendrils. It breaches from the soil and rubble to search for unassimilated mass with its many uncoordinated eyes."
+			"TendrilAmalgam": "What is seen above ground is but a small piece of an even larger unseen hivemind, linked underground through a complex network of tendrils. It breaches from the soil and rubble to search for unassimilated mass with its many uncoordinated eyes.",
+			"LivingSpine": "No biomass goes to waste in the Crimson, even bones belonging to long since decayed bodies are welcomed into the Crimson’s collective. As such, even solitary spines dutifully burrow through the blood caked earth, expanding their region’s territory.",
+			"RavenousCursed": "The favorite spawns of the Corruption are no doubt the worms it frequently births. Dreadful fire surges through its body as if it were blood."
 		},
 		"MapObject": {
 			"SaltCrystalsTile": "{$Mods.Polarities.ItemName.SaltCrystals}",

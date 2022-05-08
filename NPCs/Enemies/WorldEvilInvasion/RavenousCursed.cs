@@ -2,39 +2,25 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Tiles;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
 using Polarities.Items.Placeable.Banners;
-using Terraria.GameContent.Bestiary;
-using Polarities.Biomes;
-using Polarities.Items.Placeable.Blocks;
-using Terraria.Audio;
-using Polarities.Items.Placeable.Walls;
-using Terraria.GameContent.ItemDropRules;
-using Polarities.Items.Consumables;
-using Terraria.GameContent;
-using ReLogic.Content;
-using Polarities.Items.Accessories;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using Terraria.DataStructures;
-using Polarities.Items.Materials;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.GameContent;
+using Terraria.Audio;
+using ReLogic.Content;
 
-namespace Polarities.NPCs.Enemies.Limestone
+namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 {
-	public class FlowWorm : ModNPC
+	public class RavenousCursed : ModNPC
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Flow Worm");
-
 			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
 			{
 				SpecificallyImmuneTo = new int[] {
@@ -42,11 +28,15 @@ namespace Polarities.NPCs.Enemies.Limestone
 				}
 			};
 			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+
+			PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.WorldEvilInvasionWorm;
 		}
 
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
 		{
 			bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                //spawn conditions
+				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCorruption,
 				//flavor text
 				this.TranslatedBestiaryEntry()
 			});
@@ -55,42 +45,47 @@ namespace Polarities.NPCs.Enemies.Limestone
 		public override void SetDefaults()
 		{
 			NPC.aiStyle = -1;
-
-			NPC.width = 20;
-			NPC.height = 20;
-
-			NPC.defense = 0;
-			NPC.damage = 24;
+			NPC.width = 18;
+			NPC.height = 18;
+			NPC.defense = 10;
+			NPC.damage = 36;
 			NPC.knockBackResist = 0f;
-			NPC.lifeMax = 90;
+			NPC.lifeMax = 4000;
 			NPC.noTileCollide = true;
 			NPC.noGravity = true;
 			NPC.lavaImmune = true;
 			NPC.npcSlots = 1f;
 			NPC.behindTiles = true;
-			NPC.value = Item.buyPrice(silver: 1);
-			NPC.HitSound = SoundID.NPCHit54;
-			NPC.DeathSound = SoundID.NPCDeath52;
+			NPC.value = Item.buyPrice(silver: 5);
+			NPC.HitSound = SoundID.NPCHit1;
+			NPC.DeathSound = SoundID.NPCDeath1;
+
+			Music = GetInstance<Biomes.WorldEvilInvasion>().Music;
+			SceneEffectPriority = SceneEffectPriority.Event;
 
 			Banner = Type;
-			BannerItem = ItemType<FlowWormBanner>();
+			BannerItem = ItemType<LivingSpineBanner>();
+
+			SpawnModBiomes = new int[1] { GetInstance<Biomes.WorldEvilInvasion>().Type };
 
 			NPC.GetGlobalNPC<MultiHitboxNPC>().useMultipleHitboxes = true;
 			NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = new Rectangle[numSegments];
 
-			SpawnModBiomes = new int[1] { GetInstance<LimestoneCave>().Type };
-
-			segmentPositions = new Vector2[numSegments * segmentsPerHitbox + 6];
+			segmentPositions = new Vector2[numSegments * segmentsPerHitbox + 12];
+			segmentTypes = new int[numSegments];
 		}
 
-		const int numSegments = 10;
-		const int segmentsPerHitbox = 8;
-		const int segmentsHead = 16;
-		const int segmentsTail = 14;
-		const int hitboxSegmentOffset = 5;
+		const int numSegments = 20;
+		const int segmentsPerHitbox = 9;
+		const int segmentsHead = 18;
+		const int segmentsTail = 12;
+		const int hitboxSegmentOffset = 14;
 		private Vector2[] segmentPositions;
+		private int[] segmentTypes;
 
-        public override void AI()
+		private int attackType;
+
+		public override void AI()
 		{
 			Player player = Main.player[NPC.target];
 			if (!player.active || player.dead)
@@ -109,22 +104,34 @@ namespace Polarities.NPCs.Enemies.Limestone
 				{
 					segmentPositions[i] = segmentPositions[i - 1] - new Vector2(NPC.width, 0).RotatedBy(NPC.rotation);
 				}
+
+				for (int i = 0; i < segmentTypes.Length; i++)
+				{
+					segmentTypes[i] = Main.rand.Next(3);
+				}
 			}
 
 			//changeable ai values
-			float rotationFade = 9f;
+			float rotationFade = 11f;
 			float rotationAmount = 0.1f;
 
 			//Do AI
-            NPC.noGravity = Main.tile[(int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16)].LiquidAmount > 64 || (Main.tile[(int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16)].HasTile && Main.tileSolid[Main.tile[(int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16)].TileType]);
+			NPC.noGravity = Main.tile[(int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16)].LiquidAmount > 64 || (Main.tile[(int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16)].HasTile && Main.tileSolid[Main.tile[(int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16)].TileType]);
 
 			if (NPC.noGravity)
 			{
-				NPC.ai[0] = 0;
+				if (PolaritiesSystem.worldEvilInvasion)
+				{
+					Vector2 targetPoint = player.Center + new Vector2(0, -240);
+					Vector2 velocityGoal = 16 * (targetPoint - NPC.Center).SafeNormalize(Vector2.Zero);
+					NPC.velocity += (velocityGoal - NPC.velocity) / 90;
 
-				Vector2 targetPoint = player.Center + new Vector2(0, -240);
-				Vector2 velocityGoal = 16 * (targetPoint - NPC.Center).SafeNormalize(Vector2.Zero);
-				NPC.velocity += (velocityGoal - NPC.velocity) / 60;
+					if (Main.netMode != 1)
+					{
+						attackType = Main.rand.Next(3);
+					}
+					NPC.netUpdate = true;
+				}
 
 				//dig sounds, adapted from vanilla
 				Vector2 vector18 = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
@@ -154,36 +161,39 @@ namespace Polarities.NPCs.Enemies.Limestone
 			}
 			else
 			{
-				Lighting.AddLight(NPC.Center, 123f / 255, 233f / 255, 60f / 255);
-
-				NPC.direction = Main.rand.NextBool() ? -1 : 1;
+				if (Main.netMode != 1)
+				{
+					NPC.direction = Main.rand.NextBool() ? -1 : 1;
+				}
 				if (NPC.velocity.X == 0)
 				{
 					NPC.velocity.X = NPC.direction * 0.01f;
 				}
+				NPC.netUpdate = true;
 
-				if (NPC.ai[0] < 60)
+				switch (attackType)
 				{
-					float targetX = player.Center.X;
-					float velocityGoalX = (targetX - NPC.Center.X) / 20;
-					NPC.velocity.X += (velocityGoalX - NPC.velocity.X) / 20;
-
-					if (Math.Abs(NPC.velocity.X) > 5)
-					{
-						NPC.velocity.X = NPC.velocity.X > 0 ? 5 : -5;
-					}
-
-					NPC.ai[0]++;
-				}
-				else
-				{
-					NPC.velocity.X *= 0.95f;
-					NPC.velocity.Y += 0.3f;
+					case 0:
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.velocity, new Vector2(Main.rand.NextFloat(15, 17), 0).RotatedBy(NPC.velocity.ToRotation()).RotatedByRandom(0.2f), ProjectileType<RavenousCursedFlame>(), 20, 0, Main.myPlayer);
+						if (NPC.soundDelay <= 0)
+						{
+							NPC.soundDelay = 20;
+							SoundEngine.PlaySound(SoundID.Item, NPC.Center, 34);
+						}
+						NPC.velocity.Y += 0.15f;
+						break;
+					case 1:
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.velocity, new Vector2(2, 0).RotatedByRandom(MathHelper.TwoPi), ProjectileType<RavenousCursedSpark>(), 18, 0, Main.myPlayer);
+						NPC.velocity.Y += 0.15f;
+						break;
+					default:
+						NPC.velocity.Y += 0.3f;
+						break;
 				}
 			}
 
-			float minSpeed = NPC.noGravity ? 5 : 0;
-			float maxSpeed = NPC.noGravity ? 12 : 12;
+			float minSpeed = 6;
+			float maxSpeed = 16;
 			if (NPC.velocity.Length() > maxSpeed)
 			{
 				NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * maxSpeed;
@@ -201,6 +211,7 @@ namespace Polarities.NPCs.Enemies.Limestone
 					NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * minSpeed;
 				}
 			}
+
 			NPC.rotation = NPC.velocity.ToRotation();
 			NPC.noGravity = true;
 
@@ -274,7 +285,19 @@ namespace Polarities.NPCs.Enemies.Limestone
 			}
 		}
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+		public static Asset<Texture2D> GlowTexture;
+
+		public override void Load()
+		{
+			GlowTexture = Request<Texture2D>(Texture + "_Mask");
+		}
+
+		public override void Unload()
+		{
+			GlowTexture = null;
+		}
+
+		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
 			if (NPC.IsABestiaryIconDummy)
 			{
@@ -296,18 +319,24 @@ namespace Polarities.NPCs.Enemies.Limestone
 				float rotation = (segmentPositions[i - 1] - segmentPositions[i]).ToRotation();
 				float scale = 1f;
 
-				int segmentFramePoint = i < (segmentsHead + 1) ? 128 - 2 * (i - 1) //head
+				int segmentFramePoint = i < (segmentsHead + 1) ? 122 - 2 * (i - 1) //head
 					: i >= segmentPositions.Length - segmentsTail ? 2 * (segmentPositions.Length - 1 - i) //tail
-					: 68 - 2 * ((i - (segmentsHead + 1)) % segmentsPerHitbox); //body
+					: 62 - 2 * ((i - (segmentsHead + 1)) % segmentsPerHitbox); //body
+				int segmentFrameOffset = bodyTexture.Width / 3 * (i < (segmentsHead + 1) ? segmentTypes[0] //head
+					: i >= segmentPositions.Length - segmentsTail ? segmentTypes[segmentTypes.Length - 1] //tail
+					: segmentTypes[((i - (segmentsHead + 1)) / segmentsPerHitbox) + 1]); //body
+
+				segmentFramePoint += segmentFrameOffset;
 
 				Tile posTile = Framing.GetTileSafely(drawPosition.ToTileCoordinates());
 				if (posTile.HasTile && Main.tileBlockLight[posTile.TileType] && Lighting.GetColor((int)(drawPosition.X / 16), (int)(drawPosition.Y / 16)) == Color.Black && !Main.LocalPlayer.detectCreature)
-                {
+				{
 					continue;
-                }
+				}
 
-				Color color = Color.White; //Lighting.GetColor((int)(drawPosition.X / 16), (int)(drawPosition.Y / 16));
+				Color color = Lighting.GetColor((int)(drawPosition.X / 16), (int)(drawPosition.Y / 16));
 				spriteBatch.Draw(bodyTexture, drawPosition - screenPos, new Rectangle(segmentFramePoint, 0, 4, TextureAssets.Npc[Type].Height()), NPC.GetAlpha(NPC.GetNPCColorTintedByBuffs(color)), rotation, new Vector2(2, TextureAssets.Npc[Type].Height() / 2), new Vector2(scale, 1), SpriteEffects.None, 0f);
+				spriteBatch.Draw(GlowTexture.Value, drawPosition - screenPos, new Rectangle(segmentFramePoint, 0, 4, TextureAssets.Npc[Type].Height()), NPC.GetAlpha(NPC.GetNPCColorTintedByBuffs(Color.White)), rotation, new Vector2(2, TextureAssets.Npc[Type].Height() / 2), new Vector2(scale, 1), SpriteEffects.None, 0f);
 			}
 
 			return false;
@@ -315,33 +344,105 @@ namespace Polarities.NPCs.Enemies.Limestone
 
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
-			if (spawnInfo.PlayerSafe) return 0f;
-
-			Tile playerTile = Main.tile[(int)(spawnInfo.Player.Center.X / 16), (int)((spawnInfo.Player.Center.Y + 1 + spawnInfo.Player.height / 2) / 16)];
-			if (spawnInfo.Player.InModBiome(GetInstance<LimestoneCave>()) && (spawnInfo.SpawnTileType == TileType<LimestoneTile>() || playerTile.TileType == TileType<LimestoneTile>()))
+			//only spawns during the evil event
+			if (spawnInfo.Player.InModBiome(GetInstance<Biomes.WorldEvilInvasion>()))
 			{
-				return 1f;
+				return Biomes.WorldEvilInvasion.GetSpawnChance(spawnInfo.Player.ZoneCorrupt) * 0.5f;
 			}
 			return 0f;
 		}
 
 		public override void ModifyNPCLoot(NPCLoot npcLoot)
 		{
-			npcLoot.Add(ItemDropRule.Common(ItemType<AlkalineFluid>(), 2, 1, 3));
-			npcLoot.Add(ItemDropRule.Common(ItemType<KeyLimePie>(), 50));
+			npcLoot.Add(ItemDropRule.Common(ItemID.CursedFlame, 1, 2, 4));
 		}
 
 		public override bool CheckDead()
 		{
-			for (int i = 0; i < numSegments; i++)
+			for (int i = 0; i < NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.Length; i++)
 			{
-				Rectangle hitbox = NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[i];
-				for (int j = 0; j < 3; j++)
+				Vector2 gorePos = NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[i].TopLeft();
+				if (i == 0)
 				{
-					Main.dust[Dust.NewDust(hitbox.TopLeft(), hitbox.Width, hitbox.Height, 74, Scale: 1.75f)].noGravity = true;
+					Gore.NewGore(NPC.GetSource_Death(), gorePos, Vector2.Zero, Mod.Find<ModGore>("RavenousCursedGore" + (1 + segmentTypes[i] * 3)).Type);
+				}
+				else if (i == NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.Length - 1)
+				{
+
+					Gore.NewGore(NPC.GetSource_Death(), gorePos, Vector2.Zero, Mod.Find<ModGore>("RavenousCursedGore" + (3 + segmentTypes[i] * 3)).Type);
+				}
+				else
+				{
+					Gore.NewGore(NPC.GetSource_Death(), gorePos, Vector2.Zero, Mod.Find<ModGore>("RavenousCursedGore" + (2 + segmentTypes[i] * 3)).Type);
 				}
 			}
+
+			if (PolaritiesSystem.worldEvilInvasion)
+			{
+				//counts for 2 points
+				PolaritiesSystem.worldEvilInvasionSize -= 2;
+			}
 			return true;
+		}
+	}
+
+	public class RavenousCursedFlame : ModProjectile
+	{
+		public override string Texture => "Polarities/Textures/Pixel";
+
+		public override void SetDefaults()
+		{
+			Projectile.width = 2;
+			Projectile.height = 2;
+
+			Projectile.hostile = true;
+			Projectile.penetrate = -1;
+			Projectile.tileCollide = true;
+			Projectile.hide = true;
+			Projectile.timeLeft = 30;
+		}
+
+		// The AI of the projectile
+		public override void AI()
+		{
+			int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 75, Projectile.velocity.X, Projectile.velocity.Y, Scale: 2.5f);
+			Main.dust[dust].noGravity = true;
+		}
+
+		public override void OnHitPlayer(Player target, int damage, bool crit)
+		{
+			target.AddBuff(BuffID.CursedInferno, 60 * 8);
+		}
+	}
+
+	public class RavenousCursedSpark : ModProjectile
+	{
+		public override string Texture => "Polarities/Textures/Pixel";
+
+		public override void SetDefaults()
+		{
+			Projectile.width = 2;
+			Projectile.height = 2;
+
+			Projectile.hostile = true;
+			Projectile.penetrate = -1;
+			Projectile.tileCollide = true;
+			Projectile.hide = true;
+			Projectile.timeLeft = 120;
+		}
+
+		// The AI of the projectile
+		public override void AI()
+		{
+			int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 75, Projectile.velocity.X * 0.8f, Projectile.velocity.Y * 0.8f, Scale: 1.5f);
+			Main.dust[dust].noGravity = true;
+
+			Projectile.velocity *= 0.95f;
+		}
+
+		public override void OnHitPlayer(Player target, int damage, bool crit)
+		{
+			target.AddBuff(BuffID.CursedInferno, 60 * 8);
 		}
 	}
 }

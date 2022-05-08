@@ -50,6 +50,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			});
 		}
 
+		//TODO: These don't count towards the radar?
 		public override void SetDefaults()
 		{
 			NPC.aiStyle = -1;
