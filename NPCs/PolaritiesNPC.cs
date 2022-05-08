@@ -99,53 +99,62 @@ namespace Polarities.NPCs
         {
             ILCursor c = new ILCursor(il);
 
+            ILLabel label = null;
+
             if (!c.TryGotoNext(MoveType.Before,
-                i => i.MatchLdcR4(0f),
-                i => i.MatchStloc(1)
+                i => i.MatchBleUn(out label),
+                i => i.MatchLdloc(0),
+                i => i.MatchLdloc(4),
+                i => i.MatchCallvirt(typeof(ModNPC).GetProperty("NPC", BindingFlags.Public | BindingFlags.Instance).GetGetMethod()),
+                i => i.MatchLdfld(typeof(NPC).GetField("type", BindingFlags.Public | BindingFlags.Instance)),
+                i => i.MatchLdloc(5),
+                i => i.MatchCallvirt(typeof(IDictionary<int, float>).GetProperty("Item", BindingFlags.Public | BindingFlags.Instance).GetSetMethod())
                 ))
                 return;
 
+            c.Index++;
+
             c.Emit(OpCodes.Ldloc, 0);
             c.Emit(OpCodes.Ldarg, 0);
-            c.EmitDelegate<Action<IDictionary<int, float>, NPCSpawnInfo>>((pool, spawnInfo) =>
+            c.Emit(OpCodes.Ldloc, 4);
+            c.EmitDelegate<Func<IDictionary<int, float>, NPCSpawnInfo, ModNPC, bool>>((pool, spawnInfo, modNPC) =>
             {
-                //remove things from the spawn pool if ineligible
-                //this is done after the editspawnpool hook in order to prevent enemies from later-loaded mods from spawning
+                //return true to use normal spawn pool finding code, false to use custom code
                 if (spawnInfo.Player.ZoneTowerSolar || spawnInfo.Player.ZoneTowerStardust || spawnInfo.Player.ZoneTowerNebula || spawnInfo.Player.ZoneTowerVortex)
                 {
-                    //no enemies from the mod can spawn during the pillars
-                    foreach (int i in pool.Keys)
+                    if (modNPC.Mod == Mod)
                     {
-                        if (GetModNPC(i).Mod == Mod)
-                        {
-                            pool[i] = 0;
-                        }
+                        return false;
                     }
                 }
                 else
                 {
                     if (spawnInfo.Player.InModBiome(GetInstance<HallowInvasion>()))
                     {
-                        foreach (int i in pool.Keys)
+                        if (!HallowInvasion.ValidNPC(modNPC.Type))
                         {
-                            if (!HallowInvasion.ValidNPC(i))
-                            {
-                                pool[i] = 0;
-                            }
+                            return false;
+                        }
+                        else
+                        {
+                            pool[0] = 0;
                         }
                     }
                     else if (spawnInfo.Player.InModBiome(GetInstance<WorldEvilInvasion>()))
                     {
-                        foreach (int i in pool.Keys)
+                        if (!WorldEvilInvasion.ValidNPC(modNPC.Type))
                         {
-                            if (!WorldEvilInvasion.ValidNPC(i))
-                            {
-                                pool[i] = 0;
-                            }
+                            return false;
+                        }
+                        else
+                        {
+                            pool[0] = 0;
                         }
                     }
                 }
+                return true;
             });
+            c.Emit(OpCodes.Brfalse, label);
         }
 
         public override void SpawnNPC(int npc, int tileX, int tileY)
