@@ -83,20 +83,6 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 
 		public override void AI()
 		{
-			//there can only be one
-			if (NPC.localAI[0] == 0)
-			{
-				NPC.localAI[0] = 1;
-				for (int i = 0; i < Main.maxNPCs; i++)
-				{
-					if (Main.npc[i].active && Main.npc[i].type == NPC.type && i != NPC.whoAmI)
-					{
-						NPC.active = false;
-						return;
-					}
-				}
-			}
-
 			NPC.TargetClosest(true);
 			Player player = Main.player[NPC.target];
 

@@ -211,6 +211,7 @@ namespace Polarities.Biomes
     }
 
     //TODO: Needs to take into account variable screen sizes better
+    //TODO: Needs to take into account pausing better
     public class WorldEvilInvasionSky : CustomSky, ILoadable
     {
         bool isActive;

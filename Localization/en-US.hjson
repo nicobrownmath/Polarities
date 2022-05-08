@@ -584,7 +584,8 @@
 			"BlazingIreJavelin": "Blazing Javelin",
 			"BlazingIreSpear": "Blazing Spear",
 			"UraraneidIchorSpray": "Ichor Rain",
-			"CrimagoSlash": "Scythe Slash"
+			"CrimagoSlash": "Scythe Slash",
+			"TendrilAmalgamSpike": "Tendril Spike"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
@@ -631,7 +632,8 @@
 			"SunPixie": "Sun Pixie",
 			"Uraraneid": "Uraraneid",
 			"Crimago": "Crimago",
-			"LightEater": "Light Eater"
+			"LightEater": "Light Eater",
+			"TendrilAmalgam": "Tendril Amalgam"
 		},
 		"Bestiary": {
 			"Rattler": "This small, venomous snake prefers dry climates. It loudly rattles to ward off any predators, but it’s just too cute to avoid!",
@@ -675,7 +677,8 @@
 			"SunPixie": "Radiating intense heat with hallowed magic and solar energy, the Sun Pixie is frantic in its pursuit of absolute purification. It is said, however, that even this most luminous of beings has an inner darkness.",
 			"Uraraneid": "This creature belongs to a higher caliber than the typical arachnids that dot the Crimson. Using the ichor stored in its large swollen bulb, it can rapidly inflate its legs with the fluid, propelling itself great distances.",
 			"Crimago": "Soaring about on fell wings, this living nightmare hunts with its scythe-like claws. Close inspection reveals their claws to be literal bone matter erupting from their flesh... yet the Crimago cares not, the Crimson has long since stolen the sensation of true pain from all of its children.",
-			"LightEater": "If the Eater of Souls truly did consume souls, logically Light Eaters similarly consume light. This would explain their near ineffable hunting strategy of conjuring illusional copies of themselves."
+			"LightEater": "If the Eater of Souls truly did consume souls, logically Light Eaters similarly consume light. This would explain their near ineffable hunting strategy of conjuring illusional copies of themselves.",
+			"TendrilAmalgam": "What is seen above ground is but a small piece of an even larger unseen hivemind, linked underground through a complex network of tendrils. It breaches from the soil and rubble to search for unassimilated mass with its many uncoordinated eyes."
 		},
 		"MapObject": {
 			"SaltCrystalsTile": "{$Mods.Polarities.ItemName.SaltCrystals}",
