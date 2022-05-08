@@ -73,6 +73,7 @@ v0.11 Changelog
     Blazing ire now summons secondary javelins on normal hits, but the chance is still boosted on crits
     Rapture and pestilence now have background effects
     Buffed the ravenous cursed a little
+    Projectiles from the shade storm no longer go through tiles
 
 Thing I should do:
   Replace using AIType to control platform falling with CanFallThroughPlatforms

@@ -10,6 +10,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using ReLogic.Content;
 using Terraria.GameContent.ItemDropRules;
+using Polarities.Items.Weapons.Magic;
 
 namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 {
@@ -372,7 +373,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 
 		public override void ModifyNPCLoot(NPCLoot npcLoot)
 		{
-			//TODO: npcLoot.Add(ItemDropRule.Common(ItemType<ShadeStorm>(), 8));
+			npcLoot.Add(ItemDropRule.Common(ItemType<ShadeStorm>(), 8));
 			npcLoot.Add(ItemDropRule.Common(ItemID.DemoniteOre, 1, 2, 4));
 		}
 

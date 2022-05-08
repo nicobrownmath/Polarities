@@ -13,6 +13,7 @@ using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent;
 using Terraria.Audio;
+using Polarities.Items.Weapons.Melee;
 
 namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 {
@@ -355,7 +356,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
 		{
-			//TODO: npcLoot.Add(ItemDropRule.NormalvsExpert(ItemType<TwistedTendril>(), 4, 3));
+			npcLoot.Add(ItemDropRule.NormalvsExpert(ItemType<TwistedTendril>(), 4, 3));
 			npcLoot.Add(ItemDropRule.Common(ItemID.RottenChunk, 1, 2, 5));
 		}
 

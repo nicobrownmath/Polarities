@@ -12,6 +12,7 @@ using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent;
 using ReLogic.Content;
+using Polarities.Items.Weapons.Summon.Sentries;
 
 namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 {
@@ -377,7 +378,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-			//TODO: npcLoot.Add(ItemDropRule.Common(ItemType<PincerStaff>(), 8));
+			npcLoot.Add(ItemDropRule.Common(ItemType<PincerStaff>(), 8));
 			npcLoot.Add(ItemDropRule.Common(ItemID.CrimtaneOre, 1, 2, 4));
 		}
 

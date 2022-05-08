@@ -10,6 +10,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
+using Polarities.Items.Weapons.Ranged;
 
 namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 {
@@ -336,7 +337,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
 		{
-			//TODO: npcLoot.Add(ItemDropRule.Common(ItemType<Splattergun>(), 8));
+			npcLoot.Add(ItemDropRule.Common(ItemType<Splattergun>(), 8));
 			npcLoot.Add(ItemDropRule.Common(ItemID.Ichor, 1, 2, 5));
 		}
 	}

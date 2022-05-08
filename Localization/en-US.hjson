@@ -18,6 +18,7 @@
 			"HandheldConeShell": "Handheld Cone Shell",
 			"Sunblade": "Sunblade",
 			"LaserCutter": "Laser Cutter",
+			"TwistedTendril": "Twisted Tendril",
 
 			//warhammers
 			"WoodenWarhammer": "Wooden Warhammer",
@@ -59,6 +60,7 @@
 			"ToxicShot": "Toxic Shot",
 			"PainBow": "Pain Bow",
 			"Flarecaller": "Flarecaller",
+			"Splattergun": "Splattergun",
 
 			//atlatls
 			"WoodenAtlatl": "Wooden Atlatl",
@@ -97,6 +99,7 @@
 			"HeatFlare": "Heat Flare",
 			"RayOfSunshine": "Ray Of Sunshine",
 			"BlazingIre": "Blazing Ire",
+			"ShadeStorm": "Shade Storm",
 
 			//summon weapons
 			"ZombatStaff": "Zombat Staff",
@@ -107,6 +110,7 @@
 			"ScouringStaff": "Scouring Staff",
 			"LuminousSlimeStaff": "Luminous Slime Staff",
 			"SolarScarabStaff": "Solar Scarab Staff",
+			"PincerStaff": "Pincer Staff",
 
 			//orbs
 			"Discorb": "Discorb",
@@ -314,6 +318,7 @@
 			"CrystalKnife": "Stacks up to 16",
 			"HandheldConeShell": "'This is a terrible idea'",
 			"LaserCutter": "'Where does it end? Doesn't.'",
+			"TwistedTendril": "Stacks up to 3",
 
 			//warhammers
 			"WoodenWarhammer": "{$Mods.Polarities.ItemTooltip.WarhammerBase}",
@@ -354,6 +359,7 @@
 			"ToxicShot": "Shoots sprays of venom which account for gravity",
 			"PainBow": "Shoots a rainbow of arrows",
 			"Flarecaller": "Summons a solar flare from the sky",
+			"Splattergun": "Shoots a dense splatter of ichor",
 
 			//atlatls
 			"Axolatl": "Sometimes spits bubbles instead of shooting a dart",
@@ -380,6 +386,7 @@
 			"StarburstScepter": "Creates a starburst at the cursor",
 			"HeatFlare": "Creates tendrils of heat",
 			"BlazingIre": "Left click to use as a javelin, right click to use as a spear\nHitting enemies has a chance to summon additional javelins, and this chance is increased on critical strikes",
+			"ShadeStorm": "Shoots erratically curving shadows that tend to move towards enemies",
 
 			//summon weapons
 			"ZombatStaff": "Summons baby zombats to protect you",
@@ -390,6 +397,7 @@
 			"ScouringStaff": "Summons a friendly scourer",
 			"LuminousSlimeStaff": "Summons a luminous slime to protect you",
 			"SolarScarabStaff": "Summons a solar scarab to protect you",
+			"PincerStaff": "Summons a clawed flesh puddle",
 
 			//orbs
 			"Discorb": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons a winged disco ball to confuse enemies",
@@ -585,7 +593,10 @@
 			"BlazingIreSpear": "Blazing Spear",
 			"UraraneidIchorSpray": "Ichor Rain",
 			"CrimagoSlash": "Scythe Slash",
-			"TendrilAmalgamSpike": "Tendril Spike"
+			"TendrilAmalgamSpike": "Tendril Spike",
+			"ShadeStormProjectile": "Shade Vortex",
+			"PincerStaffSentry": "Flesh Puddle",
+			"PincerStaffSlash": "Pincer Slash"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
