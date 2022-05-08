@@ -70,6 +70,8 @@ namespace Polarities.NPCs.SunPixie
 			Main.npcFrameCount[NPC.type] = 6;
 			NPCID.Sets.TrailCacheLength[NPC.type] = 5;
 			NPCID.Sets.TrailingMode[NPC.type] = 0;
+
+			PolaritiesNPC.forceCountForRadar.Add(Type);
 		}
 
 		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

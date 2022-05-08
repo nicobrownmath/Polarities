@@ -459,7 +459,6 @@ namespace Polarities
         public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit)
 		{
 			//TODO: (MAYBE) Replace with source propagation system once supported/if it doesn't end up being trivially supported, also move terraprisma to be obtained on any flawless run if/when this system is added
-			//TODO: Make this work properly for EoW
 			for (int i = 0; i < Main.maxNPCs; i++)
             {
 				if (Main.npc[i].active)

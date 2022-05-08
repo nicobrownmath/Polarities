@@ -20,6 +20,8 @@ namespace Polarities.NPCs.Enemies
         {
             Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.GlowingSnail];
             Main.npcCatchable[NPC.type] = true;
+
+            PolaritiesNPC.forceCountForRadar.Add(Type);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

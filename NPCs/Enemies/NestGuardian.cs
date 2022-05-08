@@ -40,6 +40,8 @@ namespace Polarities.NPCs.Enemies
                 SpriteDirection = 1
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifiers);
+
+            PolaritiesNPC.forceCountForRadar.Add(Type);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

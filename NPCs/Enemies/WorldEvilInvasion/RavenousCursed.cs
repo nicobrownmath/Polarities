@@ -304,7 +304,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 				NPC.rotation = MathHelper.Pi;
 				NPC.Center -= new Vector2(20, 0);
 				segmentPositions[0] = NPC.Center + new Vector2(NPC.width / 2 - 2, 0).RotatedBy(NPC.rotation);
-				const float rotAmoutPerSegment = 0.05f;
+				const float rotAmoutPerSegment = 0.01f;
 				for (int i = 1; i < segmentPositions.Length; i++)
 				{
 					segmentPositions[i] = segmentPositions[i - 1] - new Vector2(2, 0).RotatedBy(NPC.rotation + rotAmoutPerSegment * i);

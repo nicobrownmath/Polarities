@@ -1253,6 +1253,7 @@ namespace Polarities.NPCs.StarConstruct
 			NPC.HitSound = SoundID.NPCHit4;
 			NPC.DeathSound = SoundID.NPCDeath14;
 
+			NPC.dontCountMe = true;
 			NPC.dontTakeDamage = true;
 		}
 

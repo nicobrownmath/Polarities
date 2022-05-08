@@ -31,7 +31,7 @@ namespace Polarities.Items
 
         public override bool CanUseItem(Player player)
         {
-            return (player.ZoneCorrupt || player.ZoneCrimson) && player.ZoneOverworldHeight && !PolaritiesSystem.hallowInvasion;
+            return (player.ZoneCorrupt || player.ZoneCrimson) && player.ZoneOverworldHeight && !PolaritiesSystem.worldEvilInvasion;
         }
 
         public override bool? UseItem(Player player)

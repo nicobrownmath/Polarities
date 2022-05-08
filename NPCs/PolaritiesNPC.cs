@@ -23,6 +23,9 @@ using Mono.Cecil.Cil;
 using Polarities.Items.Books;
 using MonoMod.RuntimeDetour.HookGen;
 using Polarities.Biomes;
+using Polarities.Items.Accessories;
+using Polarities.Items.Weapons.Ranged;
+using Polarities.Items.Weapons.Summon.Orbs;
 
 namespace Polarities.NPCs
 {
@@ -64,6 +67,8 @@ namespace Polarities.NPCs
 
         public static HashSet<int> customSlimes = new HashSet<int>();
 
+        public static HashSet<int> forceCountForRadar = new HashSet<int>();
+
         public override void Load()
         {
             On.Terraria.NPC.GetNPCColorTintedByBuffs += NPC_GetNPCColorTintedByBuffs;
@@ -75,7 +80,14 @@ namespace Polarities.NPCs
             IL.Terraria.GameContent.Bestiary.NPCWasNearPlayerTracker.ScanWorldForFinds += NPCWasNearPlayerTracker_ScanWorldForFinds;
             On.Terraria.NPC.HittableForOnHitRewards += NPC_HittableForOnHitRewards;
 
+            //avoid bad spawns
             IL_ChooseSpawn += PolaritiesNPC_IL_ChooseSpawn;
+
+            //flawless continuity for EoW
+            On.Terraria.NPC.Transform += NPC_Transform;
+
+            //force counts things for the radar
+            IL.Terraria.Main.DrawInfoAccs += Main_DrawInfoAccs;
         }
 
         public override void Unload()
@@ -84,6 +96,7 @@ namespace Polarities.NPCs
             customNPCCapSlot = null;
             customNPCCapSlotCaps = null;
             customSlimes = null;
+            forceCountForRadar = null;
 
             IL_ChooseSpawn -= PolaritiesNPC_IL_ChooseSpawn;
         }
@@ -91,6 +104,50 @@ namespace Polarities.NPCs
         public override void SetDefaults(NPC npc)
         {
             hammerTimes = new Dictionary<int, int>();
+        }
+
+        private void Main_DrawInfoAccs(ILContext il)
+        {
+            ILCursor c = new ILCursor(il);
+
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.MatchLdsfld(typeof(Main).GetField("npc", BindingFlags.Public | BindingFlags.Static)),
+                i => i.MatchLdloc(38),
+                i => i.MatchLdelemRef(),
+                i => i.MatchLdfld(typeof(Entity).GetField("active", BindingFlags.Public | BindingFlags.Instance)),
+                i => i.MatchBrfalse(out _),
+                i => i.MatchLdsfld(typeof(Main).GetField("npc", BindingFlags.Public | BindingFlags.Static)),
+                i => i.MatchLdloc(38),
+                i => i.MatchLdelemRef(),
+                i => i.MatchLdfld(typeof(NPC).GetField("friendly", BindingFlags.Public | BindingFlags.Instance)),
+                i => i.MatchBrtrue(out _),
+                i => i.MatchLdsfld(typeof(Main).GetField("npc", BindingFlags.Public | BindingFlags.Static)),
+                i => i.MatchLdloc(38),
+                i => i.MatchLdelemRef(),
+                i => i.MatchLdfld(typeof(NPC).GetField("damage", BindingFlags.Public | BindingFlags.Instance)),
+                i => i.MatchLdcI4(0),
+                i => i.MatchBle(out _),
+                i => i.MatchLdsfld(typeof(Main).GetField("npc", BindingFlags.Public | BindingFlags.Static)),
+                i => i.MatchLdloc(38),
+                i => i.MatchLdelemRef(),
+                i => i.MatchLdfld(typeof(NPC).GetField("lifeMax", BindingFlags.Public | BindingFlags.Instance)),
+                i => i.MatchLdcI4(5),
+                i => i.MatchBle(out _)
+                ))
+                return;
+
+            ILLabel label = c.DefineLabel();
+            label.Target = c.Next;
+
+            c.Index -= 17;
+
+            c.Emit(OpCodes.Ldloc, 38);
+            c.EmitDelegate<Func<int, bool>>((index) =>
+            {
+                //return true to force counting
+                return forceCountForRadar.Contains(Main.npc[index].type);
+            });
+            c.Emit(OpCodes.Brtrue, label);
         }
 
         //modifies enemy spawn pool after other mods for extra compatibility
@@ -312,6 +369,17 @@ namespace Polarities.NPCs
                 return defaultColor;
             });
             c.Emit(OpCodes.Stloc, 4);
+        }
+
+        private void NPC_Transform(On.Terraria.NPC.orig_Transform orig, NPC self, int newType)
+        {
+            bool flawless = self.GetGlobalNPC<PolaritiesNPC>().flawless;
+            Dictionary<int, int> hammerTimes = self.GetGlobalNPC<PolaritiesNPC>().hammerTimes;
+
+            orig(self, newType);
+
+            self.GetGlobalNPC<PolaritiesNPC>().flawless = flawless;
+            self.GetGlobalNPC<PolaritiesNPC>().hammerTimes = hammerTimes;
         }
 
         public override void ResetEffects(NPC npc)
@@ -559,10 +627,10 @@ namespace Polarities.NPCs
             switch(npc.type)
             {
                 case NPCID.KingSlime:
-                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Ranged.Gelthrower>()));
+                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Gelthrower>()));
                     break;
                 case NPCID.EyeofCthulhu:
-                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Ranged.Eyeruption>()));
+                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Eyeruption>()));
                     break;
                 case NPCID.EaterofWorldsBody:
                 case NPCID.EaterofWorldsHead:
@@ -573,13 +641,13 @@ namespace Polarities.NPCs
                     //npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Melee.NeuralBasher>()));
                     break;
                 case NPCID.QueenBee:
-                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Summon.Orbs.RoyalOrb>()));
+                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<RoyalOrb>()));
                     break;
                 case NPCID.SkeletronHead:
                     //npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Melee.Warhammers.BonyBackhand>()));
                     break;
                 case NPCID.WallofFlesh:
-                    //npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Accessories.MawOfFlesh>()));
+                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<MawOfFlesh>()));
                     break;
             }
 

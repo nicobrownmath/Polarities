@@ -38,6 +38,8 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 
 			PolaritiesNPC.npcTypeCap[Type] = 1;
 			PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.WorldEvilInvasion;
+
+			PolaritiesNPC.forceCountForRadar.Add(Type);
 		}
 
 		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -50,7 +52,6 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			});
 		}
 
-		//TODO: These don't count towards the radar?
 		public override void SetDefaults()
 		{
 			NPC.aiStyle = -1;
@@ -89,12 +90,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			if (!PolaritiesSystem.worldEvilInvasion)
 			{
 				//flee if not in the invasion
-				for (int a = 0; a < 48; a++)
-				{
-					Dust.NewDust(NPC.position, NPC.width, NPC.height, 18, newColor: Color.Transparent, Alpha: 32, Scale: 1.4f);
-				}
-				NPC.active = false;
-				return;
+				NPC.ai[0] = 0;
 			}
 
 			NPC.ai[0]--;
@@ -293,6 +289,13 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 							{
 								Dust.NewDust(NPC.position + new Vector2(NPC.width / 2, NPC.height), 1, 1, 18, newColor: Color.Transparent, Alpha: 32, Scale: 1.4f);
 							}
+
+							if (!PolaritiesSystem.worldEvilInvasion)
+                            {
+								//flee if not in event
+								NPC.active = false;
+								return;
+                            }
 
 							NPC.position = new Vector2(tryGoalPoint.X, y * 16 - NPC.height);
 
