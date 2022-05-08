@@ -272,11 +272,6 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
-			if (spawnInfo.Player.ZoneTowerNebula || spawnInfo.Player.ZoneTowerSolar || spawnInfo.Player.ZoneTowerStardust || spawnInfo.Player.ZoneTowerVortex)
-			{
-				return 0f;
-			}
-
 			//only spawns during the hallow event
 			if (spawnInfo.Player.InModBiome(GetInstance<Biomes.HallowInvasion>()))
 			{

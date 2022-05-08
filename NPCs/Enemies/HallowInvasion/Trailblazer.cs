@@ -246,11 +246,6 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
-			if (spawnInfo.Player.ZoneTowerNebula || spawnInfo.Player.ZoneTowerSolar || spawnInfo.Player.ZoneTowerStardust || spawnInfo.Player.ZoneTowerVortex)
-			{
-				return 0f;
-			}
-
 			//only spawns during the hallow event
 			if (spawnInfo.Player.InModBiome(GetInstance<Biomes.HallowInvasion>()))
 			{
@@ -281,10 +276,7 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			Projectile.hide = true;
 
 			Projectile.GetGlobalProjectile<PolaritiesProjectile>().ForceDraw = true;
-		}
 
-        public override void OnSpawn(IEntitySource source)
-		{
 			trailPositions = new Vector2[128];
 			trailScale = new float[128];
 		}

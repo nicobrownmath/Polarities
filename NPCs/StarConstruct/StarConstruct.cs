@@ -86,7 +86,7 @@ namespace Polarities.NPCs.StarConstruct
 			});
 		}
 
-        private int[] arm = new int[16];
+        private int[] arm;
 		static int baseArmCount => Main.getGoodWorld ? 6 : 4;
 		public static float VelocityMultiplier => Main.expertMode ? 10 : 6;
 
@@ -116,6 +116,8 @@ namespace Polarities.NPCs.StarConstruct
 
 			//for drawBehind
 			NPC.hide = true;
+
+			arm = new int[16];
 		}
 
 		public override void AI()
@@ -2006,6 +2008,8 @@ namespace Polarities.NPCs.StarConstruct
 				ImmuneToAllBuffsThatAreNotWhips = true
 			};
 			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+
+			PolaritiesNPC.npcTypeCap[Type] = 1;
 		}
 
 		public override void SetDefaults()
@@ -2264,12 +2268,7 @@ namespace Polarities.NPCs.StarConstruct
 		static int spawnY;
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
-			if (spawnInfo.Player.ZoneTowerNebula || spawnInfo.Player.ZoneTowerSolar || spawnInfo.Player.ZoneTowerStardust || spawnInfo.Player.ZoneTowerVortex)
-			{
-				return 0f;
-			}
-
-			if ((!PolaritiesSystem.downedStarConstruct || Main.rand.NextBool(2)) && !NPC.AnyNPCs(Type) && Main.invasionType == 0 && !Main.pumpkinMoon && !Main.snowMoon)
+			if ((!PolaritiesSystem.downedStarConstruct || Main.rand.NextBool(2)) && Main.invasionType == 0 && !Main.pumpkinMoon && !Main.snowMoon)
 			{
 				if ((spawnInfo.Player.ZoneOverworldHeight || spawnInfo.Player.ZoneSkyHeight) && spawnInfo.Player.statLifeMax2 >= 300 && !spawnInfo.Player.ShoppingZone_AnyBiome)
 				{

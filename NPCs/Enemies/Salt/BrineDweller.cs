@@ -255,11 +255,6 @@ namespace Polarities.NPCs.Enemies.Salt
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.ZoneTowerNebula || spawnInfo.Player.ZoneTowerSolar || spawnInfo.Player.ZoneTowerStardust || spawnInfo.Player.ZoneTowerVortex)
-            {
-                return 0f;
-            }
-
             if (!Main.hardMode)
             {
                 return 0f;

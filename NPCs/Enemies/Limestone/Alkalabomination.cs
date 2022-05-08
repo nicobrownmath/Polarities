@@ -149,10 +149,7 @@ namespace Polarities.NPCs.Enemies.Limestone
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.ZoneTowerNebula || spawnInfo.Player.ZoneTowerSolar || spawnInfo.Player.ZoneTowerStardust || spawnInfo.Player.ZoneTowerVortex)
-            {
-                return 0f;
-            }
+            if (spawnInfo.PlayerSafe) return 0f;
 
             if (!Main.hardMode)
             {

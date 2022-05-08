@@ -111,23 +111,37 @@ namespace Polarities.NPCs
             {
                 //remove things from the spawn pool if ineligible
                 //this is done after the editspawnpool hook in order to prevent enemies from later-loaded mods from spawning
-                if (spawnInfo.Player.InModBiome(GetInstance<HallowInvasion>()))
+                if (spawnInfo.Player.ZoneTowerSolar || spawnInfo.Player.ZoneTowerStardust || spawnInfo.Player.ZoneTowerNebula || spawnInfo.Player.ZoneTowerVortex)
                 {
-                    foreach(int i in pool.Keys)
+                    //no enemies from the mod can spawn during the pillars
+                    foreach (int i in pool.Keys)
                     {
-                        if (!HallowInvasion.ValidNPC(i))
+                        if (GetModNPC(i).Mod == Mod)
                         {
                             pool[i] = 0;
                         }
                     }
                 }
-                if (spawnInfo.Player.InModBiome(GetInstance<WorldEvilInvasion>()))
+                else
                 {
-                    foreach (int i in pool.Keys)
+                    if (spawnInfo.Player.InModBiome(GetInstance<HallowInvasion>()))
                     {
-                        if (!WorldEvilInvasion.ValidNPC(i))
+                        foreach (int i in pool.Keys)
                         {
-                            pool[i] = 0;
+                            if (!HallowInvasion.ValidNPC(i))
+                            {
+                                pool[i] = 0;
+                            }
+                        }
+                    }
+                    else if (spawnInfo.Player.InModBiome(GetInstance<WorldEvilInvasion>()))
+                    {
+                        foreach (int i in pool.Keys)
+                        {
+                            if (!WorldEvilInvasion.ValidNPC(i))
+                            {
+                                pool[i] = 0;
+                            }
                         }
                     }
                 }

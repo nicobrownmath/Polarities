@@ -240,11 +240,6 @@ namespace Polarities.NPCs.Enemies
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.ZoneTowerNebula || spawnInfo.Player.ZoneTowerSolar || spawnInfo.Player.ZoneTowerStardust || spawnInfo.Player.ZoneTowerVortex)
-            {
-                return 0f;
-            }
-
             if (PolaritiesSystem.downedGigabat)
             {
                 return SpawnCondition.Cavern.Chance * 0.1f;

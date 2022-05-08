@@ -79,6 +79,8 @@ namespace Polarities.NPCs.Enemies.Limestone
 			NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = new Rectangle[numSegments];
 
 			SpawnModBiomes = new int[1] { GetInstance<LimestoneCave>().Type };
+
+			segmentPositions = new Vector2[numSegments * segmentsPerHitbox + 6];
 		}
 
 		const int numSegments = 10;
@@ -86,7 +88,7 @@ namespace Polarities.NPCs.Enemies.Limestone
 		const int segmentsHead = 16;
 		const int segmentsTail = 14;
 		const int hitboxSegmentOffset = 5;
-		private Vector2[] segmentPositions = new Vector2[numSegments * segmentsPerHitbox + 6];
+		private Vector2[] segmentPositions;
 
         public override void AI()
 		{
@@ -305,11 +307,6 @@ namespace Polarities.NPCs.Enemies.Limestone
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
 			if (spawnInfo.PlayerSafe) return 0f;
-
-			if (spawnInfo.Player.ZoneTowerNebula || spawnInfo.Player.ZoneTowerSolar || spawnInfo.Player.ZoneTowerStardust || spawnInfo.Player.ZoneTowerVortex)
-			{
-				return 0f;
-			}
 
 			Tile playerTile = Main.tile[(int)(spawnInfo.Player.Center.X / 16), (int)((spawnInfo.Player.Center.Y + 1 + spawnInfo.Player.height / 2) / 16)];
 			if (spawnInfo.Player.InModBiome(GetInstance<LimestoneCave>()) && (spawnInfo.SpawnTileType == TileType<LimestoneTile>() || playerTile.TileType == TileType<LimestoneTile>()))
