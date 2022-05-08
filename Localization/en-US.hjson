@@ -583,7 +583,8 @@
 			"SolarScarabMinion": "Solar Scarab",
 			"BlazingIreJavelin": "Blazing Javelin",
 			"BlazingIreSpear": "Blazing Spear",
-			"UraraneidIchorSpray": "Ichor Rain"
+			"UraraneidIchorSpray": "Ichor Rain",
+			"CrimagoSlash": "Scythe Slash"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
@@ -628,7 +629,8 @@
 			"Trailblazer": "Trailblazer",
 			"Painbow": "Painbow",
 			"SunPixie": "Sun Pixie",
-			"Uraraneid": "Uraraneid"
+			"Uraraneid": "Uraraneid",
+			"Crimago": "Crimago"
 		},
 		"Bestiary": {
 			"Rattler": "This small, venomous snake prefers dry climates. It loudly rattles to ward off any predators, but it’s just too cute to avoid!",
@@ -670,7 +672,8 @@
 			"Trailblazer": "This unique subspecies of pixie leaves a long trail of holy plasma behind itself as it moves, which it happily weaponizes to rope in foes.",
 			"Painbow": "An advanced type of pixie that has learned to separate its light into the colors of the spectrum. It fights with rainbow surges and charges, every shade equally painful.",
 			"SunPixie": "Radiating intense heat with hallowed magic and solar energy, the Sun Pixie is frantic in its pursuit of absolute purification. It is said, however, that even this most luminous of beings has an inner darkness.",
-			"Uraraneid": "This creature belongs to a higher caliber than the typical arachnids that dot the Crimson. Using the ichor stored in its large swollen bulb, it can rapidly inflate its legs with the fluid, propelling itself great distances."
+			"Uraraneid": "This creature belongs to a higher caliber than the typical arachnids that dot the Crimson. Using the ichor stored in its large swollen bulb, it can rapidly inflate its legs with the fluid, propelling itself great distances.",
+			"Crimago": "Soaring about on fell wings, this living nightmare hunts with its scythe-like claws. Close inspection reveals their claws to be literal bone matter erupting from their flesh... yet the Crimago cares not, the Crimson has long since stolen the sensation of true pain from all of its children."
 		},
 		"MapObject": {
 			"SaltCrystalsTile": "{$Mods.Polarities.ItemName.SaltCrystals}",

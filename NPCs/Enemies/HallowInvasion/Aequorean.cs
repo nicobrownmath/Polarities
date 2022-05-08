@@ -198,7 +198,7 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 
             for (int i = 1; i < NPC.oldPos.Length; i++)
             {
-                Color color = new Color(220, 240, 255) * (1 - i / (float)NPC.oldPos.Length) * 0.25f;
+                Color color = NPC.GetNPCColorTintedByBuffs(new Color(220, 240, 255) * (1 - i / (float)NPC.oldPos.Length) * 0.25f);
 
                 for (int j = 0; j < numTentaclePairs; j++)
                 {
@@ -210,10 +210,10 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 
             for (int i = 0; i < numTentaclePairs; i++)
             {
-                spriteBatch.Draw(tentacleTexture, NPC.Center - screenPos, NPC.frame, Color.White, NPC.rotation, origin, new Vector2((float)Math.Abs(Math.Cos(NPC.rotation + NPC.position.X / 64f + i * MathHelper.Pi / numTentaclePairs)), 1) * NPC.scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(tentacleTexture, NPC.Center - screenPos, NPC.frame, NPC.GetNPCColorTintedByBuffs(Color.White), NPC.rotation, origin, new Vector2((float)Math.Abs(Math.Cos(NPC.rotation + NPC.position.X / 64f + i * MathHelper.Pi / numTentaclePairs)), 1) * NPC.scale, SpriteEffects.None, 0f);
             }
 
-            spriteBatch.Draw(texture, NPC.Center - screenPos, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, NPC.Center - screenPos, NPC.frame, NPC.GetNPCColorTintedByBuffs(Color.White), NPC.rotation, origin, NPC.scale, SpriteEffects.None, 0f);
 
             return false;
         }

@@ -220,12 +220,12 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			Texture2D texture = TextureAssets.Npc[Type].Value;
 			Rectangle frame = texture.Frame();
 
-			spriteBatch.Draw(texture, NPC.Center - screenPos, frame, Color.White, NPC.rotation, frame.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
+			spriteBatch.Draw(texture, NPC.Center - screenPos, frame, NPC.GetNPCColorTintedByBuffs(Color.White), NPC.rotation, frame.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
 
 			//Adapted from vanilla illuminant NPC draw code
 			for (int num347 = 1; num347 < NPC.oldPos.Length; num347++)
 			{
-				Color color27 = new Color((byte)(150 * (10 - num347) / 15), (byte)(100 * (10 - num347) / 15), (byte)(150 * (10 - num347) / 15), (byte)(50 * (10 - num347) / 15));
+				Color color27 = NPC.GetNPCColorTintedByBuffs(new Color((byte)(150 * (10 - num347) / 15), (byte)(100 * (10 - num347) / 15), (byte)(150 * (10 - num347) / 15), (byte)(50 * (10 - num347) / 15)));
 				spriteBatch.Draw(texture, NPC.oldPos[num347] + NPC.Center - NPC.position - screenPos, frame, color27, NPC.rotation, frame.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
 			}
 
@@ -234,11 +234,11 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			Rectangle plateFrame = plateTexture.Frame();
 			for (int i = 0; i < plateAngle.Length; i++)
 			{
-				spriteBatch.Draw(plateTexture, NPC.Center - screenPos + new Vector2(plateDistance[i], 0).RotatedBy(NPC.rotation + plateAngle[i]), plateFrame, Color.White, NPC.rotation + plateAngle[i] / 2 + MathHelper.PiOver4, new Vector2(plateFrame.Size().X / 2, 0), NPC.scale, SpriteEffects.None, 0f);
+				spriteBatch.Draw(plateTexture, NPC.Center - screenPos + new Vector2(plateDistance[i], 0).RotatedBy(NPC.rotation + plateAngle[i]), plateFrame, NPC.GetNPCColorTintedByBuffs(Color.White), NPC.rotation + plateAngle[i] / 2 + MathHelper.PiOver4, new Vector2(plateFrame.Size().X / 2, 0), NPC.scale, SpriteEffects.None, 0f);
 
 				for (int num347 = 1; num347 < NPC.oldPos.Length; num347++)
 				{
-					Color color27 = new Color((byte)(150 * (10 - num347) / 15), (byte)(100 * (10 - num347) / 15), (byte)(150 * (10 - num347) / 15), (byte)(50 * (10 - num347) / 15));
+					Color color27 = NPC.GetNPCColorTintedByBuffs(new Color((byte)(150 * (10 - num347) / 15), (byte)(100 * (10 - num347) / 15), (byte)(150 * (10 - num347) / 15), (byte)(50 * (10 - num347) / 15)));
 					spriteBatch.Draw(plateTexture, NPC.oldPos[num347] + NPC.Center - NPC.position - screenPos + new Vector2(plateDistance[i], 0).RotatedBy(NPC.rotation + plateAngle[i]), plateFrame, color27, NPC.rotation + plateAngle[i] / 2 + MathHelper.PiOver4, new Vector2(plateFrame.Size().X / 2, 0), NPC.scale, SpriteEffects.None, 0f);
 				}
 			}

@@ -37,7 +37,7 @@ namespace Polarities.NPCs
     {
         public override bool InstancePerEntity => true;
 
-        public Dictionary<int, int> hammerTimes = new Dictionary<int, int>();
+        public Dictionary<int, int> hammerTimes;
         public bool flawless = true;
 
         public bool usesProjectileHitCooldowns = false;
@@ -86,6 +86,11 @@ namespace Polarities.NPCs
             customSlimes = null;
 
             IL_ChooseSpawn -= PolaritiesNPC_IL_ChooseSpawn;
+        }
+
+        public override void SetDefaults(NPC npc)
+        {
+            hammerTimes = new Dictionary<int, int>();
         }
 
         //modifies enemy spawn pool after other mods for extra compatibility

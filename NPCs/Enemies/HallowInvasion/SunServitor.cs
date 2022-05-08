@@ -283,7 +283,7 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			Texture2D texture = TextureAssets.Npc[Type].Value;
 			Rectangle frame = NPC.frame;
 
-			spriteBatch.Draw(texture, NPC.Center + new Vector2(0, DrawOffsetY) - screenPos, frame, Color.White, NPC.rotation, frame.Size() / 2, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
+			spriteBatch.Draw(texture, NPC.Center + new Vector2(0, DrawOffsetY) - screenPos, frame, NPC.GetNPCColorTintedByBuffs(Color.White), NPC.rotation, frame.Size() / 2, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
 			return false;
 		}
 

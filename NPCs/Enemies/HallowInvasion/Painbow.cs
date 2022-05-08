@@ -284,22 +284,22 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			Texture2D texture = TextureAssets.Npc[Type].Value;
 			Rectangle frame = texture.Frame();
 
-			spriteBatch.Draw(texture, NPC.Center - screenPos, frame, Color.White * alphaMult, NPC.localAI[0], frame.Size() / 2, new Vector2(0.5f, 3), SpriteEffects.None, 0f);
-			spriteBatch.Draw(texture, NPC.Center - screenPos, frame, Color.White * alphaMult, -NPC.localAI[0], frame.Size() / 2, new Vector2(0.5f, 3), SpriteEffects.None, 0f);
-			spriteBatch.Draw(texture, NPC.Center - screenPos, frame, Color.White * alphaMult, NPC.localAI[0] + MathHelper.PiOver2, frame.Size() / 2, new Vector2(0.5f, 3), SpriteEffects.None, 0f);
-			spriteBatch.Draw(texture, NPC.Center - screenPos, frame, Color.White * alphaMult, -NPC.localAI[0] + MathHelper.PiOver2, frame.Size() / 2, new Vector2(0.5f, 3), SpriteEffects.None, 0f);
+			spriteBatch.Draw(texture, NPC.Center - screenPos, frame, NPC.GetNPCColorTintedByBuffs(Color.White) * alphaMult, NPC.localAI[0], frame.Size() / 2, new Vector2(0.5f, 3), SpriteEffects.None, 0f);
+			spriteBatch.Draw(texture, NPC.Center - screenPos, frame, NPC.GetNPCColorTintedByBuffs(Color.White) * alphaMult, -NPC.localAI[0], frame.Size() / 2, new Vector2(0.5f, 3), SpriteEffects.None, 0f);
+			spriteBatch.Draw(texture, NPC.Center - screenPos, frame, NPC.GetNPCColorTintedByBuffs(Color.White) * alphaMult, NPC.localAI[0] + MathHelper.PiOver2, frame.Size() / 2, new Vector2(0.5f, 3), SpriteEffects.None, 0f);
+			spriteBatch.Draw(texture, NPC.Center - screenPos, frame, NPC.GetNPCColorTintedByBuffs(Color.White) * alphaMult, -NPC.localAI[0] + MathHelper.PiOver2, frame.Size() / 2, new Vector2(0.5f, 3), SpriteEffects.None, 0f);
 
-			DrawLightTentacle(spriteBatch, screenPos, Color.Red * alphaMult, 0f);
-			DrawLightTentacle(spriteBatch, screenPos, Color.OrangeRed * alphaMult, MathHelper.Pi / 3);
-			DrawLightTentacle(spriteBatch, screenPos, Color.Yellow * alphaMult, 2 * MathHelper.Pi / 3);
-			DrawLightTentacle(spriteBatch, screenPos, Color.Green * alphaMult, 3 * MathHelper.Pi / 3);
-			DrawLightTentacle(spriteBatch, screenPos, Color.Blue * alphaMult, 4 * MathHelper.Pi / 3);
-			DrawLightTentacle(spriteBatch, screenPos, Color.Purple * alphaMult, 5 * MathHelper.Pi / 3);
+			DrawLightTentacle(spriteBatch, screenPos, NPC.GetNPCColorTintedByBuffs(Color.Red) * alphaMult, 0f);
+			DrawLightTentacle(spriteBatch, screenPos, NPC.GetNPCColorTintedByBuffs(Color.OrangeRed) * alphaMult, MathHelper.Pi / 3);
+			DrawLightTentacle(spriteBatch, screenPos, NPC.GetNPCColorTintedByBuffs(Color.Yellow) * alphaMult, 2 * MathHelper.Pi / 3);
+			DrawLightTentacle(spriteBatch, screenPos, NPC.GetNPCColorTintedByBuffs(Color.Green) * alphaMult, 3 * MathHelper.Pi / 3);
+			DrawLightTentacle(spriteBatch, screenPos, NPC.GetNPCColorTintedByBuffs(Color.Blue) * alphaMult, 4 * MathHelper.Pi / 3);
+			DrawLightTentacle(spriteBatch, screenPos, NPC.GetNPCColorTintedByBuffs(Color.Purple) * alphaMult, 5 * MathHelper.Pi / 3);
 
 			Texture2D texture2 = Textures.Glow58.Value;
 			Rectangle frame2 = texture2.Frame();
 
-			spriteBatch.Draw(texture2, NPC.Center - screenPos, frame2, Color.White * (alphaMult * 2f), 0f, frame2.Size() / 2, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(texture2, NPC.Center - screenPos, frame2, NPC.GetNPCColorTintedByBuffs(Color.White) * (alphaMult * 2f), 0f, frame2.Size() / 2, 1f, SpriteEffects.None, 0f);
 		}
 
 		private void DrawLightTentacle(SpriteBatch spriteBatch, Vector2 screenPos, Color color, float rotation)

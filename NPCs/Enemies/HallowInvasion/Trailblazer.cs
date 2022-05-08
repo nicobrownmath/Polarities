@@ -209,13 +209,13 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			Texture2D wingTexture = WingTexture.Value;
 			Rectangle wingFrame = wingTexture.Frame();
 
-			spriteBatch.Draw(wingTexture, NPC.Center - screenPos, wingFrame, Color.White, NPC.rotation + (float)Math.Sin(NPC.localAI[0]) * 0.75f - 0.1f, new Vector2(47, 13), new Vector2(1, ((float)Math.Cos(NPC.localAI[0]) + 2) / 3) * NPC.scale, SpriteEffects.None, 0f);
-			spriteBatch.Draw(wingTexture, NPC.Center - screenPos, wingFrame, Color.White, NPC.rotation - (float)Math.Sin(NPC.localAI[0]) * 0.75f + 0.1f, new Vector2(-13, 13), new Vector2(1, ((float)Math.Cos(NPC.localAI[0]) + 2) / 3) * NPC.scale, SpriteEffects.FlipHorizontally, 0f);
+			spriteBatch.Draw(wingTexture, NPC.Center - screenPos, wingFrame, NPC.GetNPCColorTintedByBuffs(Color.White), NPC.rotation + (float)Math.Sin(NPC.localAI[0]) * 0.75f - 0.1f, new Vector2(47, 13), new Vector2(1, ((float)Math.Cos(NPC.localAI[0]) + 2) / 3) * NPC.scale, SpriteEffects.None, 0f);
+			spriteBatch.Draw(wingTexture, NPC.Center - screenPos, wingFrame, NPC.GetNPCColorTintedByBuffs(Color.White), NPC.rotation - (float)Math.Sin(NPC.localAI[0]) * 0.75f + 0.1f, new Vector2(-13, 13), new Vector2(1, ((float)Math.Cos(NPC.localAI[0]) + 2) / 3) * NPC.scale, SpriteEffects.FlipHorizontally, 0f);
 
 			Texture2D texture = TextureAssets.Npc[Type].Value;
 			Rectangle frame = texture.Frame();
 
-			spriteBatch.Draw(texture, NPC.Center - screenPos, frame, Color.White, NPC.rotation, frame.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
+			spriteBatch.Draw(texture, NPC.Center - screenPos, frame, NPC.GetNPCColorTintedByBuffs(Color.White), NPC.rotation, frame.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
 
 			return false;
 		}
