@@ -45,17 +45,20 @@ namespace Polarities.Biomes
 
                 if (basePath != null)
                 {
-                    if (basePath.Length == 0)
+                    if (basePath.StartsWith("Terraria/"))
                     {
+                        if (basePath.Length == 0)
+                        {
+                            return null;
+                        }
+                        Asset<Texture2D> asset = Request<Texture2D>(basePath, AssetRequestMode.AsyncLoad);
+                        if (asset.Size() == new Vector2(115f, 65f))
+                        {
+                            return asset;
+                        }
+                        Mod.Logger.Info((object)(basePath + " needs to be 115x65 pixels."));
                         return null;
                     }
-                    Asset<Texture2D> asset = Request<Texture2D>(basePath, AssetRequestMode.AsyncLoad);
-                    if (asset.Size() == new Vector2(115f, 65f))
-                    {
-                        return asset;
-                    }
-                    Mod.Logger.Info((object)(basePath + " needs to be 115x65 pixels."));
-                    return null;
                 }
             }
 

@@ -180,6 +180,7 @@ namespace Polarities.Items.Placeable.Banners
 	public class BatSlimeBanner : BannerBase { public override int BannerIndex => 19; public override int NPCType => NPCType<BatSlime>(); }
 	public class NestGuardianBanner : BannerBase { public override int BannerIndex => 20; public override int NPCType => NPCType<NestGuardian>(); }
 	public class AlkalabominationBanner : BannerBase { public override int BannerIndex => 22; public override int NPCType => NPCType<Alkalabomination>(); }
+	public class LightEaterBanner : BannerBase { public override int BannerIndex => 26; public override int NPCType => NPCType<LightEater>(); }
 	public class CrimagoBanner : BannerBase { public override int BannerIndex => 28; public override int NPCType => NPCType<Crimago>(); }
 	public class UraraneidBanner : BannerBase { public override int BannerIndex => 29; public override int NPCType => NPCType<Uraraneid>(); }
 	public class FlowWormBanner : BannerBase { public override int BannerIndex => 34; public override int NPCType => NPCType<FlowWorm>(); }

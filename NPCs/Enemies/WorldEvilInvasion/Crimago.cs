@@ -329,7 +329,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 		{
 			Texture2D mask = WingsTexture.Value;
 			Vector2 drawOrigin = new Vector2(mask.Width * 0.5f, (mask.Height / 4) * 0.5f);
-			Vector2 drawPos = NPC.Center - Main.screenPosition + new Vector2(0f, NPC.gfxOffY + 4);
+			Vector2 drawPos = NPC.Center - screenPos + new Vector2(0f, NPC.gfxOffY + 4);
 			spriteBatch.Draw(mask, drawPos, NPC.frame, NPC.GetNPCColorTintedByBuffs(drawColor), NPC.rotation, drawOrigin, NPC.scale, SpriteEffects.None, 0f);
 
 			mask = ClawTexture.Value;
@@ -343,9 +343,14 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			Player player = Main.player[NPC.target];
 			Vector2 offset = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 2;
 
+			if (NPC.IsABestiaryIconDummy)
+            {
+				offset = new Vector2(0, 2);
+            }
+
 			Texture2D mask = EyesTexture.Value;
 			Vector2 drawOrigin = new Vector2(mask.Width * 0.5f, (mask.Height / 4) * 0.5f);
-			Vector2 drawPos = NPC.Center - Main.screenPosition + new Vector2(0f, NPC.gfxOffY + 4) + offset;
+			Vector2 drawPos = NPC.Center - screenPos + new Vector2(0f, NPC.gfxOffY + 4) + offset;
 			spriteBatch.Draw(mask, drawPos, NPC.frame, NPC.GetNPCColorTintedByBuffs(drawColor), NPC.rotation, drawOrigin, NPC.scale, SpriteEffects.None, 0f);
 		}
 

@@ -53,7 +53,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			NPC.lifeMax = 4200;
 			NPC.knockBackResist = 0f;
 			NPC.npcSlots = 1f;
-			NPC.noGravity = true;
+			NPC.noGravity = false;
 			NPC.noTileCollide = true;
 			NPC.HitSound = SoundID.NPCHit1;
 			NPC.DeathSound = SoundID.NPCDeath1;
@@ -70,6 +70,8 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 
 		public override void AI()
 		{
+			NPC.noGravity = true;
+
 			NPC.TargetClosest(true);
 			Player player = Main.player[NPC.target];
 
@@ -335,6 +337,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
         public override void ModifyNPCLoot(NPCLoot npcLoot)
 		{
 			//TODO: npcLoot.Add(ItemDropRule.Common(ItemType<Splattergun>(), 8));
+			npcLoot.Add(ItemDropRule.Common(ItemID.Ichor, 1, 2, 5));
 		}
 	}
 
