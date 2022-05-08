@@ -17,8 +17,6 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Uraraneid");
-
 			Main.npcFrameCount[Type] = 2;
 
 			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
@@ -326,11 +324,6 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
-			if (spawnInfo.Player.ZoneTowerNebula || spawnInfo.Player.ZoneTowerSolar || spawnInfo.Player.ZoneTowerStardust || spawnInfo.Player.ZoneTowerVortex)
-			{
-				return 0f;
-			}
-
 			//only spawns during the evil event
 			if (spawnInfo.Player.InModBiome(GetInstance<Biomes.WorldEvilInvasion>()))
 			{
@@ -345,16 +338,11 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 		}
 	}
 
-	//TODO: Replace with drawcode projectiles
+	//TODO: Replace with drawcode projectiles a la hemorrphage?
 	public class UraraneidIchorSpray : ModProjectile
 	{
 		//hopefully doing it this way doesn't break everything
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.GoldenShowerHostile;
-
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Ichor Rain");
-		}
 
 		public override void SetDefaults()
 		{
