@@ -121,7 +121,7 @@
 			//tools
 			"SunplateHamaxe": "Sunplate Hamaxe",
 			"Everlight": "Everlight",
-			"HallowSpreadToggleItem": "Strange Jewelry",
+			"StrangeJewelry": "Strange Jewelry",
 
 			//accessories
 			"CosmicCable": "Cosmic Cable",
@@ -408,7 +408,7 @@
 
 			//tools
 			"Everlight": "Illuminates the cursor when held\nGrants rifle scope effect",
-			"HallowSpreadToggleItem": "Toggles the Hallow's spread",
+			"StrangeJewelry": "Toggles the Hallow's spread",
 
 			//accessories
 			"CosmicCable": "Improves hook stats",
@@ -709,7 +709,7 @@
 		"BuffName": {
 			"Desiccating": "Desiccating",
 			"PiercingPotionBuff": "Piercing",
-			"TolerancePotionCooldown": "Tolerance Potion Cooldown",
+			"TolerancePotionCooldownBuff": "Tolerance Potion Cooldown",
 			"Pinpointed": "Pinpointed",
 			"Corroding": "Corroding",
 			"ToxicShock": "Toxic Shock",
@@ -739,7 +739,7 @@
 		"BuffDescription": {
 			"Desiccating": "You are drying out",
 			"PiercingPotionBuff": "Armor penetration is increased by 6",
-			"TolerancePotionCooldown": "Your tolerance is limited",
+			"TolerancePotionCooldownBuff": "Your tolerance is limited",
 			"Pinpointed": "You have been detected, giving enemies a chance to critically hit you",
 			"Corroding": "Defense is reduced",
 			"ToxicShock": "'Shocking'",

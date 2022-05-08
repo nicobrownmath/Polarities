@@ -294,7 +294,7 @@ namespace Polarities.NPCs.SunPixie
 
 							for (int i = 0; i < numLasers; i++)
 							{
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(player.Center).RotatedBy(rotationOffset + i * MathHelper.TwoPi / numLasers) * speed, ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.1f, 0);
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(player.Center).RotatedBy(rotationOffset + i * MathHelper.TwoPi / numLasers) * speed, ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.1f, player.whoAmI);
 							}
 
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ProjectileType<SunPixieOrb>(), 19, 3f, Main.myPlayer);
@@ -559,14 +559,14 @@ namespace Polarities.NPCs.SunPixie
 						if ((NPC.ai[1] - 40) % (int)NPC.ai[2] == 0)
 						{
 							SoundEngine.PlaySound(SoundID.Item, NPC.position, 33);
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, 0.5f), ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.07f, 0);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, 0.5f), ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.07f, player.whoAmI);
 						}
 						else if (Main.getGoodWorld && (NPC.ai[1] - 40) % (int)(NPC.ai[2] * 2) == NPC.ai[3] * NPC.ai[2] / 2)
                         {
 							if (Main.rand.NextBool())
 							{
 								SoundEngine.PlaySound(SoundID.Item, NPC.position, 33);
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, 0.5f), ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.07f, 0);
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, 0.5f), ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.07f, player.whoAmI);
 							}
 							else
                             {
@@ -670,13 +670,13 @@ namespace Polarities.NPCs.SunPixie
 							if ((NPC.ai[1] - 40) % 3 != NPC.ai[2])
 							{
 								SoundEngine.PlaySound(SoundID.Item, NPC.position, 33);
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, 0.5f), ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.07f, 0);
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, 0.5f), ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.07f, player.whoAmI);
 							}
 						}
 						else if ((NPC.ai[1] - 40) % 3 == 2)
 						{
 							SoundEngine.PlaySound(SoundID.Item, NPC.position, 33);
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, 0.5f), ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.07f, 0);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, 0.5f), ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.07f, player.whoAmI);
 						}
 					}
 
@@ -1545,7 +1545,7 @@ namespace Polarities.NPCs.SunPixie
 			Projectile.timeLeft = 600;
 			Projectile.penetrate = 1;
 			Projectile.hostile = true;
-			Projectile.tileCollide = Projectile.ai[0] == 0;
+			Projectile.tileCollide = false;
 			Projectile.ignoreWater = true;
 			Projectile.light = 1f;
 			Projectile.hide = true;
@@ -1567,6 +1567,11 @@ namespace Polarities.NPCs.SunPixie
 				Projectile.velocity.Normalize();
 				Projectile.velocity *= 32;
 			}
+
+			if (Vector2.Dot(Projectile.velocity, Main.player[(int)Projectile.ai[1]].Center - Projectile.Center) < 0)
+            {
+				Projectile.tileCollide = true;
+            }
 		}
 
 		public override void OnHitPlayer(Player target, int damage, bool crit)
