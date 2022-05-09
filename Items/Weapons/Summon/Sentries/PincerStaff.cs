@@ -73,6 +73,7 @@ namespace Polarities.Items.Weapons.Summon.Sentries
 
 			Projectile.penetrate = -1;
 			Projectile.sentry = true;
+			Projectile.DamageType = DamageClass.Summon;
 			Projectile.friendly = true;
 			Projectile.ignoreWater = true;
 			Projectile.tileCollide = true;
@@ -300,7 +301,7 @@ namespace Polarities.Items.Weapons.Summon.Sentries
 			Projectile.width = 20;
 			Projectile.height = 20;
 			DrawOffsetX = -6;
-
+			Projectile.DamageType = DamageClass.Summon;
 			DrawOriginOffsetY = 0;
 			DrawOriginOffsetX = 0;
 			Projectile.alpha = 0;

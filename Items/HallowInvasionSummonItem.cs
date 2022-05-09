@@ -1,10 +1,12 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Polarities.Biomes;
+using Polarities.NPCs.SunPixie;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Items
 {
@@ -31,7 +33,7 @@ namespace Polarities.Items
 
         public override bool CanUseItem(Player player)
         {
-            return player.ZoneHallow && player.ZoneOverworldHeight && !PolaritiesSystem.hallowInvasion;
+            return player.ZoneHallow && player.ZoneOverworldHeight && !PolaritiesSystem.hallowInvasion && PolaritiesSystem.sunPixieSpawnTimer == 0 && !NPC.AnyNPCs(NPCType<SunPixie>());
         }
 
         public override bool? UseItem(Player player)

@@ -484,14 +484,15 @@ namespace Polarities.NPCs
                     if (Main.npc[i].boss && Main.npc[i].active && Main.npc[i].type != NPCID.MartianSaucerCore)
                     {
                         maxSpawns = 0;
-                        break;
+                        return;
                     }
                 }
             }
 
-            if (/*PolaritiesSystem.esophageSpawnTimer > 0 ||*/ PolaritiesSystem.sunPixieSpawnTimer > 0)
+            if (PolaritiesSystem.esophageSpawnTimer > 0 || PolaritiesSystem.sunPixieSpawnTimer > 0)
             {
                 maxSpawns = 0;
+                return;
             }
         }
 
@@ -615,8 +616,7 @@ namespace Polarities.NPCs
             }
             if (WorldEvilInvasion.ValidNPC(npc.type))
             {
-                //TODO: Replace with capsid
-                npcLoot.Add(ItemDropRule.ByCondition(new EsophageSummonItemDropCondition(), ItemType<SunPixieSummonItem>()));
+                npcLoot.Add(ItemDropRule.ByCondition(new EsophageSummonItemDropCondition(), ItemType<EsophageSummonItem>()));
             }
 
             if (customSlimes.Contains(npc.type))

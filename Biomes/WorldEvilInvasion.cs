@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Polarities.NPCs;
+using Polarities.NPCs.Esophage;
 using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
@@ -16,6 +17,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Biomes
 {
+    //TODO: Pestilence soul drops?
     public class WorldEvilInvasion : ModBiome
     {
         public override SceneEffectPriority Priority => SceneEffectPriority.Event;
@@ -146,7 +148,7 @@ namespace Polarities.Biomes
                 {
                     if (Main.netMode != 1 && player.active && !player.dead)
                     {
-                        //TODO: Esophage.SpawnOn(player);
+                        Esophage.SpawnOn(player);
 
                         PolaritiesSystem.esophageSpawnTimer = -10;
 

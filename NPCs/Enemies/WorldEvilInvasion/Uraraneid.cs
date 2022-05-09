@@ -11,6 +11,7 @@ using Terraria.GameContent.Bestiary;
 using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
 using Polarities.Items.Weapons.Ranged;
+using Polarities.NPCs.Esophage;
 
 namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 {
@@ -154,7 +155,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 								if (NPC.ai[1] % ichorSprayPeriod == ichorSprayPeriod - 1)
 								{
 									Vector2 speed = new Vector2(0, -ichorSprayVelocity).RotatedBy(angle);
-									int shot = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -NPC.height / 2), speed, ProjectileType<UraraneidIchorSpray>(), 14, 3, Main.myPlayer);
+									int shot = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -NPC.height / 2), speed, ProjectileType<EsophageIchorSpray>(), 14, 3, Main.myPlayer);
 									Main.projectile[shot].tileCollide = false;
 								}
 							}
@@ -219,7 +220,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 										if (thetaDir != NPC.direction) { theta -= Math.PI; }
 									}
 
-									int shot = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -NPC.height / 2), new Vector2(v, 0).RotatedBy(theta), ProjectileType<UraraneidIchorSpray>(), 14, 3, Main.myPlayer);
+									int shot = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -NPC.height / 2), new Vector2(v, 0).RotatedBy(theta), ProjectileType<EsophageIchorSpray>(), 14, 3, Main.myPlayer);
 									Main.projectile[shot].tileCollide = false;
 								}
 							}
@@ -339,25 +340,6 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 		{
 			npcLoot.Add(ItemDropRule.Common(ItemType<Splattergun>(), 8));
 			npcLoot.Add(ItemDropRule.Common(ItemID.Ichor, 1, 2, 5));
-		}
-	}
-
-	//TODO: Replace with drawcode projectiles a la hemorrphage?
-	public class UraraneidIchorSpray : ModProjectile
-	{
-		//hopefully doing it this way doesn't break everything
-		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.GoldenShowerHostile;
-
-		public override void SetDefaults()
-		{
-			Projectile.CloneDefaults(ProjectileID.GoldenShowerHostile);
-			Projectile.tileCollide = false;
-		}
-
-		public override bool PreAI()
-		{
-			Projectile.type = ProjectileID.GoldenShowerHostile;
-			return true;
 		}
 	}
 }
