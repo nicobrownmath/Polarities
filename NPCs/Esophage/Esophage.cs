@@ -1045,38 +1045,13 @@ namespace Polarities.NPCs.Esophage
             return false;
         }
 
-        //TODO: Replace with something more similar to the old ways but the leg base leans inwards
         public void DrawAt(NPC owner, Vector2 center, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor, bool bestiaryDummy = false)
         {
-            Vector2[] bezierPoints = { owner.Center, center + (owner.Center - center - new Vector2(0, -238)) / 2 + new Vector2(0, 238), center + new Vector2(0, -238 * 3), center };
-            float bezierProgress = 0;
-            float bezierIncrement = 16;
+            Vector2[] points = { center, center + (owner.Center - center) * 0.34f - new Vector2(0, 200), center + (owner.Center - center) * 0.66f, owner.Center };
 
-            Texture2D chainTexture = ChainTexture.Value;
-            Rectangle chainFrame = ChainTexture.Frame();
-            Vector2 chainOrigin = chainFrame.Size() / 2;
-
-            int parity = 1;
-
-            while (bezierProgress < 1)
+            for (int i = 0; i < points.Length - 1; i++)
             {
-                parity *= -1;
-
-                //draw stuff
-                Vector2 oldPos = ModUtils.BezierCurve(bezierPoints, bezierProgress);
-
-                //increment progress
-                while ((oldPos - ModUtils.BezierCurve(bezierPoints, bezierProgress)).Length() < bezierIncrement)
-                {
-                    bezierProgress += 0.1f / ModUtils.BezierCurveDerivative(bezierPoints, bezierProgress).Length();
-                }
-
-                Vector2 newPos = ModUtils.BezierCurve(bezierPoints, bezierProgress);
-                float rotation = (newPos - oldPos).ToRotation();
-
-                Vector2 drawingPos = (oldPos + newPos) / 2;
-
-                Main.spriteBatch.Draw(chainTexture, drawingPos - screenPos, chainFrame, owner.GetNPCColorTintedByBuffs(bestiaryDummy ? Color.White : Lighting.GetColor(drawingPos.ToTileCoordinates())), rotation, chainOrigin, NPC.scale, NPC.spriteDirection * parity == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
+                DrawChain(owner, points[i], points[i + 1], spriteBatch, screenPos, drawColor, bestiaryDummy);
             }
 
             float num246 = Main.NPCAddHeight(NPC);
@@ -1090,7 +1065,25 @@ namespace Polarities.NPCs.Esophage
             Color color = owner.GetNPCColorTintedByBuffs(bestiaryDummy ? Color.White : Lighting.GetColor(NPC.Center.ToTileCoordinates()));
 
             spriteBatch.Draw(TextureAssets.Npc[Type].Value, center + new Vector2(0, NPC.height / 2) - screenPos + new Vector2((float)(-TextureAssets.Npc[Type].Width()) * NPC.scale / 2f + halfSize.X * NPC.scale, (float)(-TextureAssets.Npc[Type].Height()) * NPC.scale / (float)Main.npcFrameCount[Type] + 4f + halfSize.Y * NPC.scale + num246 + NPC.gfxOffY), (Rectangle?)NPC.frame, color, NPC.rotation, halfSize, NPC.scale, spriteEffects, 0f);
+        }
 
+        public void DrawChain(NPC owner, Vector2 startPoint, Vector2 endPoint, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor, bool bestiaryDummy)
+        {
+            Texture2D chainTexture = ChainTexture.Value;
+            Rectangle chainFrame = ChainTexture.Frame();
+            Vector2 chainOrigin = chainFrame.Size() / 2;
+
+            int stepSize = chainFrame.Width;
+
+            int parity = 1;
+
+            for (int i = 0; i < (endPoint - startPoint).Length() / stepSize; i++)
+            {
+                parity *= -1;
+
+                Vector2 drawingPos = startPoint + (endPoint - startPoint).SafeNormalize(Vector2.Zero) * i * stepSize;
+                spriteBatch.Draw(chainTexture, drawingPos - screenPos, chainFrame, owner.GetNPCColorTintedByBuffs(bestiaryDummy ? Color.White : Lighting.GetColor(drawingPos.ToTileCoordinates())), (endPoint - startPoint).ToRotation(), chainOrigin, NPC.scale, NPC.spriteDirection * parity == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
+            }
         }
 
         public override bool CheckActive()
@@ -1213,7 +1206,6 @@ namespace Polarities.NPCs.Esophage
         }
     }
 
-    //TODO: Improve visuals to be less dusty (probably also just make it a straightfoward AoE
     public class EsophageFireball : ModProjectile
     {
         public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.CursedFlameHostile;
