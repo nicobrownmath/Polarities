@@ -108,7 +108,6 @@ namespace Polarities.NPCs.Esophage
             NPC.aiStyle = -1;
             NPC.width = 60;
             NPC.height = 60;
-            DrawOffsetY = 67;
 
             NPC.defense = 30;
             NPC.damage = 60;
@@ -139,6 +138,20 @@ namespace Polarities.NPCs.Esophage
             NPC.GetGlobalNPC<MultiHitboxNPC>().useMultipleHitboxes = true;
             NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = new Rectangle[numSegments];
 
+            NPC.GetGlobalNPC<MultiHitboxNPC>().SegmentUpdate = (index) =>
+            {
+                if (index == 0)
+                {
+                    NPC.defense = 30;
+                    NPC.HitSound = SoundID.NPCHit1;
+                }
+                else
+                {
+                    NPC.defense = 60;
+                    NPC.HitSound = SoundID.NPCHit2;
+                }
+            };
+
             SpawnModBiomes = new int[1] { GetInstance<WorldEvilInvasion>().Type };
         }
 
@@ -164,7 +177,7 @@ namespace Polarities.NPCs.Esophage
                 if (WorldGen.AllowedToSpreadInfections && !PolaritiesSystem.disabledEvilSpread)
                 {
                     Point p = (NPC.Center + new Vector2(Main.rand.NextFloat(800), 0).RotatedByRandom(MathHelper.TwoPi)).ToTileCoordinates();
-                    WorldGen.Convert(p.X, p.Y, Main.rand.Next(new int[] { 1, 3 }), 0);
+                    WorldGen.Convert(p.X, p.Y, Main.rand.Next(new int[] { 1, 4 }), 0);
                 }
             }
 
@@ -761,34 +774,6 @@ namespace Polarities.NPCs.Esophage
             }
         }
 
-        public override void ModifyHitByItem(Player player, Item item, ref int damage, ref float knockback, ref bool crit)
-        {
-            if (NPC.GetGlobalNPC<MultiHitboxNPC>().lastHitSegment > 0)
-            {
-                NPC.defense = 30;
-                NPC.HitSound = SoundID.NPCHit2;
-            }
-            else
-            {
-                NPC.defense = 60;
-                NPC.HitSound = SoundID.NPCHit1;
-            };
-        }
-
-        public override void ModifyHitByProjectile(Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-        {
-            if (NPC.GetGlobalNPC<MultiHitboxNPC>().lastHitSegment > 0)
-            {
-                NPC.defense = 30;
-                NPC.HitSound = SoundID.NPCHit2;
-            }
-            else
-            {
-                NPC.defense = 60;
-                NPC.HitSound = SoundID.NPCHit1;
-            };
-        }
-
         private bool scytheLeftSwinging;
         private bool scytheRightSwinging;
         private int scytheFrameCounter;
@@ -1060,6 +1045,7 @@ namespace Polarities.NPCs.Esophage
             return false;
         }
 
+        //TODO: Replace with something more similar to the old ways but the leg base leans inwards
         public void DrawAt(NPC owner, Vector2 center, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor, bool bestiaryDummy = false)
         {
             Vector2[] bezierPoints = { owner.Center, center + (owner.Center - center - new Vector2(0, -238)) / 2 + new Vector2(0, 238), center + new Vector2(0, -238 * 3), center };

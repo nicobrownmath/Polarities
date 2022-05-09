@@ -365,7 +365,7 @@ namespace Polarities.NPCs
                         Rectangle hitbox = multiHitbox.hitboxes[i];
                         if (Collision.LavaCollision(hitbox.TopLeft(), hitbox.Width, hitbox.Height))
                         {
-                            lastHitSegment = i;
+                            multiHitbox.UpdateToSegment(i);
                             return orig(self);
                         }
                     }
@@ -494,6 +494,16 @@ namespace Polarities.NPCs
             return hitboxes[lastHitSegment];
         }
 
+        public Action<int> SegmentUpdate;
+        public void UpdateToSegment(int i)
+        {
+            lastHitSegment = i;
+            if (SegmentUpdate != null)
+            {
+                SegmentUpdate.Invoke(i);
+            }
+        }
+
         public bool CollideRectangle(Rectangle collider)
         {
             for (int i = 0; i < hitboxes.Length; i++)
@@ -501,7 +511,7 @@ namespace Polarities.NPCs
                 Rectangle hitbox = hitboxes[i];
                 if (collider.Intersects(hitbox))
                 {
-                    lastHitSegment = i;
+                    UpdateToSegment(i);
                     return true;
                 }
             }
@@ -521,7 +531,7 @@ namespace Polarities.NPCs
                 Rectangle hitbox = hitboxes[i];
                 if (projectile.Colliding(projectileHitbox, hitbox))
                 {
-                    lastHitSegment = i;
+                    UpdateToSegment(i);
                     return true;
                 }
             }
@@ -553,7 +563,7 @@ namespace Polarities.NPCs
                         Rectangle hitbox = targetMultiHitbox.hitboxes[i];
                         if (CollideRectangle(hitbox))
                         {
-                            targetMultiHitbox.lastHitSegment = i;
+                            targetMultiHitbox.UpdateToSegment(i);
                             return null;
                         }
                     }
