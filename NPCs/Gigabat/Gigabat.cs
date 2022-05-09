@@ -26,6 +26,7 @@ namespace Polarities.NPCs.Gigabat
     [AutoloadBossHead]
     //TODO: Better FTW changes?
     //TODO: Make drops crafted from a material? And then have that material drop from bat slimes too
+    //TODO: Telegraphs need improvement
     public class Gigabat : ModNPC
     {
         private bool dashing
