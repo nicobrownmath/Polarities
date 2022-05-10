@@ -61,6 +61,7 @@
 			"PainBow": "Pain Bow",
 			"Flarecaller": "Flarecaller",
 			"Splattergun": "Splattergun",
+			"Contagun": "Contagun",
 
 			//atlatls
 			"WoodenAtlatl": "Wooden Atlatl",
@@ -367,6 +368,7 @@
 			"PainBow": "Shoots a rainbow of arrows",
 			"Flarecaller": "Summons a solar flare from the sky",
 			"Splattergun": "Shoots a dense splatter of ichor",
+			"Contagun": "Spews toxic fumes and viruses which infect your enemies"
 
 			//atlatls
 			"Axolatl": "Sometimes spits bubbles instead of shooting a dart",
@@ -617,7 +619,9 @@
 			"EsophageTooth": "Phage Tooth",
 			"IchorDrop": "Ichor Drop",
 			"EsophminiClaw": "Esophmini Claw",
-			"EsophminiBody": "Esophmini"
+			"EsophminiBody": "Esophmini",
+			"ContagunVirusProjectile": "Mini Phage",
+			"ContagunProjectile": "Evil Fumes"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",

@@ -30,6 +30,7 @@ using Polarities.Items.Materials;
 using Polarities.Items.Weapons.Summon.Minions;
 using Polarities.Items.Hooks;
 using Polarities.Items.Armor.Vanity;
+using Polarities.Items.Weapons.Ranged;
 
 namespace Polarities.NPCs.Esophage
 {
@@ -870,7 +871,7 @@ namespace Polarities.NPCs.Esophage
             notExpertRule.OnSuccess(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemType<EsophageousStaff>(), ItemType<PhagefootHook>()));
             npcLoot.Add(notExpertRule);
 
-            //TODO: npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Contagun>()));
+            npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Contagun>()));
         }
     }
 

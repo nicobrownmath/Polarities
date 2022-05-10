@@ -281,5 +281,78 @@ namespace Polarities
 				Main.spriteBatch.Begin((SpriteSortMode)0, blendState, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
 			}
         }
+
+
+
+		//perlin/fractal noise based on this tutorial: https://dens.website/articles/procedural-generation/perlin-noise
+		public static Vector2[,] PerlinBaseVectors(this UnifiedRandom rand, int width, int height)
+        {
+			Vector2[,] output = new Vector2[width, height];
+			for (int i = 0; i < width; i++)
+            {
+				for (int j = 0; j < height; j++)
+                {
+					output[i, j] = new Vector2(0, 1).RotatedBy(rand.NextFloat(MathHelper.TwoPi));
+				}
+            }
+			return output;
+		}
+
+		public static float PerlinSmoothStep(float amount)
+        {
+			return amount * amount * amount * (amount * (amount * 6 - 15) + 10); ;
+        }
+
+		public static float PerlinSmooth(Vector2 v00, Vector2 v01, Vector2 v10, Vector2 v11, float xAmount, float yAmount)
+        {
+			float d00 = Vector2.Dot(v00, new Vector2(xAmount, yAmount));
+			float d01 = Vector2.Dot(v01, new Vector2(xAmount, yAmount - 1));
+			float d10 = Vector2.Dot(v10, new Vector2(xAmount - 1, yAmount));
+			float d11 = Vector2.Dot(v11, new Vector2(xAmount - 1, yAmount - 1));
+
+			float xLerp = PerlinSmoothStep(xAmount);
+			float yLerp = PerlinSmoothStep(yAmount);
+			return Lerp(Lerp(d00, d01, yLerp), Lerp(d10, d11, yLerp), xLerp);
+        }
+
+		public static float PerlinNoiseValue(Vector2[,] perlinBaseVectors, float xAmount, float yAmount)
+        {
+			int xIndex = (int)(xAmount * perlinBaseVectors.GetLength(0));
+			float residualXAmount = (xAmount * perlinBaseVectors.GetLength(0)) % 1;
+
+			int yIndex = (int)(yAmount * perlinBaseVectors.GetLength(1));
+			float residualYAmount = (yAmount * perlinBaseVectors.GetLength(1)) % 1;
+
+			return PerlinSmooth(perlinBaseVectors[xIndex, yIndex], perlinBaseVectors[xIndex, (yIndex + 1) % perlinBaseVectors.GetLength(1)], perlinBaseVectors[(xIndex + 1) % perlinBaseVectors.GetLength(0), yIndex], perlinBaseVectors[(xIndex + 1) % perlinBaseVectors.GetLength(0), (yIndex + 1) % perlinBaseVectors.GetLength(1)], residualXAmount, residualYAmount) * (float)Math.Sqrt(0.5f);
+		}
+
+		public static float[,] FractalNoise(this UnifiedRandom rand, int size, int startFactor = 1)
+        {
+			int scaleSize = size / startFactor;
+
+			float[,] output = new float[size, size];
+
+			int depth = 0;
+
+			while (scaleSize > 0)
+            {
+				Vector2[,] perlinBaseVectors = rand.PerlinBaseVectors(size / scaleSize, size / scaleSize);
+
+				float amplitude = (float)Math.Pow(0.5f, depth);
+
+				for (int i = 0; i < size; i++)
+                {
+					for (int j = 0; j < size; j++)
+					{
+						output[i, j] += PerlinNoiseValue(perlinBaseVectors, i / (float)size, j / (float)size) * amplitude;
+					}
+				}
+
+				scaleSize /= 2;
+				depth++;
+			}
+
+			return output;
+        }
 	}
 }

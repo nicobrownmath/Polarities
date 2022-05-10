@@ -26,6 +26,8 @@ using Polarities.Biomes;
 using Polarities.Items.Accessories;
 using Polarities.Items.Weapons.Ranged;
 using Polarities.Items.Weapons.Summon.Orbs;
+using Polarities.Projectiles;
+using Terraria.Audio;
 
 namespace Polarities.NPCs
 {
@@ -50,6 +52,8 @@ namespace Polarities.NPCs
         public float defenseMultiplier;
 
         public int tentacleClubs;
+        public int contagunPhages;
+
         public int desiccation;
         public bool coneVenom;
 
@@ -462,6 +466,19 @@ namespace Polarities.NPCs
                         damage = amountLoss;
                     }
                 }
+                if (contagunPhages > 0)
+                {
+                    if (npc.lifeRegen > 0)
+                    {
+                        npc.lifeRegen = 0;
+                    }
+                    int amountLoss = contagunPhages * 10;
+                    npc.lifeRegen -= amountLoss * 2;
+                    if (damage < amountLoss)
+                    {
+                        damage = amountLoss;
+                    }
+                }
             }
             if (desiccation > 60 * 10)
             {
@@ -480,6 +497,22 @@ namespace Polarities.NPCs
                 }
             }
 
+            if (contagunPhages > 10)
+            {
+                SoundEngine.PlaySound(SoundID.Item17, npc.Center);
+                for (int i = 0; i < Main.maxProjectiles; i++)
+                {
+                    if (Main.projectile[i].active && Main.projectile[i].type == ProjectileType<ContagunVirusProjectile>() && Main.projectile[i].ai[0] == npc.whoAmI + 1)
+                    {
+                        Main.projectile[i].ai[0] = 0;
+                        Main.projectile[i].velocity = new Vector2(10, 0).RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(0.5f, 2f);
+
+                        Projectile.NewProjectile(Main.projectile[i].GetSource_FromAI(), Main.projectile[i].Center, new Vector2(Main.rand.NextFloat(5f)).RotatedByRandom(MathHelper.TwoPi), ProjectileType<ContagunProjectile>(), Main.projectile[i].damage, Main.projectile[i].knockBack, Main.projectile[i].owner, ai0: Main.rand.NextFloat(MathHelper.TwoPi), ai1: 240f);
+                    }
+                }
+            }
+
+            contagunPhages = 0;
             tentacleClubs = 0;
             desiccation = 0;
             coneVenom = false;

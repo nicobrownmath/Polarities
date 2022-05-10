@@ -131,8 +131,8 @@ namespace Polarities.Projectiles
 
         public float turretSlots = 1f;
 
-        private int projectileHitCooldown = 0;
-        private int generalHitCooldown;
+        public int projectileHitCooldown;
+        public int generalHitCooldown;
 
         public bool usesGeneralHitCooldowns;
         public int generalHitCooldownTime;
@@ -141,6 +141,9 @@ namespace Polarities.Projectiles
 
         public override bool PreAI(Projectile projectile)
         {
+            if (generalHitCooldown > 0) generalHitCooldown--;
+            if (projectileHitCooldown > 0) projectileHitCooldown--;
+
             if (projectile.aiStyle == 7)
             {
                 //hook speed modification
