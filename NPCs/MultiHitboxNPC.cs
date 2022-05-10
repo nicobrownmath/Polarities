@@ -614,16 +614,20 @@ namespace Polarities.NPCs
 
         public override bool? DrawHealthBar(NPC npc, byte hbPosition, ref float scale, ref Vector2 position)
         {
-            position = new Vector2(npc.Center.X, npc.Center.Y - heightForInteractions / 2 + npc.gfxOffY);
-            if (Main.HealthBarDrawSettings == 1)
+            if (useMultipleHitboxes)
             {
-                position.Y += (float)heightForInteractions + 10f + Main.NPCAddHeight(npc);
+                position = new Vector2(npc.Center.X, npc.Center.Y - heightForInteractions / 2 + npc.gfxOffY);
+                if (Main.HealthBarDrawSettings == 1)
+                {
+                    position.Y += (float)heightForInteractions + 10f + Main.NPCAddHeight(npc);
+                }
+                else if (Main.HealthBarDrawSettings == 2)
+                {
+                    position.Y -= 24f + Main.NPCAddHeight(npc) / 2f;
+                }
+                return true;
             }
-            else if (Main.HealthBarDrawSettings == 2)
-            {
-                position.Y -= 24f + Main.NPCAddHeight(npc) / 2f;
-            }
-            return true;
+            return null;
         }
 
         public override bool PreAI(NPC npc)

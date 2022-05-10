@@ -8,9 +8,16 @@ using Polarities.Items.Materials;
 
 namespace Polarities.Items
 {
-	public class AltBiomeMimicSummon : ModItem
+	public interface IBiomeMimicSummon
+    {
+		int SpawnMimicType { get; }
+    }
+
+	public class AltBiomeMimicSummon : ModItem, IBiomeMimicSummon
 	{
-		public override void SetStaticDefaults()
+        public int SpawnMimicType => Main.hardMode ? (WorldGen.crimson ? NPCID.BigMimicCorruption : NPCID.BigMimicCrimson) : NPCID.None;
+
+        public override void SetStaticDefaults()
 		{
 			this.SetResearch(1);
 		}

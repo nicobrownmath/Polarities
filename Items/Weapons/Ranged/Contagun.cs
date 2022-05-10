@@ -71,7 +71,7 @@ namespace Polarities.Items.Weapons.Ranged
 				{
 					shotTime = 0;
 
-					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.MountedCenter + velocity.SafeNormalize(Vector2.Zero) * 60, velocity.RotatedByRandom(0.2f) * Main.rand.NextFloat(0.5f, 2f), ProjectileType<ContagunVirusProjectile>(), Item.damage, Item.knockBack, player.whoAmI);
+					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.MountedCenter + velocity.SafeNormalize(Vector2.Zero) * 60, velocity.RotatedByRandom(0.1f) * Main.rand.NextFloat(0.5f, 2f), ProjectileType<ContagunVirusProjectile>(), Item.damage, Item.knockBack, player.whoAmI);
 				}
 			}
 		}
@@ -274,6 +274,8 @@ namespace Polarities.Items.Weapons.Ranged
 				Projectile.hide = false;
 
 				Projectile.rotation = Projectile.velocity.ToRotation();
+
+				Projectile.velocity *= 1.02f;
 			}
 			else
             {
@@ -291,6 +293,13 @@ namespace Polarities.Items.Weapons.Ranged
 
 				Projectile.velocity = Vector2.Zero;
 				Projectile.Center = target.Center;
+
+				if (Main.rand.NextBool(120) && !target.immortal)
+                {
+					Projectile newProj = Main.projectile[Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(10f, 0).RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(0.5f, 2f), Type, Projectile.damage, Projectile.knockBack, Projectile.owner)];
+
+					newProj.localNPCImmunity = (int[])Projectile.localNPCImmunity.Clone();
+				}
             }
 		}
 
@@ -302,6 +311,14 @@ namespace Polarities.Items.Weapons.Ranged
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Projectile.ai[0] = target.whoAmI + 1;
+
+			for (int i = 0; i < Main.maxNPCs; i++)
+            {
+				if (Main.npc[i].active && target.realLife != -1 && Main.npc[i].realLife == target.realLife)
+                {
+					Projectile.localNPCImmunity[i] = Projectile.localNPCHitCooldown;
+                }
+            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -316,7 +333,7 @@ namespace Polarities.Items.Weapons.Ranged
 			if (oldVelocity.X != Projectile.velocity.X) Projectile.velocity.X = -oldVelocity.X;
 			if (oldVelocity.Y != Projectile.velocity.Y) Projectile.velocity.Y = -oldVelocity.Y;
 
-			return false;
+			return Projectile.velocity.Length() > 64;
 		}
 
 		public override bool PreDraw(ref Color lightColor)

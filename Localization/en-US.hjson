@@ -19,6 +19,7 @@
 			"Sunblade": "Sunblade",
 			"LaserCutter": "Laser Cutter",
 			"TwistedTendril": "Twisted Tendril",
+			"ChainLacerator": "Chain Lacerator",
 
 			//warhammers
 			"WoodenWarhammer": "Wooden Warhammer",
@@ -62,6 +63,7 @@
 			"Flarecaller": "Flarecaller",
 			"Splattergun": "Splattergun",
 			"Contagun": "Contagun",
+			"Hemiola": "Hemiola",
 
 			//atlatls
 			"WoodenAtlatl": "Wooden Atlatl",
@@ -101,6 +103,7 @@
 			"RayOfSunshine": "Ray Of Sunshine",
 			"BlazingIre": "Blazing Ire",
 			"ShadeStorm": "Shade Storm",
+			"LifeGrasper": "Life Grasper",
 
 			//summon weapons
 			"ZombatStaff": "Zombat Staff",
@@ -142,6 +145,8 @@
 			"StarbindCuffs": "Starbind Cuffs",
 			"SolarEnergizer": "Solar Energizer",
 			"AdaptiveGenes": "Adaptive Genes",
+			"RotKnuckles": "Rot Knuckles",
+			"InfestedBrain": "Infested Brain",
 
 			//mounts
 			"PegasusMountItem": "Bellerophon's Saddle",
@@ -274,6 +279,7 @@
 			"SunPixieSummonItem": "Hallowed Star",
 			"WorldEvilInvasionSummonItem": "Putrid Lure",
 			"EsophageSummonItem": "Fleshy Capsid",
+			"AltBiomeMimicSummon": "Weird Key of Night",
 
 			//critters
 			"GemflyItem": " Gemfly",
@@ -368,7 +374,8 @@
 			"PainBow": "Shoots a rainbow of arrows",
 			"Flarecaller": "Summons a solar flare from the sky",
 			"Splattergun": "Shoots a dense splatter of ichor",
-			"Contagun": "Spews toxic fumes and viruses which infect your enemies"
+			"Contagun": "Spews toxic fumes and viruses which infect your enemies",
+			"Hemiola": "Shoots both rapid and powerful darts\nConverts wooden darts into cursed and ichor darts",
 
 			//atlatls
 			"Axolatl": "Sometimes spits bubbles instead of shooting a dart",
@@ -396,6 +403,7 @@
 			"HeatFlare": "Creates tendrils of heat",
 			"BlazingIre": "Left click to use as a javelin, right click to use as a spear\nHitting enemies has a chance to summon additional javelins, and this chance is increased on critical strikes",
 			"ShadeStorm": "Shoots erratically curving shadows that tend to move towards enemies",
+			"LifeGrasper": "Summons a circular aura to drain life from enemies",
 
 			//summon weapons
 			"ZombatStaff": "Summons baby zombats to protect you",
@@ -441,6 +449,8 @@
 			"StarbindCuffs": "Increases pickup range for mana stars\nRestores mana when damaged\nIncreases maximum mana by 20\nDoubles mana recieved from mana stars",
 			"SolarEnergizer": "10% reduced mana usage\nHitting enemies with non-magic weapons restores your mana",
 			"AdaptiveGenes": "Increases damage and critical strike chance at higher health\nIncreases movement speed and life regeneration at lower health",
+			"RotKnuckles": "5% increased damage and critical strike chance",
+			"InfestedBrain": "Reduces damage taken by 12%\nHas a chance to create illusions and dodge an attack\nTemporarily increase critical chance after dodge\nMay confuse nearby enemies after being struck",
 
 			//mounts
 			"PegasusMountItem": "Summons a rideable pegasus mount",
@@ -501,6 +511,7 @@
 			"WorldEvilInvasionSummonItem": "Summons the Pestilence when used in the world evil",
 			"EsophageSummonItem": "Summons the Esophage\nNot consumable",
 			"EsophageSummonItemExtra": "It oozes blood under the red moon...",
+			"AltBiomeMimicSummon": "'Charged with the essence of strange souls'",
 
 			//critters
 			"GemflyItem": "May attract bats",
@@ -621,7 +632,10 @@
 			"EsophminiClaw": "Esophmini Claw",
 			"EsophminiBody": "Esophmini",
 			"ContagunVirusProjectile": "Mini Phage",
-			"ContagunProjectile": "Evil Fumes"
+			"ContagunProjectile": "Evil Fumes",
+			"ChainLaceratorProjectile": "Evil Claw",
+			"LifeGrasperAura": "Draining Aura",
+			"LifeGrasperAuraRing": "Draining Ring"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",

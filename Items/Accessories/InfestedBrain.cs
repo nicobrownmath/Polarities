@@ -13,9 +13,6 @@ namespace Polarities.Items.Accessories
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Infested Brain");
-			Tooltip.SetDefault("Reduces damage taken by 12%\nHas a chance to create illusions and dodge an attack\nTemporarily increase critical chance after dodge\nMay confuse nearby enemies after being struck");
-
 			this.SetResearch(1);
 		}
 

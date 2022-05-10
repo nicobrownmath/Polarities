@@ -802,6 +802,46 @@ namespace Polarities.NPCs.Esophage
             CapsidTexture = Request<Texture2D>(Texture + "_Capsid");
             ScytheTexture = Request<Texture2D>(Texture + "_Scythe");
             EyesTexture = Request<Texture2D>(Texture + "_Eyes");
+
+            /*IL.Terraria.Main.UpdateMenu += Main_UpdateMenu;
+		}
+
+		private void Main_UpdateMenu(MonoMod.Cil.ILContext il)
+		{
+			MonoMod.Cil.ILCursor c = new MonoMod.Cil.ILCursor(il);
+
+			c.EmitDelegate<Action>(() =>
+			{
+				if (!(bool)(typeof(ModLoader).GetField("isLoading", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).GetValue(null)))
+				{
+					String filePath = Main.SavePath + Path.DirectorySeparatorChar + "Esophage.png";
+
+					if (!File.Exists(filePath))
+					{
+						Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+
+						var capture = new RenderTarget2D(Main.spriteBatch.GraphicsDevice, Main.screenWidth, Main.screenHeight, false, Main.spriteBatch.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+
+						Main.spriteBatch.GraphicsDevice.SetRenderTarget(capture);
+						Main.spriteBatch.GraphicsDevice.Clear(Color.Transparent);
+
+						NPC me = new NPC();
+						me.SetDefaults(NPCType<Esophage>());
+						me.IsABestiaryIconDummy = true;
+						me.Center = Vector2.Zero;
+
+						Main.instance.DrawNPCDirect(Main.spriteBatch, me, false, -capture.Size() / 2);
+
+						Main.spriteBatch.End();
+						Main.spriteBatch.GraphicsDevice.SetRenderTarget(null);
+
+						var stream = File.Create(filePath);
+						capture.SaveAsPng(stream, capture.Width, capture.Height);
+						stream.Dispose();
+						capture.Dispose();
+					}
+				}
+			});*/
         }
 
         public override void Unload()
@@ -1069,7 +1109,7 @@ namespace Polarities.NPCs.Esophage
 
             Color color = owner.GetNPCColorTintedByBuffs(bestiaryDummy ? Color.White : Lighting.GetColor(NPC.Center.ToTileCoordinates()));
 
-            spriteBatch.Draw(TextureAssets.Npc[Type].Value, center + new Vector2(0, NPC.height / 2) - screenPos + new Vector2((float)(-TextureAssets.Npc[Type].Width()) * NPC.scale / 2f + halfSize.X * NPC.scale, (float)(-TextureAssets.Npc[Type].Height()) * NPC.scale / (float)Main.npcFrameCount[Type] + 4f + halfSize.Y * NPC.scale + num246 + NPC.gfxOffY), (Rectangle?)NPC.frame, color, NPC.rotation, halfSize, NPC.scale, spriteEffects, 0f);
+            spriteBatch.Draw(TextureAssets.Npc[Type].Value, center + new Vector2(0, NPC.height / 2) - screenPos + new Vector2((float)(-TextureAssets.Npc[Type].Width()) * NPC.scale / 2f + halfSize.X * NPC.scale, (float)(-TextureAssets.Npc[Type].Height()) * NPC.scale / (float)Main.npcFrameCount[Type] + 4f + halfSize.Y * NPC.scale + num246 + NPC.gfxOffY), TextureAssets.Npc[Type].Frame(), color, NPC.rotation, halfSize, NPC.scale, spriteEffects, 0f);
         }
 
         public void DrawChain(NPC owner, Vector2 startPoint, Vector2 endPoint, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor, bool bestiaryDummy)

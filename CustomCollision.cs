@@ -90,5 +90,41 @@ namespace Polarities
 			radius = _radius;
 		}
 	}
+
+	//line such that ax+by+c=0
+	public readonly struct Line
+	{
+		public readonly float a;
+		public readonly float b;
+		public readonly float c;
+
+		public Line(float _a, float _b, float _c)
+		{
+			a = _a;
+			b = _b;
+			c = _c;
+		}
+
+		public static Line AngledFrom(Vector2 point, float rotation)
+        {
+			return new Line((float)Math.Sin(rotation), (float)-Math.Cos(rotation), (float)(point.Y * Math.Cos(rotation) - point.X * Math.Sin(rotation)));
+        }
+
+		public static Line LineThrough(Vector2 point1, Vector2 point2)
+        {
+			return new Line((point2 - point1).Y, (point1 - point2).X, (point1 - point2).Y * point1.X + (point2 - point1).X * point1.Y);
+		}
+
+		public static Line Bisector(Vector2 point1, Vector2 point2)
+		{
+			return AngledFrom((point1 + point2) / 2, (point1 - point2).ToRotation() + MathHelper.PiOver2);
+		}
+
+		public Vector2 Intersection(Line line2)
+		{
+			float denominator = line2.a * b - a * line2.b;
+			return new Vector2((line2.b * c - b * line2.c) / denominator, (a * line2.c - line2.a * c) / denominator);
+		}
+	}
 }
 

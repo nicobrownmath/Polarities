@@ -28,6 +28,7 @@ using Polarities.Items.Weapons.Ranged;
 using Polarities.Items.Weapons.Summon.Orbs;
 using Polarities.Projectiles;
 using Terraria.Audio;
+using Polarities.Items.Weapons.Magic;
 
 namespace Polarities.NPCs
 {
@@ -516,6 +517,44 @@ namespace Polarities.NPCs
             tentacleClubs = 0;
             desiccation = 0;
             coneVenom = false;
+
+            UpdateCustomSoulDrain(npc);
+        }
+
+        private void UpdateCustomSoulDrain(NPC npc)
+        {
+            if (!npc.soulDrain)
+            {
+                return;
+            }
+            int num3 = 1100;
+            for (int i = 0; i < 255; i++)
+            {
+                if (!Main.player[i].active || Main.player[i].dead)
+                {
+                    continue;
+                }
+                Vector2 val = npc.Center - Main.player[i].position;
+                if (val.Length() < (float)num3 && Main.player[i].ownedProjectileCounts[ProjectileType<LifeGrasperAura>()] > 0)
+                {
+                    if (i == Main.myPlayer)
+                    {
+                        Main.player[i].soulDrain++;
+                    }
+                    if (!Main.rand.NextBool(3))
+                    {
+                        Vector2 center = npc.Center;
+                        center.X += (float)Main.rand.Next(-100, 100) * 0.05f;
+                        center.Y += (float)Main.rand.Next(-100, 100) * 0.05f;
+                        center += npc.velocity;
+                        int num2 = Dust.NewDust(center, 1, 1, DustID.LifeDrain);
+                        Dust obj = Main.dust[num2];
+                        obj.velocity *= 0f;
+                        Main.dust[num2].scale = (float)Main.rand.Next(70, 85) * 0.01f;
+                        Main.dust[num2].fadeIn = i + 1;
+                    }
+                }
+            }
         }
 
         public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)

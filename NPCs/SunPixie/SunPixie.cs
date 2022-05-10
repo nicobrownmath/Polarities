@@ -914,16 +914,58 @@ namespace Polarities.NPCs.SunPixie
 			WingsTexture = Request<Texture2D>(Texture + "_Wings");
 			FlaresTexture = Request<Texture2D>(Texture + "_Flares");
 			SunglassesTexture = Request<Texture2D>(Texture + "_Sunglasses");
+
+			/*IL.Terraria.Main.UpdateMenu += Main_UpdateMenu;
 		}
 
-        public override void Unload()
-        {
+		private void Main_UpdateMenu(MonoMod.Cil.ILContext il)
+		{
+			MonoMod.Cil.ILCursor c = new MonoMod.Cil.ILCursor(il);
+
+			c.EmitDelegate<Action>(() =>
+			{
+				if (!(bool)(typeof(ModLoader).GetField("isLoading", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).GetValue(null)))
+				{
+					String filePath = Main.SavePath + Path.DirectorySeparatorChar + "SunPixie.png";
+
+					if (!File.Exists(filePath))
+					{
+						Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+
+						var capture = new RenderTarget2D(Main.spriteBatch.GraphicsDevice, Main.screenWidth, Main.screenHeight, false, Main.spriteBatch.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+
+						Main.spriteBatch.GraphicsDevice.SetRenderTarget(capture);
+						Main.spriteBatch.GraphicsDevice.Clear(Color.Transparent);
+
+						NPC me = new NPC();
+						me.SetDefaults(NPCType<SunPixie>());
+						me.Center = Vector2.Zero;
+						me.localAI[1] = 1f;
+
+						(me.ModNPC as SunPixie).MainDraw(Main.spriteBatch, -capture.Size() / 2, Color.White, false, false);
+						me.SetBlendState(Main.spriteBatch, BlendState.Additive);
+						(me.ModNPC as SunPixie).MainDraw(Main.spriteBatch, -capture.Size() / 2, Color.White, true, false);
+
+						Main.spriteBatch.End();
+						Main.spriteBatch.GraphicsDevice.SetRenderTarget(null);
+
+						var stream = File.Create(filePath);
+						capture.SaveAsPng(stream, capture.Width, capture.Height);
+						stream.Dispose();
+						capture.Dispose();
+					}
+				}
+			});*/
+		}
+
+		public override void Unload()
+		{
 			WingsTexture = null;
 			FlaresTexture = null;
 			SunglassesTexture = null;
 		}
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color lightColor)
+		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color lightColor)
 		{
 			if (!NPC.IsABestiaryIconDummy)
 			{
@@ -1010,36 +1052,6 @@ namespace Polarities.NPCs.SunPixie
 				spriteBatch.Draw(flareTexture, drawPosition, frame, ftwColor * alphaMult, NPC.rotation, flareDrawOrigin, NPC.scale * NPC.localAI[1], SpriteEffects.None, 0f);
 			}
 		}
-
-		/*public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color lightColor)
-		{
-			if (!File.Exists(Main.SavePath + Path.DirectorySeparatorChar + "SunPixie.png"))
-			{
-				spriteBatch.End();
-				spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.Rasterizer, (Effect)null, Main.Transform);
-
-				var capture = new RenderTarget2D(spriteBatch.GraphicsDevice, Main.screenWidth, Main.screenHeight, false, Main.spriteBatch.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
-
-				spriteBatch.GraphicsDevice.SetRenderTarget(capture);
-				spriteBatch.GraphicsDevice.Clear(Color.Transparent);
-
-				MainDraw(spriteBatch, screenPos, lightColor, false, false);
-				NPC.SetBlendState(spriteBatch, BlendState.Additive);
-				MainDraw(spriteBatch, screenPos, lightColor, true, false);
-				NPC.SetBlendState(spriteBatch, BlendState.AlphaBlend);
-				MainDraw(spriteBatch, screenPos, lightColor, false, true);
-
-				spriteBatch.End();
-				spriteBatch.GraphicsDevice.SetRenderTarget(null);
-
-				var stream = File.Create(Main.SavePath + Path.DirectorySeparatorChar + "SunPixie.png");
-				capture.SaveAsPng(stream, capture.Width, capture.Height);
-				stream.Dispose();
-				capture.Dispose();
-
-				spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.Rasterizer, (Effect)null, Main.Transform);
-			}
-		}*/
 
 		public override void OnHitPlayer(Player target, int damage, bool crit)
 		{

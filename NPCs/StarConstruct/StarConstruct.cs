@@ -38,9 +38,49 @@ namespace Polarities.NPCs.StarConstruct
 			ChainTexture = Mod.GetAsset<Texture2D>("NPCs/StarConstruct/StarConstructChain");
 			ClawTexture = Mod.GetAsset<Texture2D>("NPCs/StarConstruct/StarConstructClaw");
 			DashTexture = Mod.GetAsset<Texture2D>("NPCs/StarConstruct/StarConstructDash");
+
+			/*IL.Terraria.Main.UpdateMenu += Main_UpdateMenu;
 		}
 
-        public override void Unload()
+		private void Main_UpdateMenu(MonoMod.Cil.ILContext il)
+		{
+			MonoMod.Cil.ILCursor c = new MonoMod.Cil.ILCursor(il);
+
+			c.EmitDelegate<Action>(() =>
+			{
+				if (!(bool)(typeof(ModLoader).GetField("isLoading", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).GetValue(null)))
+				{
+					String filePath = Main.SavePath + Path.DirectorySeparatorChar + "StarConstruct.png";
+
+					if (!File.Exists(filePath))
+					{
+						Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+
+						var capture = new RenderTarget2D(Main.spriteBatch.GraphicsDevice, Main.screenWidth, Main.screenHeight, false, Main.spriteBatch.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+
+						Main.spriteBatch.GraphicsDevice.SetRenderTarget(capture);
+						Main.spriteBatch.GraphicsDevice.Clear(Color.Transparent);
+
+						NPC me = new NPC();
+						me.SetDefaults(NPCType<StarConstruct>());
+						me.IsABestiaryIconDummy = true;
+						me.Center = Vector2.Zero;
+
+						Main.instance.DrawNPCDirect(Main.spriteBatch, me, false, -capture.Size() / 2);
+
+						Main.spriteBatch.End();
+						Main.spriteBatch.GraphicsDevice.SetRenderTarget(null);
+
+						var stream = File.Create(filePath);
+						capture.SaveAsPng(stream, capture.Width, capture.Height);
+						stream.Dispose();
+						capture.Dispose();
+					}
+				}
+			});*/
+		}
+
+		public override void Unload()
         {
 			LegTexture = null;
 			ChainTexture = null;

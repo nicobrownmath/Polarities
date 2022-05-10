@@ -82,6 +82,7 @@ namespace Polarities
 		public float runSpeedBoost;
 		public float spawnRate;
 		public bool solarEnergizer;
+		public bool wormScarf;
 
 		//direction of dash
 		public int dashDir;
@@ -124,6 +125,7 @@ namespace Polarities
 			runSpeedBoost = 1f;
 			spawnRate = 1f;
 			solarEnergizer = false;
+			wormScarf = false;
 
 			if (skeletronBookCooldown > 0) skeletronBookCooldown--;
 			if (beeRingTimer > 0) beeRingTimer--;
