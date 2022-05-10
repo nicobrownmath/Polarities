@@ -17,6 +17,7 @@ using Terraria.GameContent.ItemDropRules;
 using Polarities.NPCs;
 using Terraria.ID;
 using Terraria.GameContent;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities
 {
@@ -72,7 +73,10 @@ namespace Polarities
 				i => i.MatchCall(out _),
 				i => i.MatchBrfalse(out _)
 				))
+			{
+				GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
 				return;
+			}
 
 			c.Emit(OpCodes.Ldloc, 9);
 			c.EmitDelegate<Func<Tile, int>>((Tile tile) =>

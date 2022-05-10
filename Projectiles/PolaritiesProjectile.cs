@@ -37,6 +37,23 @@ namespace Polarities.Projectiles
 
             //prevents projectiles with doNotStrikeNPC true from damaging enemies
             IL.Terraria.Projectile.Damage += Projectile_Damage;
+
+            //custom projectile shaders
+            On.Terraria.Main.GetProjectileDesiredShader += Main_GetProjectileDesiredShader;
+        }
+
+        public int customShader = 0;
+
+        private int Main_GetProjectileDesiredShader(On.Terraria.Main.orig_GetProjectileDesiredShader orig, int i)
+        {
+            Projectile projectile = Main.projectile[i];
+
+            if (projectile.GetGlobalProjectile<PolaritiesProjectile>().customShader != 0)
+            {
+                return projectile.GetGlobalProjectile<PolaritiesProjectile>().customShader;
+            }
+
+            return orig(i);
         }
 
         public bool doNotStrikeNPC = false;
@@ -48,12 +65,12 @@ namespace Polarities.Projectiles
             ILLabel label = null;
 
             if (!c.TryGotoNext(MoveType.Before,
-                i => i.MatchLdloc(37),
+                i => i.MatchLdloc(36),
                 i => i.MatchBrfalse(out _),
                 i => i.MatchLdloc(33),
-                i => i.MatchLdloc(40),
+                i => i.MatchLdloc(39),
                 i => i.MatchLdloc(34),
-                i => i.MatchLdloc(41),
+                i => i.MatchLdloc(40),
                 i => i.MatchLdloc(35),
                 i => i.MatchLdcI4(0),
                 i => i.MatchLdcI4(0),
@@ -61,7 +78,10 @@ namespace Polarities.Projectiles
                 i => i.MatchConvI4(),
                 i => i.MatchBr(out label)
                 ))
+            {
+                Mod.Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             ILLabel label2 = c.DefineLabel();
             label2.Target = c.Next;
@@ -91,7 +111,10 @@ namespace Polarities.Projectiles
                 i => i.MatchCall(typeof(Rectangle).GetMethod("Intersects", BindingFlags.Instance | BindingFlags.Public, new Type[] { typeof(Rectangle) })),
                 i => i.MatchBrtrue(out label)
                 ))
+            {
+                Mod.Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.Emit(OpCodes.Ldarg, 1);
             c.EmitDelegate<Func<int, bool>>((index) =>

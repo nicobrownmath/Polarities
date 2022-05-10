@@ -8,7 +8,7 @@ using Terraria.Localization;
 
 namespace Polarities.Items
 {
-	public class StrangeJewelry : ModItem
+	public class StrangeSamples : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
@@ -17,8 +17,8 @@ namespace Polarities.Items
 
 		public override void SetDefaults()
 		{
-			Item.width = 42;
-			Item.height = 26;
+			Item.width = 30;
+			Item.height = 40;
 			Item.maxStack = 1;
 			Item.value = Item.sellPrice(gold: 1);
 			Item.rare = ItemRarityID.LightPurple;
@@ -29,17 +29,17 @@ namespace Polarities.Items
 
 		public override bool? UseItem(Player player)
 		{
-			if (PolaritiesSystem.disabledHallowSpread)
+			if (PolaritiesSystem.disabledEvilSpread)
 			{
-				PolaritiesSystem.disabledHallowSpread = false;
+				PolaritiesSystem.disabledEvilSpread = false;
 
-				Main.NewText(Language.GetTextValue("Mods.Polarities.StatusMessage.StartHallowSpread"), 175, 75, 255);
+				Main.NewText(Language.GetTextValue("Mods.Polarities.StatusMessage.StartEvilSpread"), 175, 75, 255);
 			}
 			else
 			{
-				PolaritiesSystem.disabledHallowSpread = true;
+				PolaritiesSystem.disabledEvilSpread = true;
 
-				Main.NewText(Language.GetTextValue("Mods.Polarities.StatusMessage.StopHallowSpread"), 175, 75, 255);
+				Main.NewText(Language.GetTextValue("Mods.Polarities.StatusMessage.StopEvilSpread"), 175, 75, 255);
 			}
 			return true;
 		}

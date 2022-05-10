@@ -65,7 +65,10 @@ namespace Polarities
 				i => i.MatchBrtrue(out label),
 				i => i.MatchRet()
 				))
+			{
+				GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
 				return;
+			}
 
 			c.Index++;
 
@@ -103,7 +106,10 @@ namespace Polarities
 				i => i.MatchLdsfld(typeof(NPC).GetField("downedPlantBoss", BindingFlags.Public | BindingFlags.Static)),
 				i => i.MatchBrfalse(out label)
 				))
+			{
+				GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
 				return;
+			}
 
 			c.Index++;
 

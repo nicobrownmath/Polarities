@@ -111,6 +111,7 @@
 			"LuminousSlimeStaff": "Luminous Slime Staff",
 			"SolarScarabStaff": "Solar Scarab Staff",
 			"PincerStaff": "Pincer Staff",
+			"EsophageousStaff": "Esophageous Staff",
 
 			//orbs
 			"Discorb": "Discorb",
@@ -122,6 +123,7 @@
 			"SunplateHamaxe": "Sunplate Hamaxe",
 			"Everlight": "Everlight",
 			"StrangeJewelry": "Strange Jewelry",
+			"StrangeSamples": "Strange Samples",
 
 			//accessories
 			"CosmicCable": "Cosmic Cable",
@@ -138,6 +140,7 @@
 			"MawOfFlesh": "Maw Of Flesh",
 			"StarbindCuffs": "Starbind Cuffs",
 			"SolarEnergizer": "Solar Energizer",
+			"AdaptiveGenes": "Adaptive Genes",
 
 			//mounts
 			"PegasusMountItem": "Bellerophon's Saddle",
@@ -184,8 +187,12 @@
 			"SnakescaleMask": "Snakescale Mask",
 
 			//vanity
+			"SnekHat": "Snek Hat",
+			"SeaSnekHat": "Sea Snek Hat",
 			"StarConstructMask": "Star Construct Mask",
 			"GigabatMask": "Gigabat Mask",
+			"SunPixieMask": "Sun Pixie Mask",
+			"EsophageMask": "Esophage Mask",
 
 			//hooks
 			"Starhook": "Starhook",
@@ -285,7 +292,6 @@
 			"LimestoneWall": "Limestone Wall",
 			"LimestoneBrickWall": "Limestone Brick Wall",
 			"Rattle": "Rattle",
-			"SnekHat": "Snek Hat",
 			"SunplateBar": "Sunplate Bar",
 			"BrineShrimp": "Brine Shrimp",
 			"StormChunk": "Storm Chunk",
@@ -296,7 +302,8 @@
 			"PickledHerring": "Pickled Herring",
 			"LimestoneCarapace": "Limestone Carapace",
 			"SerpentScale": "Serpent Scale",
-			"Tentacle": "Tentacle"
+			"Tentacle": "Tentacle",
+			"EvilDNA": "Evil DNA"
 		},
 		"ItemTooltip": {
 			"WarhammerBase": "Reduces enemy defense by {DefenseLoss} for {DebuffTime} seconds",
@@ -398,6 +405,7 @@
 			"LuminousSlimeStaff": "Summons a luminous slime to protect you",
 			"SolarScarabStaff": "Summons a solar scarab to protect you",
 			"PincerStaff": "Summons a clawed flesh puddle",
+			"EsophageousStaff": "Summons a baby Esophage to protect you",
 
 			//orbs
 			"Discorb": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons a winged disco ball to confuse enemies",
@@ -408,7 +416,10 @@
 
 			//tools
 			"Everlight": "Illuminates the cursor when held\nGrants rifle scope effect",
+			"StrangeClock": "Accelerates time",
+			"StrangeBarometer": "Left click to toggle the rain\nRight click to toggle the wind",
 			"StrangeJewelry": "Toggles the Hallow's spread",
+			"StrangeSamples": "Toggles the world evil's spread",
 
 			//accessories
 			"CosmicCable": "Improves hook stats",
@@ -427,6 +438,7 @@
 			"MawOfFlesh": "Grants a wall-summoning dash",
 			"StarbindCuffs": "Increases pickup range for mana stars\nRestores mana when damaged\nIncreases maximum mana by 20\nDoubles mana recieved from mana stars",
 			"SolarEnergizer": "10% reduced mana usage\nHitting enemies with non-magic weapons restores your mana",
+			"AdaptiveGenes": "Increases damage and critical strike chance at higher health\nIncreases movement speed and life regeneration at lower health",
 
 			//mounts
 			"PegasusMountItem": "Summons a rideable pegasus mount",
@@ -501,8 +513,6 @@
 			//miscellaneous
 			"SaltCrystals": "'Yum'",
 			"Rattle": "Makes a noise when you shake it",
-			"StrangeClock": "Accelerates time",
-			"StrangeBarometer": "Left click to toggle the rain\nRight click to toggle the wind",
 			"VenomGland": "'Gross'"
 		},
 		"ArmorSetBonus": {
@@ -604,7 +614,10 @@
 			"EsophageCapsidPlate": "Capsid Plate",
 			"EsophageTendril": "Phage Tendril",
 			"EsophageFleshChunk": "Flesh Ball",
-			"EsophageTooth": "Phage Tooth"
+			"EsophageTooth": "Phage Tooth",
+			"IchorDrop": "Ichor Drop",
+			"EsophminiClaw": "Esophmini Claw",
+			"EsophminiBody": "Esophmini"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
@@ -731,6 +744,7 @@
 			"GlobusCrucigerMinionBuff": "Hallowed Statue",
 			"LuminousSlimeMinionBuff": "Luminous Slime",
 			"SolarScarabMinionBuff": "Solar Scarab",
+			"EsophminiBuff": "Esophmini",
 
 			//pet buffs
 			"StarConstructPetBuff": "Dwarf Star Construct",
@@ -761,6 +775,7 @@
 			"GlobusCrucigerMinionBuff": "A hallowed statue protects you",
 			"LuminousSlimeMinionBuff": "The luminous slime will fight for you",
 			"SolarScarabMinonBuff": "The solar scarab will fight for you",
+			"EsophminiBuff": "The baby Esophage will fight for you",
 
 			//pet buffs
 			"StarConstructPetBuff": "Much more stable than its larger cousin",
@@ -861,7 +876,9 @@
 			"SpawnHallowInvasion": "The world's bright places grow brighter!",
 			"StartHallowSpread": "The Hallow's spread resumes...",
 			"StopHallowSpread": "The Hallow's spread halts...",
-			"SpawnWorldEvilInvasion": "The world's evils seethe with anger!"
+			"SpawnWorldEvilInvasion": "The world's evils seethe with anger!",
+			"StartEvilSpread": "The world evil's spread resumes...",
+			"StopEvilSpread": "The world evil's spread halts..."
 		},
 		"Prefix": {
 			"AutomaticPrefix": "Automatic",

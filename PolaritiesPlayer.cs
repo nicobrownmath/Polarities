@@ -659,7 +659,10 @@ namespace Polarities
 				i => i.MatchLdcI4(0),
 				i => i.MatchLdcI4(0)
 				))
+			{
+				GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
 				return;
+			}
 
 			//replace current stack thing with crit
 			c.Emit(OpCodes.Pop);
@@ -679,7 +682,10 @@ namespace Polarities
 				i => i.MatchLdsfld(typeof(Terraria.CombatText).GetField("DamagedFriendlyCrit", BindingFlags.Public | BindingFlags.Static)),
 				i => i.MatchStloc(8)
 				))
+			{
+				GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
 				return;
+			}
 
 			c.Emit(OpCodes.Ldloc, 8); //defaultColor
 			c.Emit(OpCodes.Ldarg, 6); //Crit
@@ -763,7 +769,10 @@ namespace Polarities
 				i => i.MatchCall(typeof(Main).GetProperty("expertMode", BindingFlags.Public | BindingFlags.Static).GetGetMethod()),
 				i => i.MatchBrfalse(out _)
 				))
+			{
+				GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
 				return;
+			}
 
 			ILLabel label = c.DefineLabel();
 			label.Target = c.Next;

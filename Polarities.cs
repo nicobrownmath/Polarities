@@ -62,7 +62,10 @@ namespace Polarities
             if (!c.TryGotoNext(MoveType.After,
                 i => i.MatchCall(typeof(LoaderManager).GetMethod("ResizeArrays", BindingFlags.Static | BindingFlags.NonPublic))
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.Emit(OpCodes.Ldarg, 0);
             c.EmitDelegate<Action<bool>>((unloading) =>

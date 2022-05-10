@@ -65,7 +65,7 @@ namespace Polarities.Items.Placeable.Relics
 			int itemType = RelicBase.relicIndexToItemType[style];
 			if (itemType != 0)
 			{
-				Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 48, itemType);
+				Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 48, 64, itemType);
 			}
 		}
 
@@ -174,4 +174,5 @@ namespace Polarities.Items.Placeable.Relics
 	public class StarConstructRelic : RelicBase { public override int RelicIndex => 0; }
 	public class GigabatRelic : RelicBase { public override int RelicIndex => 1; }
 	public class SunPixieRelic : RelicBase { public override int RelicIndex => 2; }
+	public class EsophageRelic : RelicBase { public override int RelicIndex => 3; }
 }

@@ -50,7 +50,10 @@ namespace Polarities.NPCs.TownNPCs
 				i => i.MatchLdcI4(369),
 				i => i.MatchBeq(out label)
 				))
+			{
+				GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
 				return;
+			}
 
 			c.Emit(OpCodes.Ldarg, 0);
 			c.Emit(OpCodes.Ldfld, typeof(NPC).GetField("type", BindingFlags.Public | BindingFlags.Instance));

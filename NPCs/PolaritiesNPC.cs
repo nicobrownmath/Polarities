@@ -134,7 +134,10 @@ namespace Polarities.NPCs
                 i => i.MatchLdcI4(5),
                 i => i.MatchBle(out _)
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             ILLabel label = c.DefineLabel();
             label.Target = c.Next;
@@ -172,7 +175,10 @@ namespace Polarities.NPCs
                 i => i.MatchLdloc(5),
                 i => i.MatchCallvirt(typeof(IDictionary<int, float>).GetProperty("Item", BindingFlags.Public | BindingFlags.Instance).GetSetMethod())
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.Index++;
 
@@ -273,7 +279,10 @@ namespace Polarities.NPCs
                 i => i.MatchCall(typeof(KeyValuePair<int, NPC>).GetProperty("Value", BindingFlags.Public | BindingFlags.Instance).GetGetMethod()),
                 i => i.MatchCallvirt(typeof(NPC).GetProperty("CountsAsACritter", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.Emit(OpCodes.Ldloca, 3);
             c.Emit(OpCodes.Call, typeof(KeyValuePair<int, NPC>).GetProperty("Value", BindingFlags.Public | BindingFlags.Instance).GetGetMethod());
@@ -291,7 +300,10 @@ namespace Polarities.NPCs
                 i => i.MatchLdloc(3),
                 i => i.MatchCallvirt(typeof(NPC).GetProperty("CountsAsACritter", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.Emit(OpCodes.Ldloc, 3);
             c.EmitDelegate<Func<bool, NPC, bool>>((defaultCritterValue, npc) =>
@@ -330,7 +342,10 @@ namespace Polarities.NPCs
                 i => i.MatchLdfld(typeof(NPC).GetField("ichor", BindingFlags.Public | BindingFlags.Instance)),
                 i => i.MatchBrfalse(out _)
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.Index += 3;
 
@@ -351,7 +366,10 @@ namespace Polarities.NPCs
                 i => i.MatchLdsfld(typeof(CombatText).GetField("DamagedHostileCrit", BindingFlags.Public | BindingFlags.Static)),
                 i => i.MatchStloc(4)
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.Emit(OpCodes.Ldloc, 4);
             c.Emit(OpCodes.Ldarg, 4);

@@ -141,7 +141,10 @@ namespace Polarities.NPCs
                 i => i.MatchLdelemRef(),
                 i => i.MatchStloc(8)
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.Emit(OpCodes.Ldloc, 8);
             c.EmitDelegate<Action<NPC>>((npc) =>
@@ -167,7 +170,10 @@ namespace Polarities.NPCs
                 i => i.MatchLdcI4(200),
                 i => i.MatchBlt(out _)
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.EmitDelegate<Action>(() =>
             {
@@ -215,7 +221,10 @@ namespace Polarities.NPCs
                 i => i.MatchCall(typeof(CombatText).GetMethod("NewText", BindingFlags.Static | BindingFlags.Public, new Type[] { typeof(Rectangle), typeof(Color), typeof(int), typeof(bool), typeof(bool) })),
                 i => i.MatchPop()
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.Index += 13;
             ILLabel label = c.DefineLabel();
@@ -261,7 +270,10 @@ namespace Polarities.NPCs
                 i => i.MatchCall(typeof(CombatText).GetMethod("NewText", BindingFlags.Static | BindingFlags.Public, new Type[] { typeof(Rectangle), typeof(Color), typeof(int), typeof(bool), typeof(bool) })),
                 i => i.MatchPop()
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.Index += 13;
             ILLabel label2 = c.DefineLabel();
@@ -302,7 +314,10 @@ namespace Polarities.NPCs
                 i => i.MatchCall(typeof(Rectangle).GetMethod("Intersects", BindingFlags.Instance | BindingFlags.Public, new Type[] { typeof(Rectangle) })),
                 i => i.MatchBrfalse(out label)
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.Emit(OpCodes.Ldarg, 1);
             c.Emit(OpCodes.Ldloc, 2);
@@ -326,22 +341,25 @@ namespace Polarities.NPCs
             if (!c.TryGotoNext(MoveType.After,
                 i => i.MatchConvI4(),
                 i => i.MatchLdsfld(typeof(Main).GetField("npc", BindingFlags.Static | BindingFlags.Public)),
-                i => i.MatchLdloc(146),
+                i => i.MatchLdloc(145),
                 i => i.MatchLdelemRef(),
                 i => i.MatchLdfld(typeof(Entity).GetField("width", BindingFlags.Instance | BindingFlags.Public)),
                 i => i.MatchLdsfld(typeof(Main).GetField("npc", BindingFlags.Static | BindingFlags.Public)),
-                i => i.MatchLdloc(146),
+                i => i.MatchLdloc(145),
                 i => i.MatchLdelemRef(),
                 i => i.MatchLdfld(typeof(Entity).GetField("height", BindingFlags.Instance | BindingFlags.Public)),
                 i => i.MatchNewobj(typeof(Rectangle).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(int), typeof(int) })),
                 i => i.MatchCall(typeof(Rectangle).GetMethod("Intersects", BindingFlags.Instance | BindingFlags.Public, new Type[] { typeof(Rectangle) })),
                 i => i.MatchBrfalse(out label)
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
-            c.Emit(OpCodes.Ldloc, 145);
+            c.Emit(OpCodes.Ldloc, 144);
             c.Emit(OpCodes.Ldsfld, typeof(Main).GetField("npc", BindingFlags.Static | BindingFlags.Public));
-            c.Emit(OpCodes.Ldloc, 146);
+            c.Emit(OpCodes.Ldloc, 145);
             c.Emit(OpCodes.Ldelem_Ref);
             c.EmitDelegate<Func<Rectangle, NPC, bool>>((cartHitbox, npc) =>
             {
@@ -390,7 +408,10 @@ namespace Polarities.NPCs
                 i => i.MatchCall(typeof(Rectangle).GetMethod("Intersects", BindingFlags.Instance | BindingFlags.Public, new Type[] { typeof(Rectangle) })),
                 i => i.MatchBrfalse(out label)
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.Emit(OpCodes.Ldloc, 0);
             c.Emit(OpCodes.Ldloc, 2);
@@ -406,18 +427,21 @@ namespace Polarities.NPCs
             ILLabel label2 = null;
 
             if (!c.TryGotoNext(MoveType.After,
-                i => i.MatchLdloc(9),
-                i => i.MatchCallvirt(typeof(NPC).GetMethod("getRect", BindingFlags.Instance | BindingFlags.Public)),
-                i => i.MatchStloc(10),
-                i => i.MatchLdloca(7),
                 i => i.MatchLdloc(10),
+                i => i.MatchCallvirt(typeof(NPC).GetMethod("getRect", BindingFlags.Instance | BindingFlags.Public)),
+                i => i.MatchStloc(11),
+                i => i.MatchLdloca(8),
+                i => i.MatchLdloc(11),
                 i => i.MatchCall(typeof(Rectangle).GetMethod("Intersects", BindingFlags.Instance | BindingFlags.Public, new Type[] { typeof(Rectangle) })),
                 i => i.MatchBrfalse(out label2)
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
-            c.Emit(OpCodes.Ldloc, 7);
-            c.Emit(OpCodes.Ldloc, 9);
+            c.Emit(OpCodes.Ldloc, 8);
+            c.Emit(OpCodes.Ldloc, 10);
             c.EmitDelegate<Func<Rectangle, NPC, bool>>((jumpHitbox, npc) =>
             {
                 MultiHitboxNPC multiHitbox;
@@ -444,7 +468,10 @@ namespace Polarities.NPCs
                 i => i.MatchCall(typeof(Rectangle).GetMethod("Intersects", BindingFlags.Instance | BindingFlags.Public, new Type[] { typeof(Rectangle) })),
                 i => i.MatchBrfalse(out label)
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
             c.Emit(OpCodes.Ldloc, 0);
             c.Emit(OpCodes.Ldloc, 2);
@@ -460,18 +487,21 @@ namespace Polarities.NPCs
             ILLabel label2 = null;
 
             if (!c.TryGotoNext(MoveType.After,
-                i => i.MatchLdloc(10),
-                i => i.MatchCallvirt(typeof(NPC).GetMethod("getRect", BindingFlags.Instance | BindingFlags.Public)),
-                i => i.MatchStloc(11),
-                i => i.MatchLdloca(8),
                 i => i.MatchLdloc(11),
+                i => i.MatchCallvirt(typeof(NPC).GetMethod("getRect", BindingFlags.Instance | BindingFlags.Public)),
+                i => i.MatchStloc(12),
+                i => i.MatchLdloca(9),
+                i => i.MatchLdloc(12),
                 i => i.MatchCall(typeof(Rectangle).GetMethod("Intersects", BindingFlags.Instance | BindingFlags.Public, new Type[] { typeof(Rectangle) })),
                 i => i.MatchBrfalse(out label2)
                 ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
                 return;
+            }
 
-            c.Emit(OpCodes.Ldloc, 8);
-            c.Emit(OpCodes.Ldloc, 10);
+            c.Emit(OpCodes.Ldloc, 9);
+            c.Emit(OpCodes.Ldloc, 11);
             c.EmitDelegate<Func<Rectangle, NPC, bool>>((dashHitbox, npc) =>
             {
                 MultiHitboxNPC multiHitbox;

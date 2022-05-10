@@ -24,6 +24,12 @@ using Terraria.GameContent.Bestiary;
 using Polarities.Biomes;
 using Terraria.GameContent.ItemDropRules;
 using Polarities.Effects;
+using Polarities.Items.Placeable.Relics;
+using Polarities.Items.Consumables.TreasureBags;
+using Polarities.Items.Materials;
+using Polarities.Items.Weapons.Summon.Minions;
+using Polarities.Items.Hooks;
+using Polarities.Items.Armor.Vanity;
 
 namespace Polarities.NPCs.Esophage
 {
@@ -847,15 +853,15 @@ namespace Polarities.NPCs.Esophage
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            //TODO: Loot
-            /*npcLoot.Add(new FlawlessOrRandomDropRule(ItemType<EsophageTrophy>(), 10));
+            npcLoot.Add(new FlawlessOrRandomDropRule(ItemType<EsophageTrophy>(), 10));
             npcLoot.Add(ItemDropRule.BossBag(ItemType<EsophageBag>()));
             npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ItemType<EsophageRelic>()));
-            //npcLoot.Add(ModUtils.MasterModeDropOnAllPlayersOrFlawless(ItemType<EsophagePetItem>(), 4));
+            //TODO: npcLoot.Add(ModUtils.MasterModeDropOnAllPlayersOrFlawless(ItemType<EsophagePetItem>(), 4));
 
             //normal mode loot
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
             notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<EsophageMask>(), 7));
+            notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<EvilDNA>(), 1, 3, 4));
             notExpertRule.OnSuccess(ItemDropRule.Common(ItemID.SoulofNight, 1, 12, 18));
             notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<StrangeSamples>(), 2));
             notExpertRule.OnSuccess(new OneFromOptionsWithCountsNotScaledWithLuckDropRule(1, 1,
@@ -864,9 +870,7 @@ namespace Polarities.NPCs.Esophage
             notExpertRule.OnSuccess(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemType<EsophageousStaff>(), ItemType<PhagefootHook>()));
             npcLoot.Add(notExpertRule);
 
-            npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Contagun>()));*/
-
-            //TODO: Make alt evil solutions be sold from the steampunker after beating the boss instead of dropping from it?
+            //TODO: npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Contagun>()));
         }
     }
 
@@ -1047,7 +1051,7 @@ namespace Polarities.NPCs.Esophage
 
         public void DrawAt(NPC owner, Vector2 center, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor, bool bestiaryDummy = false)
         {
-            Vector2[] points = { center, center + (owner.Center - center) * 0.34f - new Vector2(0, 200), center + (owner.Center - center) * 0.66f, owner.Center };
+            Vector2[] points = { center + new Vector2(0, -8), center + (owner.Center - center) * 0.34f - new Vector2(0, 200), center + (owner.Center - center) * 0.66f, owner.Center };
 
             for (int i = 0; i < points.Length - 1; i++)
             {
@@ -1324,6 +1328,11 @@ namespace Polarities.NPCs.Esophage
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             return CustomCollision.CheckAABBvDisc(targetHitbox, new Circle(Projectile.Center, Projectile.width / 2));
+        }
+
+        public override void OnHitPlayer(Player target, int damage, bool crit)
+        {
+            target.AddBuff(BuffID.CursedInferno, 60 * 4);
         }
 
         public override bool PreDraw(ref Color lightColor)

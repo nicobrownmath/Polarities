@@ -13,41 +13,74 @@ namespace Polarities.NPCs
     public class VanillaNPCShop : GlobalNPC
     {
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
-        {
-            switch (type)
+		{
+			switch (type)
 			{
 				case NPCID.WitchDoctor:
-					/*TODO: if (NPC.downedPlantBoss && Main.player[Main.myPlayer].ZoneJungle)
+					/*TODO: if (NPC.downedPlantBoss && Main.LocalPlayer.ZoneJungle)
 					{
 						shop.item[nextSlot].SetDefaults(ItemType<SymbioticSapling>());
 						nextSlot++;
 					}*/
 					break;
 				case NPCID.Painter:
-					/*TODO: if (Main.player[Main.myPlayer].GetModPlayer<PolaritiesPlayer>().hasBeenInFractalSubworld)
+					/*TODO: if (Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().hasBeenInFractalSubworld)
 					{
 						shop.item[nextSlot].SetDefaults(ItemType<WarpedLandscape>());
 						nextSlot++;
 					}*/
 					break;
 				case NPCID.Demolitionist:
-					if (Main.player[Main.myPlayer].HasItem(ItemType<Flarecaller>()))
+					if (Main.LocalPlayer.HasItem(ItemType<Flarecaller>()))
 					{
 						shop.item[nextSlot].SetDefaults(ItemType<Flarecaller>());
 						nextSlot++;
 					}
 					break;
 				case NPCID.Dryad:
-                    if (Main.player[Main.myPlayer].HasItem(ItemType<BatArrow>()))
+                    if (Main.LocalPlayer.HasItem(ItemType<BatArrow>()))
                     {
                         shop.item[nextSlot].SetDefaults(ItemType<BatArrow>());
                         nextSlot++;
                     }
-                    break;
+					//alt evil seeds in graveyard only unlock after esophage
+					if (!PolaritiesSystem.downedEsophage)
+					{
+						for (int i = 0; i < shop.item.Length; i++)
+						{
+							if (shop.item[i].type == ItemID.CorruptSeeds && WorldGen.crimson)
+							{
+								shop.item[i] = new Item();
+								shop.item[i].SetDefaults(ItemID.CrimsonSeeds);
+								break;
+							}
+							else if (shop.item[i].type == ItemID.CrimsonSeeds && !WorldGen.crimson)
+							{
+								shop.item[i] = new Item();
+								shop.item[i].SetDefaults(ItemID.CorruptSeeds);
+								break;
+							}
+						}
+					}
+					break;
                 case NPCID.PartyGirl:
                     shop.item[nextSlot].SetDefaults(ItemType<Discorb>());
                     nextSlot++;
                     break;
+				case NPCID.Steampunker:
+					if (PolaritiesSystem.downedEsophage && Main.LocalPlayer.ZoneGraveyard)
+					{
+						for (int i = 0; i < shop.item.Length; i++)
+						{
+							if (shop.item[i].ammo == AmmoID.Solution)
+							{
+								shop.item[i] = new Item();
+								shop.item[i].SetDefaults(WorldGen.crimson ? ItemID.PurpleSolution : ItemID.RedSolution);
+								break;
+							}
+						}
+					}
+					break;
             }
         }
 
