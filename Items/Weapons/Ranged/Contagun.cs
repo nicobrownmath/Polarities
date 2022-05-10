@@ -54,7 +54,7 @@ namespace Polarities.Items.Weapons.Ranged
 			if (player.channel)
 			{
 				Vector2 velocity = (Main.MouseWorld - player.MountedCenter).SafeNormalize(Vector2.Zero) * Item.shootSpeed;
-				Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.MountedCenter + velocity.SafeNormalize(Vector2.Zero) * 90, velocity, Item.shoot, Item.damage, Item.knockBack, player.whoAmI, ai0: Main.GlobalTimeWrappedHourly * 4f, ai1: 60f);
+				Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.MountedCenter + velocity.SafeNormalize(Vector2.Zero) * 70, velocity, Item.shoot, Item.damage, Item.knockBack, player.whoAmI, ai0: Main.GlobalTimeWrappedHourly * 4f, ai1: 60f);
 
 				player.itemTime = player.itemTimeMax;
 				player.itemAnimation = player.itemAnimationMax;
@@ -71,7 +71,7 @@ namespace Polarities.Items.Weapons.Ranged
 				{
 					shotTime = 0;
 
-					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.MountedCenter + velocity.SafeNormalize(Vector2.Zero) * 80, velocity.RotatedByRandom(0.2f) * Main.rand.NextFloat(0.5f, 2f), ProjectileType<ContagunVirusProjectile>(), Item.damage, Item.knockBack, player.whoAmI);
+					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.MountedCenter + velocity.SafeNormalize(Vector2.Zero) * 60, velocity.RotatedByRandom(0.2f) * Main.rand.NextFloat(0.5f, 2f), ProjectileType<ContagunVirusProjectile>(), Item.damage, Item.knockBack, player.whoAmI);
 				}
 			}
 		}
@@ -83,7 +83,12 @@ namespace Polarities.Items.Weapons.Ranged
 			if (player.direction == -1) { player.itemRotation += (float)Math.PI; }
 		}
 
-		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        public override Vector2? HoldoutOffset()
+        {
+			return new Vector2(-20, 0);
+        }
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			soundTime = 0;
 			shotTime = 0;

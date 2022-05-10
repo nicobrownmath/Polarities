@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Polarities.NPCs;
@@ -24,7 +25,7 @@ namespace Polarities.Biomes
 		public override int Music => MusicID.TheTowers;
 
 		public override string BestiaryIcon => "Biomes/" + Name + "_BestiaryIcon";
-        public override string BackgroundPath => "Terraria/Images\\MapBG8";
+        public override string BackgroundPath => base.BackgroundPath; //this doesn't need to be the vanilla BG because all rapture enemies are also hallow enemies
 		public override Color? BackgroundColor => base.BackgroundColor;
 
         public static Asset<Texture2D> EventIcon;
@@ -32,37 +33,6 @@ namespace Polarities.Biomes
         public override void Load()
         {
             EventIcon = Request<Texture2D>("Polarities/Biomes/" + Name + "_EventIcon");
-
-            //allow the mod's map/bestiary bgs to use vanilla textures
-            On.Terraria.GameContent.Bestiary.ModBiomeBestiaryInfoElement.GetBackgroundImage += ModBiomeBestiaryInfoElement_GetBackgroundImage;
-        }
-
-        private Asset<Texture2D> ModBiomeBestiaryInfoElement_GetBackgroundImage(On.Terraria.GameContent.Bestiary.ModBiomeBestiaryInfoElement.orig_GetBackgroundImage orig, Terraria.GameContent.Bestiary.ModBiomeBestiaryInfoElement self)
-        {
-            if (typeof(Terraria.GameContent.Bestiary.ModBestiaryInfoElement).GetField("_mod", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(self) is Polarities)
-            {
-                string basePath = (string)(typeof(Terraria.GameContent.Bestiary.ModBestiaryInfoElement).GetField("_backgroundPath", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(self));
-
-                if (basePath != null)
-                {
-                    if (basePath.StartsWith("Terraria/"))
-                    {
-                        if (basePath.Length == 0)
-                        {
-                            return null;
-                        }
-                        Asset<Texture2D> asset = Request<Texture2D>(basePath, AssetRequestMode.AsyncLoad);
-                        if (asset.Size() == new Vector2(115f, 65f))
-                        {
-                            return asset;
-                        }
-                        Mod.Logger.Info((object)(basePath + " needs to be 115x65 pixels."));
-                        return null;
-                    }
-                }
-            }
-
-            return orig(self);
         }
 
         public override void Unload()
