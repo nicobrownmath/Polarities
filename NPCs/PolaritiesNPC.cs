@@ -71,8 +71,8 @@ namespace Polarities.NPCs
         };
 
         public static HashSet<int> customSlimes = new HashSet<int>();
-
         public static HashSet<int> forceCountForRadar = new HashSet<int>();
+        public static HashSet<int> canSpawnInLava = new HashSet<int>();
 
         public override void Load()
         {
@@ -93,6 +93,9 @@ namespace Polarities.NPCs
 
             //force counts things for the radar
             IL.Terraria.Main.DrawInfoAccs += Main_DrawInfoAccs;
+
+            //allows npcs to spawn in lava
+            IL.Terraria.NPC.SpawnNPC += NPC_SpawnNPC;
         }
 
         public override void Unload()
@@ -102,6 +105,7 @@ namespace Polarities.NPCs
             customNPCCapSlotCaps = null;
             customSlimes = null;
             forceCountForRadar = null;
+            canSpawnInLava = null;
 
             IL_ChooseSpawn -= PolaritiesNPC_IL_ChooseSpawn;
         }
@@ -165,9 +169,82 @@ namespace Polarities.NPCs
             remove => HookEndpointManager.Unmodify(typeof(NPCLoader).GetMethod("ChooseSpawn", BindingFlags.Public | BindingFlags.Static), value);
         }
 
+        public static bool lavaSpawnFlag;
+
+        private void NPC_SpawnNPC(ILContext il)
+        {
+            //allows npcs to spawn in lava
+            var c = new ILCursor(il);
+
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.MatchLdcI4(0),
+                i => i.MatchStloc(55),
+                i => i.MatchBr(out _)
+                ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location 1");
+                return;
+            }
+
+            c.Index += 10;
+
+            c.EmitDelegate<Action>(() => { lavaSpawnFlag = false; });
+
+            ILLabel label = null;
+
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.MatchStloc(2),
+                i => i.MatchBr(out _),
+                //we shouldn't need any of the stuff before here but tile method matching is awful
+                i => i.MatchLdsflda(typeof(Main).GetField("tile", BindingFlags.Public | BindingFlags.Static)),
+                i => i.MatchLdloc(63),
+                i => i.MatchLdloc(64),
+                i => i.MatchCall(typeof(Tilemap).GetProperty("Item", BindingFlags.Public | BindingFlags.Instance).GetGetMethod()),
+                i => i.MatchStloc(41),
+                i => i.MatchLdloca(41),
+                i => i.MatchCall(out _), //this SHOULD be able to just be typeof(Tile).GetMethod("lava", new Type[] { }), but NO
+                i => i.MatchBrfalse(out label)
+                ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location 2");
+                return;
+            }
+
+            //we're in lava
+            c.EmitDelegate<Action>(() => { lavaSpawnFlag = true; });
+            //go to label
+            c.Emit(OpCodes.Br, label);
+        }
+
         private void PolaritiesNPC_IL_ChooseSpawn(ILContext il)
         {
             ILCursor c = new ILCursor(il);
+
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.MatchLdloc(0),
+                i => i.MatchLdcI4(0),
+                i => i.MatchLdcR4(1),
+                i => i.MatchCallvirt(typeof(IDictionary<int, float>).GetProperty("Item", BindingFlags.Public | BindingFlags.Instance).GetSetMethod())
+                ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location 1");
+                return;
+            }
+
+            //remove vanilla spawns if conditions are met
+            c.Emit(OpCodes.Ldloc, 0);
+            c.Emit(OpCodes.Ldarg, 0);
+            c.EmitDelegate<Action<IDictionary<int, float>, NPCSpawnInfo>>((pool, spawnInfo) =>
+            {
+                //don't remove vanilla spawns from pillars
+                if (spawnInfo.Player.ZoneTowerSolar || spawnInfo.Player.ZoneTowerStardust || spawnInfo.Player.ZoneTowerNebula || spawnInfo.Player.ZoneTowerVortex) return;
+
+                //remove vanilla spawns if in pestilence/rapture
+                if (spawnInfo.Player.InModBiome(GetInstance<HallowInvasion>()) || spawnInfo.Player.InModBiome(GetInstance<HallowInvasion>()))
+                {
+                    pool.Remove(0);
+                }
+            });
 
             ILLabel label = null;
 
@@ -181,7 +258,7 @@ namespace Polarities.NPCs
                 i => i.MatchCallvirt(typeof(IDictionary<int, float>).GetProperty("Item", BindingFlags.Public | BindingFlags.Instance).GetSetMethod())
                 ))
             {
-                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location 2");
                 return;
             }
 
@@ -204,30 +281,51 @@ namespace Polarities.NPCs
                 {
                     if (spawnInfo.Player.InModBiome(GetInstance<HallowInvasion>()))
                     {
+                        //purge invalid rapture spawns
                         if (!HallowInvasion.ValidNPC(modNPC.Type))
                         {
                             return false;
                         }
-                        else
-                        {
-                            pool[0] = 0;
-                        }
                     }
                     else if (spawnInfo.Player.InModBiome(GetInstance<WorldEvilInvasion>()))
                     {
+                        //purge invalid world evil enemy spawns
                         if (!WorldEvilInvasion.ValidNPC(modNPC.Type))
                         {
                             return false;
                         }
-                        else
+                    }
+
+                    if (lavaSpawnFlag)
+                    {
+                        //purge invalid lava spawns
+                        if (!canSpawnInLava.Contains(modNPC.Type))
                         {
-                            pool[0] = 0;
+                            return false;
                         }
                     }
                 }
                 return true;
             });
             c.Emit(OpCodes.Brfalse, label);
+
+            //replace vanilla spawns with null if in lava
+            if (!c.TryGotoNext(MoveType.Before,
+                i => i.MatchLdloc(12),
+                i => i.MatchRet()
+                ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location 3");
+                return;
+            }
+
+            c.Index++;
+
+            c.EmitDelegate<Func<int?, int?>>((type) =>
+            {
+                return type != 0 ? type :
+                    lavaSpawnFlag ? null : 0;
+            });
         }
 
         public override void SpawnNPC(int npc, int tileX, int tileY)

@@ -126,6 +126,8 @@
 			//tools
 			"SunplateHamaxe": "Sunplate Hamaxe",
 			"Everlight": "Everlight",
+			"StrangeClock": "Strange Clock",
+			"StrangeBarometer": "Strange Barometer",
 			"StrangeJewelry": "Strange Jewelry",
 			"StrangeSamples": "Strange Samples",
 
@@ -302,8 +304,6 @@
 			"SunplateBar": "Sunplate Bar",
 			"BrineShrimp": "Brine Shrimp",
 			"StormChunk": "Storm Chunk",
-			"StrangeClock": "Strange Clock",
-			"StrangeBarometer": "Strange Barometer",
 			"VenomGland": "Venom Gland",
 			"CongealedBrine": "Congealed Brine",
 			"PickledHerring": "Pickled Herring",

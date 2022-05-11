@@ -327,6 +327,13 @@ namespace Polarities
 			{
 				tasks.Insert(finalCleanupIndex + 1, new PassLegacy("Final Final Cleanup", FinalFinalCleanup));
 			}
+
+			int dungeonIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Dungeon"));
+			if (dungeonIndex != -1)
+			{
+				//TODO: tasks.Insert(dungeonIndex + 1, new PassLegacy("More Biome Chests", AddBiomeChests));
+				tasks.Insert(dungeonIndex + 2, new PassLegacy("Making Hell More Hellish", CustomHellGeneration));
+			}
 		}
 
 		static bool NonReplaceableTileForBiomes(Tile tile)
@@ -991,6 +998,217 @@ namespace Polarities
 						}
 					}
 				}
+			}
+		}
+
+		private void CustomHellGeneration(GenerationProgress progress, GameConfiguration configuration)
+		{
+			progress.Message = "Making hell more hellish";
+
+			int x;
+			int y;
+
+			int direction = WorldGen.dungeonX < Main.maxTilesX / 2 ? 1 : -1;
+			int GetX()
+			{
+				if (direction == 1)
+				{
+					return x;
+				}
+				return Main.maxTilesX - 1 - x;
+			}
+
+			int maxLakeX = (int)(Main.maxTilesX * 0.23f);
+			int lakeSurfaceY = Main.maxTilesY - 140;
+
+			Tile frameTile;
+
+			//generate the general lake
+			//random walk thing is semi-adapted from vanilla
+			int walkHeight = Main.maxTilesY - WorldGen.genRand.Next(50, 70);
+			for (x = 0; x < maxLakeX; x++)
+			{
+				walkHeight += WorldGen.genRand.Next(-3, 4);
+				if (walkHeight < Main.maxTilesY - 70) walkHeight = Main.maxTilesY - 70;
+				if (walkHeight > Main.maxTilesY - 50) walkHeight = Main.maxTilesY - 50;
+
+				for (y = Main.maxTilesY - 150; y < Main.maxTilesY; y++)
+				{
+					frameTile = Framing.GetTileSafely(GetX(), y);
+
+					if (y < lakeSurfaceY)
+					{
+						frameTile.HasTile = false;
+						frameTile.LiquidAmount = 0;
+					}
+					else if (y < walkHeight)
+					{
+						frameTile.HasTile = false;
+						frameTile.LiquidType = 1;
+						frameTile.LiquidAmount = 255;
+					}
+					else
+					{
+						WorldGen.PlaceTile(GetX(), y, TileID.Ash, mute: true, forced: true);
+						Framing.GetTileSafely(GetX(), y).Slope = 0;
+						Framing.GetTileSafely(GetX(), y).IsHalfBlock = false;
+					}
+				}
+
+				//clear things above the start
+				y = Main.maxTilesY - 151;
+				frameTile = Framing.GetTileSafely(GetX(), y);
+				while ((frameTile.HasTile || frameTile.LiquidAmount > 0) && y > Main.maxTilesY - 180)
+				{
+					frameTile.HasTile = false;
+					frameTile.LiquidAmount = 0;
+					y--;
+					frameTile = Framing.GetTileSafely(GetX(), y);
+				}
+			}
+
+			//Border transition with normal hell
+			x = maxLakeX;
+			y = Main.maxTilesY - 150;
+			frameTile = Framing.GetTileSafely(GetX(), y);
+			while (!frameTile.HasTile && y < Main.maxTilesY - 70)
+			{
+				y++;
+				frameTile = Framing.GetTileSafely(GetX(), y);
+			}
+			int borderTransitionHeight = y;
+			int borderTransitionCurrHeight = borderTransitionHeight;
+			x--;
+			while (borderTransitionCurrHeight > 0 && x > 0 && !Main.tile[GetX(), borderTransitionCurrHeight].HasTile)
+			{
+				for (y = borderTransitionCurrHeight; y < Main.maxTilesY; y++)
+				{
+					WorldGen.PlaceTile(GetX(), y, TileID.Ash, mute: true, forced: true);
+				}
+				x--;
+				borderTransitionCurrHeight += WorldGen.genRand.Next(-2, 4);
+				if (borderTransitionCurrHeight < borderTransitionHeight) borderTransitionCurrHeight = borderTransitionHeight;
+			}
+			x = maxLakeX;
+			borderTransitionCurrHeight = borderTransitionHeight;
+			while (borderTransitionCurrHeight > 0 && x < Main.maxTilesX)
+			{
+				for (y = borderTransitionCurrHeight; y < Main.maxTilesY; y++)
+				{
+					if (!Main.tile[GetX(), y].HasTile)
+						WorldGen.PlaceTile(GetX(), y, TileID.Ash, mute: true, forced: true);
+				}
+				x++;
+				borderTransitionCurrHeight += WorldGen.genRand.Next(-2, 7);
+				if (borderTransitionCurrHeight < borderTransitionHeight) borderTransitionCurrHeight = borderTransitionHeight;
+			}
+
+			//extend lava into normal hell until it hits something
+			x = maxLakeX;
+			y = lakeSurfaceY;
+			while (!Main.tile[GetX(), y].HasTile)
+			{
+				while (y < Main.maxTilesY && !Main.tile[GetX(), y].HasTile && Main.tile[GetX(), y].LiquidAmount == 0)
+				{
+					frameTile = Framing.GetTileSafely(GetX(), y);
+					frameTile.LiquidType = 1;
+					frameTile.LiquidAmount = 255;
+					y++;
+				}
+
+				y = lakeSurfaceY;
+				x++;
+			}
+
+			//generate ash islands and fissures
+			int lastIslandGenAt = 0;
+			for (x = 0; x < maxLakeX - 100; x++)
+			{
+				int testWidth = WorldGen.genRand.Next(2, 25) * 2;
+
+				if (x - lastIslandGenAt > testWidth / 2 + 4 && WorldGen.genRand.NextBool(20))
+				{
+					lastIslandGenAt = x;
+					float verticalScale = WorldGen.genRand.NextFloat(0.75f, 1f) * testWidth / 20f;
+					GenAshIslandAt(GetX(), lakeSurfaceY, testWidth, verticalScale);
+					int fissureGenHeight = (int)(lakeSurfaceY + 24 * verticalScale + 1);
+
+					GenLavaLakeFissureAt(GetX(), fissureGenHeight, testWidth * 0.25f + 5);
+
+					x += testWidth / 2;
+				}
+			}
+
+			//Re-generate lava pockets and hellstone
+			//adapted from vanilla
+			for (int num552 = 0; num552 < maxLakeX; num552++)
+			{
+				x = WorldGen.genRand.Next(20, maxLakeX);
+				WorldGen.TileRunner(GetX(), WorldGen.genRand.Next(Main.maxTilesY - 180, Main.maxTilesY - 10), WorldGen.genRand.Next(2, 7), WorldGen.genRand.Next(2, 7), -2);
+			}
+			for (int num554 = 0; num554 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008 * (maxLakeX / (double)Main.maxTilesX)); num554++)
+			{
+				x = WorldGen.genRand.Next(0, maxLakeX);
+				WorldGen.TileRunner(GetX(), WorldGen.genRand.Next(Main.maxTilesY - 140, Main.maxTilesY), WorldGen.genRand.Next(2, 7), WorldGen.genRand.Next(3, 7), TileID.Hellstone);
+			}
+		}
+
+		void GenAshIslandAt(int atX, int atY, int width, float verticalScale)
+		{
+			int halfWidth = width / 2;
+
+			int x;
+			int y;
+
+			float upBaseHeight = 2.5f * Main.rand.NextFloat(0.75f, 1.33f) * verticalScale;
+			float upMaxVariance = 0.6f * upBaseHeight;
+			float upGeneralVariance = 2 * verticalScale;
+
+			float downBaseHeight = 10 * Main.rand.NextFloat(0.75f, 1.33f) * verticalScale;
+			float downMaxVariance = 0.8f * downBaseHeight;
+			float downGeneralVariance = 4 * verticalScale;
+
+			float walkHeightUp = upBaseHeight + WorldGen.genRand.NextFloat(-upMaxVariance, upMaxVariance + 1);
+			float walkHeightDown = downBaseHeight + WorldGen.genRand.NextFloat(-downMaxVariance, downMaxVariance + 1);
+			for (x = -halfWidth; x <= halfWidth; x++)
+			{
+				walkHeightUp += WorldGen.genRand.NextFloat(-upGeneralVariance, upGeneralVariance + 1);
+				walkHeightUp = Utils.Clamp(walkHeightUp, upBaseHeight - upMaxVariance, upBaseHeight + upMaxVariance);
+
+				walkHeightDown += WorldGen.genRand.NextFloat(-downGeneralVariance, downGeneralVariance + 1);
+				walkHeightDown = Utils.Clamp(walkHeightDown, downBaseHeight - downMaxVariance, downBaseHeight + downMaxVariance);
+
+				int trueHeightUp = (int)(walkHeightUp * (1 - (x / (float)halfWidth) * (x / (float)halfWidth)));
+				int trueHeightDown = (int)(walkHeightDown * (1 - (x / (float)halfWidth) * (x / (float)halfWidth)));
+
+				for (y = -trueHeightUp; y <= trueHeightDown; y++)
+				{
+					WorldGen.PlaceTile(x + atX, y + atY, TileID.Ash, mute: true, forced: true);
+				}
+			}
+		}
+
+		void GenLavaLakeFissureAt(int atX, int atY, float width)
+		{
+			int x;
+			int y;
+
+			float xOffset = 0;
+			float levelWidth = width;
+			for (y = atY; y < Main.maxTilesY - 1; y++)
+			{
+				for (x = (int)(atX + xOffset - levelWidth / 2); x <= atX + xOffset + levelWidth / 2; x++)
+				{
+					Tile frameTile = Framing.GetTileSafely(x, y);
+					frameTile.HasTile = false;
+					frameTile.LiquidType = 1;
+					frameTile.LiquidAmount = 255;
+				}
+				levelWidth += Main.rand.NextFloat(-2.5f, 2f);
+				if (levelWidth > width + 2) levelWidth = width + 2;
+				if (levelWidth < 2) levelWidth = 2;
+
+				xOffset += Main.rand.NextFloat(-1f, 1f);
 			}
 		}
 
