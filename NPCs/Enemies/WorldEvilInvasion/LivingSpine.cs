@@ -384,6 +384,13 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			for (int i = segmentPositions.Length - 1; i > 0; i--)
 			{
 				Vector2 drawPosition = (segmentPositions[i] + segmentPositions[i - 1]) / 2;
+
+				int buffer = 16;
+				if (!spriteBatch.GraphicsDevice.ScissorRectangle.Intersects(new Rectangle((int)(drawPosition - screenPos).X - buffer, (int)(drawPosition - screenPos).Y - buffer, buffer * 2, buffer * 2)))
+				{
+					continue;
+				}
+
 				float rotation = (segmentPositions[i - 1] - segmentPositions[i]).ToRotation();
 				float scale = 1f;
 

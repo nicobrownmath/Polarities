@@ -18,7 +18,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Biomes
 {
-    public class LavaOcan : ModBiome
+    public class LavaOcean : ModBiome
     {
         public override SceneEffectPriority Priority => SceneEffectPriority.None;
 

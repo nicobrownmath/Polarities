@@ -354,5 +354,15 @@ namespace Polarities
 
 			return output;
         }
+
+
+		public static Color ConvectiveFlameColor(float progress)
+		{
+			float clampedProgress = Math.Clamp(progress, 0, 1);
+			float r = 1.25f - clampedProgress / 2;
+			float g = clampedProgress < 0.5f ? 4 * clampedProgress * (1 - clampedProgress) : 13 / 12f - clampedProgress / 6f;
+			float b = 2 * clampedProgress;
+			return new Color(r, g, b);
+		}
 	}
 }
