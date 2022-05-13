@@ -83,6 +83,7 @@ namespace Polarities
 		public float spawnRate;
 		public bool solarEnergizer;
 		public bool wormScarf;
+		public int wyvernsNestDamage;
 
 		//direction of dash
 		public int dashDir;
@@ -126,6 +127,7 @@ namespace Polarities
 			spawnRate = 1f;
 			solarEnergizer = false;
 			wormScarf = false;
+			wyvernsNestDamage = 0;
 
 			if (skeletronBookCooldown > 0) skeletronBookCooldown--;
 			if (beeRingTimer > 0) beeRingTimer--;
@@ -251,6 +253,14 @@ namespace Polarities
 			if (stormcore && 0.2f + Player.slotsMinions <= Player.maxMinions && Main.rand.NextBool(60))
 			{
 				Main.projectile[Projectile.NewProjectile(null, Player.Center.X + 500 * (2 * (float)Main.rand.NextDouble() - 1), Player.Center.Y - 500, 0, 0, ProjectileType<StormcoreMinion>(), 1, Player.GetTotalKnockback(DamageClass.Summon).ApplyTo(0.5f), Player.whoAmI, 0, 0)].originalDamage = 1;
+			}
+
+			if (wyvernsNestDamage > 0)
+            {
+				for (int i = Player.ownedProjectileCounts[ProjectileType<WyvernsNestMinion>()]; i < Player.maxTurrets; i++)
+				{
+					Main.projectile[Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ProjectileType<WyvernsNestMinion>(), wyvernsNestDamage, Player.GetTotalKnockback(DamageClass.Summon).ApplyTo(2f), Player.whoAmI, 0, 0)].originalDamage = 20;
+				}
 			}
 
 			if (canJumpAgain_Sail_Extra)

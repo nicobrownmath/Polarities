@@ -36,6 +36,7 @@ namespace Polarities.Items
     public class WallOfFleshFlawlessRarity : ColorLerpCycleRarity { public override Color[] ColorCycle => new Color[] { new Color(179, 68, 63), new Color(179, 99, 125) }; }
     public class SunPixieFlawlessRarity : ColorLerpCycleRarity { public override Color[] ColorCycle => new Color[] { Color.Yellow, Color.HotPink }; }
     public class EsophageFlawlessRarity : ColorLerpCycleRarity { public override Color[] ColorCycle => new Color[] { Color.Red, Color.Purple }; }
+    public class BetsyFlawlessRarity : ColorLerpCycleRarity { public override Color[] ColorCycle => new Color[] { new Color(188, 62, 68), new Color(137, 85, 169), new Color(255, 254, 182) }; }
     public class EmpressFlawlessRarity : ColorLerpCycleRarity { public override Color[] ColorCycle => new Color[] { Color.Magenta, Color.White, Color.Yellow, Color.White, Color.Cyan, Color.White }; }
 
     //an overly complex random walk-based rarity that doesn't actually look that good in this instance

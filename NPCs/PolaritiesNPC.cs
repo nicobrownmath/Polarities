@@ -837,6 +837,9 @@ namespace Polarities.NPCs
                 case NPCID.WallofFlesh:
                     npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<MawOfFlesh>()));
                     break;
+                case NPCID.DD2Betsy:
+                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<WyvernsNest>()));
+                    break;
             }
 
             //replace trophies and master pets

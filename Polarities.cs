@@ -208,6 +208,7 @@ namespace Polarities
                     return eventOccurring;
                 case "InFractalDimension":
                     return false;//TODO: Subworld.IsActive<FractalSubworld>();
+                //TODO: Check if it's the rapture/pestilence, activate/deactivate them
             }
             return null;
         }

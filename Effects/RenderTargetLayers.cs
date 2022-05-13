@@ -32,6 +32,7 @@ using Terraria.Graphics.Effects;
 
 namespace Polarities.Effects
 {
+	//TODO: Fix zoom jittering
 	public abstract class RenderTargetLayer : ARenderTargetContentByRequest, ILoadable
 	{
 		private static Dictionary<Type, RenderTargetLayer> renderTargetLayers = new Dictionary<Type, RenderTargetLayer>();
@@ -96,6 +97,7 @@ namespace Polarities.Effects
 		public BlendState blendState = BlendState.AlphaBlend;
 		public bool behindTiles = false;
 		public bool doWeResetSpritebatch = false;
+		public float targetScale = 1f;
 
 		public void ResetCaches()
 		{
@@ -114,7 +116,7 @@ namespace Polarities.Effects
 				device.SetRenderTarget(_target);
 				device.Clear(Color.Transparent);
 
-				Main.spriteBatch.Begin((SpriteSortMode)0, blendState, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+				Main.spriteBatch.Begin((SpriteSortMode)0, blendState, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.CreateTranslation(0f - Main.GameViewMatrix.Translation.X, 0f - Main.GameViewMatrix.Translation.Y, 0f) * Matrix.CreateScale(targetScale, targetScale, 1f));
 
 				DoDraw();
 
@@ -166,25 +168,27 @@ namespace Polarities.Effects
 			base.Load(mod);
 
             On.Terraria.GameContent.Events.ScreenObstruction.Draw += ScreenObstruction_Draw;
-            On.Terraria.Graphics.Effects.OverlayManager.Draw += OverlayManager_Draw;
+            On.Terraria.Main.DrawCachedNPCs += Main_DrawCachedNPCs;
+
+			targetScale = 0.5f;
 		}
 
-        private void OverlayManager_Draw(On.Terraria.Graphics.Effects.OverlayManager.orig_Draw orig, Terraria.Graphics.Effects.OverlayManager self, SpriteBatch spriteBatch, Terraria.Graphics.Effects.RenderLayers layer, bool beginSpriteBatch)
+        private void Main_DrawCachedNPCs(On.Terraria.Main.orig_DrawCachedNPCs orig, Main self, List<int> npcCache, bool behindTiles)
         {
-			orig(self, spriteBatch, layer, beginSpriteBatch);
+			orig(self, npcCache, behindTiles);
 
-			if (layer == RenderLayers.Entities && !beginSpriteBatch)
+			if (behindTiles && npcCache == Main.instance.DrawCacheNPCsMoonMoon)
 			{
 				if (_target != null && layerHasContent)
 				{
 					for (int i = 0; i < 4; i++)
 					{
-						spriteBatch.Draw(_target, new Vector2(1, 0).RotatedBy(i * MathHelper.PiOver2), null, new Color(64, 64, 64), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+						Main.spriteBatch.Draw(_target, Main.GameViewMatrix.Translation + new Vector2(1 / targetScale, 0).RotatedBy(i * MathHelper.PiOver2), null, new Color(64, 64, 64), 0f, Vector2.Zero, 1 / targetScale, SpriteEffects.None, 0f);
 					}
-					spriteBatch.Draw(_target, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(_target, Main.GameViewMatrix.Translation, null, Color.Black, 0f, Vector2.Zero, 1 / targetScale, SpriteEffects.None, 0f);
 				}
 			}
-        }
+		}
 
         private void ScreenObstruction_Draw(On.Terraria.GameContent.Events.ScreenObstruction.orig_Draw orig, SpriteBatch spriteBatch)
 		{
@@ -193,7 +197,7 @@ namespace Polarities.Effects
 				spriteBatch.End();
 				spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
 
-				spriteBatch.Draw(_target, Vector2.Zero, null, Color.White * 0.25f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+				spriteBatch.Draw(_target, Main.GameViewMatrix.Translation, null, Color.White, 0f, Vector2.Zero, 1 / targetScale, SpriteEffects.None, 0f);
 
 				spriteBatch.End();
 				spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);

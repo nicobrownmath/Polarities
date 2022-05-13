@@ -35,7 +35,7 @@ namespace Polarities.Items.Weapons.Summon.Minions
 			Item.UseSound = SoundID.Item44;
 			Item.autoReuse = true;
 			Item.shoot = ProjectileType<SolarScarabMinion>();
-			Item.buffType = BuffType<SolarScarabBuff>();
+			Item.buffType = BuffType<SolarScarabMinionBuff>();
 			Item.shootSpeed = 12f;
 
 			Item.value = Item.sellPrice(gold: 5);
@@ -50,7 +50,7 @@ namespace Polarities.Items.Weapons.Summon.Minions
 		}
 	}
 
-	public class SolarScarabBuff : ModBuff
+	public class SolarScarabMinionBuff : ModBuff
 	{
 		public override void SetStaticDefaults()
 		{
@@ -110,9 +110,9 @@ namespace Polarities.Items.Weapons.Summon.Minions
 			}
 			if (player.dead)
 			{
-				player.ClearBuff(BuffType<SolarScarabBuff>());
+				player.ClearBuff(BuffType<SolarScarabMinionBuff>());
 			}
-			if (player.HasBuff(BuffType<SolarScarabBuff>()))
+			if (player.HasBuff(BuffType<SolarScarabMinionBuff>()))
 			{
 				Projectile.timeLeft = 2;
 			}

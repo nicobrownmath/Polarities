@@ -27,7 +27,7 @@ namespace Polarities.NPCs
     //I don't really see how to fix this one without a full rewrite of Javelin code
     //This doesn't have any impact on their functionality so it's not a major issue
     //TODO: Produce hit sound from real center
-    //TODO: Mouse hovering?
+    //TODO: Mouse hovering
     //TODO: It could be cool to use or at least allow for some sort of nested structure to minimize collision checks (I probably don't need this right now but if/when I start doing things with more hitboxes than the NPC cap it'll be useful
 	public class MultiHitboxNPC : GlobalNPC
 	{

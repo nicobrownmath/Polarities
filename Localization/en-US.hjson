@@ -149,6 +149,7 @@
 			"AdaptiveGenes": "Adaptive Genes",
 			"RotKnuckles": "Rot Knuckles",
 			"InfestedBrain": "Infested Brain",
+			"WyvernsNest": "Wyvern's Nest",
 
 			//mounts
 			"PegasusMountItem": "Bellerophon's Saddle",
@@ -282,6 +283,7 @@
 			"WorldEvilInvasionSummonItem": "Putrid Lure",
 			"EsophageSummonItem": "Fleshy Capsid",
 			"AltBiomeMimicSummon": "Weird Key of Night",
+			"BetsySummonItem": "Infernia Crystal",
 
 			//critters
 			"GemflyItem": " Gemfly",
@@ -451,6 +453,7 @@
 			"AdaptiveGenes": "Increases damage and critical strike chance at higher health\nIncreases movement speed and life regeneration at lower health",
 			"RotKnuckles": "5% increased damage and critical strike chance",
 			"InfestedBrain": "Reduces damage taken by 12%\nHas a chance to create illusions and dodge an attack\nTemporarily increase critical chance after dodge\nMay confuse nearby enemies after being struck",
+			"WyvernsNest": "Summons Etherian wyverns to help your sentries keep up with you",
 
 			//mounts
 			"PegasusMountItem": "Summons a rideable pegasus mount",
@@ -512,6 +515,7 @@
 			"EsophageSummonItem": "Summons the Esophage\nNot consumable",
 			"EsophageSummonItemExtra": "It oozes blood under the red moon...",
 			"AltBiomeMimicSummon": "'Charged with the essence of strange souls'",
+			"BetsySummonItem": "Summons Betsy\nNot consumable",
 
 			//critters
 			"GemflyItem": "May attract bats",
@@ -635,7 +639,9 @@
 			"ContagunProjectile": "Evil Fumes",
 			"ChainLaceratorProjectile": "Evil Claw",
 			"LifeGrasperAura": "Draining Aura",
-			"LifeGrasperAuraRing": "Draining Ring"
+			"LifeGrasperAuraRing": "Draining Ring",
+			"WyvernsNestMinion": "Etherian Wyvern",
+			"WyvernsNestMinionFireball": "Wyvernfire",
 		},
 		"NPCName": {
 			"Rattler": "Rattler",

@@ -171,6 +171,8 @@ namespace Polarities
 		public static bool disabledEvilSpread;
 		public static bool disabledHallowSpread;
 
+		public static int timer;
+
 		public override void OnWorldLoad()
 		{
 			downedStormCloudfish = false;
@@ -1303,6 +1305,8 @@ namespace Polarities
 			{
 				sunPixieSpawnTimer++;
 			}
+
+			timer++;
 		}
 
 		public override void PostDrawInterface(SpriteBatch spriteBatch)
