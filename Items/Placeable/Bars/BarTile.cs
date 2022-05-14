@@ -7,6 +7,8 @@ using static Terraria.ModLoader.ModContent;
 using Polarities.Items;
 using Terraria.DataStructures;
 using System.Collections.Generic;
+using Terraria.ID;
+using Polarities.Dusts;
 
 namespace Polarities.Items.Placeable.Bars
 {
@@ -43,33 +45,29 @@ namespace Polarities.Items.Placeable.Bars
 		{
 			Tile t = Main.tile[i, j];
 			int style = t.TileFrameX / 18;
-			switch (style)
-			{
-				case 3:
-					type = 116;
-					break;
-				case 4:
-					type = 118;
-					break;
-			}
-			return base.CreateDust(i, j, ref type);
+			type = BarBase.barIndexToDustIndex[style] ?? type;
+			return true;
 		}
 	}
 
 	public abstract class BarBase : ModItem
 	{
 		public abstract int BarIndex { get; }
+		public virtual int? DustIndex => null;
 
 		public static Dictionary<int, int> barIndexToItemType = new Dictionary<int, int>();
+		public static Dictionary<int, int?> barIndexToDustIndex = new Dictionary<int, int?>();
 
 		public override void Unload()
 		{
 			barIndexToItemType = null;
+			barIndexToDustIndex = null;
 		}
 
 		public override void SetStaticDefaults()
 		{
 			barIndexToItemType.Add(BarIndex, Type);
+			barIndexToDustIndex.Add(BarIndex, DustIndex);
 
 			this.SetResearch(25);
 		}
@@ -87,6 +85,7 @@ namespace Polarities.Items.Placeable.Bars
 	public class SunplateBar : BarBase
     {
         public override int BarIndex => 2;
+		//TODO: Dust
 
         public override void SetDefaults()
         {
@@ -95,8 +94,25 @@ namespace Polarities.Items.Placeable.Bars
 			Item.width = 28;
 			Item.height = 20;
 
-			Item.rare = 1;
+			Item.rare = ItemRarityID.Blue;
 			Item.value = 4000;
         }
-    }
+	}
+
+	public class ConvectiveBar : BarBase
+	{
+		public override int BarIndex => 1;
+		public override int? DustIndex => DustType<ConvectiveDust>();
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+
+			Item.width = 30;
+			Item.height = 36;
+
+			Item.rare = ItemRarityID.Yellow;
+			Item.value = 10000;
+		}
+	}
 }

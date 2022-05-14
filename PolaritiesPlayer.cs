@@ -30,6 +30,7 @@ using Polarities.Items.Materials;
 using Polarities.Projectiles;
 using Polarities.Items.Consumables.Crates;
 using Terraria.Localization;
+using Polarities.Items.Placeable.Bars;
 
 namespace Polarities
 {
@@ -78,6 +79,8 @@ namespace Polarities
 		public int ignoreCritDefenseAmount;
 		public bool snakescaleSetBonus;
 		public int desiccation;
+		public int incineration;
+		public int incinerationResistanceTime;
 		public bool coneVenom;
 		public float runSpeedBoost;
 		public float spawnRate;
@@ -122,12 +125,14 @@ namespace Polarities
 			ignoreCritDefenseAmount = 0;
 			snakescaleSetBonus = false;
 			desiccation = 0;
+			incineration = 0;
 			coneVenom = false;
 			runSpeedBoost = 1f;
 			spawnRate = 1f;
 			solarEnergizer = false;
 			wormScarf = false;
 			wyvernsNestDamage = 0;
+			incinerationResistanceTime = 0;
 
 			if (skeletronBookCooldown > 0) skeletronBookCooldown--;
 			if (beeRingTimer > 0) beeRingTimer--;
@@ -516,6 +521,24 @@ namespace Polarities
 
         public override void PreUpdate()
 		{
+			//check for incineration by tile
+			bool incinerating = false;
+			for (int i = (int)((Player.position.X - 1) / 16); i < (int)((Player.position.X + 1 + Player.width) / 16) + 1; i++)
+			{
+				for (int j = (int)((Player.position.Y - 1) / 16); j < (int)((Player.position.Y + 1 + Player.height) / 16) + 1; j++)
+				{
+					if (Main.tile[i, j].TileType == TileType<MantellarOreTile>() || (Main.tile[i, j].TileType == TileType<BarTile>() && Main.tile[i, j].TileFrameX == 18))
+					{
+						incinerating = true;
+					}
+				}
+			}
+			if (incinerating)
+			{
+				Player.AddBuff(BuffType<Incinerating>(), Main.rand.Next(1, 3));
+			}
+
+
 			if (Main.expertMode && Framing.GetTileSafely(Player.Center.ToTileCoordinates()).WallType == WallType<RockSaltWallNatural>() && Player.wet && Player.adjWater)
 			{
 				Player.AddBuff(BuffType<Desiccating>(), 2);
@@ -726,11 +749,35 @@ namespace Polarities
 					Player.lifeRegen -= 60;
 				}
 			}
-        }
+
+			if (incineration * 2 - incinerationResistanceTime > 0)
+			{
+				if (Player.lifeRegen > 0) Player.lifeRegen = 0;
+				Player.lifeRegenTime = 0;
+				Player.lifeRegen -= incineration * 2 - incinerationResistanceTime;
+			}
+		}
 
 		//return true if we do vanilla life ticking, return false if we do our own
 		public bool DoUpdateBadLifeRegen()
 		{
+			int incineratonLifeRegenValue = incineration * 2 - incinerationResistanceTime;
+			if (incineratonLifeRegenValue > 0)
+			{
+				int lifeRegenStep = (int)Math.Ceiling(incineratonLifeRegenValue / 12f);
+				while (Player.lifeRegenCount <= -lifeRegenStep * 120)
+				{
+					Player.lifeRegenCount += lifeRegenStep * 120;
+					Player.statLife -= lifeRegenStep;
+					CombatText.NewText(Player.Hitbox, CombatText.LifeRegen, lifeRegenStep, dramatic: false, dot: true);
+					if (Player.statLife <= 0 && Player.whoAmI == Main.myPlayer)
+					{
+						Player.KillMe(PlayerDeathReason.ByCustomReason(Language.GetTextValueWith("Mods.Polarities.DeathMessage.Incinerating", new { PlayerName = Player.name })), 10.0, 0);
+					}
+				}
+				return false;
+			}
+
 			if (coneVenom)
 			{
 				while (Player.lifeRegenCount <= -720)

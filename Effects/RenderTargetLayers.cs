@@ -225,20 +225,19 @@ namespace Polarities.Effects
 
         private void ScreenObstruction_Draw(On.Terraria.GameContent.Events.ScreenObstruction.orig_Draw orig, SpriteBatch spriteBatch)
 		{
-			if (GetRenderTargetLayer<ConvectiveEnemyTarget>().HasContent() || HasContent())
-            {
-				spriteBatch.End();
-				spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+			spriteBatch.End();
+			spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
 
-				if (GetRenderTargetLayer<ConvectiveEnemyTarget>().HasContent())
-					GetRenderTargetLayer<ConvectiveEnemyTarget>().Draw(spriteBatch, Vector2.Zero, Color.White);
+			if (GetRenderTargetLayer<ConvectiveEnemyTarget>().HasContent())
+				GetRenderTargetLayer<ConvectiveEnemyTarget>().Draw(spriteBatch, Vector2.Zero, Color.White);
 
-				if (HasContent())
-					Draw(Main.spriteBatch, Vector2.Zero, Color.White);
+			if (HasContent())
+				Draw(Main.spriteBatch, Vector2.Zero, Color.White);
 
-				spriteBatch.End();
-				spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
-			}
+			ParticleLayer.AfterLiquidsAdditive.Draw(Main.spriteBatch);
+
+			spriteBatch.End();
+			spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
 
 			orig(spriteBatch);
 		}

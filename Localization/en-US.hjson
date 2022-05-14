@@ -312,7 +312,8 @@
 			"LimestoneCarapace": "Limestone Carapace",
 			"SerpentScale": "Serpent Scale",
 			"Tentacle": "Tentacle",
-			"EvilDNA": "Evil DNA"
+			"EvilDNA": "Evil DNA",
+			"MantellarOre": "Mantellar Ore"
 		},
 		"ItemTooltip": {
 			"WarhammerBase": "Reduces enemy defense by {DefenseLoss} for {DebuffTime} seconds",
@@ -754,6 +755,7 @@
 			"CloudCichlidCageTile": "{$Mods.Polarities.ItemName.CloudCichlidCage}",
 			"StormcloudCichlidCageTile": "{$Mods.Polarities.ItemName.StormcloudCichlidCage}",
 			"LockedChest": "Locked ",
+			"MantellarOreTile": "Mantellar Ore",
 		},
 		"BuffName": {
 			"Desiccating": "Desiccating",
@@ -764,6 +766,7 @@
 			"ToxicShock": "Toxic Shock",
 			"SeaLilyBuff": "Lily's Blessing",
 			"SunfishBuff": "Sunfish's Protection",
+			"Incinerating": "Incinerated",
 
 			//minion buffs
 			"ZombatMinionBuff": "Baby Zombat",
@@ -795,6 +798,7 @@
 			"ToxicShock": "'Shocking'",
 			"SeaLilyBuff": "Slightly increased life regen and movement speed",
 			"SunfishBuff": "Increased life regen and decreased enemy spawn rates",
+			"Incinerating": "You are being incinerated",
 
 			//minion buffs
 			"ZombatMinionBuff": "The baby zombats will fight for you",
@@ -905,7 +909,8 @@
 			"StopHallowSpread": "The Hallow's spread halts...",
 			"SpawnWorldEvilInvasion": "The world's evils seethe with anger!",
 			"StartEvilSpread": "The world evil's spread resumes...",
-			"StopEvilSpread": "The world evil's spread halts..."
+			"StopEvilSpread": "The world evil's spread halts...",
+			"GenMantellarOre": "The molten seas tremble..."
 		},
 		"Prefix": {
 			"AutomaticPrefix": "Automatic",
@@ -938,7 +943,8 @@
 		"DeathMessage": {
 			"StrangeObituary": "{PlayerName} died for strange reasons.",
 			"ConeVenom": "{PlayerName} was killed by a snail.",
-			"Desiccating": "{PlayerName} was mummified."
+			"Desiccating": "{PlayerName} was mummified.",
+			"Incinerating": "{PlayerName} went poof."
 		}
 	}
 }

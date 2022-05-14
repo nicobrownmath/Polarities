@@ -56,7 +56,11 @@ namespace Polarities.NPCs
         public int contagunPhages;
 
         public int desiccation;
+        public int incineration;
         public bool coneVenom;
+
+        //vanilla NPC.takenDamageMultiplier doesn't have any effect when less than 1, so we do this instead
+        public float neutralTakenDamageMultiplier = 1f;
 
         public static Dictionary<int, bool> bestiaryCritter = new Dictionary<int, bool>();
 
@@ -595,6 +599,14 @@ namespace Polarities.NPCs
                     damage = 12;
                 }
             }
+            if (incineration > 0)
+            {
+                npc.lifeRegen -= incineration * 2;
+                if (damage < incineration / 6)
+                {
+                    damage = incineration / 6;
+                }
+            }
 
             if (contagunPhages > 10)
             {
@@ -614,6 +626,7 @@ namespace Polarities.NPCs
             contagunPhages = 0;
             tentacleClubs = 0;
             desiccation = 0;
+            incineration = 0;
             coneVenom = false;
 
             UpdateCustomSoulDrain(npc);
@@ -980,6 +993,12 @@ namespace Polarities.NPCs
                     }
                 }
             }
+        }
+
+        public override bool StrikeNPC(NPC npc, ref double damage, int defense, ref float knockback, int hitDirection, ref bool crit)
+        {
+            damage *= neutralTakenDamageMultiplier;
+            return true;
         }
     }
 }

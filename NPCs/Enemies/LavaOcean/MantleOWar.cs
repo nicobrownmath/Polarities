@@ -29,6 +29,7 @@ using Polarities.Items.Materials;
 using Terraria.ModLoader.Utilities;
 using System.Collections.Generic;
 using Polarities.Effects;
+using Polarities.Buffs;
 
 namespace Polarities.NPCs.Enemies.LavaOcean
 {
@@ -42,14 +43,14 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
             {
                 SpecificallyImmuneTo = new int[] {
-                BuffID.Confused,
-                BuffID.OnFire,
-                BuffID.Frostburn,
-                BuffID.OnFire3,
-                BuffID.ShadowFlame,
-                BuffID.CursedInferno,
-                //BuffType<Incinerating>(),
-            }
+                    BuffID.Confused,
+                    BuffID.OnFire,
+                    BuffID.Frostburn,
+                    BuffID.OnFire3,
+                    BuffID.ShadowFlame,
+                    BuffID.CursedInferno,
+                    BuffType<Incinerating>()
+                }
             };
             NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
         }
@@ -345,8 +346,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
 
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
-            //TODO: Make this incineration
-            target.AddBuff(BuffID.OnFire, 180, true);
+            target.AddBuff(BuffType<Incinerating>(), 60, true);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -424,8 +424,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
 
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
-            //TODO: Make this incineration
-            target.AddBuff(BuffID.OnFire, 180, true);
+            target.AddBuff(BuffType<Incinerating>(), 60, true);
         }
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -478,8 +477,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
 
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
-            //TODO: Make this incineration
-            target.AddBuff(BuffID.OnFire, 180, true);
+            target.AddBuff(BuffType<Incinerating>(), 60, true);
         }
 
         public override bool ShouldUpdatePosition()

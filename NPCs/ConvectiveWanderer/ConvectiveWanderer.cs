@@ -34,7 +34,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 {
 	public class ConvectiveWanderer : ModNPC
 	{
-        /*public override void Load()
+		#region Bestiary/Wiki image generation
+		/*public override void Load()
 		{
 			IL.Terraria.Main.UpdateMenu += Main_UpdateMenu;
 		}
@@ -101,8 +102,10 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				}
 			});
 		}*/
+		#endregion
 
-        public override void SetStaticDefaults()
+		#region Setup
+		public override void SetStaticDefaults()
 		{
 			//group with other bosses
 			NPCID.Sets.BossBestiaryPriority.Add(Type);
@@ -116,7 +119,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					BuffID.OnFire3,
 					BuffID.ShadowFlame,
 					BuffID.CursedInferno,
-					//BuffType<Incinerating>()
+					BuffType<Incinerating>()
 				}
 			};
 			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
@@ -158,6 +161,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 			numSegments = 40;
 			segmentPositions = new Vector2[numSegments * segmentsPerHitbox + segmentsTailTendrils + 1];
+			segmentAngles = new float[segmentPositions.Length];
+			segmentPulseScaleAngles = new float[segmentPositions.Length + specialSegmentsHead];
 
 			numTentacleSegments = NUM_TENTACLES * HITBOXES_PER_TENTACLE;
 
@@ -171,26 +176,26 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				{
 					//hitting tentacle segments is bad
 					NPC.HitSound = new LegacySoundStyle(SoundID.Tink, 0);
-					NPC.takenDamageMultiplier = 0.5f;
+					NPC.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 0.5f;
 				}
 				else if (index < numTentacleSegments + numSegments)
 				{
 					//hitting body segments is meh
 					NPC.HitSound = SoundID.NPCHit2;
-					NPC.takenDamageMultiplier = 1f;
+					NPC.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 1f;
 				}
 				else
 				{
 					//hitting the head is great
 					NPC.HitSound = SoundID.NPCHit1;
-					NPC.takenDamageMultiplier = 2f;
+					NPC.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 2f;
 				}
 			};
 
 			drawDatas = new PriorityQueue<DrawData, float>(MAX_DRAW_CAPACITY);
 		}
 
-		int numSegments;
+        int numSegments;
 		int numTentacleSegments;
 
 		const int HITBOXES_PER_TENTACLE = 16;
@@ -202,8 +207,13 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		const int segmentsTail = 8;
 		const int segmentsTailTendrils = 8;
 		const float segmentSeparation = 16f;
-		private Vector2[] segmentPositions;
 
+		private Vector2[] segmentPositions;
+		private float[] segmentAngles;
+		private float[] segmentPulseScaleAngles;
+        #endregion
+
+        #region AI
         public override void OnSpawn(IEntitySource source)
 		{
 			Player player = Main.player[NPC.target];
@@ -234,14 +244,17 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			//changeable ai values
 			float rotationFade = 9f;
 			float rotationAmount = 0.01f;
+			float angleLerpAmount = 0.5f;
+			float pulseLerpAmount = 0.1f;
 
 			NPC.noGravity = true;
 
-			//TODO: Actual AI
-			NPC.velocity = (player.Center - NPC.Center) / 120f;
+            #region Main AI
+            //TODO: Actual AI
+            NPC.velocity = (player.Center - NPC.Center) / 120f;
+            #endregion
 
-
-			NPC.noGravity = true;
+            NPC.noGravity = true;
 			NPC.rotation = NPC.velocity.ToRotation();
 
 			//update segment positions
@@ -257,6 +270,21 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 				segmentPositions[i] = segmentPositions[i - 1] + (rotationAmount * rotationGoal + (segmentPositions[i] - segmentPositions[i - 1]).SafeNormalize(Vector2.Zero)).SafeNormalize(Vector2.Zero) * segmentSeparation;
 			}
+
+			//update segment angles
+			segmentAngles[0] = (float)Math.IEEERemainder(segmentAngles[0] + MathHelper.TwoPi / 120f, MathHelper.TwoPi);
+			for (int i = 1; i < segmentAngles.Length; i++)
+            {
+				segmentAngles[i] = Utils.AngleLerp(segmentAngles[i], segmentAngles[i - 1], angleLerpAmount);
+			}
+
+			//update pulse scales
+			segmentPulseScaleAngles[0] = (float)Math.IEEERemainder(segmentAngles[0] + MathHelper.TwoPi / 120f, MathHelper.TwoPi);
+			for (int i = 1; i < segmentPulseScaleAngles.Length; i++)
+			{
+				segmentPulseScaleAngles[i] = Utils.AngleLerp(segmentPulseScaleAngles[i], segmentPulseScaleAngles[i - 1], pulseLerpAmount);
+			}
+
 
 			//position hitbox segments
 			//the order in which we do this matters as it determines hit priority
@@ -294,12 +322,16 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[hitboxIndex] = new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height);
 			}
 		}
+        #endregion
 
-		public override bool CheckDead()
+        #region Death Behavior
+        public override bool CheckDead()
 		{
 			if (!PolaritiesSystem.downedConvectiveWanderer)
 			{
 				NPC.SetEventFlagCleared(ref PolaritiesSystem.downedConvectiveWanderer, -1);
+
+				PolaritiesSystem.GenerateMantellarOre();
 			}
 
 			/*TODO: Gores:
@@ -327,18 +359,17 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		{
 			//TODO:
 		}
+        #endregion
 
+        #region Drawcode
+        //a whole bunch of drawing stuff and helper methods
+        //abandon all hope ye who enter here
 
-
-
-		//a whole bunch of drawing stuff and helper methods
-		//abandon all hope ye who enter here
-
-		//a PriorityQueue that stores our drawData
-		PriorityQueue<DrawData, float> drawDatas;
+        //a PriorityQueue that stores our drawData
+        PriorityQueue<DrawData, float> drawDatas;
 
 		//The maximum capacity potentially required by drawDatas
-		const int MAX_DRAW_CAPACITY = 15248;
+		const int MAX_DRAW_CAPACITY = 15864;
 
 		const int NUM_TENTACLES = 8;
 
@@ -404,12 +435,11 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			return (BaseSegmentPosition(index - 1) - BaseSegmentPosition(index)).ToRotation();
 		}
 
-		//TODO: Dynamic rotation and pulsing instead of preset values
 		//TODO: Enable opening/closing mouth via PulseScale
 		float SegmentAngle(int index)
 		{
 			if (index < 1) index = 1;
-			return 0f; //(index - 1) * 0.01f + Main.GlobalTimeWrappedHourly;
+			return segmentAngles[index];
 		}
 		float PulseScale(int index)
 		{
@@ -417,7 +447,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			float headRestrictionMultiplier = index < 1 ?
 				(index + specialSegmentsHead) / (float)(specialSegmentsHead + 1)
 				: 1f;
-			float extraPulseScale = 0f; //(float)Math.Sin((index - 1) * 0.1f - Main.GlobalTimeWrappedHourly * 4f) * 0.1f * headRestrictionMultiplier
+			float extraPulseScale = (float)Math.Sin(segmentPulseScaleAngles[index + specialSegmentsHead]) * 0.1f * headRestrictionMultiplier;
 			return 1 + extraPulseScale;
 		}
 
@@ -631,8 +661,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		}
 
 		const int BASE_TENTACLE_TEXTURE_HEIGHT = 32;
-		const int SIDES_PER_TENTACLE_SEGMENT = 4;
-		const int DRAWS_PER_TENTACLE_SIDE = 2;
+		const int SIDES_PER_TENTACLE_SEGMENT = 3;
+		const int DRAWS_PER_TENTACLE_SIDE = 4;
 		const int DRAWS_PER_TENTACLE_SEGMENT = SIDES_PER_TENTACLE_SEGMENT * DRAWS_PER_TENTACLE_SIDE;
 
 		const float TENTACLE_HEAD_SEPARATION_SCALE_MULT = 4;
@@ -673,7 +703,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 			float goalRadius = TentacleRadius(index) / sideScaleMult; //ModUtils.Lerp(baseRadius, TentacleRadius(index) / sideScaleMult, (float)(1 + Math.Cos(Main.GlobalTimeWrappedHourly * 1f)) / 2f);
 
-			float segmentSqueezing = (float)(1 - Math.Pow(1 - index / EFFECTIVE_TENTACLE_SEGMENTS, 8f));
+			float segmentSqueezing = (float)(1 - Math.Pow(1 - index / EFFECTIVE_TENTACLE_SEGMENTS, 12f));
 			float distFromCenter = ModUtils.Lerp(baseRadius, goalRadius, segmentSqueezing);
 
 			float discriminant = DistTraveled * DistTraveled - (baseRadius - distFromCenter) * (baseRadius - distFromCenter);
@@ -717,7 +747,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		}
 		float TentacleRadius(float index)
 		{
-			return BASE_TENTACLE_TEXTURE_HEIGHT / DRAWS_PER_TENTACLE_SIDE * MathHelper.TwoPi / DRAWS_PER_TENTACLE_SEGMENT * TentacleRadiusMult(index);
+			return BASE_TENTACLE_TEXTURE_HEIGHT / MathHelper.TwoPi * SIDES_PER_TENTACLE_SEGMENT * TentacleRadiusMult(index);
 		}
 
 		void DrawTentacleSegment(PriorityQueue<DrawData, float> drawDatas, SpriteBatch spriteBatch, Vector2 screenPos, float baseAngle, float baseRotation, Vector2 originalBasePosition, float baseRadius, int index, Color color)
@@ -735,12 +765,13 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			int drawWidthPerSegment = segmentWidth * 2;
 
 			float segmentRotation = (TentacleSegmentPosition(index - 1, baseAngle, baseRotation, baseRadius, originalBasePosition) - segmentPosition).ToRotation();
-			float segmentAngle = -baseAngle - TentacleBaseAngleOffset(index);
+			float segmentAngle = -baseAngle - TentacleBaseAngleOffset(index) + MathHelper.Pi / DRAWS_PER_TENTACLE_SEGMENT; //adding this last term helps minimize clipping
 
 			float segmentRadius = TentacleRadius(index);
 			float scaleMultToMatch = (float)Math.Tan(MathHelper.Pi / DRAWS_PER_TENTACLE_SEGMENT) * segmentRadius;
 
-			int segmentFramePoint = (288 - drawWidthPerSegment) - (segmentWidth * (index - 1) % 64 + 64) % 64;
+			float effectiveIndexForFraming = index < 0 ? index * TENTACLE_HEAD_SEPARATION_SCALE_MULT : index;
+			int segmentFramePoint = (int)((288 - drawWidthPerSegment) - (segmentWidth * (effectiveIndexForFraming + 64 - 1) % 64));
 
 			float generalDepthFromAngle = (float)Math.Cos(baseAngle + TentacleBaseAngleOffset(index));
 			float segmentDepthModifier = (generalDepthFromAngle + 0.5f) * (specialSegmentsHead * 65536f + index) + specialSegmentsHead * 512f;
@@ -776,5 +807,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
         {
             RenderTargetLayer.AddNPC<ConvectiveWandererTarget>(index);
         }
+        #endregion
     }
 }

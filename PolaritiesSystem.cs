@@ -1008,6 +1008,8 @@ namespace Polarities
 			}
 		}
 
+		//TODO: Drunk world and FTW compatibility
+		//TODO: Fix air gaps under islands
 		private void CustomHellGeneration(GenerationProgress progress, GameConfiguration configuration)
 		{
 			progress.Message = "Making hell more hellish";
@@ -1238,6 +1240,107 @@ namespace Polarities
 			}
 
 			//TODO: progress.Message = "Generating subworlds (this can take a while!)";
+		}
+
+		//TODO: Drunk world compatibility
+		public static void GenerateMantellarOre()
+		{
+			/*TODO: if (SLWorld.subworld)
+				return;*/
+
+			Main.NewText(Language.GetTextValue("Mods.Polarities.StatusMessage.GenMantellarOre"), 255, 200, 0);
+
+			int x;
+			int y;
+
+			int direction = WorldGen.dungeonX < Main.maxTilesX / 2 ? 1 : -1;
+			int GetX()
+			{
+				if (direction == 1)
+				{
+					return Utils.Clamp(x, 0, Main.maxTilesX - 1);
+				}
+				return Utils.Clamp(Main.maxTilesX - 1 - x, 0, Main.maxTilesX - 1);
+			}
+
+			int maxLakeX = (int)(Main.maxTilesX * 0.23f);
+
+			for (x = 0; x < maxLakeX; x++)
+			{
+				int startX = x;
+
+				y = Main.maxTilesY - 2;
+				if (!Main.tile[GetX(), y].HasTile && Main.tile[GetX(), y].LiquidType == LiquidID.Lava && Main.tile[GetX(), y].LiquidAmount == 255)
+				{
+					bool canContinue = true;
+
+					int height = WorldGen.genRand.Next(60, 80) + WorldGen.genRand.Next(20);
+
+					while (y > Main.maxTilesY - height && canContinue)
+					{
+						int walkDir = WorldGen.genRand.Next(2) * 2 - 1;
+
+						x += walkDir;
+						if (!Main.tile[GetX(), y - 1].HasTile && Main.tile[GetX(), y - 1].LiquidType == LiquidID.Lava && Main.tile[GetX(), y - 1].LiquidAmount == 255)
+						{
+							y--;
+						}
+						else
+						{
+							x -= 2 * walkDir;
+							if (!Main.tile[GetX(), y - 1].HasTile && Main.tile[GetX(), y - 1].LiquidType == LiquidID.Lava && Main.tile[GetX(), y - 1].LiquidAmount == 255)
+							{
+								y--;
+							}
+							else
+							{
+								x += walkDir;
+								if (!Main.tile[GetX(), y - 1].HasTile && Main.tile[GetX(), y - 1].LiquidType == LiquidID.Lava && Main.tile[GetX(), y - 1].LiquidAmount == 255)
+								{
+									y--;
+								}
+								else
+								{
+									canContinue = false;
+								}
+							}
+						}
+					}
+
+					if (canContinue)
+					{
+						Tile tile = Framing.GetTileSafely(GetX(), y);
+						if (tile.LiquidAmount > 0 && tile.LiquidType == LiquidID.Lava)
+						{
+							List<(int, int)> coords = new List<(int, int)>();
+							(int, int) currentCoord = (GetX(), y);
+							for (int i = 0; i < WorldGen.genRand.Next(10, 80); i++)
+							{
+								while (coords.Contains(currentCoord))
+								{
+									if (!WorldGen.genRand.NextBool(8))
+									{
+										currentCoord.Item2 += WorldGen.genRand.Next(2) * 2 - 1;
+									}
+									else
+									{
+										currentCoord.Item1 += WorldGen.genRand.Next(2) * 2 - 1;
+									}
+								}
+								if (tile.LiquidAmount > 0 && tile.LiquidType == LiquidID.Lava)
+								{
+									WorldGen.PlaceTile(currentCoord.Item1, currentCoord.Item2, TileType<MantellarOreTile>());
+								}
+								coords.Add(currentCoord);
+								currentCoord = (GetX(), y);
+							}
+						}
+					}
+				}
+
+				//reset our x value to ensure the for loop continues as normal
+				x = startX;
+			}
 		}
 
 		public static bool timeAccelerate = true;
