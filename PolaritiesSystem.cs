@@ -148,6 +148,7 @@ namespace Polarities
 		public static bool downedRiftDenizen;
 		public static bool downedSunPixie;
 		public static bool downedEsophage;
+		public static bool downedConvectiveWanderer;
 		public static bool downedSelfsimilarSentinel;
 		public static bool downedEclipxie;
 		public static bool downedHemorrphage;
@@ -182,6 +183,7 @@ namespace Polarities
 			downedSunPixie = false;
 			downedEsophage = false;
 			downedSelfsimilarSentinel = false;
+			downedConvectiveWanderer = false;
 			downedEclipxie = false;
 			downedHemorrphage = false;
 			downedPolarities = false;
@@ -213,6 +215,7 @@ namespace Polarities
 			downedRiftDenizen = false;
 			downedSunPixie = false;
 			downedEsophage = false;
+			downedConvectiveWanderer = false;
 			downedSelfsimilarSentinel = false;
 			downedEclipxie = false;
 			downedHemorrphage = false;
@@ -245,6 +248,7 @@ namespace Polarities
 			if (downedRiftDenizen) tag["downedRiftDenizen"] = true;
 			if (downedSunPixie) tag["downedSunPixie"] = true;
 			if (downedEsophage) tag["downedEsophage"] = true;
+			if (downedConvectiveWanderer) tag["downedConvectiveWanderer"] = true;
 			if (downedSelfsimilarSentinel) tag["downedSelfsimilarSentinel"] = true;
 			if (downedEclipxie) tag["downedEclipxie"] = true;
 			if (downedHemorrphage) tag["downedHemorrphage"] = true;
@@ -275,6 +279,7 @@ namespace Polarities
 			downedRiftDenizen = tag.ContainsKey("downedRiftDenizen");
 			downedSunPixie = tag.ContainsKey("downedSunPixie");
 			downedEsophage = tag.ContainsKey("downedEsophage");
+			downedConvectiveWanderer = tag.ContainsKey("downedConvectiveWanderer");
 			downedSelfsimilarSentinel = tag.ContainsKey("downedSelfsimilarSentinel");
 			downedEclipxie = tag.ContainsKey("downedEclipxie");
 			downedHemorrphage = tag.ContainsKey("downedHemorrphage");

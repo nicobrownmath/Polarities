@@ -42,7 +42,7 @@ namespace Polarities.Effects
 			return renderTargetLayers[typeof(T)] as T;
 		}
 
-		bool patchesLoaded = false;
+		static bool patchesLoaded = false;
 
 		public virtual void Load(Mod mod)
 		{
@@ -87,6 +87,16 @@ namespace Polarities.Effects
 		public static bool IsActive<T>() where T : RenderTargetLayer
 		{
 			return GetRenderTargetLayer<T>().active;
+		}
+
+		public bool HasContent()
+        {
+			return _target != null && layerHasContent;
+        }
+
+		public void Draw(SpriteBatch spriteBatch, Vector2 offset, Color color)
+        {
+			spriteBatch.Draw(_target, Main.GameViewMatrix.Translation + offset, null, color, 0f, Vector2.Zero, 1 / targetScale, SpriteEffects.None, 0f);
 		}
 
 		private List<int> projCache;
@@ -179,31 +189,68 @@ namespace Polarities.Effects
 
 			if (behindTiles && npcCache == Main.instance.DrawCacheNPCsMoonMoon)
 			{
-				if (_target != null && layerHasContent)
+				if (GetRenderTargetLayer<ConvectiveEnemyTarget>().HasContent())
+					GetRenderTargetLayer<ConvectiveEnemyTarget>().Draw(Main.spriteBatch, Vector2.Zero, Color.Black);
+
+				if (HasContent())
 				{
+					Main.spriteBatch.End();
+					Main.spriteBatch.Begin((SpriteSortMode)0, new BlendState()
+                    {
+						//custom blendstate to make it so outlines in darker places are more darker
+						BlendFactor = Color.White,
+
+						AlphaBlendFunction = BlendFunction.Add,
+						AlphaSourceBlend = Blend.One,
+						AlphaDestinationBlend = Blend.InverseSourceAlpha,
+
+						ColorBlendFunction = BlendFunction.Add,
+						ColorSourceBlend = Blend.SourceColor,
+						ColorDestinationBlend = Blend.InverseSourceAlpha,
+                    },
+					Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+
 					for (int i = 0; i < 4; i++)
 					{
-						Main.spriteBatch.Draw(_target, Main.GameViewMatrix.Translation + new Vector2(1 / targetScale, 0).RotatedBy(i * MathHelper.PiOver2), null, new Color(64, 64, 64), 0f, Vector2.Zero, 1 / targetScale, SpriteEffects.None, 0f);
+						Draw(Main.spriteBatch, new Vector2(1 / targetScale, 0).RotatedBy(i * MathHelper.PiOver2), Color.White);
 					}
-					Main.spriteBatch.Draw(_target, Main.GameViewMatrix.Translation, null, Color.Black, 0f, Vector2.Zero, 1 / targetScale, SpriteEffects.None, 0f);
+
+					Main.spriteBatch.End();
+					Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+
+					Draw(Main.spriteBatch, Vector2.Zero, Color.Black);
 				}
 			}
 		}
 
         private void ScreenObstruction_Draw(On.Terraria.GameContent.Events.ScreenObstruction.orig_Draw orig, SpriteBatch spriteBatch)
 		{
-			if (_target != null && layerHasContent)
-			{
+			if (GetRenderTargetLayer<ConvectiveEnemyTarget>().HasContent() || HasContent())
+            {
 				spriteBatch.End();
 				spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
 
-				spriteBatch.Draw(_target, Main.GameViewMatrix.Translation, null, Color.White, 0f, Vector2.Zero, 1 / targetScale, SpriteEffects.None, 0f);
+				if (GetRenderTargetLayer<ConvectiveEnemyTarget>().HasContent())
+					GetRenderTargetLayer<ConvectiveEnemyTarget>().Draw(spriteBatch, Vector2.Zero, Color.White);
+
+				if (HasContent())
+					Draw(Main.spriteBatch, Vector2.Zero, Color.White);
 
 				spriteBatch.End();
 				spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
 			}
 
 			orig(spriteBatch);
+		}
+	}
+
+	public class ConvectiveEnemyTarget : RenderTargetLayer
+	{
+		public override void Load(Mod mod)
+		{
+			base.Load(mod);
+
+			targetScale = 1f;
 		}
 	}
 }

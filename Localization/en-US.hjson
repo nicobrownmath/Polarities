@@ -642,6 +642,8 @@
 			"LifeGrasperAuraRing": "Draining Ring",
 			"WyvernsNestMinion": "Etherian Wyvern",
 			"WyvernsNestMinionFireball": "Wyvernfire",
+			"MantleOWarLavaProjectile": "Lava Blob",
+			"MantleOWarNematocyst": "Nematocyst"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
@@ -693,7 +695,8 @@
 			"LivingSpine": "Living Spine",
 			"RavenousCursed": "Ravenous Cursed",
 			"Esophage": "Esophage",
-			"EsophageClaw": "Esophage Claw"
+			"EsophageClaw": "Esophage Claw",
+			"MantleOWar": "Mantle O' War"
 		},
 		"Bestiary": {
 			"Rattler": "This small, venomous snake prefers dry climates. It loudly rattles to ward off any predators, but it’s just too cute to avoid!",
@@ -925,7 +928,8 @@
 			"SaltCave": "Salt",
 			"LimestoneCave": "Limestone",
 			"HallowInvasion": "The Rapture",
-			"WorldEvilInvasion": "The Pestilence"
+			"WorldEvilInvasion": "The Pestilence",
+			"LavaOcean": "Lava Ocean"
 		},
 		"AnglerQuest": {
 			"PickledHerring_Description": "So I was exploring one of those salt caves when, get this, I saw a fish jump right into the brine! I kid you not, it turned itself into a pickle! It's a pickled herring! Funniest thing I've ever seen. Go get it for me so I can laugh at it some more!",

@@ -23,8 +23,8 @@ namespace Polarities.Items.Accessories
 
 		public override void SetDefaults()
 		{
-			Item.width = 36;
-			Item.height = 28;
+			Item.width = 50;
+			Item.height = 40;
 			Item.accessory = true;
 			Item.damage = 40;
 
@@ -164,9 +164,8 @@ namespace Polarities.Items.Accessories
 					int targetingDirection = (Projectile.Center.X > target.Center.X) ? 1 : -1;
 
 					Vector2 goalPosition = target.Center + new Vector2(targetingDirection * (indexForTargetingNPCOnSide + 0.5f) * 64, -hoverDistWhileFireballing);
-					Vector2 goalVelocity = (goalPosition - Projectile.Center) / 15f + target.velocity;
-					goalVelocity.X *= 0.5f;
-					Projectile.velocity += (goalVelocity - Projectile.velocity) / 30f;
+					Vector2 goalVelocity = (goalPosition - Projectile.Center) / 15f / (float)Math.Sqrt(indexForTargetingNPCOnSide + 1);
+					Projectile.velocity += (goalVelocity - Projectile.velocity) / 15f / (float)Math.Sqrt(indexForTargetingNPCOnSide + 1);
 
 					Projectile.spriteDirection = (Projectile.velocity.X + targetingDirection) > 0 ? 1 : -1;
 

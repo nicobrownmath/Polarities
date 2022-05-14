@@ -104,6 +104,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
         public override void SetStaticDefaults()
 		{
+			//group with other bosses
+			NPCID.Sets.BossBestiaryPriority.Add(Type);
+
 			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
 			{
 				SpecificallyImmuneTo = new int[] {
@@ -294,6 +297,12 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 		public override bool CheckDead()
 		{
+			if (!PolaritiesSystem.downedConvectiveWanderer)
+			{
+				NPC.SetEventFlagCleared(ref PolaritiesSystem.downedConvectiveWanderer, -1);
+			}
+
+			/*TODO: Gores:
 			for (int i = 0; i < NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.Length; i++)
 			{
 				Vector2 gorePos = NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[i].TopLeft();
@@ -310,7 +319,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				{
 					Gore.NewGore(NPC.GetSource_Death(), gorePos, Vector2.Zero, Mod.Find<ModGore>("ConvectiveWandererGore2").Type);
 				}
-			}
+			}*/
 			return true;
 		}
 
