@@ -64,7 +64,7 @@ v0.11 Changelog
     Renamed the tentacle club to tentaclub
     Changed rapture enemy spawning
     Aequoreans and light eaters can now teleport to their clones
-    Resprited the starburst scepter, strange jewelry, strange samples
+    Resprited the tolerance potion buff icon, starburst scepter, strange jewelry, strange samples
     Reworked the luminous slime staff
     Adjusted Sun Pixie's deathray attacks, and it now automatically recreates its arena if you leave it early
     Flarecaller beams now have an enlarged hitbox at the point of impact to better match their visuals

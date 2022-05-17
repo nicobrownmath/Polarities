@@ -178,4 +178,15 @@ namespace Polarities.Effects
             doWeResetSpritebatch = true;
         }
     }
+
+    public class DrawLayerAdditiveAfterLiquids : DrawLayer
+    {
+        public override void Load(Mod mod)
+        {
+            base.Load(mod);
+
+            blendState = BlendState.Additive;
+            doWeResetSpritebatch = false;
+        }
+    }
 }

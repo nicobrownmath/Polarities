@@ -226,6 +226,9 @@ namespace Polarities.Effects
         private void ScreenObstruction_Draw(On.Terraria.GameContent.Events.ScreenObstruction.orig_Draw orig, SpriteBatch spriteBatch)
 		{
 			spriteBatch.End();
+
+			DrawLayer.GetDrawLayer<DrawLayerAdditiveAfterLiquids>().Draw();
+
 			spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
 
 			if (GetRenderTargetLayer<ConvectiveEnemyTarget>().HasContent())

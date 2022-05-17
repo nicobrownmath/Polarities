@@ -30,6 +30,7 @@ namespace Polarities.NPCs
     //TODO: Dusts from picking up coins should be restricted to a random hitbox
     //TODO: Mouse hovering
     //TODO: It could be cool to use or at least allow for some sort of nested structure to minimize collision checks (I probably don't need this right now but if/when I start doing things with more hitboxes than the NPC cap it'll be useful
+    //TODO: Directional knockback (store velocities)?
 	public class MultiHitboxNPC : GlobalNPC
 	{
 		public override bool InstancePerEntity => true;

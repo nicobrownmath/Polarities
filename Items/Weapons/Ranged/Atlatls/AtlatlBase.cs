@@ -36,6 +36,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
             this.SetResearch(1);
         }
 
+        //TODO: Be rotated 90 degrees in inventory
         public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
             if (player.itemAnimation == player.itemAnimationMax)
