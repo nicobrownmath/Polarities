@@ -741,7 +741,7 @@ namespace Polarities.NPCs.Esophage
                 Vector2 spot = NPC.Center + NPC.velocity + new Vector2(0, -h * (136 / numSegments)).RotatedBy(NPC.rotation) * NPC.scale;
                 hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
             }
-            NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = MultiHitbox.AutoAssignFrom(hitboxes);
+            NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(hitboxes);
         }
 
         public override void FindFrame(int frameHeight)

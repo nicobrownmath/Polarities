@@ -798,7 +798,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
 			}
 
-			NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = MultiHitbox.AutoAssignFrom(hitboxes);
+			NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(hitboxes);
 		}
 
 		public override void OnHitPlayer(Player target, int damage, bool crit)

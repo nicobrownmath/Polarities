@@ -182,10 +182,10 @@ namespace Polarities.NPCs
 			chat = chatPool;
 		}
 
-		public static bool isThereAGhostwriter; //for guide help dialogue efficiency
-		public static bool inventoryCloud; //for guide help dialogue efficiency
-		public static bool inventoryStar; //for guide help dialogue efficiency
-		public static bool inventoryGem; //for guide help dialogue efficiency
+		static bool isThereAGhostwriter; //for guide help dialogue efficiency
+		static bool inventoryCloud; //for guide help dialogue efficiency
+		static bool inventoryStar; //for guide help dialogue efficiency
+		static bool inventoryGem; //for guide help dialogue efficiency
 
 		//guide help text because anyone ever uses this
 		private void Main_HelpText(ILContext il)

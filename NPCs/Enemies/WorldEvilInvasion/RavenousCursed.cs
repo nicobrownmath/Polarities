@@ -234,7 +234,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 				Vector2 spot = segmentPositions[h * segmentsPerHitbox + hitboxSegmentOffset];
 				hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
 			}
-			NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = MultiHitbox.AutoAssignFrom(hitboxes);
+			NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(hitboxes);
 
 			//dig effect adapted from vanilla
 			foreach (RectangleHitbox rectangleHitbox in NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.AllHitboxes())

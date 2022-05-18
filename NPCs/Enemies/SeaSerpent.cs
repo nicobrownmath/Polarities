@@ -199,7 +199,7 @@ namespace Polarities.NPCs.Enemies
 				Vector2 spot = segmentPositions[h * segmentsPerHitbox + hitboxSegmentOffset];
 				hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
 			}
-			NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = MultiHitbox.AutoAssignFrom(hitboxes);
+			NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(hitboxes);
 		}
 
         public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)

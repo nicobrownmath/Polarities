@@ -247,7 +247,7 @@ namespace Polarities.NPCs.Enemies
                 Vector2 spot = NPC.Center + NPC.velocity + new Vector2(0, -(h - 1) * (150 / numSegments)).RotatedBy(NPC.rotation);
                 hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
             }
-            NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = MultiHitbox.AutoAssignFrom(hitboxes);
+            NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(hitboxes);
 
             return false;
         }
@@ -267,7 +267,7 @@ namespace Polarities.NPCs.Enemies
                     newHitboxes.Add(Main.npc[i].Hitbox);
                 }
             }
-            NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = MultiHitbox.AutoAssignFrom(newHitboxes);
+            NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(newHitboxes);
 
             return true;
         }
