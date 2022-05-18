@@ -735,11 +735,11 @@ namespace Polarities.NPCs.Esophage
             }
 
             //position hitbox segments
-            List<Rectangle> hitboxes = new List<Rectangle>();
+            List<RectangleHitboxData> hitboxes = new List<RectangleHitboxData>();
             for (int h = 0; h < numSegments; h++)
             {
                 Vector2 spot = NPC.Center + NPC.velocity + new Vector2(0, -h * (136 / numSegments)).RotatedBy(NPC.rotation) * NPC.scale;
-                hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
+                hitboxes.Add(new RectangleHitboxData(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height)));
             }
             NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(hitboxes);
         }

@@ -241,11 +241,11 @@ namespace Polarities.NPCs.Enemies
             }
 
             //position hitbox segments
-            List<Rectangle> hitboxes = new List<Rectangle>();
+            List<RectangleHitboxData> hitboxes = new List<RectangleHitboxData>();
             for (int h = 0; h < numSegments; h++)
             {
                 Vector2 spot = NPC.Center + NPC.velocity + new Vector2(0, -(h - 1) * (150 / numSegments)).RotatedBy(NPC.rotation);
-                hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
+                hitboxes.Add(new RectangleHitboxData(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height)));
             }
             NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(hitboxes);
 
@@ -259,12 +259,12 @@ namespace Polarities.NPCs.Enemies
 
             //adjust hitboxes for custom loot dropping
             //this system is a little kludgy
-            List<Rectangle> newHitboxes = new List<Rectangle>();
+            List<RectangleHitboxData> newHitboxes = new List<RectangleHitboxData>();
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 if (Main.npc[i].active && Main.npc[i].type == NPCType<KrakenTentacle>() && Main.npc[i].ai[0] == NPC.whoAmI)
                 {
-                    newHitboxes.Add(Main.npc[i].Hitbox);
+                    newHitboxes.Add(new RectangleHitboxData(Main.npc[i].Hitbox));
                 }
             }
             NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(newHitboxes);

@@ -88,7 +88,7 @@ namespace Polarities.Items.Weapons.Magic
             float switchChance = 0.01f;
 
             int targetID = Projectile.FindTargetWithLineOfSight(1000);
-            if (targetID == -1)
+            if (targetID != -1)
             {
                 float val = Projectile.ai[0] * (Projectile.velocity.X * (Main.npc[targetID].Center.Y - Projectile.Center.Y) - Projectile.velocity.Y * (Main.npc[targetID].Center.X - Projectile.Center.X));
 

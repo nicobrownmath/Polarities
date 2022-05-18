@@ -775,7 +775,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			float tentacleBaseRadius = SegmentRadius(TENTACLE_ATTACH_SEGMENT_INDEX) + TentacleRadius(0);
 			Vector2 tentacleBasePosition = SegmentPosition(TENTACLE_ATTACH_SEGMENT_INDEX);
 
-			List<Rectangle> hitboxes = new List<Rectangle>();
+			List<RectangleHitboxData> hitboxes = new List<RectangleHitboxData>();
 			for (int tentacleIndex = 0; tentacleIndex < NUM_TENTACLES; tentacleIndex++)
 			{
 				for (int segmentIndex = 0; segmentIndex < HITBOXES_PER_TENTACLE; segmentIndex++)
@@ -785,7 +785,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					Vector2 spot = TentacleSegmentPosition(indexForDrawing, tentacleBaseAngle + tentacleIndex * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
 					float radius = TentacleRadius(indexForDrawing);
 
-					hitboxes.Add(new Rectangle((int)(spot.X - radius), (int)(spot.Y - radius), (int)(radius * 2), (int)(radius * 2)));
+					hitboxes.Add(new RectangleHitboxData(new Rectangle((int)(spot.X - radius), (int)(spot.Y - radius), (int)(radius * 2), (int)(radius * 2))));
 				}
 			}
 
@@ -795,7 +795,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				Vector2 spot = h == numSegments ?
 					 SegmentPosition(-(segmentsPerHitbox - hitboxSegmentOffset) * specialSegmentsHeadMultiplier) : //head segment
 					 segmentPositions[h * segmentsPerHitbox + hitboxSegmentOffset]; //body/tail segment
-				hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
+				hitboxes.Add(new RectangleHitboxData(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height)));
 			}
 
 			NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(hitboxes);
