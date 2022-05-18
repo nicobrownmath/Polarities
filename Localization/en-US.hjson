@@ -844,7 +844,6 @@
 		},
 		"DropConditions": {
 			"Flawless": "Drops when defeated flawlessly",
-			"MultiHitbox": "Drops per segment",
 			"SunPixieSummonItem": "Drops at the end of the Rapture",
 			"EsophageSummonItem": "Drops at the end of the Pestilence",
 			"SunKnightMount": "Drops when riding a Pegasus",
@@ -899,6 +898,27 @@
 				"Graveyard": "*spooky noises*"
 			}
 		},
+		"GuideHelpText": {
+			"Ghostwriter": "Defeating a powerful enemy might attract someone interested in recording your adventures.",
+			"StormCloudfishSummonItem": "Tying some bait to those clouds would be a good way to attract flying animals.", //TODO: Adjust when non-consumable summon is added
+			"StarConstructSummonItem": "Combining fallen stars with a suitable metal at a demon altar will allow you to send out signals into the cosmos.",
+			"GigabatSummonItem": "Affixing gems to a firefly would be the perfect lure for cave-dwelling bats.",
+			"SaltCave": "Salt biomes may look fun to swim in, but the pools of brine within can dry you to a husk in under a minute. Only specialist life can survive there.",
+			"LimestoneCave": "Limestone caves are full of unstable stalactites and crumbling rocks, and if that's not enough, they're also crawling with caustic animated gloop.",
+			"StormCloudfish": "When you're ready for a fight, slap together a worm on a balloon and throw it into the air.", //TODO: Adjust when non-consumable summon is added
+			"StarConstruct": "Using a stellar remote will summon a powerful foe to fight, but fair warning, you may want to ball up some cotton in your ears.",
+			"Gigabat": "Sparkly gemflies naturally spend most of their time hidden inside gem trees. Catching one and relocating it could attract attention from underground hunters.",
+			"RiftDenizen": "Strange flickers have appeared in the upper atmosphere. I don't know what they are, but they're definitely not of this world.",
+			"FractalDimension": "I don't know what lies beyond that rift, but it emanates an aura of chaos hostile to life as we know it. It's likely very inhospitable, particularly for extended periods.",
+			"HallowInvasion": "The Hallow may seem aggressive now, but, trust me, it can get worse.",
+			"SunPixie": "You should deal with the forces of light sooner rather than later. It may be slow, but their creeping progress risks overwhelming the world given time.",
+			"WorldEvilInvasion": "I've heard tales of a second type of evil, sealed away so deep as to be altogether forgotten.",
+			"Esophage": "You should deal with the forces of darkness sooner rather than later. It may be slow, but their creeping progress risks overwhelming the world given time.",
+			"ConvectiveWanderer": "There is a massive lava ocean in the underworld, filled with unique, molten life. Perhaps you could check it out?",
+			"Eclipxie": "That hallowed star you picked up from the Rapture displays interesting properties when exposed to the strange unlight of a solar eclipse.",
+			"Hemorrphage": "That fleshy capsid you picked up from the Pestilence displays interesting properties when exposed to the menacing aura of a blood moon.",
+			"Polarities": "You've defeated some powerful enemies, and acquired a lot of resources from them, both here, and, apparently, in the fractal world. Combining materials from the two could yield interesting, if volatile, results."
+		}
 		"StatusMessage": {
 			"StartWind": "The wind begins to pick up...",
 			"StopWind": "The wind begins to calm...",

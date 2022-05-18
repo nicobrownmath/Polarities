@@ -134,9 +134,14 @@ namespace Polarities.NPCs.TownNPCs
 			});
 		}
 
-        public override bool CanTownNPCSpawn(int numTownNPCs, int money)
+		public static bool SpawnCondition()
         {
 			return NPC.downedSlimeKing || NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3 || NPC.downedQueenBee || NPC.downedDeerclops || Main.hardMode || PolaritiesSystem.downedStormCloudfish || PolaritiesSystem.downedStarConstruct || PolaritiesSystem.downedGigabat || PolaritiesSystem.downedRiftDenizen;
+		}
+
+        public override bool CanTownNPCSpawn(int numTownNPCs, int money)
+        {
+			return Ghostwriter.SpawnCondition();
 		}
 
         public override List<string> SetNPCNameList()
