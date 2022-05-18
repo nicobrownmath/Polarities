@@ -262,6 +262,14 @@ namespace Polarities
 
 			if (wyvernsNestDamage > 0)
             {
+				//sentries don't despawn while using the wyvern's nest
+				for (int i = 0; i < Main.maxProjectiles; i++)
+                {
+					if (Main.projectile[i].active && Main.projectile[i].owner == Player.whoAmI && Main.projectile[i].sentry)
+                    {
+						Main.projectile[i].timeLeft = Projectile.SentryLifeTime;
+					}
+                }
 				for (int i = Player.ownedProjectileCounts[ProjectileType<WyvernsNestMinion>()]; i < Player.maxTurrets; i++)
 				{
 					Main.projectile[Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ProjectileType<WyvernsNestMinion>(), wyvernsNestDamage, Player.GetTotalKnockback(DamageClass.Summon).ApplyTo(2f), Player.whoAmI, 0, 0)].originalDamage = 20;

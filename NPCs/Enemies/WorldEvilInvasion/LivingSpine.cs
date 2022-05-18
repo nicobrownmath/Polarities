@@ -14,6 +14,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent;
 using Terraria.Audio;
 using ReLogic.Content;
+using MultiHitboxNPCLibrary;
 
 namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 {
@@ -67,9 +68,6 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			BannerItem = ItemType<LivingSpineBanner>();
 
 			SpawnModBiomes = new int[1] { GetInstance<Biomes.WorldEvilInvasion>().Type };
-
-			NPC.GetGlobalNPC<MultiHitboxNPC>().useMultipleHitboxes = true;
-			NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = new Rectangle[numSegments];
 
 			segmentPositions = new Vector2[numSegments * segmentsPerHitbox + 6];
 		}
@@ -270,15 +268,18 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			}
 
 			//position hitbox segments
+			List<Rectangle> hitboxes = new List<Rectangle>();
 			for (int h = 0; h < numSegments; h++)
 			{
 				Vector2 spot = segmentPositions[h * segmentsPerHitbox + hitboxSegmentOffset];
-				NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[h] = new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height);
+				hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
 			}
+			NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = MultiHitbox.AutoAssignFrom(hitboxes);
 
 			//dig effect adapted from vanilla
-			foreach (Rectangle hitbox in NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes)
+			foreach (RectangleHitbox rectangleHitbox in NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.AllHitboxes())
 			{
+				Rectangle hitbox = rectangleHitbox.hitbox;
 				int num180 = (int)(hitbox.X / 16f) - 1;
 				int num181 = (int)((hitbox.X + hitbox.Width) / 16f) + 2;
 				int num182 = (int)(hitbox.Y / 16f) - 1;
@@ -428,14 +429,15 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 
 		public override bool CheckDead()
 		{
-			for (int i = 0; i < NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.Length; i++)
+			ICollection<RectangleHitbox> collection = NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.AllHitboxes();
+			foreach (RectangleHitbox hitbox in collection)
 			{
-				Vector2 gorePos = NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[i].TopLeft();
-				if (i == 0)
+				Vector2 gorePos = hitbox.hitbox.TopLeft();
+				if (hitbox.index == 0)
 				{
 					Gore.NewGore(NPC.GetSource_Death(), gorePos, Vector2.Zero, Mod.Find<ModGore>("LivingSpineGore1").Type);
 				}
-				else if (i == NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.Length - 1)
+				else if (hitbox.index == collection.Count - 1)
 				{
 
 					Gore.NewGore(NPC.GetSource_Death(), gorePos, Vector2.Zero, Mod.Find<ModGore>("LivingSpineGore3").Type);

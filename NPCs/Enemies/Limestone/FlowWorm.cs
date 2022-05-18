@@ -26,6 +26,8 @@ using ReLogic.Content;
 using Polarities.Items.Accessories;
 using Terraria.DataStructures;
 using Polarities.Items.Materials;
+using MultiHitboxNPCLibrary;
+using System.Collections.Generic;
 
 namespace Polarities.NPCs.Enemies.Limestone
 {
@@ -74,9 +76,6 @@ namespace Polarities.NPCs.Enemies.Limestone
 
 			Banner = Type;
 			BannerItem = ItemType<FlowWormBanner>();
-
-			NPC.GetGlobalNPC<MultiHitboxNPC>().useMultipleHitboxes = true;
-			NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = new Rectangle[numSegments];
 
 			SpawnModBiomes = new int[1] { GetInstance<LimestoneCave>().Type };
 
@@ -219,15 +218,18 @@ namespace Polarities.NPCs.Enemies.Limestone
 			}
 
 			//position hitbox segments
+			List<Rectangle> hitboxes = new List<Rectangle>();
 			for (int h = 0; h < numSegments; h++)
 			{
 				Vector2 spot = segmentPositions[h * segmentsPerHitbox + hitboxSegmentOffset];
-				NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[h] = new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height);
+				hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
 			}
+			NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = MultiHitbox.AutoAssignFrom(hitboxes);
 
 			//dig effect adapted from vanilla
-			foreach (Rectangle hitbox in NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes)
+			foreach (RectangleHitbox rectangleHitbox in NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.AllHitboxes())
 			{
+				Rectangle hitbox = rectangleHitbox.hitbox;
 				int num180 = (int)(hitbox.X / 16f) - 1;
 				int num181 = (int)((hitbox.X + hitbox.Width) / 16f) + 2;
 				int num182 = (int)(hitbox.Y / 16f) - 1;
@@ -340,12 +342,12 @@ namespace Polarities.NPCs.Enemies.Limestone
 
 		public override bool CheckDead()
 		{
-			for (int i = 0; i < numSegments; i++)
+			ICollection<RectangleHitbox> collection = NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.AllHitboxes();
+			foreach (RectangleHitbox hitbox in collection)
 			{
-				Rectangle hitbox = NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[i];
 				for (int j = 0; j < 3; j++)
 				{
-					Main.dust[Dust.NewDust(hitbox.TopLeft(), hitbox.Width, hitbox.Height, 74, Scale: 1.75f)].noGravity = true;
+					Main.dust[Dust.NewDust(hitbox.hitbox.TopLeft(), hitbox.hitbox.Width, hitbox.hitbox.Height, 74, Scale: 1.75f)].noGravity = true;
 				}
 			}
 			return true;

@@ -29,11 +29,12 @@ using Polarities.Items.Materials;
 using Terraria.ModLoader.Utilities;
 using System.Collections.Generic;
 using Polarities.Effects;
+using MultiHitboxNPCLibrary;
 
 namespace Polarities.NPCs.ConvectiveWanderer
 {
 	[AutoloadBossHead]
-	public class ConvectiveWanderer : ModNPC
+	public class ConvectiveWanderer : ModNPC, IMultiHitboxSegmentUpdate
 	{
 		#region Bestiary/Wiki image generation
 		/*public override void Load()
@@ -170,39 +171,10 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				segmentHeats[i] = 1f;
             }
 
-			numTentacleSegments = NUM_TENTACLES * HITBOXES_PER_TENTACLE;
-
-			NPC.GetGlobalNPC<MultiHitboxNPC>().useMultipleHitboxes = true;
-			NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = new Rectangle[numTentacleSegments + numSegments + 1]; //extra segment for the head
-
-			//changes hit sounds to indicate damage reduction
-			NPC.GetGlobalNPC<MultiHitboxNPC>().SegmentUpdate = (index) =>
-			{
-				if (index < numTentacleSegments)
-				{
-					//hitting tentacle segments is bad
-					NPC.HitSound = new LegacySoundStyle(SoundID.Tink, 0);
-					NPC.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 0.5f;
-				}
-				else if (index < numTentacleSegments + numSegments)
-				{
-					//hitting body segments is meh
-					NPC.HitSound = SoundID.NPCHit2;
-					NPC.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 1f;
-				}
-				else
-				{
-					//hitting the head is great
-					NPC.HitSound = SoundID.NPCHit1;
-					NPC.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 2f;
-				}
-			};
-
 			drawDatas = new PriorityQueue<DrawData, float>(MAX_DRAW_CAPACITY);
 		}
 
         int numSegments;
-		int numTentacleSegments;
 
 		const int HITBOXES_PER_TENTACLE = 16;
 
@@ -520,10 +492,11 @@ namespace Polarities.NPCs.ConvectiveWanderer
 										float angle = SegmentAngle(i);
 
 										const float projSpeed = 32f;
+										int projsPerSegment = 16;
 
-										for (int j = 0; j < 16; j++)
+										for (int j = 0; j < projsPerSegment; j++)
                                         {
-											Projectile.NewProjectile(NPC.GetSource_FromAI(), position + new Vector2(0, radius).RotatedBy(rotation) * (float)Math.Sin(angle + j * MathHelper.TwoPi / 16), new Vector2(0, projSpeed).RotatedBy(rotation) * (float)Math.Sin(angle + j * MathHelper.TwoPi / 16), ProjectileType<ConvectiveWandererAcceleratingShot>(), 25, 2f, Main.myPlayer, ai0: 0f);
+											Projectile.NewProjectile(NPC.GetSource_FromAI(), position + new Vector2(0, radius).RotatedBy(rotation) * (float)Math.Sin(angle + j * MathHelper.TwoPi / projsPerSegment), new Vector2(0, projSpeed).RotatedBy(rotation) * (float)Math.Sin(angle + j * MathHelper.TwoPi / projsPerSegment), ProjectileType<ConvectiveWandererAcceleratingShot>(), 25, 2f, Main.myPlayer, ai0: 0f);
                                         }
                                     } 
                                 }
@@ -586,7 +559,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							angleSpeed = NPC.velocity.Length() * 0.003f;
 						}
 						//TODO: Trail projectiles?
-						//TODO: Arcing projectiles?
 						else if (attackProgress < attackSetupTime + attackDashTime)
 						{
 							float timeLeft = attackSetupTime + attackDashTime - attackProgress;
@@ -630,27 +602,56 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 				#region Circle player while charging up heat pulse
 				case 4:
+                    {
+						const int totalAttackTime = 480;
 
+
+
+						NPC.ai[1]++;
+						if (NPC.ai[1] == totalAttackTime)
+						{
+							gotoNextAttack = true;
+						}
+					}
 					break;
 				#endregion
 
 				#region Swim around under the player and cause screenshake, producing flamethrowers from terrain/lava surface, and causing lava debris to fall from the ceiling
 				case 5:
+                    {
 
+                    }
 					break;
 				#endregion
 
 				#region Tentacles spin and rotate outwards, producing projectiles
 				case 6:
+                    {
 
+                    }
 					break;
 				#endregion
 
 				#region Tentacles point backwards, boss shoots giant mouth flamethrower
 				case 7:
+                    {
 
+                    }
 					break;
 					#endregion
+			}
+
+			if (gotoNextAttack)
+			{
+				if (NPC.life * 2 < NPC.lifeMax)
+				{
+					inPhase2 = true;
+					//TODO: Blue visuals for phase 2
+				}
+
+				//TODO: go to next attack with a SC/Sentinel-like system
+				NPC.ai[0] = (NPC.ai[0] + Main.rand.Next(0, 2)) % 3 + 1;
+				NPC.ai[1] = 0;
 			}
 
 			//TODO: Add a bit of occasional random variation to some of the attacks to ensure their positioning is varied
@@ -700,19 +701,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				Vector2 goalPosition = player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero).RotatedBy(side) * 1200f;
 				Vector2 goalVelocity = (goalPosition - NPC.Center) / 30f;
 				NPC.velocity += (goalVelocity - NPC.velocity) / 30f;
-			}
-
-			if (gotoNextAttack)
-			{
-				if (NPC.life * 2 < NPC.lifeMax)
-                {
-					inPhase2 = true;
-					//TODO: Blue visuals for phase 2
-                }
-
-				//TODO: go to next attack with a SC/Sentinel-like system
-				NPC.ai[0] = (NPC.ai[0] + Main.rand.Next(0, 2)) % 3 + 1;
-				NPC.ai[1] = 0;
 			}
 
 			#endregion
@@ -787,36 +775,57 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			float tentacleBaseRadius = SegmentRadius(TENTACLE_ATTACH_SEGMENT_INDEX) + TentacleRadius(0);
 			Vector2 tentacleBasePosition = SegmentPosition(TENTACLE_ATTACH_SEGMENT_INDEX);
 
+			List<Rectangle> hitboxes = new List<Rectangle>();
 			for (int tentacleIndex = 0; tentacleIndex < NUM_TENTACLES; tentacleIndex++)
 			{
 				for (int segmentIndex = 0; segmentIndex < HITBOXES_PER_TENTACLE; segmentIndex++)
 				{
-					int hitboxIndex = tentacleIndex * HITBOXES_PER_TENTACLE + segmentIndex;
-
 					float indexForDrawing = segmentIndex * TENTACLE_SEGMENTS / (float)HITBOXES_PER_TENTACLE;
 
 					Vector2 spot = TentacleSegmentPosition(indexForDrawing, tentacleBaseAngle + tentacleIndex * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
 					float radius = TentacleRadius(indexForDrawing);
 
-					NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[hitboxIndex] = new Rectangle((int)(spot.X - radius), (int)(spot.Y - radius), (int)(radius * 2), (int)(radius * 2));
+					hitboxes.Add(new Rectangle((int)(spot.X - radius), (int)(spot.Y - radius), (int)(radius * 2), (int)(radius * 2)));
 				}
 			}
 
 			//position body and head segments
 			for (int h = 0; h < numSegments + 1; h++)
 			{
-				int hitboxIndex = h + numTentacleSegments;
-
 				Vector2 spot = h == numSegments ?
 					 SegmentPosition(-(segmentsPerHitbox - hitboxSegmentOffset) * specialSegmentsHeadMultiplier) : //head segment
 					 segmentPositions[h * segmentsPerHitbox + hitboxSegmentOffset]; //body/tail segment
-				NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[hitboxIndex] = new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height);
+				hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
 			}
+
+			NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = MultiHitbox.AutoAssignFrom(hitboxes);
 		}
 
 		public override void OnHitPlayer(Player target, int damage, bool crit)
 		{
 			target.AddBuff(BuffType<Incinerating>(), 60, true);
+		}
+
+		public void MultiHitboxSegmentUpdate(NPC npc, RectangleHitbox mostRecentHitbox)
+		{
+			if (mostRecentHitbox.index < NUM_TENTACLES * HITBOXES_PER_TENTACLE)
+			{
+				//hitting tentacle segments is bad
+				npc.HitSound = new LegacySoundStyle(SoundID.Tink, 0);
+				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 0.5f;
+			}
+			else if (mostRecentHitbox.index < NUM_TENTACLES * HITBOXES_PER_TENTACLE + numSegments)
+			{
+				//hitting body segments is meh
+				npc.HitSound = SoundID.NPCHit2;
+				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 1f;
+			}
+			else
+			{
+				//hitting the head is great
+				npc.HitSound = SoundID.NPCHit1;
+				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 2f;
+			}
 		}
 		#endregion
 
@@ -865,7 +874,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
         PriorityQueue<DrawData, float> drawDatas;
 
 		//The maximum capacity potentially required by drawDatas
-		const int MAX_DRAW_CAPACITY = 15864;
+		const int MAX_DRAW_CAPACITY = 9184;
 
 		const int NUM_TENTACLES = 8;
 

@@ -31,11 +31,12 @@ using Polarities.Items.Weapons.Summon.Minions;
 using Polarities.Items.Hooks;
 using Polarities.Items.Armor.Vanity;
 using Polarities.Items.Weapons.Ranged;
+using MultiHitboxNPCLibrary;
 
 namespace Polarities.NPCs.Esophage
 {
     [AutoloadBossHead]
-    public class Esophage : ModNPC
+    public class Esophage : ModNPC, IMultiHitboxSegmentUpdate
     {
         private int LEGCOUNT
         {
@@ -141,23 +142,6 @@ namespace Polarities.NPCs.Esophage
             {
                 NPC.scale = 0.5f;
             }
-
-            NPC.GetGlobalNPC<MultiHitboxNPC>().useMultipleHitboxes = true;
-            NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = new Rectangle[numSegments];
-
-            NPC.GetGlobalNPC<MultiHitboxNPC>().SegmentUpdate = (index) =>
-            {
-                if (index == 0)
-                {
-                    NPC.defense = 30;
-                    NPC.HitSound = SoundID.NPCHit1;
-                }
-                else
-                {
-                    NPC.defense = 60;
-                    NPC.HitSound = SoundID.NPCHit2;
-                }
-            };
 
             SpawnModBiomes = new int[1] { GetInstance<WorldEvilInvasion>().Type };
         }
@@ -751,11 +735,13 @@ namespace Polarities.NPCs.Esophage
             }
 
             //position hitbox segments
+            List<Rectangle> hitboxes = new List<Rectangle>();
             for (int h = 0; h < numSegments; h++)
             {
                 Vector2 spot = NPC.Center + NPC.velocity + new Vector2(0, -h * (136 / numSegments)).RotatedBy(NPC.rotation) * NPC.scale;
-                NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[h] = new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height);
+                hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
             }
+            NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = MultiHitbox.AutoAssignFrom(hitboxes);
         }
 
         public override void FindFrame(int frameHeight)
@@ -778,6 +764,20 @@ namespace Polarities.NPCs.Esophage
                         headFrameX = 0;
                     }
                 }
+            }
+        }
+
+        public void MultiHitboxSegmentUpdate(NPC npc, RectangleHitbox mostRecentHitbox)
+        {
+            if (mostRecentHitbox.index == 0)
+            {
+                npc.defense = 30;
+                npc.HitSound = SoundID.NPCHit1;
+            }
+            else
+            {
+                npc.defense = 60;
+                npc.HitSound = SoundID.NPCHit2;
             }
         }
 

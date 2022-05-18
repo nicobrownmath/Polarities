@@ -27,6 +27,8 @@ using Polarities.Items.Accessories;
 using Terraria.DataStructures;
 using Polarities.Items.Materials;
 using Terraria.ModLoader.Utilities;
+using MultiHitboxNPCLibrary;
+using System.Collections.Generic;
 
 namespace Polarities.NPCs.Enemies
 {
@@ -79,9 +81,6 @@ namespace Polarities.NPCs.Enemies
 
 			numSegments = Main.rand.Next(20, 31);
 			segmentPositions = new Vector2[numSegments * segmentsPerHitbox + (segmentsHead - segmentsPerHitbox) + (segmentsTail - segmentsPerHitbox)];
-
-			NPC.GetGlobalNPC<MultiHitboxNPC>().useMultipleHitboxes = true;
-			NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = new Rectangle[numSegments];
 		}
 
 		int numSegments;
@@ -194,16 +193,18 @@ namespace Polarities.NPCs.Enemies
 			}
 
 			//position hitbox segments
+			List<Rectangle> hitboxes = new List<Rectangle>();
 			for (int h = 0; h < numSegments; h++)
 			{
 				Vector2 spot = segmentPositions[h * segmentsPerHitbox + hitboxSegmentOffset];
-				NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[h] = new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height);
+				hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
 			}
+			NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = MultiHitbox.AutoAssignFrom(hitboxes);
 		}
 
         public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
 		{
-			if (NPC.GetGlobalNPC<MultiHitboxNPC>().lastHitSegment == 0)
+			if (NPC.GetGlobalNPC<MultiHitboxNPC>().mostRecentHitbox.index == 0)
 			{
 				target.AddBuff(BuffID.Venom, 5 * 60);
 			}
@@ -215,7 +216,7 @@ namespace Polarities.NPCs.Enemies
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit)
 		{
-			if (NPC.GetGlobalNPC<MultiHitboxNPC>().lastHitSegment == 0)
+			if (NPC.GetGlobalNPC<MultiHitboxNPC>().mostRecentHitbox.index == 0)
 			{
 				target.AddBuff(BuffID.Venom, 5 * 60);
 			}
@@ -239,15 +240,16 @@ namespace Polarities.NPCs.Enemies
 
         public override bool CheckDead()
         {
-            for (int i = 0; i < NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.Length; i++)
+			ICollection<RectangleHitbox> collection = NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.AllHitboxes();
+			foreach (RectangleHitbox hitbox in collection)
             {
-				Vector2 gorePos = NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[i].TopLeft();
-				if (i == 0)
-                {
+				Vector2 gorePos = hitbox.hitbox.TopLeft();
+				if (hitbox.index == 0)
+				{
 					Gore.NewGore(NPC.GetSource_Death(), gorePos, Vector2.Zero, Mod.Find<ModGore>("SeaSerpentGore1").Type);
 				}
-				else if (i == NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.Length - 1)
-                {
+				else if (hitbox.index == collection.Count - 1)
+				{
 
 					Gore.NewGore(NPC.GetSource_Death(), gorePos, Vector2.Zero, Mod.Find<ModGore>("SeaSerpentGore3").Type);
 				}
@@ -256,6 +258,7 @@ namespace Polarities.NPCs.Enemies
 					Gore.NewGore(NPC.GetSource_Death(), gorePos, Vector2.Zero, Mod.Find<ModGore>("SeaSerpentGore2").Type);
 				}
 			}
+
 			return true;
         }
 

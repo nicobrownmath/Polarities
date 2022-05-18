@@ -21,6 +21,7 @@ using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Polarities.Items.Materials;
+using MultiHitboxNPCLibrary;
 
 namespace Polarities.NPCs.Enemies
 {
@@ -81,9 +82,6 @@ namespace Polarities.NPCs.Enemies
 
             Banner = Type;
             BannerItem = ItemType<KrakenBanner>();
-
-            NPC.GetGlobalNPC<MultiHitboxNPC>().useMultipleHitboxes = true;
-            NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = new Rectangle[numSegments];
         }
 
         const int numSegments = 5;
@@ -243,11 +241,13 @@ namespace Polarities.NPCs.Enemies
             }
 
             //position hitbox segments
+            List<Rectangle> hitboxes = new List<Rectangle>();
             for (int h = 0; h < numSegments; h++)
             {
                 Vector2 spot = NPC.Center + NPC.velocity + new Vector2(0, -(h - 1) * (150 / numSegments)).RotatedBy(NPC.rotation);
-                NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[h] = new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height);
+                hitboxes.Add(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height));
             }
+            NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = MultiHitbox.AutoAssignFrom(hitboxes);
 
             return false;
         }
@@ -267,7 +267,7 @@ namespace Polarities.NPCs.Enemies
                     newHitboxes.Add(Main.npc[i].Hitbox);
                 }
             }
-            NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = newHitboxes.ToArray();
+            NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes = MultiHitbox.AutoAssignFrom(newHitboxes);
 
             return true;
         }
