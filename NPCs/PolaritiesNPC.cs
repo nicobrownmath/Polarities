@@ -29,6 +29,7 @@ using Polarities.Items.Weapons.Summon.Orbs;
 using Polarities.Projectiles;
 using Terraria.Audio;
 using Polarities.Items.Weapons.Magic;
+using Polarities.Buffs;
 
 namespace Polarities.NPCs
 {
@@ -117,6 +118,13 @@ namespace Polarities.NPCs
         public override void SetDefaults(NPC npc)
         {
             hammerTimes = new Dictionary<int, int>();
+
+            switch (npc.type)
+            {
+                case NPCID.DungeonGuardian:
+                    npc.buffImmune[BuffType<Incinerating>()] = true;
+                    break;
+            }
         }
 
         private void Main_DrawInfoAccs(ILContext il)

@@ -141,7 +141,7 @@ namespace Polarities.NPCs.TownNPCs
 
         public override bool CanTownNPCSpawn(int numTownNPCs, int money)
         {
-			return Ghostwriter.SpawnCondition();
+			return SpawnCondition();
 		}
 
         public override List<string> SetNPCNameList()

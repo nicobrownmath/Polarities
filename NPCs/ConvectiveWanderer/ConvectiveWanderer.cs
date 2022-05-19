@@ -874,7 +874,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
         PriorityQueue<DrawData, float> drawDatas;
 
 		//The maximum capacity potentially required by drawDatas
-		const int MAX_DRAW_CAPACITY = 9184;
+		int MAX_DRAW_CAPACITY = 8669;
 
 		const int NUM_TENTACLES = 8;
 
@@ -894,15 +894,20 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				//register body data
 				for (int i = segmentPositions.Length - 1; i > -specialSegmentsHead; i--)
 				{
+					//most draws I've recorded as needed for this is: 6796
 					DrawSegment(drawDatas, spriteBatch, screenPos, i, NPC.GetNPCColorTintedByBuffs(Color.White));
 				}
 
+				//register tentacle data
 				for (int i = 0; i < NUM_TENTACLES; i++)
 				{
+					//most draws I've recorded as needed for this is needed for this is: 1873
 					DrawTentacle(drawDatas, spriteBatch, screenPos, i * MathHelper.TwoPi / NUM_TENTACLES, NPC.GetNPCColorTintedByBuffs(Color.White));
 				}
 
+				//debug stuff that lets us know if we've gone above the default max draw capacity (this doesn't really cause problems but I would like to know when it occurs)
 				if (drawDatas.Count > MAX_DRAW_CAPACITY) Main.NewText("drawData capacity exceeded: " + drawDatas.Count + " > " + MAX_DRAW_CAPACITY); //for finding max capacity used
+				if (drawDatas.Count > MAX_DRAW_CAPACITY) MAX_DRAW_CAPACITY = drawDatas.Count;
 
 				//draw all data
 				while (drawDatas.TryDequeue(out var drawData, out _))
@@ -1108,7 +1113,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								finOrigin = new Vector2(finFrame.Width / 2, finFrame.Height);
 							}
 
-							drawDatas.Enqueue(new DrawData(TextureAssets.Npc[Type].Value, segmentPosition + sectionOffset - screenPos, finFrame, depthModifiedColor, segmentRotation, finOrigin, finScale, finEffects, 0), (float)Math.Cos(totalAngle) * 2f - globalDepthModifier);
+							//only add if we'd actually be visible
+							if (Math.Cos(totalAngle) > 0 || Math.Abs(Math.Sin(totalAngle) + Math.Sin(offsetAngle)) > 1)
+								drawDatas.Enqueue(new DrawData(TextureAssets.Npc[Type].Value, segmentPosition + sectionOffset - screenPos, finFrame, depthModifiedColor, segmentRotation, finOrigin, finScale, finEffects, 0), (float)Math.Cos(totalAngle) * 2f - globalDepthModifier);
 
 							//internal fin code in the event I decide to give the beak internal teeth
 							/*if (index < 1)
@@ -1175,7 +1182,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					float offsetDist1 = (float)Math.Sin(totalAngle1) * tendrilsRadius1;
 					float offsetDist2 = (float)Math.Sin(totalAngle2) * tendrilsRadius2;
 
-					//TODO: Make tendrilPos1 actually match up with the edge
 					Vector2 tendrilPos0 = pos0 + new Vector2(0, offsetDist0).RotatedBy(rot0);
 					Vector2 tendrilPos1 = pos1 + new Vector2(0, offsetDist1).RotatedBy(rot1);
 					Vector2 tendrilPos2 = pos2 + new Vector2(0, offsetDist2).RotatedBy(rot2);
