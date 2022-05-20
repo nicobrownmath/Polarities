@@ -150,7 +150,7 @@ namespace Polarities.Effects
 		public virtual void OnSpawn() { }
 
 
-		public void Draw(SpriteBatch spritebatch)
+		public virtual void Draw(SpriteBatch spritebatch)
 		{
 			Asset<Texture2D> particleTexture = particleTextures[Type];
 

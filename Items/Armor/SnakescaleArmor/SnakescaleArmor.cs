@@ -41,6 +41,7 @@ namespace Polarities.Items.Armor.SnakescaleArmor
 	}
 
 	[AutoloadEquip(EquipType.Legs)]
+	//TODO: Add flippers, provide flipper effect
 	public class SnakescaleGreaves : ModItem
 	{
 		public override void SetStaticDefaults()

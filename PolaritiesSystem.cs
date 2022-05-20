@@ -26,6 +26,7 @@ using Terraria.GameContent;
 using System.Reflection;
 using Mono.Cecil.Cil;
 using Terraria.Localization;
+using Polarities.NPCs.ConvectiveWanderer;
 
 namespace Polarities
 {
