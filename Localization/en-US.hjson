@@ -313,7 +313,8 @@
 			"SerpentScale": "Serpent Scale",
 			"Tentacle": "Tentacle",
 			"EvilDNA": "Evil DNA",
-			"MantellarOre": "Mantellar Ore"
+			"MantellarOre": "Mantellar Ore",
+			"MantellarBar": "Mantellar Bar"
 		},
 		"ItemTooltip": {
 			"WarhammerBase": "Reduces enemy defense by {DefenseLoss} for {DebuffTime} seconds",
@@ -531,7 +532,8 @@
 			//miscellaneous
 			"SaltCrystals": "'Yum'",
 			"Rattle": "Makes a noise when you shake it",
-			"VenomGland": "'Gross'"
+			"VenomGland": "'Gross'",
+			"MantellarBar": "'Do not touch'"
 		},
 		"ArmorSetBonus": {
 			"SunplateMask": "Allows the ability to dash",

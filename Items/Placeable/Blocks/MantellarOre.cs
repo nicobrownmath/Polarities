@@ -48,7 +48,7 @@ namespace Polarities.Items.Placeable.Blocks
 			name.SetDefault("{$Mods.Polarities.ItemName.MantellarOre}");
 			AddMapEntry(new Color(255, 200, 0), name);
 
-			DustType = DustType<ConvectiveDust>();
+			DustType = DustType<MantellarDust>();
 			ItemDrop = ItemType<MantellarOre>();
 			SoundType = 21;
 			SoundStyle = 1;

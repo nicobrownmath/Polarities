@@ -99,10 +99,10 @@ namespace Polarities.Items.Placeable.Bars
         }
 	}
 
-	public class ConvectiveBar : BarBase
+	public class MantellarBar : BarBase
 	{
 		public override int BarIndex => 1;
-		public override int? DustIndex => DustType<ConvectiveDust>();
+		public override int? DustIndex => DustType<MantellarDust>();
 
 		public override void SetDefaults()
 		{

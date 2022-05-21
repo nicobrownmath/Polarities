@@ -194,6 +194,11 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		private float[] segmentPulseScaleAngles;
 		private float[] segmentHeats;
 
+		float tentacleAngleMultiplier = 0f;
+		float tentacleCompression = 1f;
+		float tentacleTiltAngle = 0f;
+		float tentacleCurveAmount = 0f;
+
 		float tendrilOutwardness;
 		float upDashTelegraphProgress;
 
@@ -233,6 +238,12 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				player = Main.player[NPC.target];
 			}
 
+			//things for use with tentacle methods
+			float tentacleBaseAngle = SegmentAngle(TENTACLE_ATTACH_SEGMENT_INDEX);
+			float tentacleBaseRotation = SegmentRotation(TENTACLE_ATTACH_SEGMENT_INDEX) + MathHelper.PiOver2;
+			float tentacleBaseRadius = SegmentRadius(TENTACLE_ATTACH_SEGMENT_INDEX) + TentacleRadius(0);
+			Vector2 tentacleBasePosition = SegmentPosition(TENTACLE_ATTACH_SEGMENT_INDEX);
+
 			//changeable ai values
 			float rotationFade = 9f;
 			float rotationAmount = 0.01f;
@@ -245,6 +256,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			//drawcode values
 			tendrilOutwardness = 0f;
 			upDashTelegraphProgress = 0f;
+			tentacleCompression = 1f;
+			tentacleTiltAngle = 0f;
+			tentacleCurveAmount = 0f;
 
 			NPC.noGravity = true;
 
@@ -267,7 +281,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						const int attackSwingTime = 20;
 						const int totalAttackTime = attackSetupTime + attackFreezeTime + attackSwingTime;
 
-						//TODO: Tentacle twisting to correspond to the goal direction (this should also exist for the other attacks)
 						//TODO: Better visual cues (both for charging time and for freeze)
 						//TODO: Prim trail for swing?
 						float attackProgress = (int)(NPC.ai[1] - attackFirstSetupExtraTime) % totalAttackTime;
@@ -275,7 +288,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						bool playerAhead = Vector2.Dot(NPC.Center - player.Center, new Vector2(-1, 0).RotatedBy(NPC.rotation)) > 0;
 						int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
 
-						const float goalDistance = 113f; //160f;
+						const float goalDistance = 113f;
 
 						if (attackProgress < 0)
 						{
@@ -299,7 +312,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							Vector2 goalVelocity = (goalPosition - NPC.Center) / timeLeft;
 							NPC.velocity += (goalVelocity - NPC.velocity) / (float)Math.Pow(timeLeft, 0.25f);
 
-							angleSpeed = NPC.velocity.Length() * 0.003f;
+							tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+							angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
 						}
 						else if (attackProgress < attackSetupTime)
 						{
@@ -334,7 +348,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								NPC.velocity += new Vector2(angularSpeed, 0).RotatedBy(NPC.rotation + MathHelper.PiOver2 * side);
 							}
 
-							angleSpeed = NPC.velocity.Length() * 0.0075f * side;
+							tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+							angleSpeed = NPC.velocity.Length() * 0.075f * tentacleAngleMultiplier;
 						}
 						else
 						{
@@ -347,6 +362,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							{
 								NPC.velocity = Vector2.Zero;
 
+								tentacleAngleMultiplier += (NPC.ai[2] * 0.1f - tentacleAngleMultiplier) / 10f;
 								angleSpeed = (attackSetupTime + attackFreezeTime - attackProgress) * 0.01f * NPC.ai[2];
 							}
 							else
@@ -356,6 +372,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 								NPC.velocity = new Vector2(angularSpeed, 0).RotatedBy(NPC.rotation + MathHelper.PiOver2 * NPC.ai[2]);
 
+								tentacleAngleMultiplier += (NPC.ai[2] * 0.1f - tentacleAngleMultiplier) / 10f;
 								angleSpeed = angularSpeed * 0.2f * NPC.ai[2];
 
 								//TODO: Consider bringing back the p1 projectiles and adding more projectiles in p2 (possibly staggered) if this is too easy
@@ -420,6 +437,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							{
 								tendrilOutwardness = timeLeft / totalAttackSetupTime;
 							}
+
+							tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+							angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
 						}
 						else if (attackProgress < totalAttackSetupTime + totalAttackDashTime)
 						{
@@ -448,6 +468,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							}
 
 							tendrilOutwardness = 1 - timeLeft / totalAttackStoppedTime;
+
+							tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+							angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
 						}
 						else
 						{
@@ -482,9 +505,10 @@ namespace Polarities.NPCs.ConvectiveWanderer
                                     } 
                                 }
                             }
-						}
 
-						angleSpeed = NPC.velocity.Length() * 0.003f;
+							tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+							angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
+						}
 
 						NPC.ai[1]++;
 						if (NPC.ai[1] == totalAttackTime * attackRepetitions + totalAttackSetupTime + extraTimeForProjectileDisappearance) //run an extra setup to move on after the final dash
@@ -515,13 +539,11 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							//allow extra time for projectiles to leave
 							float timeLeft = totalAttackTime * attackRepetitions + extraTimeForProjectileDisappearance - NPC.ai[1];
 							Idle(timeLeft);
-
-							angleSpeed = NPC.velocity.Length() * 0.003f;
 						}
 						else if (attackProgress < attackSetupTime)
 						{
 							//set up attack
-							//TODO: Telegraph at all
+							//TODO: Telegraph should feel less arbitrary
 							float timeLeft = attackSetupTime - attackSetupFrozenTime - attackProgress;
 
 							if (timeLeft > 0)
@@ -537,7 +559,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								upDashTelegraphProgress = (timeLeft + attackSetupFrozenTime) * (timeLeft + attackSetupFrozenTime) * (-timeLeft) / (float)Math.Pow(attackSetupFrozenTime, 3) * 27f / 4f;
 							}
 
-							angleSpeed = NPC.velocity.Length() * 0.003f;
+							tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+							angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
 						}
 						//TODO: Trail projectiles?
 						else if (attackProgress < attackSetupTime + attackDashTime)
@@ -547,11 +570,14 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							if (attackProgress == attackSetupTime)
 							{
 								NPC.velocity = new Vector2(0, -100);
+
+								NPC.ai[2] = side;
 							}
 
 							NPC.velocity *= timeLeft / (timeLeft + 1);
 
-							angleSpeed = NPC.velocity.Length() * 0.003f;
+							tentacleAngleMultiplier += (NPC.ai[2] * 0.1f - tentacleAngleMultiplier) / 10f;
+							angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
 
 							float radius = SegmentRadius(0);
 							const int rowsProjectiles = 1;
@@ -630,7 +656,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								NPC.velocity += (goalVelocity - NPC.velocity) / 20f;
 							}
 
-							angleSpeed = NPC.velocity.Length() * 0.003f * side;
+							tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+							angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
 
 							int segmentToSpawnParticleFrom = Main.rand.Next(1, numSegments * segmentsPerHitbox);
 							Vector2 particleSpawnPos = SegmentPosition(segmentToSpawnParticleFrom) + new Vector2(0, Main.rand.NextFloat(-1f, 1f)).RotatedBy(SegmentRotation(segmentToSpawnParticleFrom)) * SegmentRadius(segmentToSpawnParticleFrom);
@@ -655,15 +682,139 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				#region Swim around under the player and cause screenshake, producing flamethrowers from terrain/lava surface, and causing lava debris to fall from the ceiling
+				#region Tentacles spin and rotate outwards, producing projectiles
 				case 5:
-                    {
+					{
+						const int attackRepetitions = 4;
+						const int extraStartSetupTime = 120;
+						const int setupStartTime = 30;
+						const int setupTime = 60;
+						const int attackTime = 120;
+						const int resetTime = 30;
+						const int extraEndTime = 60;
+						const int totalAttackTime = setupTime + attackTime + resetTime;
 
-                    }
+						float attackProgress = (int)(NPC.ai[1] - extraStartSetupTime) % totalAttackTime;
+
+						int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
+
+						if (NPC.ai[1] >= totalAttackTime * attackRepetitions + extraStartSetupTime)
+                        {
+							Idle(totalAttackTime * attackRepetitions + extraStartSetupTime + extraEndTime - NPC.ai[1]);
+                        }
+						else if (attackProgress < setupTime)
+                        {
+							if (NPC.ai[1] == 0)
+								NPC.ai[2] = side;
+							if (attackProgress == 0 && NPC.ai[1] > extraStartSetupTime)
+								NPC.ai[2] *= -1;
+
+							if (attackProgress < 0)
+							{
+								if (attackProgress < -60)
+								{
+									Idle(-60 - attackProgress);
+								}
+								else
+								{
+									if ((NPC.Center - player.Center).Length() > 600f)
+									{
+										GoTowardsRadial(player.Center + new Vector2(0, -600).RotatedBy(NPC.Center.X > player.Center.X ? MathHelper.Pi / 3 : -MathHelper.Pi / 3), player.Center, -attackProgress);
+									}
+									else
+									{
+										NPC.ai[1] = extraStartSetupTime;
+									}
+								}
+							}
+							else
+							{
+								if (attackProgress < setupStartTime && (NPC.Center - player.Center).Length() > 400f)
+								{
+									float timeLeftForSetupStart = setupStartTime - attackProgress;
+
+									Vector2 goalPosition = player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * 400f;
+									Vector2 goalVelocity = (goalPosition - NPC.Center) / timeLeftForSetupStart;
+									NPC.velocity += (goalVelocity - NPC.velocity) / (float)Math.Sqrt(timeLeftForSetupStart);
+								}
+								else
+								{
+									if (Vector2.Dot((NPC.Center - player.Center).SafeNormalize(Vector2.Zero), new Vector2(-1, 0).RotatedBy(NPC.rotation)) > 0.5)
+									{
+										NPC.velocity = Vector2.Zero;
+									}
+									else
+									{
+										NPC.velocity *= 0.95f;
+										float angularSpeed = 0.2f;
+										NPC.velocity += new Vector2(angularSpeed, 0).RotatedBy(NPC.rotation + MathHelper.PiOver2 * side);
+									}
+
+									rotationAmount *= 2f;
+								}
+							}
+
+							float timeLeft = setupTime - Math.Max(attackProgress, 0);
+
+							tentacleAngleMultiplier += (-NPC.ai[2] * 0.1f * (1 - timeLeft / setupTime) - tentacleAngleMultiplier) * timeLeft / (timeLeft + 1);
+							angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier + attackProgress / setupTime * NPC.ai[2] * 0.06f;
+
+							tentacleCompression = timeLeft / setupTime;
+						}
+						else if (attackProgress < setupTime + attackTime)
+						{
+							float timeLeft = setupTime + attackTime - attackProgress;
+
+							rotationAmount *= 2f;
+
+							tentacleAngleMultiplier += (-NPC.ai[2] * 0.1f * timeLeft / attackTime - tentacleAngleMultiplier) / 10f;
+							angleSpeed = NPC.ai[2] * 0.06f;
+							tentacleCompression = 0f;
+
+							float tentacleRotProgress = (1 - timeLeft / attackTime);
+							tentacleTiltAngle = tentacleRotProgress * tentacleRotProgress * (3 - 2 * tentacleRotProgress) * MathHelper.Pi * 0.625f;
+							tentacleCurveAmount = -tentacleTiltAngle / 8;
+
+							NPC.velocity = Vector2.Zero;
+
+							//TODO: Replace with deathrays in p2
+							if (attackProgress % 5 == 0)
+							{
+								for (int i = 0; i < NUM_TENTACLES; i++)
+								{
+									Vector2 spot = TentacleSegmentPosition(31, tentacleBaseAngle + i * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
+									float angle = MathHelper.Pi + TentacleSegmentRotation(31, tentacleBaseAngle + i * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
+
+									Projectile.NewProjectile(NPC.GetSource_FromAI(), spot, new Vector2(2, 0).RotatedBy(angle), ProjectileType<ConvectiveWandererAcceleratingShot>(), 25, 2f, Main.myPlayer, ai0: 1f, ai1: inPhase2 ? 0.5f : 0f);
+								}
+                            }
+						}
+						else
+						{
+							NPC.velocity = Vector2.Zero;
+
+							rotationAmount *= 2f;
+
+							float timeLeft = setupTime + attackTime + resetTime - attackProgress;
+
+							tentacleAngleMultiplier = NPC.ai[2] * 0.1f * (1 - timeLeft / resetTime);
+							angleSpeed = NPC.ai[2] * 0.06f * timeLeft / resetTime;
+							tentacleCompression = 1 - timeLeft / resetTime;
+							float tentacleRotProgress = timeLeft / resetTime;
+							tentacleTiltAngle = tentacleRotProgress * tentacleRotProgress * (3 - 2 * tentacleRotProgress) * MathHelper.Pi * 0.625f;
+							tentacleCurveAmount = -tentacleTiltAngle / 8;
+						}
+
+						NPC.ai[1]++;
+						if (NPC.ai[1] == totalAttackTime * attackRepetitions + extraStartSetupTime + extraEndTime)
+						{
+							gotoNextAttack = true;
+						}
+					}
 					break;
 				#endregion
 
-				#region Tentacles spin and rotate outwards, producing projectiles
+				#region Swim around under the player and cause screenshake, producing flamethrowers from terrain/lava surface, and causing lava debris to fall from the ceiling
 				case 6:
                     {
 
@@ -685,15 +836,12 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				if (NPC.life * 2 < NPC.lifeMax)
 				{
 					inPhase2 = true;
-					//TODO: Blue visuals for phase 2
 				}
 
 				//TODO: go to next attack with a SC/Sentinel-like system
-				NPC.ai[0] = (NPC.ai[0] + Main.rand.Next(0, 3)) % 4 + 1;
+				NPC.ai[0] = (NPC.ai[0] + Main.rand.Next(0, 4)) % 5 + 1;
 				NPC.ai[1] = 0;
 			}
-
-			NPC.ai[0] = 4;
 
 			//TODO: Add a bit of occasional random variation to some of the attacks to ensure their positioning is varied
 			//(This should only be varied some of the time, a la sun pixie's projectile rings)
@@ -742,6 +890,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				Vector2 goalPosition = player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero).RotatedBy(side) * 1200f;
 				Vector2 goalVelocity = (goalPosition - NPC.Center) / 30f;
 				NPC.velocity += (goalVelocity - NPC.velocity) / 30f;
+
+				tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+				angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
 			}
 
 			#endregion
@@ -812,11 +963,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			//doing the tentacles first ensures the tentacles always shield the head
 
 			//position tentacle hitbox segments
-			float tentacleBaseAngle = SegmentAngle(TENTACLE_ATTACH_SEGMENT_INDEX);
-			float tentacleBaseRotation = SegmentRotation(TENTACLE_ATTACH_SEGMENT_INDEX) + MathHelper.PiOver2;
-			float tentacleBaseRadius = SegmentRadius(TENTACLE_ATTACH_SEGMENT_INDEX) + TentacleRadius(0);
-			Vector2 tentacleBasePosition = SegmentPosition(TENTACLE_ATTACH_SEGMENT_INDEX);
-
 			List<RectangleHitboxData> hitboxes = new List<RectangleHitboxData>();
 			for (int tentacleIndex = 0; tentacleIndex < NUM_TENTACLES; tentacleIndex++)
 			{
@@ -1285,15 +1431,14 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			return originalBasePosition + new Vector2(0, offsetDistForEffectiveBasePosition).RotatedBy(baseRotation - MathHelper.PiOver2);
 		}
 
-		//TODO: Make this adjustable in AI
         float TentacleBaseAngleOffset(float index)
 		{
 			return (index <= 0) ? 0 :
-				index * 0.1f; //* (float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.5f);
+				index * tentacleAngleMultiplier;
 		}
 		float TentacleRotation(float index)
         {
-			return 0f; //2.5f * (float)Math.Pow((1 - Math.Cos(Main.GlobalTimeWrappedHourly * 1f)) / 2f, (index / EFFECTIVE_TENTACLE_SEGMENTS + 0.5f) * 4f);
+			return tentacleTiltAngle + tentacleCurveAmount * index / EFFECTIVE_TENTACLE_SEGMENTS;
 		}
 
 		Vector2 TentacleRadialOffset(float index, float baseRadius)
@@ -1312,7 +1457,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 			float sideScaleMult = (float)Math.Sin(MathHelper.TwoPi / NUM_TENTACLES) / 2f;
 
-			float goalRadius = TentacleRadius(index) / sideScaleMult; //ModUtils.Lerp(baseRadius, TentacleRadius(index) / sideScaleMult, (float)(1 + Math.Cos(Main.GlobalTimeWrappedHourly * 1f)) / 2f);
+			float goalRadius = ModUtils.Lerp(baseRadius, TentacleRadius(index) / sideScaleMult, tentacleCompression);
 
 			float segmentSqueezing = (float)(1 - Math.Pow(1 - index / EFFECTIVE_TENTACLE_SEGMENTS, 12f));
 			float distFromCenter = ModUtils.Lerp(baseRadius, goalRadius, segmentSqueezing);
@@ -1374,9 +1519,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			float segmentAngle = -baseAngle - TentacleBaseAngleOffset(index) + MathHelper.Pi / DRAWS_PER_TENTACLE_SEGMENT; //adding this last term helps minimize clipping
 
 			//add this to segment angle to look better when not in drill form
-			//TODO: This is kind of meh
-			//TODO: More accurate depth calculation when TentacleRotation != 0
-			segmentAngle += TentacleRotation(index);
+			segmentAngle += (TentacleRotation(index) > MathHelper.PiOver2) ? MathHelper.Pi : 0;
 
 			float segmentRadius = TentacleRadius(index);
 			float scaleMultToMatch = (float)Math.Tan(MathHelper.Pi / DRAWS_PER_TENTACLE_SEGMENT) * segmentRadius;
@@ -1388,7 +1531,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			float segmentDepthModifier = (generalDepthFromAngle + 0.5f) * (specialSegmentsHead * 65536f + index) + specialSegmentsHead * 512f;
 
 			float scaleLength = (TentacleSegmentPosition(index, baseAngle, baseRotation, baseRadius, originalBasePosition) - TentacleSegmentPosition(index - 1, baseAngle, baseRotation, baseRadius, originalBasePosition)).Length() / TENTACLE_SEGMENT_SEPARATION;
-			
+
+			int inc = Math.Clamp((int)(SegmentHeat(0) * 7), 0, 6);
+
 			for (int i = 0; i < SIDES_PER_TENTACLE_SEGMENT; i++)
             {
 				for (int j = 0; j < DRAWS_PER_TENTACLE_SIDE; j++)
@@ -1407,7 +1552,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 					if (scale.Y > 0)
 					{
-						Rectangle frame = new Rectangle(segmentFramePoint, j * BASE_TENTACLE_TEXTURE_HEIGHT / DRAWS_PER_TENTACLE_SIDE, TENTACLE_SEGMENT_SEPARATION * 2, BASE_TENTACLE_TEXTURE_HEIGHT / DRAWS_PER_TENTACLE_SIDE);
+						Rectangle frame = new Rectangle(segmentFramePoint, j * BASE_TENTACLE_TEXTURE_HEIGHT / DRAWS_PER_TENTACLE_SIDE + (BASE_TEXTURE_HEIGHT + 2) * 2 * inc, TENTACLE_SEGMENT_SEPARATION * 2, BASE_TENTACLE_TEXTURE_HEIGHT / DRAWS_PER_TENTACLE_SIDE);
 						Vector2 origin = frame.Size() / 2;
 
 						drawDatas.Enqueue(new DrawData(TextureAssets.Npc[Type].Value, segmentPosition + sectionOffset - screenPos, frame, depthModifiedColor, segmentRotation, origin, scale, bodyEffects, 0), (float)Math.Cos(totalAngle) * 0.1f + segmentDepthModifier);

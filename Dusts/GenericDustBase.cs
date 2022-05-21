@@ -18,6 +18,6 @@ namespace Polarities.Dusts
 
     public class SaltDust : GenericDustBase { }
     public class LimestoneDust : GenericDustBase { }
-    public class ConvectiveDust : GenericDustBase { public override bool Glow => true; }
+    public class MantellarDust : GenericDustBase { public override bool Glow => true; }
 }
 
