@@ -12,7 +12,8 @@ namespace Polarities.Items.Books
     public class PlanteraBook : BookBase
     {
         public override int BuffType => BuffType<PlanteraBookBuff>();
-    }
+		public override int BookIndex => 20;
+	}
 
     public class PlanteraBookBuff : BookBuffBase
     {

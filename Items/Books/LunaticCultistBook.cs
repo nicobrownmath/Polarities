@@ -12,6 +12,7 @@ namespace Polarities.Items.Books
     public class LunaticCultistBook : BookBase
     {
         public override int BuffType => BuffType<LunaticCultistBookBuff>();
+        public override int BookIndex => 29;
     }
 
     public class LunaticCultistBookBuff : BookBuffBase

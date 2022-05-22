@@ -9,6 +9,7 @@ namespace Polarities.Items.Books
     public class TwinsBook : BookBase
     {
         public override int BuffType => BuffType<TwinsBookBuff>();
+        public override int BookIndex => 16;
     }
 
     public class TwinsBookBuff : BookBuffBase

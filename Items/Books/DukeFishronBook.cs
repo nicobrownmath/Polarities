@@ -12,6 +12,7 @@ namespace Polarities.Items.Books
     public class DukeFishronBook : BookBase
     {
         public override int BuffType => BuffType<DukeFishronBookBuff>();
+        public override int BookIndex => 24;
     }
 
     public class DukeFishronBookBuff : BookBuffBase

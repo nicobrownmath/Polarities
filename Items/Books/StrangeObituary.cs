@@ -6,31 +6,10 @@ using Polarities.Buffs;
 
 namespace Polarities.Items.Books
 {
-    public class StrangeObituary : ModItem
+    public class StrangeObituary : BookBase
     {
-        public override void SetStaticDefaults()
-        {
-            this.SetResearch(1);
-        }
-
-        public override void SetDefaults()
-        {
-            Item.width = 26;
-            Item.height = 32;
-            Item.useStyle = ItemUseStyleID.HoldUp;
-            Item.useAnimation = 15;
-            Item.useTime = 15;
-            Item.useTurn = true;
-            Item.UseSound = SoundID.Item8;
-            Item.rare = ItemRarityID.Blue;
-            Item.value = Item.buyPrice(gold: 5);
-        }
-
-        public override bool? UseItem(Player player)
-        {
-            player.AddBuff(BuffType<StrangeObituaryBuff>(), 2);
-            return true;
-        }
+        public override int BuffType => BuffType<StrangeObituaryBuff>();
+        public override int BookIndex => 1;
     }
 
     public class StrangeObituaryBuff : ModBuff

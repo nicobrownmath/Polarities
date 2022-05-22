@@ -12,6 +12,7 @@ namespace Polarities.Items.Books
     public class GolemBook : BookBase
     {
         public override int BuffType => BuffType<GolemBookBuff>();
+        public override int BookIndex => 23;
     }
 
     public class GolemBookBuff : BookBuffBase

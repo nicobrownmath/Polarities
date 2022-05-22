@@ -758,6 +758,7 @@
 			"StormcloudCichlidCageTile": "{$Mods.Polarities.ItemName.StormcloudCichlidCage}",
 			"LockedChest": "Locked ",
 			"MantellarOreTile": "Mantellar Ore",
+			"BookTile": "Book"
 		},
 		"BuffName": {
 			"Desiccating": "Desiccating",

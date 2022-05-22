@@ -12,6 +12,7 @@ namespace Polarities.Items.Books
     public class BetsyBook : BookBase
     {
         public override int BuffType => BuffType<BetsyBookBuff>();
+        public override int BookIndex => 25;
     }
 
     public class BetsyBookBuff : BookBuffBase

@@ -9,6 +9,7 @@ namespace Polarities.Items.Books
     public class StarConstructBook : BookBase
     {
         public override int BuffType => BuffType<StarConstructBookBuff>();
+        public override int BookIndex => 7;
     }
 
     public class StarConstructBookBuff : BookBuffBase

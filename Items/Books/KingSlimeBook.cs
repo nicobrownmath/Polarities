@@ -9,6 +9,7 @@ namespace Polarities.Items.Books
     public class KingSlimeBook : BookBase
     {
         public override int BuffType => BuffType<KingSlimeBookBuff>();
+        public override int BookIndex => 2;
     }
 
     public class KingSlimeBookBuff : BookBuffBase

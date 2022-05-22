@@ -11,7 +11,8 @@ namespace Polarities.Items.Books
     public class EyeOfCthulhuBook : BookBase
     {
         public override int BuffType => BuffType<EyeOfCthulhuBookBuff>();
-    }
+		public override int BookIndex => 4;
+	}
 
     public class EyeOfCthulhuBookBuff : BookBuffBase
     {

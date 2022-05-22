@@ -9,6 +9,7 @@ namespace Polarities.Items.Books
     public class WallOfFleshBook : BookBase
     {
         public override int BuffType => BuffType<WallOfFleshBookBuff>();
+        public override int BookIndex => 13;
     }
 
     public class WallOfFleshBookBuff : BookBuffBase

@@ -9,6 +9,7 @@ namespace Polarities.Items.Books
     public class SkeletronBook : BookBase
     {
         public override int BuffType => BuffType<SkeletronBookBuff>();
+        public override int BookIndex => 10;
     }
 
     public class SkeletronBookBuff : BookBuffBase

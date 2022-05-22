@@ -9,6 +9,7 @@ namespace Polarities.Items.Books
     public class EaterOfWorldsBook : BookBase
     {
         public override int BuffType => BuffType<EaterOfWorldsBookBuff>();
+        public override int BookIndex => 5;
     }
 
     public class EaterOfWorldsBookBuff : BookBuffBase
