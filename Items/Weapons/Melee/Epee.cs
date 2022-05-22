@@ -35,8 +35,8 @@ namespace Polarities.Items.Weapons.Melee
 			Item.SetWeaponValues(12, 8f, 0);
 			Item.DamageType = DamageClass.Melee;
 
-			Item.width = 64;
-			Item.height = 64;
+			Item.width = 62;
+			Item.height = 60;
 
 			Item.useTime = 60;
 			Item.useAnimation = 30;
@@ -50,7 +50,12 @@ namespace Polarities.Items.Weapons.Melee
 			Item.value = 1000;
 		}
 
-		public override bool? UseItem(Player player)
+        public override bool CanUseItem(Player player)
+        {
+			return player.itemTime == 0;
+        }
+
+        public override bool? UseItem(Player player)
 		{
 			player.direction = (Main.MouseWorld.X - player.Center.X > 0) ? 1 : -1;
 			if (player.velocity.Y == 0)

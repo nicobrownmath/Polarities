@@ -24,7 +24,7 @@ namespace Polarities.Items.Weapons.Melee
 			Item.damage = 13;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 30;
-			Item.height = 32;
+			Item.height = 34;
 			Item.useTime = 15;
 			Item.useAnimation = 15;
 			Item.noUseGraphic = true;

@@ -49,10 +49,10 @@ namespace Polarities.Items.Accessories
 
 		public override void SetDefaults()
 		{
-			Projectile.width = 26;
-			Projectile.height = 26;
-			DrawOffsetX = -12;
-			DrawOriginOffsetX = 7;
+			Projectile.width = 22;
+			Projectile.height = 22;
+			DrawOffsetX = -18;
+			DrawOriginOffsetX = 9;
 			Projectile.penetrate = -1;
 			Projectile.minion = true;
 			Projectile.minionSlots = 0.2f;

@@ -23,8 +23,8 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 			Item.SetWeaponValues(9, 6, 0);
 			Item.DamageType = DamageClass.Ranged;
 
-			Item.width = 34;
-			Item.height = 34;
+			Item.width = 32;
+			Item.height = 36;
 
 			Item.useTime = 28;
 			Item.useAnimation = 28;

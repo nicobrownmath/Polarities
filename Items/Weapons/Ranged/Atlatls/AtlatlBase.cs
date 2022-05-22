@@ -18,6 +18,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
     {
         public abstract Vector2[] ShotDistances { get; }
         public abstract float BaseShotDistance { get; }
+        public virtual float SpriteRotationOffset => 0;
 
         public static int mostRecentAmmo;
         public static int[] mostRecentShotTypes;
@@ -70,6 +71,9 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
                     usedShots[i] = 1;
                 }
             }
+
+            player.itemRotation += player.direction * player.gravDir * (MathHelper.PiOver2 + SpriteRotationOffset);
+            player.itemLocation += new Vector2(-player.direction * TextureAssets.Item[Type].Width(), 0).RotatedBy(player.itemRotation);
         }
 
         public virtual bool RealShoot(Player player, EntitySource_ItemUse_WithAmmo source, int index, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
@@ -104,6 +108,13 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 
         public void DrawHeldItem(ref PlayerDrawSet drawInfo)
         {
+            Vector2 oldLocation = drawInfo.drawPlayer.itemLocation;
+            float oldRotation = drawInfo.drawPlayer.itemRotation;
+
+            //reset draw position data to normal after drawing the actual item
+            drawInfo.drawPlayer.itemLocation -= new Vector2(-drawInfo.drawPlayer.direction * TextureAssets.Item[Type].Width(), 0).RotatedBy(drawInfo.drawPlayer.itemRotation);
+            drawInfo.drawPlayer.itemRotation -= drawInfo.drawPlayer.direction * drawInfo.drawPlayer.gravDir * (MathHelper.PiOver2 + SpriteRotationOffset);
+
             //draws the darts that haven't yet been used
             //for some reason vanilla darts don't draw until a few ticks after spawning so this can look strange with them
             for (int i = 0; i < usedShots.Length; i++)
@@ -120,7 +131,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 
                     float rotationOffset = MathHelper.Pi - drawInfo.drawPlayer.direction * (MathHelper.PiOver2 - drawInfo.drawPlayer.gravDir * MathHelper.PiOver4);
 
-                    //vanilla glowing darts
+                    //modded glowing darts
                     if (ProjectileLoader.GetProjectile(mostRecentShotTypes[i]) is ICustomAtlatlDart atlatlDart)
                     {
                         atlatlDart.DrawDart(drawInfo, shotPosition, drawInfo.drawPlayer.itemRotation + rotationOffset);
@@ -129,6 +140,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
                     {
                         Color dartColor = drawInfo.itemColor;
 
+                        //vanilla glowing darts
                         if (mostRecentShotTypes[i] == ProjectileID.IchorDart || mostRecentShotTypes[i] == ProjectileID.CursedDart || mostRecentShotTypes[i] == ProjectileID.CrystalDart)
                         {
                             dartColor = Color.White;
@@ -138,6 +150,10 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
                     }
                 }
             }
+
+            //re-reset draw data
+            drawInfo.drawPlayer.itemLocation = oldLocation;
+            drawInfo.drawPlayer.itemRotation = oldRotation;
         }
 
         public virtual bool DoDartDraw(int index) => true;

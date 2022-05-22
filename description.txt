@@ -9,7 +9,7 @@ Wiki- bubbyboytoo
 Spriters- ElectroManiac, niker, triangle, Scratch Lunin, Squartron, Rednbloo
 Bestiary- Danku (Jerry), bubbyboytoo
 Former team members- junk boy
-With sprites from- discord_account, yogu, Vega_1, Evolution, UnworthyPie, warrenmark_art, Masked Luigi, Darkpuppey, DeJuiceTD, Jimbo Animations, Le Supreme Slimelad, nalyddd, Hugekraken, Heart Plus Up!, MountainyBear49, Rocketlauncher269, TRYAGAIN211 //IlluminatiJoe (drill sprites) //Danmaskino (flywheel + stormcore) //hondacivicmoment (Mithrix warhammer)
+With sprites from- discord_account, yogu, Vega_1, Evolution, UnworthyPie, warrenmark_art, Masked Luigi, Darkpuppey, DeJuiceTD, Jimbo Animations, Le Supreme Slimelad, nalyddd, Hugekraken, Heart Plus Up!, MountainyBear49, Rocketlauncher269, TRYAGAIN211, Danmaskino, //IlluminatiJoe (drill sprites) //hondacivicmoment (Mithrix warhammer)
 
 v0.11 Changelog
     The mod is now in 1.4
@@ -61,10 +61,11 @@ v0.11 Changelog
     Most rapture enemies now flee rather than instantly disappearing when the event ends
     The mod's slimes are now affected by the royal gel and can drop the slime staff
     Bat slimes now inflict feral bite
-    Renamed the tentacle club to tentaclub and convective bar to mantellar bare
+    Renamed the tentacle club to tentaclub and convective bar to mantellar bar
     Changed rapture enemy spawning
     Aequoreans and light eaters can now teleport to their clones
-    Resprited the tolerance potion buff icon, starburst scepter, strange jewelry, strange samples
+    Resprited the tolerance potion buff icon, starburst scepter, strange jewelry, strange samples, halite warhammer, salt knife, cavern carver, stormcore and its minion, épée, seeping death, wooden dart, wooden atlatls, ratlatl, thistle thrower
+    Atlatls are now rotated differently in the inventory
     Reworked the luminous slime staff
     Adjusted Sun Pixie's deathray attacks, and it now automatically recreates its arena if you leave it early
     Flarecaller beams now have an enlarged hitbox at the point of impact to better match their visuals
@@ -153,5 +154,6 @@ Possible BG objects
   Generic background objects: Falling star constructs (possibly more common during meteor showers (this could maybe apply to actual dormant constructs and both stellated slimes)), cloudfish
   Rapture BG objects: Glowing sunbeams (even at night)
   Pestilence BG objects: Red and purple spores floating up from the terrain (more red in corruption, more purple in crimson)
-  Hell BG objects: Post-golem flocks of lavafowl
+  Hell BG objects: Flocks of lavafowl (killing polarities should remove these)
+  Killing the polarities should remove migratory bird BG objects
   Fractal background objects: Various fractal creatures? Rifts? I need to make the dimension feel more alive so it should probably feel like there's as much depth in random systems that don't do that much as there is in the overworld

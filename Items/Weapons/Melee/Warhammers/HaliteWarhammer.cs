@@ -15,8 +15,8 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 {
 	public class HaliteWarhammer : WarhammerBase
 	{
-		public override int HammerLength => 55;
-		public override int HammerHeadSize => 13;
+		public override int HammerLength => 52;
+		public override int HammerHeadSize => 16;
 		public override int DefenseLoss => 8;
 		public override int DebuffTime => 600;
 
@@ -25,8 +25,8 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 			Item.SetWeaponValues(18, 12, 0);
 			Item.DamageType = DamageClass.Melee;
 
-			Item.width = 68;
-			Item.height = 68;
+			Item.width = 74;
+			Item.height = 74;
 
 			Item.useTime = 40;
 			Item.useAnimation = 40;

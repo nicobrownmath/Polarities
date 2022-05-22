@@ -30,9 +30,6 @@ using Terraria.ModLoader.Utilities;
 using System.Collections.Generic;
 using Polarities.Effects;
 using MultiHitboxNPCLibrary;
-using Terraria.Graphics.Effects;
-using Filters = Terraria.Graphics.Effects.Filters;
-using Terraria.Graphics.Shaders;
 
 namespace Polarities.NPCs.ConvectiveWanderer
 {
@@ -80,19 +77,44 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							float rotationOffset = (float)Math.Cos(i * MathHelper.TwoPi / ((me.ModNPC as ConvectiveWanderer).segmentPositions.Length - 16));
 							(me.ModNPC as ConvectiveWanderer).segmentPositions[i] = (me.ModNPC as ConvectiveWanderer).segmentPositions[i - 1] - new Vector2(segmentSeparation, 0).RotatedBy(me.rotation + rotationOffset);
 						}
-
 						me.ModNPC.PreDraw(Main.spriteBatch, -capture.Size() / 2, Color.White);
 
 						Main.spriteBatch.End();
-						Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+
+
+						Main.spriteBatch.Begin((SpriteSortMode)0, new BlendState()
+						{
+							//custom blendstate to make it so outlines in darker places are more darker
+							BlendFactor = Color.White,
+
+							AlphaBlendFunction = BlendFunction.Add,
+							AlphaSourceBlend = Blend.One,
+							AlphaDestinationBlend = Blend.InverseSourceAlpha,
+
+							ColorBlendFunction = BlendFunction.Add,
+							ColorSourceBlend = Blend.SourceColor,
+							ColorDestinationBlend = Blend.InverseSourceAlpha,
+						},
+						Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
 
 						Main.spriteBatch.GraphicsDevice.SetRenderTarget(capture2);
 						Main.spriteBatch.GraphicsDevice.Clear(Color.Transparent);
 
 						for (int i = 0; i < 4; i++)
 						{
-							Main.spriteBatch.Draw(capture, Main.GameViewMatrix.Translation + new Vector2(2f, 0).RotatedBy(i * MathHelper.PiOver2), null, new Color(64, 64, 64), 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
+							Main.spriteBatch.Draw(capture, Main.GameViewMatrix.Translation + new Vector2(2f, 0).RotatedBy(i * MathHelper.PiOver2), null, Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
 						}
+
+						Main.spriteBatch.End();
+						Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+						Main.spriteBatch.GraphicsDevice.SetRenderTarget(capture2);
+
+						Main.spriteBatch.Draw(capture, Main.GameViewMatrix.Translation, null, Color.Black, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
+
+						Main.spriteBatch.End();
+						Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+						Main.spriteBatch.GraphicsDevice.SetRenderTarget(capture2);
+
 						Main.spriteBatch.Draw(capture, Main.GameViewMatrix.Translation, null, Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
 
 						Main.spriteBatch.End();
@@ -198,9 +220,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		float tentacleCompression = 1f;
 		float tentacleTiltAngle = 0f;
 		float tentacleCurveAmount = 0f;
-
-		float tendrilOutwardness;
-		float upDashTelegraphProgress;
+		float tendrilOutwardness = 0f;
+		float upDashTelegraphProgress = 0f;
 
 		bool inPhase2 = false;
 		#endregion
@@ -1074,7 +1095,16 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				return false;
 			}
 
-			if (RenderTargetLayer.IsActive<ConvectiveWandererTarget>())
+			if (DrawLayer.IsActive<DrawLayerAdditiveAfterLiquids>())
+            {
+				//stuff to draw additively after most things (mostly telegraphs and effects
+				if (upDashTelegraphProgress > 0)
+                {
+					//TODO: Possibly replace with/add a screenshake
+					Main.spriteBatch.Draw(Textures.Glow256.Value, NPC.Center - screenPos, Textures.Glow256.Frame(), ModUtils.ConvectiveFlameColor(upDashTelegraphProgress * upDashTelegraphProgress * 0.125f + (inPhase2 ? 0.875f : 0f)) * upDashTelegraphProgress, 0f, Textures.Glow256.Size() / 2, new Vector2(1, 64), SpriteEffects.None, 0);
+                }
+            }
+			else
 			{
 				//stuff to draw to our target (includes main worm)
 				drawDatas.Clear();
@@ -1103,15 +1133,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					drawData.Draw(spriteBatch);
 				}
 			}
-			else if (DrawLayer.IsActive<DrawLayerAdditiveAfterLiquids>())
-            {
-				//stuff to draw additively after most things (mostly telegraphs and effects
-				if (upDashTelegraphProgress > 0)
-                {
-					//TODO: Possibly replace with/add a screenshake
-					Main.spriteBatch.Draw(Textures.Glow256.Value, NPC.Center - screenPos, Textures.Glow256.Frame(), ModUtils.ConvectiveFlameColor(upDashTelegraphProgress * upDashTelegraphProgress * 0.125f + (inPhase2 ? 0.875f : 0f)) * upDashTelegraphProgress, 0f, Textures.Glow256.Size() / 2, new Vector2(1, 64), SpriteEffects.None, 0);
-                }
-            }
 
 			return false;
 		}

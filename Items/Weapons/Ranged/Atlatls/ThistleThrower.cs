@@ -17,14 +17,15 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 	{
 		public override Vector2[] ShotDistances => new Vector2[] { new Vector2(30) };
 		public override float BaseShotDistance => 30;
+        public override float SpriteRotationOffset => -0.1f;
 
-		public override void SetDefaults()
+        public override void SetDefaults()
 		{
 			Item.SetWeaponValues(21, 6, 0);
 			Item.DamageType = DamageClass.Ranged;
 
-			Item.width = 34;
-			Item.height = 34;
+			Item.width = 32;
+			Item.height = 42;
 
 			Item.useTime = 24;
 			Item.useAnimation = 24;
