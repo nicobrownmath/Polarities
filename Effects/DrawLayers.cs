@@ -141,6 +141,10 @@ namespace Polarities.Effects
             if (projCache == Main.instance.DrawCacheProjsBehindNPCs)
             {
                 Draw();
+                
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+                ParticleLayer.BeforeNPCsAdditive.Draw(Main.spriteBatch);
+                Main.spriteBatch.End();
             }
         }
     }

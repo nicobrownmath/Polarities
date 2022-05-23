@@ -31,6 +31,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 			Item.useTime = 30;
 			Item.useAnimation = 30;
 			Item.useStyle = WarhammerUseStyle;
+			Item.autoReuse = true;
 
 			Item.value = Item.sellPrice(gold: 5);
 			Item.rare = ItemRarityID.Pink;

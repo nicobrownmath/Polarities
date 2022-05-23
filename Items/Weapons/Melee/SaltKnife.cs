@@ -33,8 +33,8 @@ namespace Polarities.Items.Weapons.Melee
 			Item.shoot = ProjectileType<SaltKnifeProjectile>();
 			Item.shootSpeed = 1f;
 
-			Item.width = 28;
-			Item.height = 26;
+			Item.width = 32;
+			Item.height = 30;
 
 			Item.useTime = 40;
 			Item.useAnimation = 40;
@@ -87,8 +87,8 @@ namespace Polarities.Items.Weapons.Melee
 
         public override void SetDefaults()
 		{
-			Projectile.width = 28;
-			Projectile.height = 28;
+			Projectile.width = 32;
+			Projectile.height = 32;
 			Projectile.aiStyle = -1;
 			Projectile.friendly = true;
 			Projectile.penetrate = -1;

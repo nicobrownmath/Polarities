@@ -20,6 +20,7 @@
 			"LaserCutter": "Laser Cutter",
 			"TwistedTendril": "Twisted Tendril",
 			"ChainLacerator": "Chain Lacerator",
+			"Asthenos": "Asthenos",
 
 			//warhammers
 			"WoodenWarhammer": "Wooden Warhammer",
@@ -51,6 +52,7 @@
 			"TitaniumWarhammer": "Titanium Warhammer",
 			"TentacleClub": "Tentaclub",
 			"Ukonvasara": "Ukonvasara",
+			"SeismicStriker": "Seismic Striker",
 
 			//ranged weapons
 			"SaltShaker": "Salt Shaker",
@@ -64,6 +66,8 @@
 			"Splattergun": "Splattergun",
 			"Contagun": "Contagun",
 			"Hemiola": "Hemiola",
+			"Draconian": "Draconian",
+			"PyroclasticOnslaught": "Pyroclastic Onslaught",
 
 			//atlatls
 			"WoodenAtlatl": "Wooden Atlatl",
@@ -104,6 +108,7 @@
 			"BlazingIre": "Blazing Ire",
 			"ShadeStorm": "Shade Storm",
 			"LifeGrasper": "Life Grasper",
+			"HadeanUpwelling": "Hadean Upwelling",
 
 			//summon weapons
 			"ZombatStaff": "Zombat Staff",
@@ -337,6 +342,7 @@
 			"HandheldConeShell": "'This is a terrible idea'",
 			"LaserCutter": "'Where does it end? Doesn't.'",
 			"TwistedTendril": "Stacks up to 3",
+			"Asthenos": "Charge and release to incinerate your enemies",
 
 			//warhammers
 			"WoodenWarhammer": "{$Mods.Polarities.ItemTooltip.WarhammerBase}",
@@ -368,6 +374,7 @@
 			"TitaniumWarhammer": "{$Mods.Polarities.ItemTooltip.WarhammerBase}",
 			"TentacleClub": "{$Mods.Polarities.ItemTooltip.WarhammerBase}\nRight click to use as a javelin",
 			"Ukonvasara": "{$Mods.Polarities.ItemTooltip.WarhammerBase}",
+			"SeismicStriker": "{$Mods.Polarities.ItemTooltip.WarhammerBase}\nIncinerates enemies and produces pillars of fire on impact with tiles\nRight click to use as a flamethrower spear",
 
 			//ranged weapons
 			"SaltShaker": "'Ideal for family Thanksgivings'",
@@ -380,6 +387,8 @@
 			"Splattergun": "Shoots a dense splatter of ichor",
 			"Contagun": "Spews toxic fumes and viruses which infect your enemies",
 			"Hemiola": "Shoots both rapid and powerful darts\nConverts wooden darts into cursed and ichor darts",
+			"Draconian": "Shoots fireballs that explode into bullets",
+			"PyroclasticOnslaught": "Shoots infernal arrows into the sky to rain upon your enemies",
 
 			//atlatls
 			"Axolatl": "Sometimes spits bubbles instead of shooting a dart",
@@ -408,6 +417,7 @@
 			"BlazingIre": "Left click to use as a javelin, right click to use as a spear\nHitting enemies has a chance to summon additional javelins, and this chance is increased on critical strikes",
 			"ShadeStorm": "Shoots erratically curving shadows that tend to move towards enemies",
 			"LifeGrasper": "Summons a circular aura to drain life from enemies",
+			"HadeanUpwelling": "Summons a ring of fire around you, which turns into a directed fireblast",
 
 			//summon weapons
 			"ZombatStaff": "Summons baby zombats to protect you",
@@ -646,7 +656,13 @@
 			"WyvernsNestMinion": "Etherian Wyvern",
 			"WyvernsNestMinionFireball": "Wyvernfire",
 			"MantleOWarLavaProjectile": "Lava Blob",
-			"MantleOWarNematocyst": "Nematocyst"
+			"MantleOWarNematocyst": "Nematocyst",
+			"DraconianExplosion": "Draconian Blast",
+			"DraconianFireball": "Draconian Fireball",
+			"PyroclasticOnslaughtProjectile": "Infernal Arrow",
+			"SeismicStrikerFlamePillar": "Flame Pillar",
+			"HadeanUpwellingProjectile": "Hadean Fire",
+			"HadeanUpwellingMegablast": "Hadean Blast",
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
@@ -778,6 +794,7 @@
 			"LuminousSlimeMinionBuff": "Luminous Slime",
 			"SolarScarabMinionBuff": "Solar Scarab",
 			"EsophminiBuff": "Esophmini",
+			"ConvectiveMinionBuff": "Molten Spirit",
 
 			//pet buffs
 			"StarConstructPetBuff": "Dwarf Star Construct",
@@ -810,6 +827,7 @@
 			"LuminousSlimeMinionBuff": "The luminous slime will fight for you",
 			"SolarScarabMinonBuff": "The solar scarab will fight for you",
 			"EsophminiBuff": "The baby Esophage will fight for you",
+			"ConvectiveMinionBuff": "The molten spirits will fight for you",
 
 			//pet buffs
 			"StarConstructPetBuff": "Much more stable than its larger cousin",

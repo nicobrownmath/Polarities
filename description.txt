@@ -36,6 +36,7 @@ v0.11 Changelog
     Ghostwriter can now be damaged by poltergeists and dungeon spirits
     Strange obituary is now bought in graveyards
     Using a book while your books are maxed out will now cancel the first book you used and apply the new one rather than doing nothing, book buffs now remain after the player is killed, and using a book while you already have its associated buff will now clear its buff
+    Books are now placeable
     Strange barometer can now be right clicked to toggle the wind
     Salt and limestone furniture now require the same crafting stations as granite furniture
     Stargel amulet now continuously varies its bonuses depending on the time of day
@@ -64,7 +65,7 @@ v0.11 Changelog
     Renamed the tentacle club to tentaclub and convective bar to mantellar bar
     Changed rapture enemy spawning
     Aequoreans and light eaters can now teleport to their clones
-    Resprited the tolerance potion buff icon, starburst scepter, strange jewelry, strange samples, halite warhammer, salt knife, cavern carver, stormcore and its minion, épée, seeping death, wooden dart, wooden atlatls, ratlatl, thistle thrower
+    Resprited the tolerance potion buff icon, starburst scepter, strange jewelry, strange samples, halite warhammer, salt knife, cavern carver, stormcore and its minion, épée, seeping death, wooden dart, wooden atlatls, ratlatl, thistle thrower, strange obituary, draconian
     Atlatls are now rotated differently in the inventory
     Reworked the luminous slime staff
     Adjusted Sun Pixie's deathray attacks, and it now automatically recreates its arena if you leave it early
@@ -81,6 +82,9 @@ v0.11 Changelog
     The dryad now only sells alternate evil seeds in a graveyard after esophage is defeated
     Added the contagun
     Added some help quotes to the guide
+    Nerfed the draconian, pyroclastic onslaught, volcanic plume
+    Seismic striker now produces pillars of fire on impact with tiles
+    Adjusted the tooltip of the molten spirit staff buff
 
 Thing I should do:
   Replace using AIType to control platform falling with CanFallThroughPlatforms

@@ -44,13 +44,13 @@ namespace Polarities.Buffs
 
 			for (int i = 0; i < 4; i++)
 			{
-				ParticleLayer layer = i < 2 ? ParticleLayer.BeforePlayersAdditive : ParticleLayer.AfterLiquidsAdditive;
+				ParticleLayer layer = i < 2 ? ParticleLayer.BeforeNPCsAdditive : ParticleLayer.AfterLiquidsAdditive;
 				Vector2 position = npc.position + new Vector2(Main.rand.NextFloat(), Main.rand.NextFloat()) * npc.Size;
 
 				float angling = Main.rand.NextFloat(-MathHelper.PiOver4, MathHelper.PiOver4);
 				Vector2 velocity = new Vector2(0, -Main.rand.NextFloat(6f, 12f) * (float)Math.Pow(Math.Cos(angling), 4)).RotatedBy(angling) + npc.velocity;
 
-				int effectiveBuffTime = Math.Min(120, npc.buffTime[buffIndex]);
+				int effectiveBuffTime = Math.Min(120, npc.buffTime[buffIndex] / 5);
 
 				layer.Add(Particle.NewParticle<IncineratingParticle>(position, velocity, 0f, 0f, Scale: Main.rand.NextFloat(0.5f, 1f), TimeLeft: Main.rand.Next(effectiveBuffTime * 3 / 4, effectiveBuffTime)));
 			}

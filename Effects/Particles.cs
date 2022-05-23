@@ -13,12 +13,14 @@ namespace Polarities.Effects
 {
 	public class ParticleLayer : ILoadable
 	{
+		public static ParticleLayer BeforeNPCsAdditive;
 		public static ParticleLayer BeforePlayersAdditive;
 		public static ParticleLayer AfterLiquidsAdditive;
 
 		public void Load(Mod mod)
 		{
 			//load our particle layers
+			BeforeNPCsAdditive = new ParticleLayer();
 			BeforePlayersAdditive = new ParticleLayer();
 			AfterLiquidsAdditive = new ParticleLayer();
 
@@ -31,6 +33,7 @@ namespace Polarities.Effects
         {
 			orig(self);
 
+			BeforeNPCsAdditive.Update();
 			BeforePlayersAdditive.Update();
 			AfterLiquidsAdditive.Update();
         }
@@ -46,6 +49,7 @@ namespace Polarities.Effects
 
         public void Unload()
 		{
+			BeforeNPCsAdditive = null;
 			BeforePlayersAdditive = null;
 			AfterLiquidsAdditive = null;
 		}
