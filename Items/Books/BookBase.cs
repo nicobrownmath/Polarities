@@ -120,6 +120,133 @@ namespace Polarities.Items.Books
     //TODO: Make the pre-placement version a. not show up if invalid and b. show up shifted if placing to the right (I need to find where vanilla does this)
     public class BookTile : ModTile
     {
+        public override void Load()
+        {
+            On.Terraria.TileObject.DrawPreview += TileObject_DrawPreview;
+        }
+
+        private void TileObject_DrawPreview(On.Terraria.TileObject.orig_DrawPreview orig, SpriteBatch sb, TileObjectPreviewData op, Vector2 position)
+        {
+            if (op.Type == TileType<BookTile>())
+            {
+                Point16 coordinates = op.Coordinates;
+                Texture2D value = TextureAssets.Tile[op.Type].Value;
+                TileObjectData tileData = TileObjectData.GetTileData(op.Type, op.Style, op.Alternate);
+                int num;
+                int num5;
+                int num6 = tileData.CalculatePlacementStyle(op.Style, op.Alternate, op.Random);
+                int num7 = 0;
+                int num8 = tileData.DrawYOffset;
+                int drawXOffset = tileData.DrawXOffset;
+
+                Tile testTile = Framing.GetTileSafely(coordinates);
+
+                bool forceSuccess = false;
+                if (testTile.TileType == TileType<BookTile>())
+                {
+                    if (testTile.TileFrameX == 0 && testTile.TileFrameY != 0)
+                    {
+                        forceSuccess = true;
+                    }
+                    else if (testTile.TileFrameX != 0 && testTile.TileFrameY == 0)
+                    {
+                        drawXOffset += 8;
+                        forceSuccess = true;
+                    }
+                    else if (Main.MouseWorld.X % 16 >= 8)
+                    {
+                        drawXOffset += 8;
+                    }
+                }
+                else if (Main.MouseWorld.X % 16 >= 8)
+                {
+                    drawXOffset += 8;
+                }
+
+                num6 += tileData.DrawStyleOffset;
+                int num9 = tileData.StyleWrapLimit;
+                int num10 = tileData.StyleLineSkip;
+                if (tileData.StyleWrapLimitVisualOverride.HasValue)
+                {
+                    num9 = tileData.StyleWrapLimitVisualOverride.Value;
+                }
+                if (tileData.styleLineSkipVisualOverride.HasValue)
+                {
+                    num10 = tileData.styleLineSkipVisualOverride.Value;
+                }
+                if (num9 > 0)
+                {
+                    num7 = num6 / num9 * num10;
+                    num6 %= num9;
+                }
+                if (tileData.StyleHorizontal)
+                {
+                    num = tileData.CoordinateFullWidth * num6;
+                    num5 = tileData.CoordinateFullHeight * num7;
+                }
+                else
+                {
+                    num = tileData.CoordinateFullWidth * num7;
+                    num5 = tileData.CoordinateFullHeight * num6;
+                }
+                for (int i = 0; i < op.Size.X; i++)
+                {
+                    int x = num + (i - op.ObjectStart.X) * (tileData.CoordinateWidth + tileData.CoordinatePadding);
+                    int num11 = num5;
+                    for (int j = 0; j < op.Size.Y; j++)
+                    {
+                        int num12 = coordinates.X + i;
+                        int num2 = coordinates.Y + j;
+                        if (j == 0 && tileData.DrawStepDown != 0 && WorldGen.SolidTile(Framing.GetTileSafely(num12, num2 - 1)))
+                        {
+                            num8 += tileData.DrawStepDown;
+                        }
+                        if (op.Type == 567)
+                        {
+                            num8 = ((j != 0) ? tileData.DrawYOffset : (tileData.DrawYOffset - 2));
+                        }
+                        int num3 = op[i, j];
+                        Color color = Color.White;
+                        if (num3 != 1)
+                        {
+                            if (num3 != 2)
+                            {
+                                continue;
+                            }
+                            if (!forceSuccess)
+                                color = Color.Red * 0.7f;
+                        }
+                        color *= 0.5f;
+                        if (i >= op.ObjectStart.X && i < op.ObjectStart.X + tileData.Width && j >= op.ObjectStart.Y && j < op.ObjectStart.Y + tileData.Height)
+                        {
+                            SpriteEffects spriteEffects = (SpriteEffects)0;
+                            if (tileData.DrawFlipHorizontal && num12 % 2 == 0)
+                            {
+                                spriteEffects = (SpriteEffects)((int)spriteEffects | 1);
+                            }
+                            if (tileData.DrawFlipVertical && num2 % 2 == 0)
+                            {
+                                spriteEffects = (SpriteEffects)((int)spriteEffects | 2);
+                            }
+                            int coordinateWidth = tileData.CoordinateWidth;
+                            int num4 = tileData.CoordinateHeights[j - op.ObjectStart.Y];
+                            if (op.Type == 114 && j == 1)
+                            {
+                                num4 += 2;
+                            }
+                            Rectangle? val = new Rectangle(x, num11, coordinateWidth, num4);
+                            sb.Draw(value, new Vector2((float)(num12 * 16 - (int)(position.X + (float)(coordinateWidth - 16) / 2f) + drawXOffset), (float)(num2 * 16 - (int)position.Y + num8)), val, color, 0f, Vector2.Zero, 1f, spriteEffects, 0f);
+                            num11 += num4 + tileData.CoordinatePadding;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                orig(sb, op, position);
+            }
+        }
+
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = false;
