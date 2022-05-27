@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour.HookGen;
@@ -27,6 +28,8 @@ namespace Polarities
         //the size is odd because we only ever move 4 steps along the data stream so this way we can loop 4 times without actually repeating
         public static PreGeneratedRandom preGeneratedRand = new PreGeneratedRandom(358297, 4095);
 
+        public static ModKeybind ConvectiveSetBonusHotkey;
+
         public override void Load()
         {
             ModUtils.Load();
@@ -38,6 +41,9 @@ namespace Polarities
             On.Terraria.Main.UpdateAudio_DecideOnNewMusic += Main_UpdateAudio_DecideOnNewMusic;
 
             IL_ResizeArrays += Polarities_IL_ResizeArrays;
+
+            //register hotkeys
+            ConvectiveSetBonusHotkey = KeybindLoader.RegisterKeybind(this, "Convective Set Bonus", Keys.K);
         }
 
         public override void Unload()
@@ -53,6 +59,9 @@ namespace Polarities
             Array.Resize<Asset<Texture2D>>(ref TextureAssets.GlowMask, Main.maxGlowMasks);
 
             IL_ResizeArrays -= Polarities_IL_ResizeArrays;
+
+            //unload hotkeys
+            ConvectiveSetBonusHotkey = null;
         }
 
         private void Polarities_IL_ResizeArrays(ILContext il)

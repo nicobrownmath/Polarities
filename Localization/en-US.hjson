@@ -121,6 +121,7 @@
 			"SolarScarabStaff": "Solar Scarab Staff",
 			"PincerStaff": "Pincer Staff",
 			"EsophageousStaff": "Esophageous Staff",
+			"MoltenSpiritStaff": "Molten Spirit Staff",
 
 			//orbs
 			"Discorb": "Discorb",
@@ -199,6 +200,12 @@
 			"SnakescaleArmor": "Snakescale Armor",
 			"SnakescaleGreaves": "Snakescale Greaves",
 			"SnakescaleMask": "Snakescale Mask",
+			"ConvectiveArmor": "Convective Armor",
+			"ConvectiveLeggings": "Convective Leggings",
+			"ConvectiveHelmetMelee": "Convective Faceplate",
+			"ConvectiveHelmetRanged": "Convective Helmet",
+			"ConvectiveHelmetMagic": "Convective Hood",
+			"ConvectiveHelmetSummon": "Convective Mask",
 
 			//vanity
 			"SnekHat": "Snek Hat",
@@ -430,6 +437,7 @@
 			"SolarScarabStaff": "Summons a solar scarab to protect you",
 			"PincerStaff": "Summons a clawed flesh puddle",
 			"EsophageousStaff": "Summons a baby Esophage to protect you",
+			"MoltenSpiritStaff": "Summons a molten spirit to protect you",
 
 			//orbs
 			"Discorb": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons a winged disco ball to confuse enemies",
@@ -505,6 +513,12 @@
 			"SnakescaleArmor": "5% increased damage",
 			"SnakescaleGreaves": "10% increased movement speed",
 			"SnakescaleMask": "8% increased critical strike chance",
+			"ConvectiveArmor": "6% increased damage and critical strike chance",
+			"ConvectiveLeggings": "10% increased movement speed",
+			"ConvectiveHelmetMelee": "6% increased melee damage and critical strike chance",
+			"ConvectiveHelmetRanged": "6% increased ranged damage and critical strike chance",
+			"ConvectiveHelmetMagic": "6% increased magic damage and critical strike chance",
+			"ConvectiveHelmetSummon": "6% increased minion damage\nIncreases your max number of minions",
 
 			//hooks
 			"Starhook": "Shoots out four hooks at once",
@@ -551,6 +565,10 @@
 			"AerogelHood": "Provides a significant boost to movement speed\nProvides immunity to fire and fire blocks",
 			"LimestoneHelmet": "40 defense\nDefense is reduced to zero for a short time after being hit",
 			"SnakescaleMask": "Free movement in liquids\nCritical hits deal extra damage and inflict venom",
+			"ConvectiveHelmetMelee": "17% increased melee damage\n5% increased melee speed\nPress {Hotkey} to create a massive explosion, with a 10 second cooldown",
+			"ConvectiveHelmetRanged": "17% increased ranged damage\n5% increased ranged critical strike chance\nPress {Hotkey} to fire a superheated beam, with a 10 second cooldown",
+			"ConvectiveHelmetMagic": "17% increased magic damage\nIncreases max mana by 60\nPress {Hotkey} to create an eruption from below the cursor, with a 10 second cooldown",
+			"ConvectiveHelmetSummon": "17% increased minion damage\nIncreases your max number of minions\nPress {Hotkey} to summon convective vortices to attack enemies, with a 10 second cooldown"
 		},
 		"ProjectileName": {
 			"SaltProjectile": "Salt Ball",
@@ -663,6 +681,12 @@
 			"SeismicStrikerFlamePillar": "Flame Pillar",
 			"HadeanUpwellingProjectile": "Hadean Fire",
 			"HadeanUpwellingMegablast": "Hadean Blast",
+			"MoltenSpiritMinionExplosion": "Molten Blast",
+			"MoltenSpiritMinion": "Molten Spirit",
+			"ConvectiveArmorMeleeExplosion": "Thermal Explosion",
+			"ConvectiveArmorRangedDeathray": "Thermal Beam",
+			"ConvectiveArmorMagicEruption": "Eruption",
+			"ConvectiveArmorSummonVortex": "Convection Vortex"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
@@ -986,6 +1010,9 @@
 			"ConeVenom": "{PlayerName} was killed by a snail.",
 			"Desiccating": "{PlayerName} was mummified.",
 			"Incinerating": "{PlayerName} went poof."
+		},
+		"Misc": {
+			"UnboundHotkey": "an unbound hotkey"
 		}
 	}
 }

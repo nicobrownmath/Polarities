@@ -1015,6 +1015,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			target.AddBuff(BuffType<Incinerating>(), 60, true);
 		}
 
+		//TODO: Make it so that we can actually hit the head segment even when only partially open
 		public void MultiHitboxSegmentUpdate(NPC npc, RectangleHitbox mostRecentHitbox)
 		{
 			if (mostRecentHitbox.index < NUM_TENTACLES * HITBOXES_PER_TENTACLE)

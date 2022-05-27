@@ -139,6 +139,7 @@ namespace Polarities.Items.Weapons.Ranged
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
+			Projectile.velocity = oldVelocity;
 			TryExplode();
 
 			return false;

@@ -31,6 +31,10 @@ using Polarities.Projectiles;
 using Polarities.Items.Consumables.Crates;
 using Terraria.Localization;
 using Polarities.Items.Placeable.Bars;
+using Polarities.Items.Armor.ConvectiveArmor;
+using Terraria.Audio;
+using Polarities.NPCs.ConvectiveWanderer;
+using Polarities.Effects;
 
 namespace Polarities
 {
@@ -87,6 +91,9 @@ namespace Polarities
 		public bool solarEnergizer;
 		public bool wormScarf;
 		public int wyvernsNestDamage;
+		public Vector3 light;
+		public DamageClass convectiveSetBonusType;
+		public int convectiveSetBonusCharge;
 
 		//direction of dash
 		public int dashDir;
@@ -133,6 +140,8 @@ namespace Polarities
 			wormScarf = false;
 			wyvernsNestDamage = 0;
 			incinerationResistanceTime = 0;
+			light = Vector3.Zero;
+			convectiveSetBonusType = null;
 
 			if (skeletronBookCooldown > 0) skeletronBookCooldown--;
 			if (beeRingTimer > 0) beeRingTimer--;
@@ -200,6 +209,62 @@ namespace Polarities
 			if (PlayerInput.Triggers.JustPressed.MouseRight && (Player.HeldItem.DamageType == DamageClass.Summon || Player.HeldItem.DamageType.GetEffectInheritance(DamageClass.Summon)) && Player.channel)
 			{
 				Player.MinionNPCTargetAim(false);
+			}
+
+			//convective set bonus
+			if (convectiveSetBonusType != null)
+			{
+				convectiveSetBonusCharge++;
+
+				if (convectiveSetBonusCharge == 600)
+                {
+					SoundEngine.PlaySound(SoundID.Item, Player.position, 15);
+
+					for (int i = 0; i < 24; i++)
+					{
+						float speedProgress = Main.rand.NextFloat(1f);
+
+						ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(Player.MountedCenter, new Vector2(4 + speedProgress * 8, 0).RotatedBy(MathHelper.TwoPi * i / 24f), 0f, 0f, Scale: 0.15f, Color: ModUtils.ConvectiveFlameColor((1 - speedProgress) * (1 - speedProgress) / 2f));
+						ParticleLayer.BeforePlayersAdditive.Add(particle);
+					}
+				}
+
+				if (convectiveSetBonusCharge >= 600 && Polarities.ConvectiveSetBonusHotkey.JustPressed)
+				{
+					if (convectiveSetBonusType == DamageClass.Melee)
+                    {
+						Projectile.NewProjectile(Player.GetSource_FromAI(), Player.MountedCenter, Vector2.Zero, ProjectileType<ConvectiveArmorMeleeExplosion>(), (int)Player.GetTotalDamage(DamageClass.Melee).ApplyTo(400), Player.GetTotalKnockback(DamageClass.Melee).ApplyTo(5f), Player.whoAmI);
+                    }
+					else if (convectiveSetBonusType == DamageClass.Ranged)
+					{
+						Projectile.NewProjectile(Player.GetSource_FromAI(), Player.MountedCenter, Main.MouseWorld - Player.MountedCenter, ProjectileType<ConvectiveArmorRangedDeathray>(), (int)Player.GetTotalDamage(DamageClass.Ranged).ApplyTo(300), Player.GetTotalKnockback(DamageClass.Ranged).ApplyTo(5f), Player.whoAmI);
+					}
+					else if (convectiveSetBonusType == DamageClass.Magic)
+					{
+						SoundEngine.PlaySound(SoundID.Item88, Main.MouseWorld);
+						for (int i = 0; i < 32; i++)
+						{
+							Vector2 offset = new Vector2(Main.rand.NextFloat(1f), 0).RotatedByRandom(MathHelper.TwoPi);
+							Projectile.NewProjectile(Player.GetSource_FromAI(), Main.MouseWorld + new Vector2(0, 1000), new Vector2(0, -54).RotatedBy(offset.X * 0.2f) * (1 + offset.Y * 0.4f), ProjectileType<ConvectiveArmorMagicEruption>(), (int)Player.GetTotalDamage(DamageClass.Magic).ApplyTo(80), Player.GetTotalKnockback(DamageClass.Magic).ApplyTo(2f), Player.whoAmI);
+						}
+					}
+					else if (convectiveSetBonusType == DamageClass.Summon)
+					{
+						SoundEngine.PlaySound(SoundID.NPCDeath14, Player.Center);
+						for (int i = 0; i < Player.maxMinions; i++)
+						{
+							Main.projectile[Projectile.NewProjectile(Player.GetSource_FromAI(), Player.MountedCenter, new Vector2(16, 0).RotatedBy(PolaritiesSystem.timer * 0.05f + MathHelper.TwoPi * i / Player.maxMinions), ProjectileType<ConvectiveArmorSummonVortex>(), 400, Player.GetTotalKnockback(DamageClass.Summon).ApplyTo(3f), Player.whoAmI)].originalDamage = 400;
+						}
+					}
+
+					AddScreenShake(15, 30);
+
+					convectiveSetBonusCharge = 0;
+				}
+			}
+			else
+			{
+				convectiveSetBonusCharge = 0;
 			}
 		}
 
@@ -307,6 +372,8 @@ namespace Polarities
 			{
 				Player.statDefense = 0;
 			}
+
+			Lighting.AddLight(Player.Center, light);
 		}
 
         public void AddScreenShake(float magnitude, float timeLeft)

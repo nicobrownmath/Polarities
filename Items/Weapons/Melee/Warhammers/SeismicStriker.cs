@@ -310,6 +310,8 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
         public override void AI()
         {
 			Projectile.rotation = 0f;
+
+			//TODO: Sounds
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

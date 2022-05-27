@@ -243,11 +243,11 @@ namespace Polarities.Projectiles
 
         public override bool? CanHitNPC(Projectile projectile, NPC target)
         {
-            if (target.GetGlobalNPC<PolaritiesNPC>().usesProjectileHitCooldowns && projectileHitCooldown > 0)
+            if (target.GetGlobalNPC<PolaritiesNPC>().usesProjectileHitCooldowns && projectileHitCooldown != 0)
             {
                 return false;
             }
-            if (generalHitCooldown > 0)
+            if (generalHitCooldown != 0)
             {
                 return false;
             }
