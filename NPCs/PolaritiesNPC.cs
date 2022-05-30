@@ -211,7 +211,7 @@ namespace Polarities.NPCs
                 i => i.MatchLdsflda(typeof(Main).GetField("tile", BindingFlags.Public | BindingFlags.Static)),
                 i => i.MatchLdloc(63),
                 i => i.MatchLdloc(64),
-                i => i.MatchCall(typeof(Tilemap).GetProperty("Item", BindingFlags.Public | BindingFlags.Instance).GetGetMethod()),
+                i => i.MatchCall(typeof(Tilemap).GetProperty("Item", new Type[] { typeof(int), typeof(int) }).GetGetMethod()),
                 i => i.MatchStloc(41),
                 i => i.MatchLdloca(41),
                 i => i.MatchCall(out _), //this SHOULD be able to just be typeof(Tile).GetMethod("lava", new Type[] { }), but NO

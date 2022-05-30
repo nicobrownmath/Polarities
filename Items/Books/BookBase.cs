@@ -70,14 +70,14 @@ namespace Polarities.Items.Books
                         if (targetTile.TileFrameX == 0)
                         {
                             targetTile.TileFrameX = (short)(Item.placeStyle * 18);
-                            SoundEngine.PlaySound(0, Player.tileTargetX * 16, Player.tileTargetY * 16);
+                            SoundEngine.PlaySound(SoundID.Dig, new Vector2(Player.tileTargetX, Player.tileTargetY) * 16);
 
                             return true;
                         }
                         else if (targetTile.TileFrameY == 0)
                         {
                             targetTile.TileFrameY = (short)(Item.placeStyle * 18);
-                            SoundEngine.PlaySound(0, Player.tileTargetX * 16, Player.tileTargetY * 16);
+                            SoundEngine.PlaySound(SoundID.Dig, new Vector2(Player.tileTargetX, Player.tileTargetY) * 16);
 
                             return true;
                         }
@@ -117,7 +117,6 @@ namespace Polarities.Items.Books
         }
     }
 
-    //TODO: Make the pre-placement version a. not show up if invalid and b. show up shifted if placing to the right (I need to find where vanilla does this)
     public class BookTile : ModTile
     {
         public override void Load()
@@ -310,7 +309,7 @@ namespace Polarities.Items.Books
                         t.HasTile = false;
                     }
 
-                    SoundEngine.PlaySound(SoundID.Dig, i * 16, j * 16);
+                    SoundEngine.PlaySound(SoundID.Dig, new Vector2(i, j) * 16);
 
                     return true;
                 }
@@ -332,7 +331,7 @@ namespace Polarities.Items.Books
                         t.HasTile = false;
                     }
 
-                    SoundEngine.PlaySound(SoundID.Dig, i * 16, j * 16);
+                    SoundEngine.PlaySound(SoundID.Dig, new Vector2(i, j) * 16);
 
                     return true;
                 }

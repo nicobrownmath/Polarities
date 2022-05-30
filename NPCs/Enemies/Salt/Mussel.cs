@@ -131,7 +131,7 @@ namespace Polarities.NPCs.Enemies.Salt
                             if (thetaDir != NPC.direction) { theta -= Math.PI; }
                         }
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, 8 * (new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta))), ProjectileType<MusselProjectile>(), 10, 5f, Main.myPlayer);
-                        SoundEngine.PlaySound(SoundID.Item, NPC.Center, 61);
+                        SoundEngine.PlaySound(SoundID.Item61, NPC.Center);
                     }
                     break;
             }

@@ -55,9 +55,9 @@ namespace Polarities.Items.Weapons.Ranged
 				}
 				charges = 0;
 
-				SoundEngine.PlaySound(SoundID.Item, player.Center, 9);
+				SoundEngine.PlaySound(SoundID.Item9, player.Center);
 			}
-			else if (player.channel && !player.HasAmmo(Item, false))
+			else if (player.channel && !player.HasAmmo(Item))
 			{
 				player.itemTime = 10;
 				player.itemAnimation = 10;
@@ -70,7 +70,7 @@ namespace Polarities.Items.Weapons.Ranged
 			}
 		}
 
-        public override bool CanConsumeAmmo(Player player)
+        public override bool CanConsumeAmmo(Item ammo, Player player)
 		{
 			return charges < 20;
 		}
@@ -80,7 +80,7 @@ namespace Polarities.Items.Weapons.Ranged
 			if (charges < 20)
 			{
 				charges++;
-				SoundEngine.PlaySound(SoundID.Item, player.MountedCenter, 4);
+				SoundEngine.PlaySound(SoundID.Item4, player.MountedCenter);
 
 				for (int i = 0; i < 5; i++)
 				{

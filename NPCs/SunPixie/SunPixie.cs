@@ -120,7 +120,7 @@ namespace Polarities.NPCs.SunPixie
         {
 			NPC pixie = Main.npc[NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), (int)player.Center.X, (int)player.Center.Y - 1400, ModContent.NPCType<SunPixie>())];
 			Main.NewText(Language.GetTextValue("Announcement.HasAwoken", pixie.TypeName), 171, 64, 255);
-			SoundEngine.PlaySound(SoundID.Item, (int)player.position.X, (int)player.position.Y, 29);
+			SoundEngine.PlaySound(SoundID.Item29, player.position);
 		}
 
 		public Vector2 arenaCenter;
@@ -285,7 +285,7 @@ namespace Polarities.NPCs.SunPixie
 						int numLasers = (NPC.ai[0] == AttackIDLaserShots) ? 8 : 12;
 						if (Main.getGoodWorld) numLasers = numLasers * 3 / 2;
 
-						SoundEngine.PlaySound(SoundID.Item, NPC.position, 33);
+						SoundEngine.PlaySound(SoundID.Item33, NPC.position);
 
 						if (Main.netMode != 1)
 						{
@@ -514,7 +514,7 @@ namespace Polarities.NPCs.SunPixie
 					}
 					if (NPC.ai[1] % 120 == 90)
 					{
-						SoundEngine.PlaySound(SoundID.Item, NPC.Center, 29);
+						SoundEngine.PlaySound(SoundID.Item29, NPC.Center);
 					}
 
 					NPC.ai[1]++;
@@ -558,14 +558,14 @@ namespace Polarities.NPCs.SunPixie
 
 						if ((NPC.ai[1] - 40) % (int)NPC.ai[2] == 0)
 						{
-							SoundEngine.PlaySound(SoundID.Item, NPC.position, 33);
+							SoundEngine.PlaySound(SoundID.Item33, NPC.position);
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, 0.5f), ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.07f, player.whoAmI);
 						}
 						else if (Main.getGoodWorld && (NPC.ai[1] - 40) % (int)(NPC.ai[2] * 2) == NPC.ai[3] * NPC.ai[2] / 2)
                         {
 							if (Main.rand.NextBool())
 							{
-								SoundEngine.PlaySound(SoundID.Item, NPC.position, 33);
+								SoundEngine.PlaySound(SoundID.Item33, NPC.position);
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, 0.5f), ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.07f, player.whoAmI);
 							}
 							else
@@ -606,7 +606,7 @@ namespace Polarities.NPCs.SunPixie
 						{
 							NPC.velocity = Vector2.Zero;
 
-							SoundEngine.PlaySound(SoundID.Item, NPC.Center, 29);
+							SoundEngine.PlaySound(SoundID.Item29, NPC.Center);
 
 							if (Main.netMode != 1)
 							{
@@ -669,13 +669,13 @@ namespace Polarities.NPCs.SunPixie
 							}
 							if ((NPC.ai[1] - 40) % 3 != NPC.ai[2])
 							{
-								SoundEngine.PlaySound(SoundID.Item, NPC.position, 33);
+								SoundEngine.PlaySound(SoundID.Item33, NPC.position);
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, 0.5f), ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.07f, player.whoAmI);
 							}
 						}
 						else if ((NPC.ai[1] - 40) % 3 == 2)
 						{
-							SoundEngine.PlaySound(SoundID.Item, NPC.position, 33);
+							SoundEngine.PlaySound(SoundID.Item33, NPC.position);
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, 0.5f), ProjectileType<SunPixieRay>(), 19, 3f, Main.myPlayer, 1.07f, player.whoAmI);
 						}
 					}
@@ -713,7 +713,7 @@ namespace Polarities.NPCs.SunPixie
 
 						if (NPC.ai[1] % 20 == 0 && NPC.ai[1] < 300)
 						{
-							SoundEngine.PlaySound(SoundID.Item, NPC.Center, 29);
+							SoundEngine.PlaySound(SoundID.Item29, NPC.Center);
 
 							if (Main.netMode != 1)
 							{

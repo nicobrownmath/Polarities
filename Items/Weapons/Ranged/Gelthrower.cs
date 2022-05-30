@@ -45,7 +45,7 @@ namespace Polarities.Items.Weapons.Ranged
             Item.GetGlobalItem<PolaritiesItem>().flawless = true;
         }
 
-        public override bool CanConsumeAmmo(Player player)
+        public override bool CanConsumeAmmo(Item ammo, Player player)
         {
             return Main.rand.NextBool(3);
         }

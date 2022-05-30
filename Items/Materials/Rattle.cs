@@ -33,7 +33,7 @@ namespace Polarities.Items.Materials
 
 		public override bool? UseItem(Player player)
 		{
-			SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Rattle").WithVolume(.7f).WithPitchVariance(.5f), player.position);
+			SoundEngine.PlaySound(Sounds.Rattle, player.position);
 			return true;
 		}
 	}

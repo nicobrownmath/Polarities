@@ -82,7 +82,7 @@ namespace Polarities.Items.Weapons.Melee
             }
             if (Projectile.localAI[0] == 0)
             {
-                SoundEngine.PlaySound(SoundID.Item, Projectile.Center, 22);
+                SoundEngine.PlaySound(SoundID.Item22, Projectile.Center);
             }
             Projectile.localAI[0]++;
 

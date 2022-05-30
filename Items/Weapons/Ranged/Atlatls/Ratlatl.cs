@@ -30,6 +30,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 			Item.useAnimation = 28;
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.noMelee = true;
+			Item.UseSound = Sounds.Rattle;
 
 			Item.shoot = 10;
 			Item.shootSpeed = 16f;
@@ -41,7 +42,6 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Rattle").WithVolume(.7f).WithPitchVariance(.5f), player.position);
 			type = ProjectileID.PoisonDartBlowgun;
 
 			return base.Shoot(player, source, position, velocity, type, damage, knockback);

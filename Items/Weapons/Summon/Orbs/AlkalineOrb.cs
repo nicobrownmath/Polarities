@@ -53,9 +53,9 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 				player.itemAnimation = player.itemAnimationMax;
 
 				time++;
-				if (time % 20 == 0)
+				if (time % 20 == 0 && Item.UseSound != null)
 				{
-					SoundEngine.PlaySound(Item.UseSound, player.position);
+					SoundEngine.PlaySound((SoundStyle)Item.UseSound, player.position);
 				}
 			}
 		}
@@ -167,7 +167,10 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 			{
 				Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 74, Scale: 1.5f)].noGravity = true;
 			}
-			SoundEngine.PlaySound(SoundID.NPCKilled, (int)Projectile.position.X, (int)Projectile.position.Y, 52, volumeScale: 0.5f);
+			SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_52")
+			{
+				Volume = 0.5f,
+			}, Projectile.position);
 		}
 
 		public override bool PreDraw(ref Color lightColor)
@@ -251,7 +254,10 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 			{
 				Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 74, newColor: new Color(0, 180, 255), Scale: 1f)].noGravity = true;
 			}
-			SoundEngine.PlaySound(SoundID.NPCKilled, (int)Projectile.position.X, (int)Projectile.position.Y, 52, volumeScale: 0.5f);
+			SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_52")
+			{
+				Volume = 0.5f,
+			}, Projectile.position);
 		}
 
 		public override bool PreDraw(ref Color lightColor)

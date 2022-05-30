@@ -43,7 +43,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 		}
 
 		bool shotConsumed;
-        public override bool CanConsumeAmmo(Player player)
+        public override bool CanConsumeAmmo(Item ammo, Player player)
         {
 			shotConsumed = Main.rand.NextBool();
 			return shotConsumed;

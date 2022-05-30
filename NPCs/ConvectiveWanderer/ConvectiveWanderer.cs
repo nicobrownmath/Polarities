@@ -1021,7 +1021,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			if (mostRecentHitbox.index < NUM_TENTACLES * HITBOXES_PER_TENTACLE)
 			{
 				//hitting tentacle segments is bad
-				npc.HitSound = new LegacySoundStyle(SoundID.Tink, 0);
+				npc.HitSound = SoundID.Tink;
 				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 0.5f;
 			}
 			else if (mostRecentHitbox.index < NUM_TENTACLES * HITBOXES_PER_TENTACLE + numSegments)

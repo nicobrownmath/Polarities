@@ -60,10 +60,10 @@ namespace Polarities.Items.Weapons.Ranged
 				player.itemAnimation = player.itemAnimationMax;
 
 				soundTime++;
-				if (soundTime >= 20)
+				if (soundTime >= 20 && Item.UseSound != null)
 				{
 					soundTime = 0;
-					SoundEngine.PlaySound(Item.UseSound, player.MountedCenter);
+					SoundEngine.PlaySound((SoundStyle)Item.UseSound, player.MountedCenter);
 				}
 
 				shotTime++;

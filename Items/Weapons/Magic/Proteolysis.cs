@@ -69,7 +69,7 @@ namespace Polarities.Items.Weapons.Magic
 							}
 						}
 						numShots++;
-						if (numShots == 1) SoundEngine.PlaySound(SoundID.Item, player.position, 17);
+						if (numShots == 1) SoundEngine.PlaySound(SoundID.Item17, player.position);
 						if (numShots == 5) break;
 					}
 					else

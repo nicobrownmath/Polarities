@@ -184,7 +184,7 @@ namespace Polarities.Items.Weapons.Summon.Sentries
 					if (thetaDir != Projectile.direction) { theta -= Math.PI; }
 				}
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, 8 * (new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta))), ProjectileType<MolluscStaffSentryProjectile>(), Projectile.damage, 5f, Projectile.owner);
-				SoundEngine.PlaySound(SoundID.Item, Projectile.Center, 61);
+				SoundEngine.PlaySound(SoundID.Item61, Projectile.Center);
 			}
 		}
 

@@ -20,7 +20,7 @@ namespace Polarities.Items.Armor.SunplateArmor
 			this.SetResearch(1);
 
 			//registers a body glowmask color
-			ArmorMasks.bodyIndexToBodyMaskColor.Add(Mod.GetEquipSlot(Name, EquipType.Body), this);
+			ArmorMasks.bodyIndexToBodyMaskColor.Add(EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body), this);
 		}
 
 		public override void SetDefaults()

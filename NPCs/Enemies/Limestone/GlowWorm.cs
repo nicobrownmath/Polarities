@@ -137,7 +137,7 @@ namespace Polarities.NPCs.Enemies.Limestone
                     {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, 3.5f).RotatedBy(NPC.rotation), ProjectileType<GlowWormDroplet>(), 13, 2f, Main.myPlayer);
                     }
-                    SoundEngine.PlaySound(SoundID.Item, NPC.Center, 17);
+                    SoundEngine.PlaySound(SoundID.Item17, NPC.Center);
                 }
             }
             if (NPC.ai[1] == 120 || NPC.ai[1] == 360)

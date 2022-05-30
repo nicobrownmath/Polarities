@@ -21,7 +21,7 @@ namespace Polarities.Items.Armor.LimestoneArmor
 			this.SetResearch(1);
 
 			//registers a body glowmask color
-			ArmorMasks.bodyIndexToBodyMaskColor.Add(Mod.GetEquipSlot(Name, EquipType.Body), this);
+			ArmorMasks.bodyIndexToBodyMaskColor.Add(EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body), this);
 		}
 
 		public override void SetDefaults()
@@ -73,7 +73,7 @@ namespace Polarities.Items.Armor.LimestoneArmor
 			this.SetResearch(1);
 
 			//registers a head glowmask
-			ArmorMasks.legIndexToArmorDraw.TryAdd(Mod.GetEquipSlot(Name, EquipType.Legs), this);
+			ArmorMasks.legIndexToArmorDraw.TryAdd(EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs), this);
 		}
 
 		public override void SetDefaults()
@@ -141,7 +141,7 @@ namespace Polarities.Items.Armor.LimestoneArmor
 		{
 			this.SetResearch(1);
 
-			int equipSlotHead = Mod.GetEquipSlot(Name, EquipType.Head);
+			int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 			ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;
 
 			//registers a head glowmask

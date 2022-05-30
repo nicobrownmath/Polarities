@@ -111,7 +111,7 @@ namespace Polarities.NPCs.Enemies
                     NPC.noTileCollide = false;
                     if (rattleCooldown == 0)
                     {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Rattle").WithVolume(.7f).WithPitchVariance(.5f), NPC.Center);
+                        SoundEngine.PlaySound(Sounds.Rattle, NPC.Center);
                         rattleCooldown = 40;
                     }
                 }
@@ -142,7 +142,7 @@ namespace Polarities.NPCs.Enemies
             if (NPC.life < NPC.lifeMax / 2 && !usedEggs)
             {
                 usedEggs = true;
-                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Rattle").WithVolume(.7f).WithPitchVariance(.5f), NPC.Center);
+                SoundEngine.PlaySound(Sounds.Rattle, NPC.Center);
                 for (int i = 0; i < (Main.expertMode ? 7 : 4); i++)
                 {
                     if (Main.netMode != 1)
@@ -241,7 +241,7 @@ namespace Polarities.NPCs.Enemies
         public override void Kill(int timeLeft)
         {
             NPC.NewNPC(Projectile.GetSource_Death(), (int)Projectile.Center.X, (int)Projectile.Center.Y, NPCType<Rattler>());
-            SoundEngine.PlaySound(SoundID.Item, Projectile.Center, 17);
+            SoundEngine.PlaySound(SoundID.Item17, Projectile.Center);
             for (int i = 0; i < 2; i++)
             {
                 Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, Projectile.velocity, Mod.Find<ModGore>("NestGuardianEggShard").Type);

@@ -184,7 +184,7 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 							else
 								goalRotation += MathHelper.Pi / 3;
 
-							SoundEngine.PlaySound(SoundID.Item, Projectile.Center, 17);
+							SoundEngine.PlaySound(SoundID.Item17, Projectile.Center);
 							Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(16, 0).RotatedBy(goalRotation - MathHelper.PiOver2), ProjectileType<WeaverOrbMinionWeb>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, ai0: Projectile.ai[1]);
 							Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(16, 0).RotatedBy(goalRotation - MathHelper.Pi / 6), ProjectileType<WeaverOrbMinionWeb>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, ai0: Projectile.ai[1]);
 						}
@@ -206,7 +206,7 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 
 						if (Projectile.ai[1] % 10 == 0 && Projectile.ai[1] >= 30 && Projectile.ai[1] <= 180)
 						{
-							SoundEngine.PlaySound(SoundID.Item, Projectile.Center, 17);
+							SoundEngine.PlaySound(SoundID.Item17, Projectile.Center);
 							Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(16, 0).RotatedBy(goalRotation - MathHelper.PiOver2), ProjectileType<WeaverOrbMinionWebBall>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 						}
 						if (Projectile.ai[1] == 209)

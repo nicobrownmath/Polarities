@@ -50,8 +50,8 @@ namespace Polarities.Items.Placeable.Blocks
 
 			DustType = DustType<Dusts.SaltDust>();
 			ItemDrop = ItemType<Salt>();
-			SoundType = 0;
-			SoundStyle = 1;
+
+			HitSound = SoundID.Dig;
 		}
 
 		public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)

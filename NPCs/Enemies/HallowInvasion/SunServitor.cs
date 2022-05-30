@@ -367,7 +367,7 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			{
 				Projectile.hostile = true;
 
-				SoundEngine.PlaySound(SoundID.Item, new Vector2(Projectile.Center.X, Main.LocalPlayer.Center.Y), 122);
+				SoundEngine.PlaySound(SoundID.Item122, new Vector2(Projectile.Center.X, Main.LocalPlayer.Center.Y));
 			}
 		}
 

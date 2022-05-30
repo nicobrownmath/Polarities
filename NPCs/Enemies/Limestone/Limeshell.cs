@@ -96,7 +96,7 @@ namespace Polarities.NPCs.Enemies.Limestone
                     attackTimer++;
                     if (NPC.collideY || attackTimer > 240)
                     {
-                        if (NPC.collideY) { SoundEngine.PlaySound(21, NPC.Center); }
+                        if (NPC.collideY) { SoundEngine.PlaySound(SoundID.Tink, NPC.Center); }
 
                         attackTimer = 0;
                         attackPattern = 1;
@@ -125,7 +125,7 @@ namespace Polarities.NPCs.Enemies.Limestone
                     if (attackTimer == 80 || attackTimer == 100)
                     {
                         //shoot projectile
-                        SoundEngine.PlaySound(SoundID.Item, NPC.position, 33);
+                        SoundEngine.PlaySound(SoundID.Item33, NPC.position);
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, (Main.player[NPC.target].Center - NPC.Center).SafeNormalize(Vector2.Zero) * 12, ProjectileType<LimeshellProjectile>(), 25, 1, Main.myPlayer);
 
                     }
@@ -353,7 +353,7 @@ namespace Polarities.NPCs.Enemies.Limestone
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            SoundEngine.PlaySound(2, Projectile.position, 10);
+            SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
             return true;
         }
 

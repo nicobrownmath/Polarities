@@ -154,7 +154,7 @@ namespace Polarities.Items.Weapons.Summon.Minions
 					}
 					if (Projectile.ai[0] % 20 == 0)
 					{
-						SoundEngine.PlaySound(SoundID.Item, Projectile.Center, 17);
+						SoundEngine.PlaySound(SoundID.Item17, Projectile.Center);
 					}
 				}
 				else

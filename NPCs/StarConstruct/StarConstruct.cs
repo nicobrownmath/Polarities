@@ -39,6 +39,8 @@ namespace Polarities.NPCs.StarConstruct
 			ClawTexture = Mod.GetAsset<Texture2D>("NPCs/StarConstruct/StarConstructClaw");
 			DashTexture = Mod.GetAsset<Texture2D>("NPCs/StarConstruct/StarConstructDash");
 
+			Scream = new SoundStyle("Terraria/Sounds/Roar_2") { Volume = 1f, Pitch = 0.7f };
+
 			/*IL.Terraria.Main.UpdateMenu += Main_UpdateMenu;
 		}
 
@@ -160,6 +162,8 @@ namespace Polarities.NPCs.StarConstruct
 			arm = new int[16];
 		}
 
+		public static SoundStyle Scream;
+
 		public override void AI()
 		{
 			Lighting.AddLight(NPC.Center, 2f, 2f, 2f);
@@ -190,7 +194,7 @@ namespace Polarities.NPCs.StarConstruct
 			if (NPC.localAI[0] == 0)
 			{
 				//scream
-				SoundEngine.PlaySound(SoundID.Roar, (int)NPC.Center.X, (int)NPC.Center.Y, 2, pitchOffset: 0.7f, volumeScale: 1.2f);
+				SoundEngine.PlaySound(Scream, NPC.Center);
 				Main.NewText("Star Construct has awoken!", 171, 64, 255);
 
 				NPC.localAI[0] = 1;
@@ -316,7 +320,7 @@ namespace Polarities.NPCs.StarConstruct
 						{
 							NPC.ai[3] = player.Center.X > NPC.Center.X ? 1 : -1;
 
-							SoundEngine.PlaySound(SoundID.Roar, (int)NPC.Center.X, (int)NPC.Center.Y, 2, pitchOffset: 0.7f, volumeScale: 1.2f);
+							SoundEngine.PlaySound(Scream, NPC.Center);
 						}
 
 						FlyingLegAnim();
@@ -392,7 +396,7 @@ namespace Polarities.NPCs.StarConstruct
 									NPC.velocity.Y = VelocityMultiplier / 2;
 								}
 
-								SoundEngine.PlaySound(SoundID.Roar, (int)NPC.Center.X, (int)NPC.Center.Y, 2, pitchOffset: 0.7f, volumeScale: 1.2f);
+								SoundEngine.PlaySound(Scream, NPC.Center);
 
 								NPC.frame.Y = NPC.frame.Height;
 
@@ -531,7 +535,7 @@ namespace Polarities.NPCs.StarConstruct
 								}
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ProjectileType<StarConstructDash>(), 16, 0, Main.myPlayer, ai0: startPosition.X, ai1: startPosition.Y);
 
-								SoundEngine.PlaySound(SoundID.Roar, (int)NPC.Center.X, (int)NPC.Center.Y, 2, pitchOffset: 0.7f, volumeScale: 1.2f);
+								SoundEngine.PlaySound(Scream, NPC.Center);
 								SoundEngine.PlaySound(SoundID.NPCDeath14, NPC.Center);
 							}
 							RunAbout(0, canRise: false);
@@ -577,7 +581,7 @@ namespace Polarities.NPCs.StarConstruct
 
 						if (NPC.ai[1] == 170)
 						{
-							SoundEngine.PlaySound(SoundID.Roar, (int)NPC.Center.X, (int)NPC.Center.Y, 2, pitchOffset: 0.7f, volumeScale: 1.2f);
+							SoundEngine.PlaySound(Scream, NPC.Center);
 
 							NPC.ai[3] = player.Center.X > NPC.Center.X ? 1 : -1;
 
@@ -648,7 +652,7 @@ namespace Polarities.NPCs.StarConstruct
 						{
 							NPC.velocity.X = 0;
 
-							SoundEngine.PlaySound(SoundID.Roar, (int)NPC.Center.X, (int)NPC.Center.Y, 2, pitchOffset: 0.7f, volumeScale: 1.2f);
+							SoundEngine.PlaySound(Scream, NPC.Center);
 						}
 
 						NPC.velocity.Y -= 0.1f * (float)Math.Sin((NPC.ai[1] - 180) / (1500f / VelocityMultiplier) * MathHelper.PiOver2);
@@ -702,7 +706,7 @@ namespace Polarities.NPCs.StarConstruct
 
 						if (NPC.ai[1] == 150)
 						{
-							SoundEngine.PlaySound(SoundID.Roar, (int)NPC.Center.X, (int)NPC.Center.Y, 2, pitchOffset: 0.7f, volumeScale: 1.2f);
+							SoundEngine.PlaySound(Scream, NPC.Center);
 						}
 
 						if (NPC.ai[1] == 180)
@@ -1228,7 +1232,7 @@ namespace Polarities.NPCs.StarConstruct
 				NPC.SetEventFlagCleared(ref PolaritiesSystem.downedStarConstruct, -1);
 			}
 
-			SoundEngine.PlaySound(SoundID.Roar, (int)NPC.Center.X, (int)NPC.Center.Y, 2, pitchOffset: 0.7f, volumeScale: 1.2f);
+			SoundEngine.PlaySound(Scream, NPC.Center);
 
 			for (int i = 1; i <= 6; i++)
 			{

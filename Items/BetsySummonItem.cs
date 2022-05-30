@@ -59,7 +59,7 @@ namespace Polarities.Items
 		public override bool? UseItem(Player player)
 		{
 			NPC.SpawnOnPlayer(player.whoAmI, NPCID.DD2Betsy);
-			SoundEngine.PlaySound(SoundID.Roar, player.Center, 0);
+			SoundEngine.PlaySound(SoundID.Roar, player.Center);
 			return true;
 		}
 	}

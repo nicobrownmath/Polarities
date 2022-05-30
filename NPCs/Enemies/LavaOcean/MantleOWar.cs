@@ -29,7 +29,6 @@ using Polarities.Items.Materials;
 using Terraria.ModLoader.Utilities;
 using System.Collections.Generic;
 using Polarities.Effects;
-using Polarities.Buffs;
 
 namespace Polarities.NPCs.Enemies.LavaOcean
 {
@@ -351,10 +350,11 @@ namespace Polarities.NPCs.Enemies.LavaOcean
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            for (int i = 0; i < NUM_TENTACLES; i++)
-            {
-                tentacles[i].Draw(spriteBatch, screenPos, drawColor, NPC);
-            }
+            if (!NPC.IsABestiaryIconDummy)
+                for (int i = 0; i < NUM_TENTACLES; i++)
+                {
+                    tentacles[i].Draw(spriteBatch, screenPos, drawColor, NPC);
+                }
 
             return true;
         }
@@ -408,7 +408,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
 
         public override void OnSpawn(IEntitySource source)
         {
-            SoundEngine.PlaySound(SoundID.NPCHit, Projectile.Center, 8);
+            SoundEngine.PlaySound(SoundID.NPCHit8, Projectile.Center);
         }
 
         public override void AI()
@@ -441,7 +441,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
 
         public override void Kill(int timeLeft)
         {
-            SoundEngine.PlaySound(SoundID.NPCHit, Projectile.Center, 9);
+            SoundEngine.PlaySound(SoundID.NPCHit9, Projectile.Center);
             for (int i = 0; i < 16; i++)
             {
                 Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Lava, Scale: 1.5f)].noGravity = true;

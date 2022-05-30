@@ -116,7 +116,7 @@ namespace Polarities.Items.Weapons.Ranged
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            SoundEngine.PlaySound(SoundID.Item, Projectile.position + Projectile.velocity, 122);
+            SoundEngine.PlaySound(SoundID.Item122, Projectile.position + Projectile.velocity);
             Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center + Projectile.velocity + new Vector2(0, Projectile.height / 2 + 2), Vector2.Zero, ProjectileType<FlarecallerFlare>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
             Projectile.Kill();
             return false;

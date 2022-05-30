@@ -41,7 +41,7 @@ namespace Polarities.Items.Weapons.Ranged
 			Item.rare = ItemRarityID.LightPurple;
 		}
 
-		public override bool CanConsumeAmmo(Player player)
+		public override bool CanConsumeAmmo(Item ammo, Player player)
 		{
 			return !(player.itemAnimation < Item.useAnimation - 2);
 		}

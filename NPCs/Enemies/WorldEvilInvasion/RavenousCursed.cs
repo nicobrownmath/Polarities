@@ -154,7 +154,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 						num195 = 20f;
 					}
 					NPC.soundDelay = (int)num195;
-					SoundEngine.PlaySound(SoundID.Roar, NPC.position, 1);
+					SoundEngine.PlaySound(SoundID.WormDig, NPC.position);
 				}
 			}
 			else
@@ -176,7 +176,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 						if (NPC.soundDelay <= 0)
 						{
 							NPC.soundDelay = 20;
-							SoundEngine.PlaySound(SoundID.Item, NPC.Center, 34);
+							SoundEngine.PlaySound(SoundID.Item34, NPC.Center);
 						}
 						NPC.velocity.Y += 0.15f;
 						break;

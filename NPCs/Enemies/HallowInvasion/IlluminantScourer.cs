@@ -149,7 +149,7 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 					{
 						if (NPC.ai[0] == 250)
 						{
-							SoundEngine.PlaySound(SoundID.Item, NPC.Center, 122);
+							SoundEngine.PlaySound(SoundID.Item122, NPC.Center);
 						}
 
 						NPC.velocity.Y -= 0.1f;

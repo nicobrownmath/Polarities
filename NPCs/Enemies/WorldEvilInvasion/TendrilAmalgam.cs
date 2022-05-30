@@ -452,7 +452,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 
 				if (Projectile.ai[1] == 0)
 				{
-					SoundEngine.PlaySound(SoundID.Item, Projectile.Center, 71);
+					SoundEngine.PlaySound(SoundID.Item71, Projectile.Center);
 				}
 
 				if (Projectile.ai[1] > 177)

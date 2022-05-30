@@ -116,7 +116,7 @@ namespace Polarities.Items.Weapons.Summon.Sentries
 			else if (target != null && Projectile.velocity.Y == 0)
 			{
 				Projectile.spriteDirection = (target.Center.X > Projectile.Center.X) ? 1 : -1;
-				SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Rattle").WithVolume(.7f).WithPitchVariance(.5f), Projectile.Center);
+				SoundEngine.PlaySound(Sounds.Rattle, Projectile.Center);
 				Projectile.ai[0] = MaxAtkCooldown;
 				Projectile.frame = 1; //this frame is skipped because we always add 1 to it after, but we want this to happen
 			}

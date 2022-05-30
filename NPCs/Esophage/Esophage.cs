@@ -154,8 +154,16 @@ namespace Polarities.NPCs.Esophage
             int boss = NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), (int)(player.Center.X + (500 * r + 1000) * (float)Math.Cos(theta)), (int)(player.Center.Y - (500 * r + 1000) * (float)Math.Sin(theta)), NPCType<NPCs.Esophage.Esophage>());
             Main.NewText(Language.GetTextValue("Announcement.HasAwoken", Main.npc[boss].TypeName), 171, 64, 255);
 
-            SoundEngine.PlaySound(SoundID.NPCKilled, (int)player.position.X, (int)player.position.Y, 10, volumeScale: 1.2f, pitchOffset: -0.5f);
-            SoundEngine.PlaySound(SoundID.Roar, (int)player.position.X, (int)player.position.Y, 0, volumeScale: 1.2f, pitchOffset: -0.5f);
+            SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_10")
+            {
+                Volume = 1.2f,
+                Pitch = -0.5f
+            }, player.position);
+            SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/Roar_0")
+            {
+                Volume = 1.2f,
+                Pitch = -0.5f
+            }, player.position);
         }
 
         const int numSegments = 2;
@@ -342,7 +350,7 @@ namespace Polarities.NPCs.Esophage
 
                         if (corruptAttackCooldown == 120)
                         {
-                            SoundEngine.PlaySound(SoundID.Item, NPC.Center, 117);
+                            SoundEngine.PlaySound(SoundID.Item117, NPC.Center);
 
                             if (Main.netMode != 1)
                             {
@@ -380,7 +388,7 @@ namespace Polarities.NPCs.Esophage
 
                         if (corruptAttackCooldown == 60)
                         {
-                            SoundEngine.PlaySound(SoundID.Item, NPC.Center, 8);
+                            SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
 
                             if (Main.netMode != 1)
                             {
@@ -525,7 +533,7 @@ namespace Polarities.NPCs.Esophage
 
                         if (crimsonAttackCooldown % 18 == 17)
                         {
-                            SoundEngine.PlaySound(SoundID.Item, NPC.Center, 71);
+                            SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
 
                             if (Main.netMode != 1)
                             {
@@ -884,8 +892,16 @@ namespace Polarities.NPCs.Esophage
                 NPC.SetEventFlagCleared(ref PolaritiesSystem.downedEsophage, -1);
             }
 
-            SoundEngine.PlaySound(SoundID.NPCKilled, (int)NPC.Center.X, (int)NPC.Center.Y, 10, volumeScale: 1.2f, pitchOffset: -0.5f);
-            SoundEngine.PlaySound(SoundID.Roar, (int)NPC.Center.X, (int)NPC.Center.Y, 0, volumeScale: 1.2f, pitchOffset: -0.5f);
+            SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_10")
+            {
+                Volume = 1.2f,
+                Pitch = -0.5f
+            }, NPC.Center);
+            SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/Roar_0")
+            {
+                Volume = 1.2f,
+                Pitch = -0.5f
+            }, NPC.Center);
 
             Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, Mod.Find<ModGore>("EsophageHeadGore").Type);
             Gore.NewGore(NPC.GetSource_Death(), NPC.Center + new Vector2(0, -91f).RotatedBy(NPC.rotation), NPC.velocity, Mod.Find<ModGore>("EsophageCapsidGore").Type);
@@ -1300,7 +1316,7 @@ namespace Polarities.NPCs.Esophage
             if (Projectile.localAI[0] == 0)
             {
                 Projectile.localAI[0] = 1;
-                SoundEngine.PlaySound(SoundID.Item, Projectile.position, 20);
+                SoundEngine.PlaySound(SoundID.Item20, Projectile.position);
             }
 
             float maxTime = Math.Min(60, 60 * 540f / Projectile.Distance(player.Center));
@@ -1323,7 +1339,7 @@ namespace Polarities.NPCs.Esophage
 
         public override void Kill(int timeLeft)
         {
-            SoundEngine.PlaySound(SoundID.Item, Projectile.Center, 14);
+            SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
 
             if (Main.netMode != 1)
             {
@@ -1682,7 +1698,7 @@ namespace Polarities.NPCs.Esophage
             {
                 Projectile.localAI[0] = 1;
 
-                SoundEngine.PlaySound(SoundID.NPCKilled, Projectile.Center, 13);
+                SoundEngine.PlaySound(SoundID.NPCDeath13, Projectile.Center);
             }
 
             Player player = Main.player[(int)Projectile.ai[1]];
@@ -1721,7 +1737,7 @@ namespace Polarities.NPCs.Esophage
 
         public override void Kill(int timeLeft)
         {
-            SoundEngine.PlaySound(SoundID.NPCKilled, Projectile.Center, 19);
+            SoundEngine.PlaySound(SoundID.NPCDeath19, Projectile.Center);
 
             if (Main.netMode != 1)
             {

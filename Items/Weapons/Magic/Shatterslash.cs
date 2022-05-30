@@ -128,10 +128,10 @@ namespace Polarities.Items.Weapons.Magic
         public override void Kill(int timeLeft)
         {
             Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
-            SoundEngine.PlaySound(SoundID.Item, Projectile.Center, 27);
+            SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
             for (int i = 0; i < 4; i++)
             {
-                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 135, Projectile.velocity.X / 2, Projectile.velocity.Y / 2, Scale: 2f);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, Projectile.velocity.X / 2, Projectile.velocity.Y / 2, Scale: 2f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= 0.5f;
             }

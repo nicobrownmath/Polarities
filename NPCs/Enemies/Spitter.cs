@@ -121,7 +121,7 @@ namespace Polarities.NPCs.Enemies
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -NPC.height / 2), 16 * (new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta))), ProjectileType<SpitterVenom>(), 25, 1f, Main.myPlayer);
                 if (attackCooldown == 20)
                 {
-                    SoundEngine.PlaySound(SoundID.Item, NPC.Center, 13);
+                    SoundEngine.PlaySound(SoundID.Item13, NPC.Center);
                 }
             }
         }

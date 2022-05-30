@@ -46,8 +46,7 @@ namespace Polarities.Items.Placeable
 
 			ItemDrop = ItemType<SaltCrystals>();
 
-			SoundType = 13;
-			SoundStyle = 1;
+			HitSound = SoundID.Shatter;
 
 			AddMapEntry(new Color(255, 240, 240), CreateMapEntryName());
 		}

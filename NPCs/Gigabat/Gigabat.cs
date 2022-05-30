@@ -422,8 +422,12 @@ namespace Polarities.NPCs.Gigabat
                     //dash through the center after the chord darts if below half health
                     else if (NPC.ai[1] == 170)
                     {
-                        /*Main.PlaySound(SoundID.ForceRoar, NPC.Center, 0);*/
-                        SoundEngine.PlaySound(SoundID.NPCKilled, (int)NPC.Center.X, (int)NPC.Center.Y, Style: 4, volumeScale: 2f, pitchOffset: -2f);
+                        SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_4")
+                        {
+                            Volume = 2f,
+                            Pitch = -2f
+                        }, NPC.Center);
+
                         NPC.velocity = (circleCenter - NPC.Center).SafeNormalize(Vector2.Zero) * 16f;
 
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity.SafeNormalize(Vector2.Zero) * 4, ProjectileType<GigabatEcholocation>(), 1, 0, Main.myPlayer);
@@ -461,7 +465,12 @@ namespace Polarities.NPCs.Gigabat
                         dashCounter++;
 
                         //Main.PlaySound(SoundID.ForceRoar, NPC.Center, 0);
-                        SoundEngine.PlaySound(SoundID.NPCKilled, (int)NPC.Center.X, (int)NPC.Center.Y, Style: 4, volumeScale: 2f, pitchOffset: -1f);
+                        SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_4")
+                        {
+                            Volume = 2f,
+                            Pitch = -1f
+                        }, NPC.Center);
+
                         NPC.velocity = NPC.DirectionTo(player.Center) * 12f;
 
                         NPC.spriteDirection = (NPC.velocity.X < 0) ? 1 : -1;
@@ -530,7 +539,12 @@ namespace Polarities.NPCs.Gigabat
 
                             Music = -1;
 
-                            SoundEngine.PlaySound(SoundID.NPCKilled, (int)NPC.Center.X, (int)NPC.Center.Y, Style: 4, volumeScale: 2f, pitchOffset: -0.5f);
+                            SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_4")
+                            {
+                                Volume = 2f,
+                                Pitch = -0.5f
+                            }, NPC.Center);
+
                             SoundEngine.PlaySound(SoundID.NPCDeath14, NPC.Center);
                         }
 
@@ -551,7 +565,11 @@ namespace Polarities.NPCs.Gigabat
             if (rapidWingbeats && NPC.soundDelay <= 0)
             {
                 NPC.soundDelay = 21;
-                SoundEngine.PlaySound(SoundID.Item, (int)NPC.Center.X, (int)NPC.Center.Y, 32, 2f);
+
+                SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/Item_32")
+                {
+                    Volume = 2f,
+                }, NPC.Center);
             }
         }
 

@@ -66,9 +66,9 @@ namespace Polarities.Items.Weapons.Magic
                         player.channel = false;
                     }
                 }
-                if (time % 20 == 0)
+                if (time % 20 == 0 && Item.UseSound != null)
                 {
-                    SoundEngine.PlaySound(Item.UseSound, player.position);
+                    SoundEngine.PlaySound((SoundStyle)Item.UseSound, player.position);
                 }
             }
         }

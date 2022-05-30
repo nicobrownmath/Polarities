@@ -51,8 +51,8 @@ namespace Polarities.Items.Placeable.Blocks
 
 			DustType = DustType<Dusts.SaltDust>();
 			ItemDrop = ItemType<RockSalt>();
-			SoundType = 0;
-			SoundStyle = 1;
+
+			HitSound = SoundID.Dig;
 		}
 
 		public override void RandomUpdate(int i, int j)

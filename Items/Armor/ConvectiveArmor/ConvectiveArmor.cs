@@ -27,7 +27,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 			this.SetResearch(1);
 
 			//registers a body glowmask color
-			ArmorMasks.bodyIndexToBodyMaskColor.Add(Mod.GetEquipSlot(Name, EquipType.Body), this);
+			ArmorMasks.bodyIndexToBodyMaskColor.Add(EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body), this);
 		}
 
 		public override void SetDefaults()
@@ -85,7 +85,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 			this.SetResearch(1);
 
 			//registers a head glowmask
-			ArmorMasks.legIndexToArmorDraw.TryAdd(Mod.GetEquipSlot(Name, EquipType.Legs), this);
+			ArmorMasks.legIndexToArmorDraw.TryAdd(EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs), this);
 		}
 
 		public override void SetDefaults()
@@ -182,7 +182,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 		{
 			this.SetResearch(1);
 
-			int equipSlotHead = Mod.GetEquipSlot(Name, EquipType.Head);
+			int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 			ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;
 
 			//registers a head glowmask
@@ -215,7 +215,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			string hotkey = Polarities.ConvectiveSetBonusHotkey.GetAssignedKeys().ToArray().Length > 0 ? Polarities.ConvectiveSetBonusHotkey.GetAssignedKeys()[0] : Language.GetTextValue("Mods.Polarities.Misc.UnboundHotkey");
+			string hotkey = Polarities.ArmorSetBonusHotkey.GetAssignedKeys().ToArray().Length > 0 ? Polarities.ArmorSetBonusHotkey.GetAssignedKeys()[0] : Language.GetTextValue("Mods.Polarities.Misc.UnboundHotkey");
 			player.setBonus = Language.GetTextValueWith("Mods.Polarities.ArmorSetBonus." + Name, new { Hotkey = hotkey });
 
 			player.GetModPlayer<PolaritiesPlayer>().light += new Vector3(0.25f, 0.25f, 0.25f);
@@ -355,7 +355,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 		{
 			this.SetResearch(1);
 
-			int equipSlotHead = Mod.GetEquipSlot(Name, EquipType.Head);
+			int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 			ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;
 
 			//registers a head glowmask
@@ -388,7 +388,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			string hotkey = Polarities.ConvectiveSetBonusHotkey.GetAssignedKeys().ToArray().Length > 0 ? Polarities.ConvectiveSetBonusHotkey.GetAssignedKeys()[0] : Language.GetTextValue("Mods.Polarities.Misc.UnboundHotkey");
+			string hotkey = Polarities.ArmorSetBonusHotkey.GetAssignedKeys().ToArray().Length > 0 ? Polarities.ArmorSetBonusHotkey.GetAssignedKeys()[0] : Language.GetTextValue("Mods.Polarities.Misc.UnboundHotkey");
 			player.setBonus = Language.GetTextValueWith("Mods.Polarities.ArmorSetBonus." + Name, new { Hotkey = hotkey });
 
 			player.GetModPlayer<PolaritiesPlayer>().light += new Vector3(0.25f, 0.25f, 0.25f);
@@ -538,7 +538,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 		{
 			this.SetResearch(1);
 
-			int equipSlotHead = Mod.GetEquipSlot(Name, EquipType.Head);
+			int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 			ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;
 
 			//registers a head glowmask
@@ -571,7 +571,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			string hotkey = Polarities.ConvectiveSetBonusHotkey.GetAssignedKeys().ToArray().Length > 0 ? Polarities.ConvectiveSetBonusHotkey.GetAssignedKeys()[0] : Language.GetTextValue("Mods.Polarities.Misc.UnboundHotkey");
+			string hotkey = Polarities.ArmorSetBonusHotkey.GetAssignedKeys().ToArray().Length > 0 ? Polarities.ArmorSetBonusHotkey.GetAssignedKeys()[0] : Language.GetTextValue("Mods.Polarities.Misc.UnboundHotkey");
 			player.setBonus = Language.GetTextValueWith("Mods.Polarities.ArmorSetBonus." + Name, new { Hotkey = hotkey });
 
 			player.GetModPlayer<PolaritiesPlayer>().light += new Vector3(0.25f, 0.25f, 0.25f);
@@ -746,7 +746,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 		{
 			this.SetResearch(1);
 
-			int equipSlotHead = Mod.GetEquipSlot(Name, EquipType.Head);
+			int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 			ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;
 
 			//registers a head glowmask
@@ -779,7 +779,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			string hotkey = Polarities.ConvectiveSetBonusHotkey.GetAssignedKeys().ToArray().Length > 0 ? Polarities.ConvectiveSetBonusHotkey.GetAssignedKeys()[0] : Language.GetTextValue("Mods.Polarities.Misc.UnboundHotkey");
+			string hotkey = Polarities.ArmorSetBonusHotkey.GetAssignedKeys().ToArray().Length > 0 ? Polarities.ArmorSetBonusHotkey.GetAssignedKeys()[0] : Language.GetTextValue("Mods.Polarities.Misc.UnboundHotkey");
 			player.setBonus = Language.GetTextValueWith("Mods.Polarities.ArmorSetBonus." + Name, new {Hotkey = hotkey});
 
 			player.GetModPlayer<PolaritiesPlayer>().light += new Vector3(0.25f, 0.25f, 0.25f);
@@ -823,6 +823,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 		}
 	}
 
+	//TODO: Give the convective minion's explosion on hit effect, rework that minion
 	public class ConvectiveArmorSummonVortex : ModProjectile
 	{
 		public override string Texture => "Polarities/NPCs/ConvectiveWanderer/ConvectiveWandererHeatVortex";

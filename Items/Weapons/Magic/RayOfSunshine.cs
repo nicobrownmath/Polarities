@@ -68,9 +68,9 @@ namespace Polarities.Items.Weapons.Magic
 						player.channel = false;
 					}
 				}
-				if (time % 30 == 0)
+				if (time % 30 == 0 && Item.UseSound != null)
 				{
-					SoundEngine.PlaySound(Item.UseSound, player.position);
+					SoundEngine.PlaySound((SoundStyle)Item.UseSound, player.position);
 				}
 			}
 			else
@@ -87,7 +87,7 @@ namespace Polarities.Items.Weapons.Magic
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			SoundEngine.PlaySound(29, Main.MouseWorld, 104);
+			SoundEngine.PlaySound(SoundID.Zombie104, Main.MouseWorld);
 			player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(60, 60);
 			Projectile.NewProjectile(source, Main.MouseWorld, Vector2.Zero, type, damage, knockback, player.whoAmI);
 			return false;

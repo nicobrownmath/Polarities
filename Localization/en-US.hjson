@@ -818,7 +818,7 @@
 			"LuminousSlimeMinionBuff": "Luminous Slime",
 			"SolarScarabMinionBuff": "Solar Scarab",
 			"EsophminiBuff": "Esophmini",
-			"ConvectiveMinionBuff": "Molten Spirit",
+			"MoltenSpiritMinionBuff": "Molten Spirit",
 
 			//pet buffs
 			"StarConstructPetBuff": "Dwarf Star Construct",
@@ -851,7 +851,7 @@
 			"LuminousSlimeMinionBuff": "The luminous slime will fight for you",
 			"SolarScarabMinonBuff": "The solar scarab will fight for you",
 			"EsophminiBuff": "The baby Esophage will fight for you",
-			"ConvectiveMinionBuff": "The molten spirits will fight for you",
+			"MoltenSpiritMinionBuff": "The molten spirits will fight for you",
 
 			//pet buffs
 			"StarConstructPetBuff": "Much more stable than its larger cousin",

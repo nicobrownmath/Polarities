@@ -18,7 +18,7 @@ namespace Polarities.Items.Armor.Vanity
         {
             this.SetResearch(1);
 
-            int equipSlotHead = Mod.GetEquipSlot(Name, EquipType.Head);
+            int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
             ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;
         }
 

@@ -182,7 +182,10 @@ namespace Polarities.Items.Weapons.Summon.Minions
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			SoundEngine.PlaySound(SoundID.NPCKilled, (int)Projectile.position.X, (int)Projectile.position.Y, Style: 4, volumeScale: 0.5f);
+			SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_4")
+			{
+				Volume = 0.5f,
+			}, Projectile.Center);
 		}
 
 		public override bool? CanCutTiles()

@@ -163,7 +163,7 @@ namespace Polarities.Items.Hooks
                             }
                         }
                         WorldGen.KillTile(num2502, num2501, fail: true, effectOnly: true);
-                        SoundEngine.PlaySound(0, num2502 * 16, num2501 * 16);
+                        SoundEngine.PlaySound(SoundID.Dig, new Vector2(num2502, num2501) * 16);
                         Projectile.velocity.X = 0f;
                         Projectile.velocity.Y = 0f;
                         Projectile.ai[0] = 2f;

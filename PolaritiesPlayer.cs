@@ -218,7 +218,7 @@ namespace Polarities
 
 				if (convectiveSetBonusCharge == 600)
                 {
-					SoundEngine.PlaySound(SoundID.Item, Player.position, 15);
+					SoundEngine.PlaySound(SoundID.Item15, Player.position);
 
 					for (int i = 0; i < 24; i++)
 					{
@@ -229,7 +229,7 @@ namespace Polarities
 					}
 				}
 
-				if (convectiveSetBonusCharge >= 600 && Polarities.ConvectiveSetBonusHotkey.JustPressed)
+				if (convectiveSetBonusCharge >= 600 && Polarities.ArmorSetBonusHotkey.JustPressed)
 				{
 					if (convectiveSetBonusType == DamageClass.Melee)
                     {

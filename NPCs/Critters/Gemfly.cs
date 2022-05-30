@@ -299,7 +299,11 @@ namespace Polarities.NPCs.Critters
 					if (Main.rand.NextBool(60 * 30 * (Index + 1)) && Main.netMode != 1)
 					{
 						NPC.SpawnOnPlayer(Main.myPlayer, NPCType<NPCs.Gigabat.Gigabat>());
-						SoundEngine.PlaySound(SoundID.NPCKilled, (int)Main.LocalPlayer.position.X, (int)Main.LocalPlayer.position.Y, Style: 4, volumeScale: 2f, pitchOffset: -8f);
+						SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_4")
+						{
+							Volume = 2f,
+							Pitch = -8f
+						}, Main.LocalPlayer.position);
 					}
 				}
 
@@ -321,7 +325,7 @@ namespace Polarities.NPCs.Critters
 					else if (NPC.soundDelay == 1)
                     {
 						//spooky wingbeat
-						SoundEngine.PlaySound(SoundID.Item, Main.LocalPlayer.Center, 32);
+						SoundEngine.PlaySound(SoundID.Item32, Main.LocalPlayer.Center);
 					}
                 }
 

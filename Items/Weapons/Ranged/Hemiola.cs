@@ -47,7 +47,7 @@ namespace Polarities.Items.Weapons.Ranged
 
 		private int phase = 0;
 
-        public override bool CanConsumeAmmo(Player player)
+        public override bool CanConsumeAmmo(Item ammo, Player player)
 		{
 			return phase != 1;
 		}
@@ -57,12 +57,12 @@ namespace Polarities.Items.Weapons.Ranged
 			if (phase % 2 == 0)
 			{
 				Projectile.NewProjectile(source, position, velocity * 1.5f, type == ProjectileType<WoodenDartProjectile>() ? ProjectileID.CursedDart : type, damage, knockback, player.whoAmI);
-				SoundEngine.PlaySound(SoundID.Item, player.position, 98);
+				SoundEngine.PlaySound(SoundID.Item98, player.position);
 			}
 			if (phase % 3 == 0)
 			{
 				Projectile.NewProjectile(source, position, velocity, type == ProjectileType<WoodenDartProjectile>() ? ProjectileID.IchorDart : type, (damage * 3) / 2, (knockback * 3) / 2, player.whoAmI);
-				SoundEngine.PlaySound(SoundID.Item, player.position, 99);
+				SoundEngine.PlaySound(SoundID.Item99, player.position);
 			}
 
 			phase = (phase + 1) % 6;

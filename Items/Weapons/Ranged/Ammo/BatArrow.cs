@@ -110,7 +110,7 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
         public override void Kill(int timeLeft)
         {
             Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
-            SoundEngine.PlaySound(0, Projectile.position);
+            SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
             if (Main.rand.NextBool(3) && !Projectile.noDropItem)
             {
                 Item.NewItem(Projectile.GetSource_DropAsItem(), Projectile.getRect(), ItemType<BatArrow>());

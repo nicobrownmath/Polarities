@@ -155,7 +155,7 @@ namespace Polarities.Items.Weapons.Summon.Sentries
 								Projectile.NewProjectile(Projectile.GetSource_FromAI(), shotPosition, new Vector2(speed, 0).RotatedBy(shotRotation + 0.05f), ProjectileType<PincerStaffSlash>(), Projectile.damage, 2f, Main.myPlayer);
 								Projectile.NewProjectile(Projectile.GetSource_FromAI(), shotPosition, new Vector2(speed, 0).RotatedBy(shotRotation - 0.05f), ProjectileType<PincerStaffSlash>(), Projectile.damage, 2f, Main.myPlayer);
 
-								SoundEngine.PlaySound(SoundID.Item, shotPosition, 71);
+								SoundEngine.PlaySound(SoundID.Item71, shotPosition);
 							}
 						}
 					}
@@ -187,7 +187,7 @@ namespace Polarities.Items.Weapons.Summon.Sentries
 								Projectile.NewProjectile(Projectile.GetSource_FromAI(), shotPosition, new Vector2(speed, 0).RotatedBy(shotRotation + 0.05f), ProjectileType<PincerStaffSlash>(), Projectile.damage, 2f, Main.myPlayer);
 								Projectile.NewProjectile(Projectile.GetSource_FromAI(), shotPosition, new Vector2(speed, 0).RotatedBy(shotRotation - 0.05f), ProjectileType<PincerStaffSlash>(), Projectile.damage, 2f, Main.myPlayer);
 
-								SoundEngine.PlaySound(SoundID.Item, shotPosition, 71);
+								SoundEngine.PlaySound(SoundID.Item71, shotPosition);
 							}
 						}
 					}

@@ -13,17 +13,17 @@ namespace Polarities.Items.Armor.AerogelArmor
 	{
         public override void Load()
         {
-			Mod.AddEquipTexture(this, EquipType.Legs, Texture + "_Legs");
+			EquipLoader.AddEquipTexture(Mod, Texture + "_Legs", EquipType.Legs, this);
 		}
 
         public override void SetStaticDefaults()
 		{
 			this.SetResearch(1);
 
-			int equipSlotBody = Mod.GetEquipSlot(Name, EquipType.Body);
+			int equipSlotBody = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
 			ArmorIDs.Body.Sets.NeedsToDrawArm[equipSlotBody] = true;
 
-			int equipSlotLegs = Mod.GetEquipSlot(Name, EquipType.Legs);
+			int equipSlotLegs = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs);
 			ArmorIDs.Legs.Sets.OverridesLegs[equipSlotLegs] = true;
 		}
 
@@ -39,7 +39,7 @@ namespace Polarities.Items.Armor.AerogelArmor
 		public override void SetMatch(bool male, ref int equipSlot, ref bool robes)
 		{
 			robes = true;
-			equipSlot = Mod.GetEquipSlot(Name, EquipType.Legs);
+			equipSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs);
 		}
 
 		public override void AddRecipes()

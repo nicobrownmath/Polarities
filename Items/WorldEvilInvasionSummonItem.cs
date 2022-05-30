@@ -38,7 +38,7 @@ namespace Polarities.Items
 
         public override bool? UseItem(Player player)
         {
-            SoundEngine.PlaySound(SoundID.Roar, player.position, 0);
+            SoundEngine.PlaySound(SoundID.Roar, player.position);
             WorldEvilInvasion.StartInvasion();
             return true;
         }

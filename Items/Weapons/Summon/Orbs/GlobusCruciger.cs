@@ -220,7 +220,7 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 		{
 			if (oldVelocity.Y > 0.6f)
 			{
-				SoundEngine.PlaySound(SoundID.NPCKilled, Projectile.Center, 14);
+				SoundEngine.PlaySound(SoundID.NPCDeath14, Projectile.Center);
 				Projectile.position.Y += Projectile.velocity.Y;
 				Projectile.velocity.Y = 0;
 

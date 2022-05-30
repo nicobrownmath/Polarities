@@ -51,8 +51,8 @@ namespace Polarities.Items.Placeable.Blocks
 
 			DustType = DustType<Dusts.SaltDust>();
 			ItemDrop = ItemType<SaltBrick>();
-			SoundType = 21;
-			SoundStyle = 1;
+
+			HitSound = SoundID.Tink;
 
 			MinPick = 0;
 		}

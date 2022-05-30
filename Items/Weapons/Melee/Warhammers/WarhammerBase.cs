@@ -23,8 +23,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
         //the total time spent on the actual swing
         public virtual float SwingTime => 10f;
 
-        public virtual int SwingSound => SoundID.Item;
-        public virtual int SwingSoundType => 1;
+        public virtual SoundStyle? SwingSound => SoundID.Item1;
 
         static Vector2 oldHitboxPosition;
         static bool hasHitTile;
@@ -70,9 +69,9 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 
             if (!hasHitTile)
             {
-                if (SwingSoundType >= 0 && animationProgress >= swingWindup && 1 - player.itemAnimation / (float)player.itemAnimationMax < swingWindup)
+                if (SwingSound != null && animationProgress >= swingWindup && 1 - player.itemAnimation / (float)player.itemAnimationMax < swingWindup)
                 {
-                    SoundEngine.PlaySound(SwingSound, SwingSoundType);
+                    SoundEngine.PlaySound((SoundStyle)SwingSound, player.Center);
                 }
 
                 if (animationProgress < swingWindup)

@@ -131,7 +131,7 @@ namespace Polarities.NPCs.Enemies.Limestone
                             {
                                 Main.dust[Dust.NewDust(NPC.position, NPC.width, NPC.height, 74, Scale: 1.75f)].noGravity = true;
                             }
-                            SoundEngine.PlaySound(SoundID.NPCHit, NPC.position, 54);
+                            SoundEngine.PlaySound(SoundID.NPCHit54, NPC.position);
                         }
                         break;
                 }

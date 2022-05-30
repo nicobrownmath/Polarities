@@ -28,7 +28,7 @@ namespace Polarities
         //the size is odd because we only ever move 4 steps along the data stream so this way we can loop 4 times without actually repeating
         public static PreGeneratedRandom preGeneratedRand = new PreGeneratedRandom(358297, 4095);
 
-        public static ModKeybind ConvectiveSetBonusHotkey;
+        public static ModKeybind ArmorSetBonusHotkey;
 
         public override void Load()
         {
@@ -43,7 +43,7 @@ namespace Polarities
             IL_ResizeArrays += Polarities_IL_ResizeArrays;
 
             //register hotkeys
-            ConvectiveSetBonusHotkey = KeybindLoader.RegisterKeybind(this, "Convective Set Bonus", Keys.K);
+            ArmorSetBonusHotkey = KeybindLoader.RegisterKeybind(this, "Convective Set Bonus", Keys.K);
         }
 
         public override void Unload()
@@ -61,7 +61,7 @@ namespace Polarities
             IL_ResizeArrays -= Polarities_IL_ResizeArrays;
 
             //unload hotkeys
-            ConvectiveSetBonusHotkey = null;
+            ArmorSetBonusHotkey = null;
         }
 
         private void Polarities_IL_ResizeArrays(ILContext il)

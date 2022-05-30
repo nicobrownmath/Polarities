@@ -257,7 +257,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 							}
 						}
 
-						SoundEngine.PlaySound(SoundID.Item, shotPosition, 71);
+						SoundEngine.PlaySound(SoundID.Item71, shotPosition);
 					}
 				}
 			}
@@ -292,7 +292,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 							}
 						}
 
-						SoundEngine.PlaySound(SoundID.Item, shotPosition, 71);
+						SoundEngine.PlaySound(SoundID.Item71, shotPosition);
 					}
 				}
 			}

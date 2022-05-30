@@ -113,7 +113,7 @@ namespace Polarities.NPCs.Enemies
                     NPC.noTileCollide = false;
                     if (rattleCooldown == 0)
                     {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Rattle").WithVolume(.7f).WithPitchVariance(.5f), NPC.Center);
+                        SoundEngine.PlaySound(Sounds.Rattle, NPC.Center);
                         rattleCooldown = 40;
                     }
                 }

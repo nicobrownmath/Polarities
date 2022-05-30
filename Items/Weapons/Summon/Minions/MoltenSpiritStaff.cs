@@ -238,7 +238,7 @@ namespace Polarities.Items.Weapons.Summon.Minions
 
 			target.immune[Projectile.owner] = 0;
 
-			SoundEngine.PlaySound(SoundID.Item, Projectile.Center, 14);
+			SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
 
 			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<MoltenSpiritMinionExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 		}

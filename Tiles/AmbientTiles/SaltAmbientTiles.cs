@@ -8,6 +8,7 @@ using Polarities.Items;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Polarities.Dusts;
+using Terraria.ID;
 
 namespace Polarities.Tiles.AmbientTiles
 {
@@ -28,8 +29,7 @@ namespace Polarities.Tiles.AmbientTiles
 			TileObjectData.addTile(Type);
 
 			DustType = DustType<SaltDust>();
-			SoundType = 0;
-			SoundStyle = 1;
+			HitSound = SoundID.Dig;
 
 			AddMapEntry(new Color(255, 190, 190));
 		}
@@ -52,8 +52,7 @@ namespace Polarities.Tiles.AmbientTiles
 			TileObjectData.addTile(Type);
 
 			DustType = DustType<SaltDust>();
-			SoundType = 0;
-			SoundStyle = 1;
+			HitSound = SoundID.Dig;
 
 			AddMapEntry(new Color(255, 190, 190));
 		}
@@ -76,8 +75,7 @@ namespace Polarities.Tiles.AmbientTiles
 			TileObjectData.addTile(Type);
 
 			DustType = DustType<SaltDust>();
-			SoundType = 0;
-			SoundStyle = 1;
+			HitSound = SoundID.Dig;
 
 			AddMapEntry(new Color(255, 190, 190));
 		}
@@ -105,8 +103,7 @@ namespace Polarities.Tiles.AmbientTiles
 			TileObjectData.addTile(Type);
 
 			DustType = DustType<SaltDust>();
-			SoundType = 0;
-			SoundStyle = 1;
+			HitSound = SoundID.Dig;
 
 			AddMapEntry(new Color(255, 190, 190));
 		}
@@ -132,8 +129,7 @@ namespace Polarities.Tiles.AmbientTiles
 			TileObjectData.addTile(Type);
 
 			DustType = DustType<SaltDust>();
-			SoundType = 0;
-			SoundStyle = 1;
+			HitSound = SoundID.Dig;
 
 			AddMapEntry(new Color(255, 190, 190));
 		}

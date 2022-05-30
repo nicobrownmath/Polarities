@@ -148,7 +148,7 @@ namespace Polarities.NPCs.Enemies.Limestone
 						num195 = 20f;
 					}
 					NPC.soundDelay = (int)num195;
-					SoundEngine.PlaySound(SoundID.Roar, NPC.position, 1);
+					SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/Roar_1"), NPC.Center);
 				}
 			}
 			else

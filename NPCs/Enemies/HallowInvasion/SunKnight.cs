@@ -287,7 +287,10 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 
 		private void MakeDusts()
 		{
-			SoundEngine.PlaySound(SoundID.NPCKilled, (int)NPC.Center.X, (int)NPC.Center.Y, 14, 0.75f);
+			SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_14")
+			{
+				Volume = 0.75f,
+			}, NPC.Center);
 
 			for (int num231 = 0; num231 < 20; num231++)
 			{

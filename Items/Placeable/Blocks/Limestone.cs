@@ -44,8 +44,9 @@ namespace Polarities.Items.Placeable.Blocks
 
 			DustType = DustType<Dusts.LimestoneDust>();
 			ItemDrop = ItemType<Limestone>();
-			SoundType = 21;
-			SoundStyle = 1;
+
+			HitSound = SoundID.Tink;
+
 			MinPick = 0;
 		}
 	}

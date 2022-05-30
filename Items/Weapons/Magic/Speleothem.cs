@@ -156,7 +156,7 @@ namespace Polarities.Items.Weapons.Magic
 
         public override void Kill(int timeLeft)
         {
-            SoundEngine.PlaySound(21, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Tink, Projectile.Center);
             Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
         }
 

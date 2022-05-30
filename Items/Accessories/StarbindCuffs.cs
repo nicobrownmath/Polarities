@@ -17,8 +17,8 @@ namespace Polarities.Items.Accessories
 		{
 			this.SetResearch(1);
 
-			ArmorIDs.HandOn.Sets.UsesOldFramingTexturesForWalking[Mod.GetAccessorySlot(Name, EquipType.HandsOn)] = true;
-			TextureAssets.AccHandsOn[Mod.GetAccessorySlot(Name, EquipType.HandsOn)] = Request<Texture2D>(Texture + "_HandsOn_Old");
+			ArmorIDs.HandOn.Sets.UsesOldFramingTexturesForWalking[EquipLoader.GetEquipSlot(Mod, Name, EquipType.HandsOn)] = true;
+			TextureAssets.AccHandsOn[EquipLoader.GetEquipSlot(Mod, Name, EquipType.HandsOn)] = Request<Texture2D>(Texture + "_HandsOn_Old");
 		}
 
 		public override void SetDefaults()

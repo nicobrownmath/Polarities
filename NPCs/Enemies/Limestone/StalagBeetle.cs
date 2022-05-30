@@ -95,7 +95,7 @@ namespace Polarities.NPCs.Enemies.Limestone
                     if (NPC.ai[1] % 30 == 0)
                     {
                         Vector2 shotPos = NPC.Center + new Vector2(NPC.spriteDirection * NPC.width / 2, 0);
-                        SoundEngine.PlaySound(SoundID.Item, NPC.Center, 17);
+                        SoundEngine.PlaySound(SoundID.Item17, NPC.Center);
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), shotPos, (player.Center - shotPos).SafeNormalize(Vector2.Zero) * 6, ProjectileType<StalagBeetleShot>(), 2, 0f, Main.myPlayer);
                     }
                     if (NPC.collideY)

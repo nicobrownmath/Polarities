@@ -35,6 +35,7 @@ namespace Polarities.Items.Weapons.Magic
             Item.useAnimation = 60;
             Item.noMelee = true;
             Item.useStyle = 5;
+            Item.UseSound = Sounds.Rattle;
 
             Item.shoot = ProjectileType<RattlestaffProjectile>();
             Item.shootSpeed = 2f;
@@ -45,7 +46,6 @@ namespace Polarities.Items.Weapons.Magic
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Rattle").WithVolume(.7f).WithPitchVariance(.5f), player.position);
             for (int i = 1; i < 6; i++)
             {
                 Projectile.NewProjectile(source, position, i * velocity, type, damage, knockback, player.whoAmI);

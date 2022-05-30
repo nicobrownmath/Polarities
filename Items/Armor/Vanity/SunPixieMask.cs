@@ -18,7 +18,7 @@ namespace Polarities.Items.Armor.Vanity
         {
             this.SetResearch(1);
 
-            int equipSlotHead = Mod.GetEquipSlot(Name, EquipType.Head);
+            int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
             ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;
 
             //registers a head glowmask
@@ -49,7 +49,7 @@ namespace Polarities.Items.Armor.Vanity
                     bodyFrame3.Height -= 4;
                 }
                 Vector2 helmetOffset = drawInfo.helmetOffset;
-                DrawData data = new DrawData(TextureAssets.ArmorHead[Mod.GetEquipSlot(Name, EquipType.Head)].Value, helmetOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect, bodyFrame3, Color.White, drawInfo.drawPlayer.headRotation, headVect2, 1f, drawInfo.playerEffect, 0);
+                DrawData data = new DrawData(TextureAssets.ArmorHead[EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head)].Value, helmetOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect, bodyFrame3, Color.White, drawInfo.drawPlayer.headRotation, headVect2, 1f, drawInfo.playerEffect, 0);
                 data.shader = drawInfo.cHead;
                 drawInfo.DrawDataCache.Add(data);
             }

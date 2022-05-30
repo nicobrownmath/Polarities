@@ -50,8 +50,9 @@ namespace Polarities.Items.Placeable.Blocks
 
 			DustType = DustType<MantellarDust>();
 			ItemDrop = ItemType<MantellarOre>();
-			SoundType = 21;
-			SoundStyle = 1;
+
+			HitSound = SoundID.Tink;
+
 			MineResist = 8f;
 			MinPick = 200;
 		}

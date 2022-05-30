@@ -106,7 +106,7 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			SoundEngine.PlaySound(0, Projectile.position);
+			SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
 			Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
 			return true;
 		}

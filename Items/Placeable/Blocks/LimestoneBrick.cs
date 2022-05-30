@@ -28,7 +28,7 @@ namespace Polarities.Items.Placeable.Blocks
 				.AddTile(TileID.Furnaces)
 				.Register();
 
-			/*CreateRecipe()
+			/*TODO: CreateRecipe()
 				.AddIngredient(ItemType<Furniture.Limestone.LimestonePlatform>(), 2)
 				.Register();*/
 
@@ -51,8 +51,8 @@ namespace Polarities.Items.Placeable.Blocks
 
 			DustType = DustType<Dusts.LimestoneDust>();
 			ItemDrop = ItemType<LimestoneBrick>();
-			SoundType = 21;
-			SoundStyle = 1;
+
+			HitSound = SoundID.Tink;
 
 			MinPick = 0;
 		}
