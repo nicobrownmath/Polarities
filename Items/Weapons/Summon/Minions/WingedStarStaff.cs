@@ -105,7 +105,6 @@ namespace Polarities.Items.Weapons.Summon.Minions
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Winged Star");
 			Main.projPet[Projectile.type] = true;
 			ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
 			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;

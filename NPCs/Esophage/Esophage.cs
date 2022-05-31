@@ -154,7 +154,7 @@ namespace Polarities.NPCs.Esophage
             int boss = NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), (int)(player.Center.X + (500 * r + 1000) * (float)Math.Cos(theta)), (int)(player.Center.Y - (500 * r + 1000) * (float)Math.Sin(theta)), NPCType<NPCs.Esophage.Esophage>());
             Main.NewText(Language.GetTextValue("Announcement.HasAwoken", Main.npc[boss].TypeName), 171, 64, 255);
 
-            SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_10")
+            SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Killed_10")
             {
                 Volume = 1.2f,
                 Pitch = -0.5f
@@ -892,7 +892,7 @@ namespace Polarities.NPCs.Esophage
                 NPC.SetEventFlagCleared(ref PolaritiesSystem.downedEsophage, -1);
             }
 
-            SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_10")
+            SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Killed_10")
             {
                 Volume = 1.2f,
                 Pitch = -0.5f

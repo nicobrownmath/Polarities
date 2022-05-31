@@ -46,6 +46,7 @@ namespace Polarities.Items.Placeable.Blocks
 			Main.tileSolid[Type] = true;
 			Main.tileBlockLight[Type] = true;
 			Main.tileBlendAll[Type] = true;
+			Main.tileMergeDirt[Type] = true;
 			TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
 			AddMapEntry(new Color(226, 205, 227));
 

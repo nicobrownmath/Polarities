@@ -262,7 +262,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 
 		private void MakeDusts()
 		{
-			SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_14")
+			SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Killed_14")
 			{
 				Volume = 0.75f,
 			}, NPC.Center);

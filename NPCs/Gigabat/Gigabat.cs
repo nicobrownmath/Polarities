@@ -422,7 +422,7 @@ namespace Polarities.NPCs.Gigabat
                     //dash through the center after the chord darts if below half health
                     else if (NPC.ai[1] == 170)
                     {
-                        SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_4")
+                        SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Killed_4")
                         {
                             Volume = 2f,
                             Pitch = -2f
@@ -465,7 +465,7 @@ namespace Polarities.NPCs.Gigabat
                         dashCounter++;
 
                         //Main.PlaySound(SoundID.ForceRoar, NPC.Center, 0);
-                        SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_4")
+                        SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Killed_4")
                         {
                             Volume = 2f,
                             Pitch = -1f
@@ -539,7 +539,7 @@ namespace Polarities.NPCs.Gigabat
 
                             Music = -1;
 
-                            SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_4")
+                            SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Killed_4")
                             {
                                 Volume = 2f,
                                 Pitch = -0.5f

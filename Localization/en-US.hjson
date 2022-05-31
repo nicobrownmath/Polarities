@@ -122,6 +122,7 @@
 			"PincerStaff": "Pincer Staff",
 			"EsophageousStaff": "Esophageous Staff",
 			"MoltenSpiritStaff": "Molten Spirit Staff",
+			"SaltKillifishStaff": "Salt Killifish Staff",
 
 			//orbs
 			"Discorb": "Discorb",
@@ -438,6 +439,7 @@
 			"PincerStaff": "Summons a clawed flesh puddle",
 			"EsophageousStaff": "Summons a baby Esophage to protect you",
 			"MoltenSpiritStaff": "Summons a molten spirit to protect you",
+			"SaltKillifishStaff": "Summons a salt killifish to protect you",
 
 			//orbs
 			"Discorb": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons a winged disco ball to confuse enemies",
@@ -686,7 +688,8 @@
 			"ConvectiveArmorMeleeExplosion": "Thermal Explosion",
 			"ConvectiveArmorRangedDeathray": "Thermal Beam",
 			"ConvectiveArmorMagicEruption": "Eruption",
-			"ConvectiveArmorSummonVortex": "Convection Vortex"
+			"ConvectiveArmorSummonVortex": "Convection Vortex",
+			"SaltKillifishMinion": "Salt Killifish"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
@@ -819,6 +822,7 @@
 			"SolarScarabMinionBuff": "Solar Scarab",
 			"EsophminiBuff": "Esophmini",
 			"MoltenSpiritMinionBuff": "Molten Spirit",
+			"SaltKillifishMinionBuff": "Salt Killifish",
 
 			//pet buffs
 			"StarConstructPetBuff": "Dwarf Star Construct",
@@ -852,6 +856,7 @@
 			"SolarScarabMinonBuff": "The solar scarab will fight for you",
 			"EsophminiBuff": "The baby Esophage will fight for you",
 			"MoltenSpiritMinionBuff": "The molten spirits will fight for you",
+			"SaltKillifishMinionBuff": "The salt killifish will fight for you",
 
 			//pet buffs
 			"StarConstructPetBuff": "Much more stable than its larger cousin",

@@ -36,7 +36,7 @@ namespace Polarities.Items
 		public override bool? UseItem(Player player)
 		{
 			NPC.SpawnOnPlayer(player.whoAmI, NPCType<NPCs.Gigabat.Gigabat>());
-			SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_4")
+			SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Killed_4")
 			{
 				Volume = 2f,
 				Pitch = -8f

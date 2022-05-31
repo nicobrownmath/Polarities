@@ -167,7 +167,7 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 			{
 				Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 74, Scale: 1.5f)].noGravity = true;
 			}
-			SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_52")
+			SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Killed_52")
 			{
 				Volume = 0.5f,
 			}, Projectile.position);
@@ -254,7 +254,7 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 			{
 				Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 74, newColor: new Color(0, 180, 255), Scale: 1f)].noGravity = true;
 			}
-			SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_52")
+			SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Killed_52")
 			{
 				Volume = 0.5f,
 			}, Projectile.position);

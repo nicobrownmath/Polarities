@@ -299,7 +299,7 @@ namespace Polarities.NPCs.Critters
 					if (Main.rand.NextBool(60 * 30 * (Index + 1)) && Main.netMode != 1)
 					{
 						NPC.SpawnOnPlayer(Main.myPlayer, NPCType<NPCs.Gigabat.Gigabat>());
-						SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Death_4")
+						SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Killed_4")
 						{
 							Volume = 2f,
 							Pitch = -8f

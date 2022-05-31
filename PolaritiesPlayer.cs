@@ -35,6 +35,7 @@ using Polarities.Items.Armor.ConvectiveArmor;
 using Terraria.Audio;
 using Polarities.NPCs.ConvectiveWanderer;
 using Polarities.Effects;
+using Polarities.Items.Weapons.Summon.Minions;
 
 namespace Polarities
 {
@@ -374,6 +375,11 @@ namespace Polarities
 			}
 
 			Lighting.AddLight(Player.Center, light);
+
+			/*for (int i = 0; i < ItemLoader.ItemCount; i++)
+            {
+				Main.LocalPlayerCreativeTracker.ItemSacrifices.RegisterItemSacrifice(i, 1000);
+			}*/
 		}
 
         public void AddScreenShake(float magnitude, float timeLeft)
@@ -474,7 +480,7 @@ namespace Polarities
 				}
 				if (attempt.veryrare)
                 {
-					//TODO:if (Main.hardMode) itemDrop = ItemType<SaltKillifishStaff>();
+					if (Main.hardMode) itemDrop = ItemType<SaltKillifishStaff>();
                 }
 				if (attempt.legendary)
                 {
