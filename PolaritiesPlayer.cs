@@ -95,6 +95,7 @@ namespace Polarities
 		public Vector3 light;
 		public DamageClass convectiveSetBonusType;
 		public int convectiveSetBonusCharge;
+		public StatModifier dartDamage;
 
 		//direction of dash
 		public int dashDir;
@@ -143,6 +144,7 @@ namespace Polarities
 			incinerationResistanceTime = 0;
 			light = Vector3.Zero;
 			convectiveSetBonusType = null;
+			dartDamage = StatModifier.Default;
 
 			if (skeletronBookCooldown > 0) skeletronBookCooldown--;
 			if (beeRingTimer > 0) beeRingTimer--;
@@ -487,6 +489,13 @@ namespace Polarities
 
                 }
 			}
+        }
+
+        public override void ModifyWeaponDamage(Item item, ref StatModifier damage)
+        {
+            damage *= dartDamage.Additive * dartDamage.Multiplicative;
+			damage.Base += dartDamage.Base;
+			damage.Flat += dartDamage.Flat;
         }
 
         public override bool? CanHitNPC(Item item, NPC target)

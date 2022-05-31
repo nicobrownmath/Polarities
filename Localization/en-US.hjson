@@ -207,6 +207,7 @@
 			"ConvectiveHelmetRanged": "Convective Helmet",
 			"ConvectiveHelmetMagic": "Convective Hood",
 			"ConvectiveHelmetSummon": "Convective Mask",
+			"ShroomiteDartHelmet": "Shroomite Visor",
 
 			//vanity
 			"SnekHat": "Snek Hat",
@@ -521,6 +522,7 @@
 			"ConvectiveHelmetRanged": "6% increased ranged damage and critical strike chance",
 			"ConvectiveHelmetMagic": "6% increased magic damage and critical strike chance",
 			"ConvectiveHelmetSummon": "6% increased minion damage\nIncreases your max number of minions",
+			"ShroomiteDartHelmet": "15% increased dart damage\n5% increased ranged critical strike chance",
 
 			//hooks
 			"Starhook": "Shoots out four hooks at once",

@@ -21,7 +21,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 
 		public override void SetDefaults()
 		{
-			Item.SetWeaponValues(20, 6, 4);
+			Item.SetWeaponValues(20, 3, 4);
 			Item.DamageType = DamageClass.Ranged;
 
 			Item.width = 38;
