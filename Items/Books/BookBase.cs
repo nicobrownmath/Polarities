@@ -38,7 +38,7 @@ namespace Polarities.Items.Books
             Item.maxStack = 1;
 
             Item.width = 26;
-            Item.height = 32;
+            Item.height = 26;
 
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.useAnimation = 15;

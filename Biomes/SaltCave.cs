@@ -11,9 +11,9 @@ namespace Polarities.Biomes
 {
 	public class SaltCave : ModBiome
 	{
-		public override SceneEffectPriority Priority => SceneEffectPriority.None;
+		public override SceneEffectPriority Priority => SceneEffectPriority.BiomeLow;
 
-		public override int Music => 0;
+		public override int Music => -1;
 
         public override ModWaterStyle WaterStyle => ModContent.GetInstance<SaltWaterStyle>();
 

@@ -10,7 +10,7 @@ namespace Polarities.Biomes
 	{
 		public override SceneEffectPriority Priority => SceneEffectPriority.None;
 
-		public override int Music => 0;
+		public override int Music => -1;
 
 		public override string BestiaryIcon => "Biomes/" + Name + "_BestiaryIcon";
 		public override string BackgroundPath => base.BackgroundPath;

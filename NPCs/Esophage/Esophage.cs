@@ -924,6 +924,7 @@ namespace Polarities.NPCs.Esophage
             notExpertRule.OnSuccess(new OneFromOptionsWithCountsNotScaledWithLuckDropRule(1, 1,
                 (ItemID.Ichor, 20, 40),
                 (ItemID.CursedFlame, 20, 40)));
+            //TODO: Should probably drop evil seeds still
             notExpertRule.OnSuccess(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemType<EsophageousStaff>(), ItemType<PhagefootHook>()));
             npcLoot.Add(notExpertRule);
 
