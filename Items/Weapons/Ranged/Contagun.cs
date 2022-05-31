@@ -56,7 +56,7 @@ namespace Polarities.Items.Weapons.Ranged
 				Vector2 velocity = (Main.MouseWorld - player.MountedCenter).SafeNormalize(Vector2.Zero) * Item.shootSpeed;
 				Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.MountedCenter + velocity.SafeNormalize(Vector2.Zero) * 70, velocity, Item.shoot, Item.damage, Item.knockBack, player.whoAmI, ai0: Main.GlobalTimeWrappedHourly * 4f, ai1: 60f);
 
-				player.itemTime = player.itemTimeMax;
+				if (!player.ItemTimeIsZero) player.itemTime = player.itemTimeMax;
 				player.itemAnimation = player.itemAnimationMax;
 
 				soundTime++;

@@ -57,7 +57,7 @@ namespace Polarities.Items.Weapons.Magic
 
 				player.direction = (Main.MouseWorld.X - player.Center.X > 0) ? 1 : -1;
 				time++;
-				player.itemTime = player.itemTimeMax;
+				if (!player.ItemTimeIsZero) player.itemTime = player.itemTimeMax;
 				player.itemAnimation = player.itemAnimationMax;
 				player.manaRegen = Math.Min(player.manaRegen, 0);
 

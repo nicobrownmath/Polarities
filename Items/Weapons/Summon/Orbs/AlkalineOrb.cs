@@ -49,7 +49,7 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 			if (player.channel)
 			{
 				player.direction = (Main.MouseWorld.X - player.Center.X > 0) ? 1 : -1;
-				player.itemTime = player.itemTimeMax;
+				if (!player.ItemTimeIsZero) player.itemTime = player.itemTimeMax;
 				player.itemAnimation = player.itemAnimationMax;
 
 				time++;

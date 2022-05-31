@@ -165,6 +165,14 @@ namespace Polarities.Items.Weapons.Summon.Minions
             }
 
 			Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
+
+			Projectile.frameCounter++;
+			if (Projectile.frameCounter == 5)
+            {
+				Projectile.frameCounter = 0;
+				Projectile.frame++;
+				if (Projectile.frame == 8) Projectile.frame = 0;
+            }
         }
 
         public override bool MinionContactDamage()
