@@ -133,6 +133,8 @@
 			"RoyalOrb": "Royal Orb",
 			"WeaverOrb": "Weaver Orb",
 			"GlobusCruciger": "Globus Cruciger",
+			"AlkalineOrb": "Alkaline Orb",
+			"SpiritBottle": "Spirit Bottle"
 
 			//tools
 			"SunplateHamaxe": "Sunplate Hamaxe",
@@ -455,6 +457,7 @@
 			"WeaverOrb": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons an orb weaver which spins webs to slow enemies",
 			"GlobusCruciger": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons a sword-wielding hallowed statue that provides a slight regen boost when nearby",
 			"AlkalineOrb": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons a twisted mass of alkaline wraiths which shoots small defense-reducing spirits",
+			"SpiritBottle": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons a pair of spirits to bite enemies, causing your minions to deal up to 20 additional damage to them",
 
 			//tools
 			"Everlight": "Illuminates the cursor when held\nGrants rifle scope effect",
@@ -700,6 +703,7 @@
 			"ConvectiveArmorSummonVortex": "Convection Vortex",
 			"SaltKillifishMinion": "Salt Killifish",
 			"VenomDartCloud": "Venom Cloud",
+			"SpiritBottleMinion": "Bitey Spirit"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
@@ -823,6 +827,7 @@
 			"SeaLilyBuff": "Lily's Blessing",
 			"SunfishBuff": "Sunfish's Protection",
 			"Incinerating": "Incinerated",
+			"SpiritBottleDebuff": "Spirit Bite",
 
 			//minion buffs
 			"ZombatMinionBuff": "Baby Zombat",
@@ -857,6 +862,7 @@
 			"SeaLilyBuff": "Slightly increased life regen and movement speed",
 			"SunfishBuff": "Increased life regen and decreased enemy spawn rates",
 			"Incinerating": "You are being incinerated",
+			"SpiritBottleDebuff": "You have been bitten",
 
 			//minion buffs
 			"ZombatMinionBuff": "The baby zombats will fight for you",

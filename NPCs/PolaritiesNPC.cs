@@ -63,6 +63,9 @@ namespace Polarities.NPCs
         public int incineration;
         public bool coneVenom;
 
+        public bool spiritBite;
+        public int spiritBiteLevel;
+
         //vanilla NPC.takenDamageMultiplier doesn't have any effect when less than 1, so we do this instead
         public float neutralTakenDamageMultiplier = 1f;
 
@@ -548,6 +551,14 @@ namespace Polarities.NPCs
             return true;
         }
 
+        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            if (projectile.IsTypeSummon())
+            {
+                damage += spiritBiteLevel;
+            }
+        }
+
         public void ModifyDefense(NPC npc, ref int defense)
         {
             defense = (int)(defense * defenseMultiplier);
@@ -647,12 +658,18 @@ namespace Polarities.NPCs
                 }
             }
 
+            if (!spiritBite)
+            {
+                spiritBiteLevel = 0;
+            }
+
             contagunPhages = 0;
             tentacleClubs = 0;
             chlorophyteDarts = 0;
             desiccation = 0;
             incineration = 0;
             coneVenom = false;
+            spiritBite = false;
 
             UpdateCustomSoulDrain(npc);
         }
