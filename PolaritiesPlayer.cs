@@ -98,6 +98,7 @@ namespace Polarities
 		public StatModifier dartDamage;
 		public bool justHit;
 		public float candyCaneAtlatlBoost;
+		public StatModifier nonMagicDamage;
 
 		//direction of dash
 		public int dashDir;
@@ -148,6 +149,7 @@ namespace Polarities
 			convectiveSetBonusType = null;
 			dartDamage = StatModifier.Default;
 			justHit = false;
+			nonMagicDamage = StatModifier.Default;
 
 			if (skeletronBookCooldown > 0) skeletronBookCooldown--;
 			if (beeRingTimer > 0) beeRingTimer--;
@@ -729,16 +731,21 @@ namespace Polarities
 
         public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
 		{
-			ModifyHitNPCWithAnything(target, ref damage, ref knockback, ref crit);
+			ModifyHitNPCWithAnything(target, item.DamageType, ref damage, ref knockback, ref crit);
 		}
 
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
-			ModifyHitNPCWithAnything(target, ref damage, ref knockback, ref crit);
+			ModifyHitNPCWithAnything(target, proj.DamageType, ref damage, ref knockback, ref crit);
 		}
 
-		public void ModifyHitNPCWithAnything(NPC target, ref int damage, ref float knockback, ref bool crit)
+		public void ModifyHitNPCWithAnything(NPC target, DamageClass damageType, ref int damage, ref float knockback, ref bool crit)
 		{
+			if (damageType != DamageClass.Magic && damageType.GetModifierInheritance(DamageClass.Magic).damageInheritance == 0f && damageType.GetModifierInheritance(DamageClass.Generic).Equals(StatInheritanceData.Full))
+            {
+				damage = (int)(damage * nonMagicDamage.Additive * nonMagicDamage.Multiplicative);
+            }
+
 			if (target.HasBuff(BuffType<Pinpointed>()) && Main.rand.NextBool()) crit = true;
 
 			target.GetGlobalNPC<PolaritiesNPC>().ignoredDefenseFromCritAmount = 0;
