@@ -137,7 +137,7 @@ namespace Polarities.Effects
 			}
 		}
 
-		public void DoDraw()
+		public virtual void DoDraw()
 		{
 			active = true;
 			for (int i = 0; i < projCache.Count; i++)
@@ -247,7 +247,9 @@ namespace Polarities.Effects
 		}
 	}
 
-	public class ConvectiveEnemyTarget : RenderTargetLayer
+	public class ConvectiveEnemyTarget : RenderTargetLayer { }
+
+	public class BehindTilesWithLightingTarget : RenderTargetLayer
 	{
 		public override void Load(Mod mod)
 		{
@@ -255,6 +257,36 @@ namespace Polarities.Effects
 
 			targetScale = 1f;
 		}
-	}
+
+        public override void DoDraw()
+        {
+            base.DoDraw();
+
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin((SpriteSortMode)0,
+				new BlendState() {
+					AlphaBlendFunction = BlendFunction.Add,
+					AlphaSourceBlend = Blend.Zero,
+					AlphaDestinationBlend = Blend.One,
+					ColorBlendFunction = BlendFunction.Add,
+					ColorSourceBlend = Blend.Zero,
+					ColorDestinationBlend = Blend.SourceColor
+				},
+				Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.CreateTranslation(0f - Main.GameViewMatrix.Translation.X, 0f - Main.GameViewMatrix.Translation.Y, 0f) * Matrix.CreateScale(targetScale, targetScale, 1f));
+
+			//draw lighting
+			//Note: If I ever do another layer with lighting, I should move this to a separate rendertarget for ease of reuse
+			//TODO: This can probably be made smoother, I should look at the tile drawing code for that
+			for (int i = (int)Main.screenPosition.X / 16; i < (int)(Main.screenPosition.X + Main.screenWidth) / 16; i++)
+            {
+				for (int j = (int)Main.screenPosition.Y / 16; j < (int)(Main.screenPosition.Y + Main.screenHeight) / 16; j++)
+				{
+					Color lightColor = Lighting.GetColor(i, j);
+					Vector2 drawPos = new Vector2(i, j) * 16 - Main.screenPosition;
+					Main.spriteBatch.Draw(Textures.PixelTexture.Value, drawPos, new Rectangle(0, 0, 16, 16), lightColor);
+				}
+			}
+		}
+    }
 }
 

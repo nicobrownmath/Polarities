@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
@@ -136,6 +137,16 @@ namespace Polarities.Effects
 
         private void Main_DrawCachedProjs(On.Terraria.Main.orig_DrawCachedProjs orig, Main self, List<int> projCache, bool startSpriteBatch)
         {
+            if (projCache == Main.instance.DrawCacheProjsBehindNPCsAndTiles)
+            {
+                if (RenderTargetLayer.GetRenderTargetLayer<BehindTilesWithLightingTarget>().HasContent())
+                {
+                    Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+                    RenderTargetLayer.GetRenderTargetLayer<BehindTilesWithLightingTarget>().Draw(Main.spriteBatch, Vector2.Zero, Color.White);
+                    Main.spriteBatch.End();
+                }
+            }
+
             orig(self, projCache, startSpriteBatch);
 
             if (projCache == Main.instance.DrawCacheProjsBehindNPCs)

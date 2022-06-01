@@ -206,6 +206,13 @@ namespace Polarities
 
 			disabledEvilSpread = false;
 			disabledHallowSpread = false;
+
+			//journey mode item auto-researching for debugging purposes
+			//TODO: Remove this before the release version
+			for (int i = 0; i < ItemLoader.ItemCount; i++)
+			{
+				Main.LocalPlayerCreativeTracker.ItemSacrifices.RegisterItemSacrifice(i, 1000);
+			}
 		}
 
         public override void OnWorldUnload()

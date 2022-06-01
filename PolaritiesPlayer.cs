@@ -96,6 +96,7 @@ namespace Polarities
 		public DamageClass convectiveSetBonusType;
 		public int convectiveSetBonusCharge;
 		public StatModifier dartDamage;
+		public bool justHit;
 
 		//direction of dash
 		public int dashDir;
@@ -145,6 +146,7 @@ namespace Polarities
 			light = Vector3.Zero;
 			convectiveSetBonusType = null;
 			dartDamage = StatModifier.Default;
+			justHit = false;
 
 			if (skeletronBookCooldown > 0) skeletronBookCooldown--;
 			if (beeRingTimer > 0) beeRingTimer--;
@@ -377,11 +379,6 @@ namespace Polarities
 			}
 
 			Lighting.AddLight(Player.Center, light);
-
-			/*for (int i = 0; i < ItemLoader.ItemCount; i++)
-            {
-				Main.LocalPlayerCreativeTracker.ItemSacrifices.RegisterItemSacrifice(i, 1000);
-			}*/
 		}
 
         public void AddScreenShake(float magnitude, float timeLeft)
@@ -493,9 +490,12 @@ namespace Polarities
 
         public override void ModifyWeaponDamage(Item item, ref StatModifier damage)
         {
-            damage *= dartDamage.Additive * dartDamage.Multiplicative;
-			damage.Base += dartDamage.Base;
-			damage.Flat += dartDamage.Flat;
+			if (item.useAmmo == AmmoID.Dart)
+			{
+				damage *= dartDamage.Additive * dartDamage.Multiplicative;
+				damage.Base += dartDamage.Base;
+				damage.Flat += dartDamage.Flat;
+			}
         }
 
         public override bool? CanHitNPC(Item item, NPC target)
@@ -597,6 +597,8 @@ namespace Polarities
 			{
 				limestoneSetBonusHitCooldown = 300;
 			}
+
+			justHit = true;
 		}
 
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
