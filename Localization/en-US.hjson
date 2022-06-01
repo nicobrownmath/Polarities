@@ -163,6 +163,7 @@
 			"RotKnuckles": "Rot Knuckles",
 			"InfestedBrain": "Infested Brain",
 			"WyvernsNest": "Wyvern's Nest",
+			"CelestialAmulet": "Celestial Amulet",
 
 			//mounts
 			"PegasusMountItem": "Bellerophon's Saddle",
@@ -487,6 +488,7 @@
 			"RotKnuckles": "5% increased damage and critical strike chance",
 			"InfestedBrain": "Reduces damage taken by 12%\nHas a chance to create illusions and dodge an attack\nTemporarily increase critical chance after dodge\nMay confuse nearby enemies after being struck",
 			"WyvernsNest": "Summons Etherian wyverns to help your sentries keep up with you",
+			"CelestialAmulet": "Increases your maximum health by 10% at night\nIncreases all damage by 12% during the day\nMinor increase to damage, melee speed, critical strike chance,\nlife regeneration, defense, mining speed, and minion knockback",
 
 			//mounts
 			"PegasusMountItem": "Summons a rideable pegasus mount",
