@@ -3,6 +3,7 @@ using System.Reflection;
 using Microsoft.Xna.Framework;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using Polarities.Items.Accessories;
 using Polarities.Items.Weapons.Ranged;
 using Polarities.Items.Weapons.Ranged.Ammo;
 using Polarities.Items.Weapons.Summon.Orbs;
@@ -28,11 +29,11 @@ namespace Polarities.NPCs
 			switch (type)
 			{
 				case NPCID.WitchDoctor:
-					/*TODO: if (NPC.downedPlantBoss && Main.LocalPlayer.ZoneJungle)
+					if (NPC.downedPlantBoss && Main.LocalPlayer.ZoneJungle)
 					{
 						shop.item[nextSlot].SetDefaults(ItemType<SymbioticSapling>());
 						nextSlot++;
-					}*/
+					}
 					break;
 				case NPCID.Painter:
 					/*TODO: if (Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().hasBeenInFractalSubworld)

@@ -12,9 +12,6 @@ namespace Polarities.Items.Accessories
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Sunlight Emblem");
-			Tooltip.SetDefault("15% increased magic damage\n10% reduced mana usage\n10% increased non-magic damage while not at full mana\nHitting enemies with non-magic weapons restores your mana");
-
 			this.SetResearch(1);
 		}
 
