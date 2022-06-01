@@ -56,6 +56,7 @@ namespace Polarities.NPCs
         public float defenseMultiplier;
 
         public int tentacleClubs;
+        public int chlorophyteDarts;
         public int contagunPhages;
 
         public int desiccation;
@@ -579,6 +580,19 @@ namespace Polarities.NPCs
                         damage = amountLoss;
                     }
                 }
+                if (chlorophyteDarts > 0)
+                {
+                    if (npc.lifeRegen > 0)
+                    {
+                        npc.lifeRegen = 0;
+                    }
+                    int amountLoss = chlorophyteDarts * 24;
+                    npc.lifeRegen -= amountLoss * 2;
+                    if (damage < amountLoss)
+                    {
+                        damage = amountLoss;
+                    }
+                }
                 if (contagunPhages > 0)
                 {
                     if (npc.lifeRegen > 0)
@@ -635,6 +649,7 @@ namespace Polarities.NPCs
 
             contagunPhages = 0;
             tentacleClubs = 0;
+            chlorophyteDarts = 0;
             desiccation = 0;
             incineration = 0;
             coneVenom = false;

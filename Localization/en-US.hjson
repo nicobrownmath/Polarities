@@ -92,6 +92,8 @@
 			"BouncyDart": "Bouncy Dart",
 			"BatArrow": "Bat Arrow",
 			"BoneDart": "Bone Dart",
+			"ChlorophyteDart": "Chlorophyte Dart",
+			"VenomDart": "Venom Dart",
 
 			//magic weapons
 			"Halocline": "Halocline",
@@ -413,6 +415,8 @@
 			"BouncyDart": "Bounces up to three times",
 			"BatArrow": "'Contrary to popular belief, fletching bats does not make them faster'",
 			"BoneDart": "Flies straight until it hits an enemy",
+			"ChlorophyteDart": "Sticks to enemies",
+			"VenomDart": "Explodes into a venom cloud",
 
 			//magic weapons
 			"Halocline": "Shoots a blob of brine that splits into smaller blobs on impact",
@@ -694,7 +698,8 @@
 			"ConvectiveArmorRangedDeathray": "Thermal Beam",
 			"ConvectiveArmorMagicEruption": "Eruption",
 			"ConvectiveArmorSummonVortex": "Convection Vortex",
-			"SaltKillifishMinion": "Salt Killifish"
+			"SaltKillifishMinion": "Salt Killifish",
+			"VenomDartCloud": "Venom Cloud",
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
