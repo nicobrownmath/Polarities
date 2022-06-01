@@ -139,6 +139,8 @@ namespace Polarities.Projectiles
 
         public bool planteraBookHooks;
 
+        public bool candyCaneAtlatl;
+
         public override bool PreAI(Projectile projectile)
         {
             if (generalHitCooldown > 0) generalHitCooldown--;
@@ -265,6 +267,19 @@ namespace Polarities.Projectiles
             {
                 target.immune[projectile.owner] = 0;
                 generalHitCooldown = generalHitCooldownTime;
+            }
+
+            Player player = Main.player[projectile.owner];
+
+            if (candyCaneAtlatl)
+            {
+                candyCaneAtlatl = false;
+
+                player.GetModPlayer<PolaritiesPlayer>().candyCaneAtlatlBoost += 60;
+                if (player.GetModPlayer<PolaritiesPlayer>().candyCaneAtlatlBoost >= 60 * 15)
+                {
+                    player.GetModPlayer<PolaritiesPlayer>().candyCaneAtlatlBoost = 60 * 15;
+                }
             }
         }
     }

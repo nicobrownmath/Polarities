@@ -48,7 +48,7 @@ namespace Polarities.Items.Consumables.TreasureBags
 
 		public override void OpenBossBag(Player player)
 		{
-			IEntitySource source = player.GetSource_OpenItem(Type);
+			IEntitySource source = player.GetSource_OpenItem(Type, "bossBag");
 
 			player.QuickSpawnItem(source, ItemType<Items.Accessories.CosmicCable>());
 			player.QuickSpawnItem(source, ItemType<Items.Placeable.Bars.SunplateBar>(), Main.rand.Next(15, 25));

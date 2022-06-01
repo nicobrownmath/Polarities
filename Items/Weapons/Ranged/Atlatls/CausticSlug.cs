@@ -18,7 +18,6 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 	public class CausticSlug : AtlatlBase
 	{
         public override Vector2[] ShotDistances => new Vector2[] { new Vector2(38), new Vector2(38), new Vector2(38) };
-        public override float BaseShotDistance => 30;
 
         public override void SetDefaults()
         {

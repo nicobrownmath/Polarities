@@ -16,7 +16,6 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 	public class ShadewoodAtlatl : AtlatlBase
 	{
 		public override Vector2[] ShotDistances => new Vector2[] { new Vector2(30) };
-		public override float BaseShotDistance => 30;
 
 		public override void SetDefaults()
 		{

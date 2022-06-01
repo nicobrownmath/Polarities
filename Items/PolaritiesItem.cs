@@ -12,6 +12,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.GameContent;
 using Terraria.Localization;
+using Polarities.Items.Weapons.Ranged.Atlatls;
 
 namespace Polarities.Items
 {
@@ -197,6 +198,20 @@ namespace Polarities.Items
                     }
                     player.GetModPlayer<PolaritiesPlayer>().wormScarf = true;
                     break;
+            }
+        }
+
+        public override void OpenVanillaBag(string context, Player player, int arg)
+        {
+            if (context == "bossBag")
+            {
+                if (arg == ItemID.PlanteraBossBag)
+                {
+                    if (Main.rand.NextBool(4))
+                    {
+                        player.QuickSpawnItem(player.GetSource_OpenItem(arg, context), ItemType<JunglesRage>());
+                    }
+                }
             }
         }
     }

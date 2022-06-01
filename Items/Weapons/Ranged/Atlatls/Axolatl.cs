@@ -16,7 +16,6 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 	public class Axolatl : AtlatlBase
 	{
 		public override Vector2[] ShotDistances => new Vector2[] { new Vector2(34) };
-		public override float BaseShotDistance => 30;
 
 		public override void SetDefaults()
 		{

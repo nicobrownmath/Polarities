@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -67,10 +68,21 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
 			Projectile.ignoreWater = false;
 		}
 
+		public override void OnSpawn(IEntitySource source)
+		{
+			while (Projectile.velocity.X >= 16f || Projectile.velocity.X <= -16f || Projectile.velocity.Y >= 16f || Projectile.velocity.Y < -16f)
+			{
+				Projectile.velocity.X *= 0.97f;
+				Projectile.velocity.Y *= 0.97f;
+			}
+		}
+
 		public override void AI()
 		{
 			Projectile.rotation = Projectile.velocity.ToRotation() + (float)Math.PI / 2;
-			Projectile.velocity.Y += 0.3f;
+			Projectile.velocity.Y += 0.075f;
+
+			if (Projectile.velocity.Y > 16) Projectile.velocity.Y = 16;
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)

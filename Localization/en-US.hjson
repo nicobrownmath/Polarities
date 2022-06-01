@@ -83,6 +83,8 @@
 			"BoneSlinger": "Bone Slinger",
 			"Ehecatl": "Ehecatl",
 			"CausticSlug": "Caustic Slug",
+			"JunglesRage": "Jungle's Rage",
+			"CandyCaneAtlatl": "Candy Cane Atlatl",
 
 			//ammo
 			"WoodenDart": "Wooden Dart",
@@ -405,6 +407,7 @@
 			"BoneSlinger": "Shoots an extra bone dart",
 			"Ehecatl": "Shoots three darts at once",
 			"CausticSlug": "Shoots corrosive slugs that fall when they reach the cursor",
+			"CandyCaneAtlatl": "Hitting enemies increases swing speed and decreases accuracy",
 
 			//ammo
 			"BouncyDart": "Bounces up to three times",

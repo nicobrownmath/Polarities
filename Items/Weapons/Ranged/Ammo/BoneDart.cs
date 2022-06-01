@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -62,6 +63,15 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
 
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 60;
+		}
+
+		public override void OnSpawn(IEntitySource source)
+		{
+			while (Projectile.velocity.X >= 16f || Projectile.velocity.X <= -16f || Projectile.velocity.Y >= 16f || Projectile.velocity.Y < -16f)
+			{
+				Projectile.velocity.X *= 0.97f;
+				Projectile.velocity.Y *= 0.97f;
+			}
 		}
 
 		public override void AI()

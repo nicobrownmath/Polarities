@@ -17,7 +17,6 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 	public class Ehecatl : AtlatlBase
 	{
 		public override Vector2[] ShotDistances => new Vector2[] { new Vector2(36), new Vector2(42), new Vector2(48) };
-		public override float BaseShotDistance => 30;
 
 		public override void SetDefaults()
 		{

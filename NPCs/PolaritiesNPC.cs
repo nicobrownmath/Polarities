@@ -30,6 +30,8 @@ using Polarities.Projectiles;
 using Terraria.Audio;
 using Polarities.Items.Weapons.Magic;
 using Polarities.Buffs;
+using Polarities.Items.Weapons.Melee;
+using Polarities.Items.Weapons.Ranged.Atlatls;
 
 namespace Polarities.NPCs
 {
@@ -844,19 +846,54 @@ namespace Polarities.NPCs
                 case NPCID.EaterofWorldsBody:
                 case NPCID.EaterofWorldsHead:
                 case NPCID.EaterofWorldsTail:
-                    //npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Magic.ConsumptionCannon>()));
+                    //TODO: npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Magic.ConsumptionCannon>()));
                     break;
                 case NPCID.BrainofCthulhu:
-                    //npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Melee.NeuralBasher>()));
+                    //TODO: npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Melee.NeuralBasher>()));
                     break;
                 case NPCID.QueenBee:
                     npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<RoyalOrb>()));
                     break;
                 case NPCID.SkeletronHead:
-                    //npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Melee.Warhammers.BonyBackhand>()));
+                    //TODO: npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Melee.Warhammers.BonyBackhand>()));
                     break;
                 case NPCID.WallofFlesh:
                     npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<MawOfFlesh>()));
+                    break;
+                case NPCID.Plantera:
+                    {
+                        npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<UnfoldingBlossom>()));
+
+                        LeadingConditionRule leadingConditionRule = new LeadingConditionRule(new Conditions.NotExpert());
+                        leadingConditionRule.OnSuccess(ItemDropRule.Common(ItemType<JunglesRage>(), 4));
+                    }
+                    break;
+                case NPCID.Everscream:
+                    {
+                        //adds the candy cane atlatl
+                        List<IItemDropRule> everscreamLoot = npcLoot.Get(includeGlobalDrops: false);
+                        for (int index = 0; index < everscreamLoot.Count; index++)
+                        {
+                            IItemDropRule rule = everscreamLoot[index];
+                            if (rule is LeadingConditionRule leadingConditionRule && leadingConditionRule.condition is Conditions.FrostMoonDropGatingChance)
+                            {
+                                foreach (IItemDropRuleChainAttempt tryAttempt in rule.ChainedRules)
+                                {
+                                    if (tryAttempt is TryIfSucceeded chain && chain.RuleToChain is CommonDrop rule2)
+                                    {
+                                        foreach (IItemDropRuleChainAttempt tryAttempt2 in rule2.ChainedRules)
+                                        {
+                                            if (tryAttempt2 is TryIfFailedRandomRoll chain2 && chain2.RuleToChain is OneFromOptionsDropRule rule3)
+                                            {
+                                                Array.Resize(ref rule3.dropIds, rule3.dropIds.Length + 1);
+                                                rule3.dropIds[rule3.dropIds.Length - 1] = ItemType<CandyCaneAtlatl>();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                     break;
                 case NPCID.DD2Betsy:
                     npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<WyvernsNest>()));

@@ -25,7 +25,7 @@ namespace Polarities.Items.Consumables.Crates
 
 		public override void RightClick(Player player)
 		{
-			IEntitySource source = player.GetSource_OpenItem(Type);
+			IEntitySource source = player.GetSource_OpenItem(Type, "crate");
 
 			switch (Main.rand.Next(4))
 			{

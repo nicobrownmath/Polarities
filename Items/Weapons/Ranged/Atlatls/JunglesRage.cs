@@ -13,38 +13,36 @@ using Terraria.Audio;
 
 namespace Polarities.Items.Weapons.Ranged.Atlatls
 {
-	public class BorealWoodAtlatl : AtlatlBase
+	public class JunglesRage : AtlatlBase
 	{
-		public override Vector2[] ShotDistances => new Vector2[] { new Vector2(30) };
+		public override Vector2[] ShotDistances => new Vector2[] { new Vector2(44) };
 
 		public override void SetDefaults()
 		{
-			Item.SetWeaponValues(9, 3, 0);
+			Item.SetWeaponValues(30, 3, 0);
 			Item.DamageType = DamageClass.Ranged;
 
-			Item.width = 36;
-			Item.height = 34;
+			Item.width = 68;
+			Item.height = 62;
 
-			Item.useTime = 28;
-			Item.useAnimation = 28;
+			Item.useTime = 8;
+			Item.useAnimation = 8;
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.noMelee = true;
 			Item.UseSound = SoundID.Item1;
+			Item.autoReuse = true;
 
 			Item.shoot = 10;
-			Item.shootSpeed = 16f;
+			Item.shootSpeed = 4.5f;
 			Item.useAmmo = AmmoID.Dart;
 
-			Item.value = Item.sellPrice(copper: 20);
-			Item.rare = ItemRarityID.White;
+			Item.value = Item.sellPrice(gold: 5);
+			Item.rare = ItemRarityID.Pink;
 		}
 
-		public override void AddRecipes()
-		{
-			CreateRecipe()
-				.AddIngredient(ItemID.BorealWood, 12)
-				.AddTile(TileID.WorkBenches)
-				.Register();
-		}
+        public override bool CanConsumeAmmo(Item ammo, Player player)
+        {
+            return Main.rand.NextBool();
+        }
 	}
 }

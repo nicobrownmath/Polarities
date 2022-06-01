@@ -97,6 +97,7 @@ namespace Polarities
 		public int convectiveSetBonusCharge;
 		public StatModifier dartDamage;
 		public bool justHit;
+		public float candyCaneAtlatlBoost;
 
 		//direction of dash
 		public int dashDir;
@@ -153,6 +154,7 @@ namespace Polarities
 			if (limestoneShieldCooldown > 0) limestoneShieldCooldown--;
 			if (limestoneSetBonusHitCooldown > 0) limestoneSetBonusHitCooldown--;
 			if (moonLordLifestealCooldown > 0) moonLordLifestealCooldown--;
+			if (candyCaneAtlatlBoost > 0) candyCaneAtlatlBoost--;
 
 			screenshakeRandomSeed = Main.rand.Next();
 

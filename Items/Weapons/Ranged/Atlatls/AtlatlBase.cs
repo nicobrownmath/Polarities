@@ -17,8 +17,10 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 	public abstract class AtlatlBase : ModItem, IDrawHeldItem
     {
         public abstract Vector2[] ShotDistances { get; }
-        public abstract float BaseShotDistance { get; }
         public virtual float SpriteRotationOffset => 0;
+
+        public virtual float BaseShotDistance => 30;
+        public virtual float BaseItemTime => 30;
 
         public static int mostRecentAmmo;
         public static int[] mostRecentShotTypes;
@@ -30,6 +32,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
         public override void Unload()
         {
             usedShots = null;
+            mostRecentShotTypes = null;
         }
 
         public override void SetStaticDefaults()
@@ -39,6 +42,11 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 
         public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
+            if (mostRecentShotTypes == null)
+            {
+                mostRecentShotTypes = new int[ShotDistances.Length];
+            }
+
             if (player.itemAnimation == player.itemAnimationMax)
             {
                 usedShots = new int[ShotDistances.Length];
@@ -54,7 +62,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 
                 if (usedShots[i] == 0 && IsShotAvailable(player, shotPosition))
                 {
-                    Vector2 shotVelocity = (Main.MouseWorld - shotPosition).SafeNormalize(Vector2.Zero) * shotDistance.Length() / BaseShotDistance * mostRecentShotSpeed;
+                    Vector2 shotVelocity = (Main.MouseWorld - shotPosition).SafeNormalize(Vector2.Zero) * shotDistance.Length() / BaseShotDistance * mostRecentShotSpeed * BaseItemTime / player.itemTimeMax;
 
                     EntitySource_ItemUse_WithAmmo source = player.GetSource_ItemUse_WithPotentialAmmo(Item, mostRecentAmmo) as EntitySource_ItemUse_WithAmmo;
 
