@@ -103,19 +103,19 @@ namespace Polarities.Items.Armor.LimestoneArmor
 		{
 			if (!drawInfo.drawPlayer.invis)
 			{
-				Rectangle bodyFrame3 = drawInfo.drawPlayer.bodyFrame;
+				Rectangle legFrame3 = drawInfo.drawPlayer.legFrame;
 				Vector2 legVect2 = drawInfo.legVect;
 				if (drawInfo.drawPlayer.gravDir == 1f)
 				{
-					bodyFrame3.Height -= 4;
+					legFrame3.Height -= 4;
 				}
 				else
 				{
 					legVect2.Y -= 4f;
-					bodyFrame3.Height -= 4;
+					legFrame3.Height -= 4;
 				}
 				Vector2 legsOffset = drawInfo.legsOffset;
-				DrawData data = new DrawData(GlowTexture.Value, legsOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.legFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.legFrame.Height + 4f)) + drawInfo.drawPlayer.legPosition + drawInfo.legVect, bodyFrame3, Color.White, drawInfo.drawPlayer.legRotation, legVect2, 1f, drawInfo.playerEffect, 0);
+				DrawData data = new DrawData(GlowTexture.Value, legsOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.legFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.legFrame.Height + 4f)) + drawInfo.drawPlayer.legPosition + drawInfo.legVect, legFrame3, Color.White, drawInfo.drawPlayer.legRotation, legVect2, 1f, drawInfo.playerEffect, 0);
 				data.shader = drawInfo.cLegs;
 				drawInfo.DrawDataCache.Add(data);
 			}

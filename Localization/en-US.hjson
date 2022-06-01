@@ -217,6 +217,9 @@
 			"ConvectiveHelmetMagic": "Convective Hood",
 			"ConvectiveHelmetSummon": "Convective Mask",
 			"ShroomiteDartHelmet": "Shroomite Visor",
+			"FlawlessMechMask": "Laser Lens",
+			"FlawlessMechChestplate": "Arm-Ageddon",
+			"FlawlessMechTail": "Earthshaker",
 
 			//vanity
 			"SnekHat": "Snek Hat",
@@ -539,6 +542,9 @@
 			"ConvectiveHelmetMagic": "6% increased magic damage and critical strike chance",
 			"ConvectiveHelmetSummon": "6% increased minion damage\nIncreases your max number of minions",
 			"ShroomiteDartHelmet": "15% increased dart damage\n5% increased ranged critical strike chance",
+			"FlawlessMechMask": "3% increased movement speed\n3% reduced damage taken\nShoots lasers at the cursor when you attack",
+			"FlawlessMechChestplate": "6% reduced damage taken\nSwings at the cursor when you attack",
+			"FlawlessMechTail": "6% increased movement speed\nReleases probes that target the cursor when you attack",
 
 			//hooks
 			"Starhook": "Shoots out four hooks at once",
@@ -588,7 +594,8 @@
 			"ConvectiveHelmetMelee": "17% increased melee damage\n5% increased melee speed\nPress {Hotkey} to create a massive explosion, with a 10 second cooldown",
 			"ConvectiveHelmetRanged": "17% increased ranged damage\n5% increased ranged critical strike chance\nPress {Hotkey} to fire a superheated beam, with a 10 second cooldown",
 			"ConvectiveHelmetMagic": "17% increased magic damage\nIncreases max mana by 60\nPress {Hotkey} to create an eruption from below the cursor, with a 10 second cooldown",
-			"ConvectiveHelmetSummon": "17% increased minion damage\nIncreases your max number of minions\nPress {Hotkey} to summon convective vortices to attack enemies, with a 10 second cooldown"
+			"ConvectiveHelmetSummon": "17% increased minion damage\nIncreases your max number of minions\nPress {Hotkey} to summon convective vortices to attack enemies, with a 10 second cooldown",
+			"FlawlessMechMask": "Right click to enter a temporary state of mecha mayhem, buffing your armor's attacks\nThis has a short cooldown, but the cooldown does not progress while holding a weapon"
 		},
 		"ProjectileName": {
 			"SaltProjectile": "Salt Ball",
@@ -709,7 +716,11 @@
 			"ConvectiveArmorSummonVortex": "Convection Vortex",
 			"SaltKillifishMinion": "Salt Killifish",
 			"VenomDartCloud": "Venom Cloud",
-			"SpiritBottleMinion": "Bitey Spirit"
+			"SpiritBottleMinion": "Bitey Spirit",
+			"FlawlessMechMaskDeathray": "Optic Laser",
+			"MiniPrimeArmSlash": "Arm Flailing",
+			"MiniProbe": "Mini Probe",
+			"MiniProbleLaser": "MiniProbeLaser",
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
@@ -971,7 +982,7 @@
 			}
 		},
 		"GuideHelpText": {
-			"Ghostwriter": "Defeating a powerful enemy might attract someone interested in recording your adventures.",
+			"Ghostwriter": "Defeating a powerful foe might attract someone interested in recording your adventures.",
 			"StormCloudfishSummonItem": "Tying some bait to those clouds would be a good way to attract flying animals.", //TODO: Adjust when non-consumable summon is added
 			"StarConstructSummonItem": "Combining fallen stars with a suitable metal at a demon altar will allow you to send out signals into the cosmos.",
 			"GigabatSummonItem": "Affixing gems to a firefly would be the perfect lure for cave-dwelling bats.",

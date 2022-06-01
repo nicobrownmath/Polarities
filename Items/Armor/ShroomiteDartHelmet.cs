@@ -23,6 +23,7 @@ namespace Polarities.Items.Armor
 		public override void SetDefaults()
 		{
 			Item.CloneDefaults(ItemID.ShroomiteHelmet);
+			Item.headSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 		}
 
 		public override void UpdateEquip(Player player)

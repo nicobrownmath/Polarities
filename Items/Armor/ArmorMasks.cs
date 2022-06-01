@@ -22,7 +22,7 @@ namespace Polarities.Items.Armor
     {
         void DrawArmor(ref PlayerDrawSet drawInfo);
 
-        //bool DoVanillaDraw();
+        virtual bool DoVanillaDraw() => true;
     }
 
     public interface IGetBodyMaskColor
@@ -32,7 +32,7 @@ namespace Polarities.Items.Armor
 
     public class HeadMaskDrawLayer : PlayerDrawLayer
     {
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
+        public override Position GetDefaultPosition() => new Between(PlayerDrawLayers.Head, PlayerDrawLayers.FinchNest);
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         {
@@ -47,7 +47,7 @@ namespace Polarities.Items.Armor
 
     public class LegMaskDrawLayer : PlayerDrawLayer
     {
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Leggings);
+        public override Position GetDefaultPosition() => new Between(PlayerDrawLayers.Leggings, PlayerDrawLayers.Shoes);
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         {

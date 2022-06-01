@@ -36,6 +36,7 @@ using Terraria.Audio;
 using Polarities.NPCs.ConvectiveWanderer;
 using Polarities.Effects;
 using Polarities.Items.Weapons.Summon.Minions;
+using Polarities.Items.Armor.MechaMayhemArmor;
 
 namespace Polarities
 {
@@ -100,6 +101,20 @@ namespace Polarities
 		public float candyCaneAtlatlBoost;
 		public StatModifier nonMagicDamage;
 
+		public bool flawlessMechArmorSet;
+		public int flawlessMechSetBonusTime;
+		public int flawlessMechSetBonusCooldown;
+		public bool flawlessMechMask;
+		public int flawlessMechMaskCooldown;
+		public bool flawlessMechChestplate;
+		public bool flawlessMechTail;
+		public int flawlessMechTailCooldown;
+
+		public const int MECH_ARMOR_SET_COOLDOWN = 120;
+		public const int MECH_ARMOR_SET_TIME = 240;
+		public const int MECH_MASK_COOLDOWN = 20;
+		public const int MECH_TAIL_COOLDOWN = 60;
+
 		//direction of dash
 		public int dashDir;
 		//index of dash in Dash.dashes
@@ -157,6 +172,31 @@ namespace Polarities
 			if (limestoneSetBonusHitCooldown > 0) limestoneSetBonusHitCooldown--;
 			if (moonLordLifestealCooldown > 0) moonLordLifestealCooldown--;
 			if (candyCaneAtlatlBoost > 0) candyCaneAtlatlBoost--;
+
+			//mech flawless stuff
+			flawlessMechArmorSet = false;
+			flawlessMechChestplate = false;
+			flawlessMechMask = false;
+			flawlessMechTail = false;
+			if (flawlessMechMaskCooldown > 0) flawlessMechMaskCooldown--;
+			if (flawlessMechTailCooldown > 0) flawlessMechTailCooldown--;
+			if (flawlessMechSetBonusTime > 0) flawlessMechSetBonusTime--;
+			//only cool this down if the player isn't holding a weapon
+			if (flawlessMechSetBonusCooldown > 0 && Player.HeldItem.damage <= 0 && (Player.HeldItem.DamageType == DamageClass.Default || Player.HeldItem.DamageType == DamageClass.Generic))
+			{
+				flawlessMechSetBonusCooldown--;
+
+				if (flawlessMechSetBonusCooldown == 0)
+				{
+					SoundEngine.PlaySound(SoundID.Item15, Player.position);
+
+					for (int i = 0; i < 24; i++)
+					{
+						Dust.NewDustPerfect(Player.MountedCenter, 114, new Vector2(4, 0).RotatedBy(MathHelper.TwoPi * i / 24f), Scale: 1f).noGravity = true;
+					}
+				}
+			}
+
 
 			screenshakeRandomSeed = Main.rand.Next();
 
@@ -275,6 +315,13 @@ namespace Polarities
 			{
 				convectiveSetBonusCharge = 0;
 			}
+
+			//flawless mech armor set
+			if (PlayerInput.Triggers.Current.MouseRight && flawlessMechArmorSet && flawlessMechSetBonusCooldown == 0)
+			{
+				flawlessMechSetBonusTime = MECH_ARMOR_SET_TIME;
+				flawlessMechSetBonusCooldown = MECH_ARMOR_SET_COOLDOWN + MECH_ARMOR_SET_TIME;
+			}
 		}
 
 		public override void PostUpdateEquips()
@@ -377,6 +424,59 @@ namespace Polarities
 				beeRingTimer = 5;
 			}
 
+			if (Player.controlUseItem)
+			{
+				if (flawlessMechMask || flawlessMechChestplate || flawlessMechTail)
+				{
+					Player.direction = (Main.MouseWorld.X > Player.Center.X) ? 1 : -1;
+				}
+
+				//mask has deathrays
+				if (flawlessMechMask && flawlessMechMaskCooldown == 0)
+				{
+					flawlessMechMaskCooldown = MECH_MASK_COOLDOWN;
+
+					if (flawlessMechSetBonusTime > 0)
+					{
+						flawlessMechMaskCooldown /= 3;
+					}
+
+					int baseDamage = 50;
+
+					Vector2 position = Player.MountedCenter + new Vector2(Player.direction * 4, -11);
+					Vector2 velocity = (Main.MouseWorld - position).SafeNormalize(new Vector2(0, 1));
+
+					Projectile.NewProjectile(Player.GetSource_FromAI(), position, velocity, ProjectileType<FlawlessMechMaskDeathray>(), (int)Player.GetTotalDamage(DamageClass.Generic).ApplyTo(baseDamage), 0, Player.whoAmI);
+				}
+				//chestplate has arm swings
+				if (flawlessMechChestplate)
+				{
+					if (Player.ownedProjectileCounts[ProjectileType<MiniPrimeArmSlash>()] == 0)
+					{
+						int baseDamage = 50;
+
+						Vector2 position = Player.MountedCenter;
+						Projectile.NewProjectile(Player.GetSource_FromAI(), position, Vector2.Zero, ProjectileType<MiniPrimeArmSlash>(), (int)Player.GetTotalDamage(DamageClass.Generic).ApplyTo(baseDamage), Player.GetTotalKnockback(DamageClass.Generic).ApplyTo(4f), Player.whoAmI);
+					}
+				}
+				//tail has probes
+				if (flawlessMechTail && flawlessMechTailCooldown == 0)
+				{
+					flawlessMechTailCooldown = MECH_TAIL_COOLDOWN;
+
+					if (flawlessMechSetBonusTime > 0)
+					{
+						flawlessMechTailCooldown /= 3;
+					}
+
+					Vector2 position = Player.MountedCenter;
+					Vector2 velocity = new Vector2(14, 0).RotatedByRandom(MathHelper.TwoPi);
+					int baseDamage = 40;
+
+					Projectile.NewProjectile(Player.GetSource_FromAI(), position, velocity, ProjectileType<MiniProbe>(), (int)Player.GetTotalDamage(DamageClass.Generic).ApplyTo(baseDamage), Player.GetTotalKnockback(DamageClass.Generic).ApplyTo(2f), Player.whoAmI);
+				}
+			}
+
 			if (limestoneSetBonusHitCooldown > 0)
 			{
 				Player.statDefense = 0;
@@ -422,12 +522,26 @@ namespace Polarities
 
         public override void HideDrawLayers(PlayerDrawSet drawInfo)
 		{
-			if (Player?.HeldItem?.ModItem != null && Player.HeldItem.ModItem is IDrawHeldItem drawHeldItem)
+			if (drawInfo.drawPlayer?.HeldItem?.ModItem != null && drawInfo.drawPlayer.HeldItem.ModItem is IDrawHeldItem drawHeldItem)
 			{
 				if (!drawHeldItem.DoVanillaDraw())
 					PlayerDrawLayers.HeldItem.Hide();
 			}
-        }
+			if (ArmorMasks.headIndexToArmorDraw.ContainsKey(drawInfo.drawPlayer.head))
+            {
+				if (!ArmorMasks.headIndexToArmorDraw[drawInfo.drawPlayer.head].DoVanillaDraw())
+                {
+					PlayerDrawLayers.Head.Hide();
+				}
+			}
+			if (ArmorMasks.legIndexToArmorDraw.ContainsKey(drawInfo.drawPlayer.legs))
+			{
+				if (!ArmorMasks.legIndexToArmorDraw[drawInfo.drawPlayer.legs].DoVanillaDraw())
+				{
+					PlayerDrawLayers.Leggings.Hide();
+				}
+			}
+		}
 
         public override void CatchFish(FishingAttempt attempt, ref int itemDrop, ref int npcSpawn, ref AdvancedPopupRequest sonar, ref Vector2 sonarPosition)
         {

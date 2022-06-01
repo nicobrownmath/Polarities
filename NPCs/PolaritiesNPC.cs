@@ -32,6 +32,7 @@ using Polarities.Items.Weapons.Magic;
 using Polarities.Buffs;
 using Polarities.Items.Weapons.Melee;
 using Polarities.Items.Weapons.Ranged.Atlatls;
+using Polarities.Items.Armor.MechaMayhemArmor;
 
 namespace Polarities.NPCs
 {
@@ -891,6 +892,19 @@ namespace Polarities.NPCs
                     break;
                 case NPCID.WallofFlesh:
                     npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<MawOfFlesh>()));
+                    break;
+                case NPCID.TheDestroyer:
+                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<FlawlessMechTail>()));
+                    break;
+                case NPCID.Retinazer:
+                case NPCID.Spazmatism:
+                    {
+                        LeadingConditionRule leadingConditionRule = new LeadingConditionRule(new Conditions.MissingTwin());
+                        leadingConditionRule.OnSuccess(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<FlawlessMechMask>()));
+                    }
+                    break;
+                case NPCID.SkeletronPrime:
+                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<FlawlessMechChestplate>()));
                     break;
                 case NPCID.Plantera:
                     {
