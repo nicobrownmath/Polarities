@@ -190,11 +190,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			segmentPositions = new Vector2[numSegments * segmentsPerHitbox + segmentsTailTendrils + 3];
 			segmentAngles = new float[segmentPositions.Length];
 			segmentPulseScaleAngles = new float[segmentPositions.Length + specialSegmentsHead];
-			segmentHeats = new float[segmentPositions.Length];
-			for (int i = 0; i < segmentHeats.Length; i++)
-            {
-				segmentHeats[i] = 0.5f;
-            }
 
 			drawDatas = new PriorityQueue<DrawData, float>(MAX_DRAW_CAPACITY);
 		}
@@ -214,7 +209,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		private Vector2[] segmentPositions;
 		private float[] segmentAngles;
 		private float[] segmentPulseScaleAngles;
-		private float[] segmentHeats;
 
 		float tentacleAngleMultiplier = 0f;
 		float tentacleCompression = 1f;
@@ -273,6 +267,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			float angleSpeed = 0f;
 			float pulseSpeed = MathHelper.TwoPi / 120f;
 			bool gotoNextAttack = false;
+			bool useDefaultRotation = true;
 
 			//drawcode values
 			tendrilOutwardness = 0f;
@@ -284,7 +279,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			NPC.noGravity = true;
 
 			#region Main AI
-
 			switch (NPC.ai[0])
 			{
 				case 0:
@@ -364,9 +358,10 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							}
 							else
 							{
-								NPC.velocity *= 0.95f;
-								float angularSpeed = 1 / (NPC.velocity.Length() + 1);
-								NPC.velocity += new Vector2(angularSpeed, 0).RotatedBy(NPC.rotation + MathHelper.PiOver2 * side);
+								float angularSpeed = 0.05f / (NPC.velocity.Length() + 1);
+								NPC.rotation += angularSpeed * side;
+								useDefaultRotation = false;
+								NPC.velocity = new Vector2(NPC.velocity.Length() * 0.95f, 0).RotatedBy(NPC.rotation);
 							}
 
 							tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
@@ -389,9 +384,10 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							else
 							{
 								//swing
-								float angularSpeed = (attackProgress - (attackSetupTime + attackFreezeTime)) * ((attackSetupTime + attackFreezeTime + attackSwingTime) - attackProgress) / (attackSwingTime * attackSwingTime / 8f);
+								float angularSpeed = (6f * MathHelper.PiOver2 / attackSwingTime) * (attackProgress - (attackSetupTime + attackFreezeTime)) * ((attackSetupTime + attackFreezeTime + attackSwingTime) - attackProgress) / (attackSwingTime * attackSwingTime);
 
-								NPC.velocity = new Vector2(angularSpeed, 0).RotatedBy(NPC.rotation + MathHelper.PiOver2 * NPC.ai[2]);
+								NPC.rotation += angularSpeed * NPC.ai[2];
+								useDefaultRotation = false;
 
 								tentacleAngleMultiplier += (NPC.ai[2] * 0.1f - tentacleAngleMultiplier) / 10f;
 								angleSpeed = angularSpeed * 0.2f * NPC.ai[2];
@@ -540,23 +536,25 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
+				//note: This attack currently feels rather uninspired and should feel more eruptioney
 				#region Dash up and produce projectiles
 				case 3:
                     {
 						const int attackRepetitions = 4;
-						const int attackSetupTime = 120;
+						int attackSetupTime = inPhase2 ? 45 : 120;
+						int firstAttackExtraSetup = 120 - attackSetupTime;
 						const int attackSetupFrozenTime = 30;
 						const int attackDashTime = 150;
-						const int totalAttackTime = attackSetupTime + attackDashTime;
+						int totalAttackTime = attackSetupTime + attackDashTime;
 						const int extraTimeForProjectileDisappearance = 120;
 
-						float attackProgress = (int)NPC.ai[1] % totalAttackTime;
+						float attackProgress = (int)(NPC.ai[1] - firstAttackExtraSetup) % totalAttackTime;
 
 						int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
 						bool playerAhead = Vector2.Dot(NPC.Center - player.Center, new Vector2(-1, 0).RotatedBy(NPC.rotation)) > 0;
 
-						if (NPC.ai[1] > totalAttackTime * attackRepetitions)
-                        {
+						if (NPC.ai[1] >= totalAttackTime * attackRepetitions)
+						{
 							//allow extra time for projectiles to leave
 							float timeLeft = totalAttackTime * attackRepetitions + extraTimeForProjectileDisappearance - NPC.ai[1];
 							Idle(timeLeft);
@@ -573,7 +571,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								GoTowardsRadial(goalPosition, player.Center, timeLeft);
 							}
 							else
-                            {
+							{
 								Vector2 goalPosition = new Vector2(NPC.Center.X, player.Center.Y + 3600);
 								NPC.velocity = goalPosition - NPC.Center;
 
@@ -583,7 +581,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
 							angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
 						}
-						//TODO: Trail projectiles?
 						else if (attackProgress < attackSetupTime + attackDashTime)
 						{
 							float timeLeft = attackSetupTime + attackDashTime - attackProgress;
@@ -601,7 +598,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
 
 							float radius = SegmentRadius(0);
-							const int rowsProjectiles = 1;
+							/*const int rowsProjectiles = 1;
 
 							int numPerRow = inPhase2 ? 4 : 3;
 
@@ -616,6 +613,13 @@ namespace Polarities.NPCs.ConvectiveWanderer
 									float projSpeedMult = (float)Math.Sin(angle + angleBonus);
 									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - NPC.velocity * j / (float)rowsProjectiles + new Vector2(radius * projSpeedMult, 0), new Vector2(projSpeed * projSpeedMult, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 25, 2f, Main.myPlayer, ai0: 1f, ai1: inPhase2 ? 0.5f : 0f);
 								}
+							}*/
+
+							float projSpeed = 64f * (float)Math.Pow(1 - timeLeft / (attackDashTime + 4), 2);
+
+							for (int i = -1; i <= 1; i += 2)
+							{
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(radius * i, 0), NPC.velocity / 2 + new Vector2(projSpeed * i, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 25, 2f, Main.myPlayer, ai0: 5f, ai1: inPhase2 ? 0.5f : 0f);
 							}
 						}
 
@@ -684,7 +688,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							Vector2 particleSpawnPos = SegmentPosition(segmentToSpawnParticleFrom) + new Vector2(0, Main.rand.NextFloat(-1f, 1f)).RotatedBy(SegmentRotation(segmentToSpawnParticleFrom)) * SegmentRadius(segmentToSpawnParticleFrom);
 							float particleAngling = -Main.rand.NextFloat(0.2f, 0.8f) * side;
 
-							ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(particleSpawnPos, (arenaTargetPosition - particleSpawnPos).RotatedBy(particleAngling).SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(12f, 20f), (arenaTargetPosition - particleSpawnPos).ToRotation() + particleAngling, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: ModUtils.ConvectiveFlameColor((float)Math.Pow(SegmentHeat(segmentToSpawnParticleFrom), 2)));
+							ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(particleSpawnPos, (arenaTargetPosition - particleSpawnPos).RotatedBy(particleAngling).SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(12f, 20f), (arenaTargetPosition - particleSpawnPos).ToRotation() + particleAngling, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: ModUtils.ConvectiveFlameColor((inPhase2 ? 1f : 0.4f) * Main.rand.NextFloat(0.5f, 1f)));
 							particle.owner = NPC.whoAmI;
 							particle.angling = particleAngling;
 							ParticleLayer.AfterLiquidsAdditive.Add(particle);
@@ -703,6 +707,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
+				//note: This attack currently kind of sucks to dodge
 				#region Tentacles spin and rotate outwards, producing projectiles
 				case 5:
 					{
@@ -766,9 +771,10 @@ namespace Polarities.NPCs.ConvectiveWanderer
 									}
 									else
 									{
-										NPC.velocity *= 0.95f;
-										float angularSpeed = 0.2f;
-										NPC.velocity += new Vector2(angularSpeed, 0).RotatedBy(NPC.rotation + MathHelper.PiOver2 * side);
+										float angularSpeed = 0.05f / (NPC.velocity.Length() + 1);
+										NPC.rotation += angularSpeed * side;
+										useDefaultRotation = false;
+										NPC.velocity = new Vector2(NPC.velocity.Length() * 0.95f, 0).RotatedBy(NPC.rotation);
 									}
 
 									rotationAmount *= 2f;
@@ -924,19 +930,22 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 			//update segment positions
 			segmentPositions[0] = NPC.Center + NPC.velocity;
+
 			Vector2 rotationGoal = Vector2.Zero;
-
-			for (int i = 1; i < segmentPositions.Length; i++)
+			if (!useDefaultRotation) //uses whatever custom rotation value we've set to determine the position of the first segment instead of the default worm behavior
 			{
-				if (i > 1)
-				{
-					rotationGoal = ((rotationFade - 1) * rotationGoal + (segmentPositions[i - 1] - segmentPositions[i - 2])) / rotationFade;
-				}
+				segmentPositions[1] = segmentPositions[0] + new Vector2(-segmentSeparation, 0).RotatedBy(NPC.rotation);
+				rotationGoal = segmentPositions[1] - segmentPositions[0];
+			}
 
+			for (int i = (useDefaultRotation ? 1 : 2); i < segmentPositions.Length; i++)
+			{
+				if (i > 1) rotationGoal = ((rotationFade - 1) * rotationGoal + (segmentPositions[i - 1] - segmentPositions[i - 2])) / rotationFade;
 				segmentPositions[i] = segmentPositions[i - 1] + (rotationAmount * rotationGoal + (segmentPositions[i] - segmentPositions[i - 1]).SafeNormalize(Vector2.Zero)).SafeNormalize(Vector2.Zero) * segmentSeparation;
 			}
 
-			NPC.rotation = SegmentRotation(0);
+			if (useDefaultRotation)
+				NPC.rotation = SegmentRotation(0);
 
 			//update segment angles
 			segmentAngles[0] = (float)Math.IEEERemainder(segmentAngles[0] + angleSpeed, MathHelper.TwoPi);
@@ -950,32 +959,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			for (int i = 1; i < segmentPulseScaleAngles.Length; i++)
 			{
 				segmentPulseScaleAngles[i] = Utils.AngleLerp(segmentPulseScaleAngles[i], segmentPulseScaleAngles[i - 1], pulseLerpAmount);
-			}
-
-			//update heat values
-			const float heatLerpAmount = 0.5f;
-			const float heatGain = 0.005f;
-			const float heatLoss = 0.00125f;
-			for (int i = 0; i < segmentHeats.Length; i++)
-            {
-				Point tilePoint = SegmentPosition(i).ToTileCoordinates();
-				Tile tile = Framing.GetTileSafely(tilePoint);
-				if ((segmentHeats[i] < 0.5f && inPhase2) || (tile.LiquidAmount == 255 && tile.LiquidType == LiquidID.Lava) || tile.TileType == TileID.Ash || tile.TileType == TileID.Hellstone || tile.TileType == TileType<MantellarOreTile>() || tilePoint.Y >= Main.maxTilesY)
-                {
-					segmentHeats[i] += heatGain;
-				}
-				else
-                {
-					segmentHeats[i] -= heatLoss;
-                }
-				segmentHeats[i] = Math.Clamp(segmentHeats[i], 0, 0.5f + (inPhase2 ? 0.5f : 0f));
-
-			}
-			for (int i = 1; i < segmentHeats.Length; i++)
-			{
-				float diff = segmentHeats[i] - segmentHeats[i - 1];
-				segmentHeats[i] -= diff * heatLerpAmount / 2;
-				segmentHeats[i - 1] += diff * heatLerpAmount / 2;
 			}
 
 
@@ -1084,7 +1067,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
         PriorityQueue<DrawData, float> drawDatas;
 
 		//The maximum capacity potentially required by drawDatas
-		int MAX_DRAW_CAPACITY = 8669;
+		int MAX_DRAW_CAPACITY = 8720;
 
 		const int NUM_TENTACLES = 8;
 
@@ -1178,13 +1161,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				return (BaseSegmentPosition((int)index - 1) - BaseSegmentPosition((int)index)).ToRotation();
 			return Utils.AngleLerp(SegmentRotation((int)Math.Floor(index)), SegmentRotation((int)Math.Ceiling(index)), index % 1);
 		}
-		float SegmentHeat(float index)
-		{
-			if (index < 1) index = 1;
-			if (index % 1 == 0)
-				return (segmentHeats[(int)index] + segmentHeats[(int)index - 1]) / 2;
-			return ModUtils.Lerp(SegmentHeat((int)Math.Floor(index)), SegmentHeat((int)Math.Ceiling(index)), index % 1);
-		}
 
 		//TODO: Enable opening/closing mouth via PulseScale or something similar
 		float SegmentAngle(int index)
@@ -1272,9 +1248,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 				float radius = SegmentRadius(index);
 
-				//TODO: Adjust this to both look good and be continuous and be efficient
-				Color heatForColorValue = Color.White;//Color.Lerp(Color.DarkRed, Color.White, SegmentHeat(index));
-				int inc = Math.Clamp((int)(SegmentHeat(index) * 7), 0, 6);
+				int inc = inPhase2 ? 1 : 0;
 
 				float scaleMultToMatch = (float)Math.Tan(MathHelper.Pi / DRAWS_PER_SEGMENT) * radius;
 
@@ -1290,7 +1264,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						Vector2 scale = new Vector2(1, (float)Math.Cos(totalAngle) * scaleMultToMatch / (BASE_TEXTURE_HEIGHT / DRAWS_PER_SIDE) * 2);
 
 						float depthColorModifier = ((float)Math.Cos(totalAngle) + 2) / 3;
-						Color depthModifiedColor = color.MultiplyRGB(new Color(new Vector3(depthColorModifier))).MultiplyRGB(heatForColorValue);
+						Color depthModifiedColor = color.MultiplyRGB(new Color(new Vector3(depthColorModifier)));
 
 						SpriteEffects bodyEffects = SpriteEffects.None;
 
@@ -1404,7 +1378,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					Vector2 endPosition = (tendrilPos1 + tendrilPos2) / 2;
 
 					float depthColorModifier = ((float)Math.Cos(totalAngle1) + 3) / 4;
-					Color tendrilColor = ModUtils.ConvectiveFlameColor(tendrilProgress * tendrilProgress * SegmentHeat(index - tendrilIndex)).MultiplyRGB(new Color(new Vector3(depthColorModifier))) * tendrilProgress;
+					Color tendrilColor = ModUtils.ConvectiveFlameColor(tendrilProgress * tendrilProgress * 0.5f + (inPhase2 ? 0.5f : 0)).MultiplyRGB(new Color(new Vector3(depthColorModifier))) * tendrilProgress;
 					float tendrilWidth = tendrilProgress * 2f + 2f;
 
 					drawDatas.Enqueue(new DrawData(Textures.PixelTexture.Value, startPosition - screenPos, Textures.PixelTexture.Frame(), color.MultiplyRGBA(tendrilColor), (endPosition - startPosition).ToRotation(), new Vector2(0, 0.5f), new Vector2((endPosition - startPosition).Length(), tendrilWidth), SpriteEffects.None, 0), (float)Math.Cos(totalAngle1) * 64f - globalSegmentDepthModifier);
@@ -1554,7 +1528,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 			float scaleLength = (TentacleSegmentPosition(index, baseAngle, baseRotation, baseRadius, originalBasePosition) - TentacleSegmentPosition(index - 1, baseAngle, baseRotation, baseRadius, originalBasePosition)).Length() / TENTACLE_SEGMENT_SEPARATION;
 
-			int inc = Math.Clamp((int)(SegmentHeat(0) * 7), 0, 6);
+			int inc = inPhase2 ? 1 : 0;
 
 			for (int i = 0; i < SIDES_PER_TENTACLE_SEGMENT; i++)
             {
@@ -1589,7 +1563,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 	{
 		public override string Texture => "Polarities/Textures/Glow58";
 
-		public override void SetDefaults()
+        public override void SetDefaults()
 		{
 			Projectile.aiStyle = -1;
 			Projectile.scale = 0.5f;
@@ -1603,6 +1577,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			Projectile.ignoreWater = true;
 
 			Projectile.hide = false;
+
+			Projectile.GetGlobalProjectile<PolaritiesProjectile>().canLeaveWorld = true;
 		}
 
         public override void OnSpawn(IEntitySource source)
@@ -1624,14 +1600,19 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				case 4:
 					Projectile.timeLeft = 450;
 					break;
+				case 5:
+					Projectile.timeLeft = 600;
+					break;
 			}
 			Projectile.localAI[0] = Projectile.timeLeft;
 		}
 
+		//TODO: Prevent from despawning if outside of the world
         public override void AI()
 		{
 			float acceleration = 1;
 			float velRotation = 0f;
+			float gravity = 0f;
 			switch ((int)Projectile.ai[0])
             {
 				case 0:
@@ -1651,9 +1632,12 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					acceleration = 1.01f;
 					velRotation = (Projectile.ai[0] % 1 - 0.5f) * MathHelper.TwoPi;
 					break;
+				case 5:
+					gravity = 0.3f;
+					break;
 			}
 
-			Projectile.velocity = Projectile.velocity.RotatedBy(velRotation) * acceleration;
+			Projectile.velocity = Projectile.velocity.RotatedBy(velRotation) * acceleration + new Vector2(0, gravity);
 
 			Projectile.rotation = Projectile.velocity.ToRotation();
 

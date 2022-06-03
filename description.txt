@@ -85,6 +85,7 @@ v0.11 Changelog
     Nerfed the draconian, pyroclastic onslaught, volcanic plume
     Seismic striker now produces pillars of fire on impact with tiles
     Adjusted the tooltip of the molten spirit staff buff
+    Reworked and resprited convective armor
     Reworked the salt killifish staff
     Added the shroomite visor
     Decreased the knockback of atlatls

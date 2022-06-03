@@ -40,6 +40,47 @@ namespace Polarities.Projectiles
 
             //custom projectile shaders
             On.Terraria.Main.GetProjectileDesiredShader += Main_GetProjectileDesiredShader;
+
+            //prevent certain projectiles from despawning outside of the world
+            IL.Terraria.Projectile.Update += Projectile_Update;
+        }
+
+        public bool canLeaveWorld;
+
+        private void Projectile_Update(ILContext il)
+        {
+            ILCursor c = new ILCursor(il);
+
+            ILLabel label = null;
+
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.MatchLdarg(0),
+                i => i.MatchLdflda(typeof(Entity).GetField("position", BindingFlags.Instance | BindingFlags.Public)),
+                i => i.MatchLdfld(typeof(Vector2).GetField("Y", BindingFlags.Instance | BindingFlags.Public)),
+                i => i.MatchLdsfld(typeof(Main).GetField("topWorld", BindingFlags.Static | BindingFlags.Public)),
+                i => i.MatchBle(out _),
+                i => i.MatchLdarg(0),
+                i => i.MatchLdflda(typeof(Entity).GetField("position", BindingFlags.Instance | BindingFlags.Public)),
+                i => i.MatchLdfld(typeof(Vector2).GetField("Y", BindingFlags.Instance | BindingFlags.Public)),
+                i => i.MatchLdarg(0),
+                i => i.MatchLdfld(typeof(Entity).GetField("height", BindingFlags.Instance | BindingFlags.Public)),
+                i => i.MatchConvR4(),
+                i => i.MatchAdd(),
+                i => i.MatchLdsfld(typeof(Main).GetField("bottomWorld", BindingFlags.Static | BindingFlags.Public)),
+                i => i.MatchBltUn(out label),
+                i => i.MatchLdarg(0)
+                ))
+            {
+                Mod.Logger.Debug("Failed to find patch location");
+                return;
+            }
+
+            c.EmitDelegate<Func<Projectile, bool>>((projectile) =>
+            {
+                return projectile.GetGlobalProjectile<PolaritiesProjectile>().canLeaveWorld;
+            });
+            c.Emit(OpCodes.Brtrue, label);
+            c.Emit(OpCodes.Ldarg, 0);
         }
 
         public int customShader = 0;

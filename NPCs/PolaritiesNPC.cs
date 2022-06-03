@@ -879,7 +879,7 @@ namespace Polarities.NPCs
                 case NPCID.EaterofWorldsBody:
                 case NPCID.EaterofWorldsHead:
                 case NPCID.EaterofWorldsTail:
-                    //TODO: npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Magic.ConsumptionCannon>()));
+                    //TODO: npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Magic.ConsumptionCannon>())); (this can't actually be quite this simple)
                     break;
                 case NPCID.BrainofCthulhu:
                     //TODO: npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Melee.NeuralBasher>()));
@@ -901,6 +901,7 @@ namespace Polarities.NPCs
                     {
                         LeadingConditionRule leadingConditionRule = new LeadingConditionRule(new Conditions.MissingTwin());
                         leadingConditionRule.OnSuccess(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<FlawlessMechMask>()));
+                        npcLoot.Add(leadingConditionRule);
                     }
                     break;
                 case NPCID.SkeletronPrime:
