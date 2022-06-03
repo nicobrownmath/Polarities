@@ -261,6 +261,9 @@ namespace Polarities.NPCs.TownNPCs
 			{
 				chat.Add((baseDialogueString + "Graveyard", null));
 			}
+			//TODO: Dialogue for rain, windy days, and thunderstorms
+			//TODO: Maybe some dialogue for certain biomes?
+			//TODO: Fractal dimension dialogue that points out how they really shouldn't be there
 
 			(string, object) output = chat;
 			return Language.GetTextValueWith(output.Item1, output.Item2);
