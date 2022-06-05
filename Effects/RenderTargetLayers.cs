@@ -171,7 +171,7 @@ namespace Polarities.Effects
 		}
 	}
 
-	//TODO: There may be a bug where these don't load properly sometimes, since wanderer is occasionally invisible
+	//TODO: Fix issue where layers don't show up on the first load
 	public class ConvectiveWandererTarget : RenderTargetLayer
 	{
 		public override void Load(Mod mod)
