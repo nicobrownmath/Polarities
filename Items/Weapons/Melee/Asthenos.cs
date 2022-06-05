@@ -19,7 +19,7 @@ namespace Polarities.Items.Weapons.Melee
 {
 	public class Asthenos : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override void SetStaticDefaults()
 		{
 			this.SetResearch(1);
 		}
@@ -57,6 +57,13 @@ namespace Polarities.Items.Weapons.Melee
 
 	public class AsthenosProjectile : ModProjectile
 	{
+		public static PreGeneratedRandom asthenosRandomValues = new PreGeneratedRandom(51801, 4095);
+
+		public override void Unload()
+		{
+			asthenosRandomValues = null;
+		}
+
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("{$Mods.Polarities.ItemName.Asthenos}");
@@ -208,10 +215,11 @@ namespace Polarities.Items.Weapons.Melee
 				for (int i = 1; i < 8; i++)
 				{
 					if (i != 4)
-						DrawFlame(Main.spriteBatch, secondaryFlamePos, Projectile.rotation + i * MathHelper.PiOver4, flameScale * multiplier, progress, new UnifiedRandom(48391 + 4829 * i), PolaritiesSystem.timer, 1, alpha: 1f, goalAngle: Projectile.oldRot[5] + i * MathHelper.PiOver4);
+						DrawFlame(Main.spriteBatch, secondaryFlamePos, Projectile.rotation + i * MathHelper.PiOver4, flameScale * multiplier, progress, PolaritiesSystem.timer, 1, alpha: 1f, goalAngle: Projectile.oldRot[5] + i * MathHelper.PiOver4);
 				}
 			}
-			DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation, flameScale, progress, new UnifiedRandom(53290), PolaritiesSystem.timer, 2, alpha: 1f, goalAngle: Projectile.oldRot[5]);
+			asthenosRandomValues.SetIndex(0);
+			DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation, flameScale, progress, PolaritiesSystem.timer, 2, alpha: 1f, goalAngle: Projectile.oldRot[5]);
 
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
@@ -223,10 +231,11 @@ namespace Polarities.Items.Weapons.Melee
 				for (int i = 1; i < 8; i++)
 				{
 					if (i != 4)
-						DrawFlame(Main.spriteBatch, secondaryFlamePos, Projectile.rotation + i * MathHelper.PiOver4, flameScale * multiplier, progress, new UnifiedRandom(48391 + 4829 * i), PolaritiesSystem.timer, 1, alpha: 1f, goalAngle: Projectile.oldRot[5] + i * MathHelper.PiOver4);
+						DrawFlame(Main.spriteBatch, secondaryFlamePos, Projectile.rotation + i * MathHelper.PiOver4, flameScale * multiplier, progress, PolaritiesSystem.timer, 1, alpha: 1f, goalAngle: Projectile.oldRot[5] + i * MathHelper.PiOver4);
 				}
 			}
-			DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation, flameScale, progress, new UnifiedRandom(53290), PolaritiesSystem.timer, 2, alpha: 1f, goalAngle: Projectile.oldRot[5]);
+			asthenosRandomValues.SetIndex(0);
+			DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation, flameScale, progress, PolaritiesSystem.timer, 2, alpha: 1f, goalAngle: Projectile.oldRot[5]);
 
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
@@ -240,7 +249,7 @@ namespace Polarities.Items.Weapons.Melee
 			return false;
 		}
 
-		public static void DrawFlame(SpriteBatch spriteBatch, Vector2 position, float rotation, Vector2 scale, float progress, UnifiedRandom random, float timer, int index, float alpha = 1f, float goalAngle = 0f)
+		public static void DrawFlame(SpriteBatch spriteBatch, Vector2 position, float rotation, Vector2 scale, float progress, float timer, int index, float alpha = 1f, float goalAngle = 0f)
 		{
 			Texture2D glowTexture = Textures.Glow256.Value;
 			Rectangle glowFrame = glowTexture.Frame();
@@ -251,14 +260,14 @@ namespace Polarities.Items.Weapons.Melee
 			{
 				for (int i = 0; i < 8 * index; i++)
 				{
-					float mySpeed = random.NextFloat(60f, 120f);
-					float progression = (random.NextFloat(0f, 1f) + timer / mySpeed) % 1f;
-					Vector2 nextPosition = position + (new Vector2(random.NextFloat(-1f, 1f) * 2 * progression * (1 - progression) * (1 - progression), -progression) * scale * new Vector2(128f)).RotatedBy(rotation);
-					float nextRotation = (rotation + random.NextFloat(-0.5f, 0.5f) * progression * (1 - progression)).AngleLerp(goalAngle, (progression + 1) / 2);
+					float mySpeed = asthenosRandomValues.NextFloat(60f, 120f);
+					float progression = (asthenosRandomValues.NextFloat(0f, 1f) + timer / mySpeed) % 1f;
+					Vector2 nextPosition = position + (new Vector2(asthenosRandomValues.NextFloat(-1f, 1f) * 2 * progression * (1 - progression) * (1 - progression), -progression) * scale * new Vector2(128f)).RotatedBy(rotation);
+					float nextRotation = (rotation + asthenosRandomValues.NextFloat(-0.5f, 0.5f) * progression * (1 - progression)).AngleLerp(goalAngle, (progression + 1) / 2);
 
 					Vector2 nextScale = new Vector2(scale.X, Math.Max(scale.X, scale.Y / 2)) * 4 * progression * (1 - progression) * (1 - progression);
 
-					DrawFlame(spriteBatch, nextPosition, nextRotation, nextScale, progress, random, timer, index - 1, alpha * (1 - progression), goalAngle);
+					DrawFlame(spriteBatch, nextPosition, nextRotation, nextScale, progress, timer, index - 1, alpha * (1 - progression), goalAngle);
 				}
 			}
 

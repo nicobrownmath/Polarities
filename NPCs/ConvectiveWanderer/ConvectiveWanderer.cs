@@ -30,6 +30,7 @@ using Terraria.ModLoader.Utilities;
 using System.Collections.Generic;
 using Polarities.Effects;
 using MultiHitboxNPCLibrary;
+using Polarities.Items.Weapons.Melee;
 
 namespace Polarities.NPCs.ConvectiveWanderer
 {
@@ -764,7 +765,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: This attack currently has kind of inconsistent setup and you sometimes don't have enough space in current lava ocean worldgen
+				//note: this attack isn't really harder in p2 currently
 				#region Tentacles spin and rotate outwards, producing projectiles
 				case 5:
 					{
@@ -913,10 +914,152 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				#region Swim around underneath the player and cause screenshake, producing flamethrowers from terrain/lava surface, and causing lava debris to fall from the ceiling (maybe this could be a phase transition attack?)
+				//note: this attack could probably be trivialized by hollowing out everything everywhere
+				#region Create flame pillars from terrain, while dashing at them from below and to the side
 				case 6:
-                    {
+					{
+						const int setupTime = 60;
+						const int mainAttackTime = 720;
+						const int windDownTime = 60;
+						const int totalAttackTime = setupTime + mainAttackTime + windDownTime;
 
+						if (NPC.ai[1] == 0)
+                        {
+                            NPC.ai[2] = Vector2.Dot(NPC.Center - (player.Center + new Vector2(0, 600)), new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
+						}
+
+						//old motion from before I added the dashes, could be useful for something else
+						/*Vector2 orbitPoint = player.Center + new Vector2((float)Math.Sin(NPC.ai[1] * 0.01f) * NPC.ai[2] * 300, 500);
+						float angle = ((NPC.Center - orbitPoint) * new Vector2(1, 4)).ToRotation();
+						float dist = ((NPC.Center - orbitPoint) * new Vector2(1, 4)).Length();
+						Vector2 goalPosition = orbitPoint + new Vector2(800, 0).RotatedBy(angle + MathHelper.PiOver2 * dist / 800f * NPC.ai[2]) * new Vector2(1, 0.25f);
+
+						GoTowardsRadial(goalPosition, player.Center, 45f);*/
+
+						if (NPC.ai[1] >= setupTime + mainAttackTime)
+                        {
+							Idle(totalAttackTime - NPC.ai[1]);
+                        }
+						else if ((NPC.ai[1] - setupTime) % 180 < 60)
+						{
+							Vector2 goalPosition = player.Center + new Vector2(-NPC.ai[2] * 600, 400);
+							GoTowardsRadial(goalPosition, player.Center, 60 - (NPC.ai[1] - setupTime) % 180);
+						}
+						else
+						{
+							//dash at player
+							if ((NPC.ai[1] - setupTime) % 180 == 60)
+							{
+								NPC.velocity = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8f;
+
+								NPC.ai[2] *= -1;
+							}
+							else
+							{
+								NPC.velocity *= (float)Math.Pow(8, 1 / 120f);
+							}
+						}
+
+						if (NPC.ai[1] % (inPhase2 ? 40 : 60) == 0 && NPC.ai[1] >= setupTime && NPC.ai[1] <= totalAttackTime - windDownTime)
+                        {
+							const float minOffset = 200f;
+							const float maxOffset = 400f;
+
+							bool playerInLava = Framing.GetTileSafely(player.Center.ToTileCoordinates()).LiquidType == LiquidID.Lava && Framing.GetTileSafely(player.Center.ToTileCoordinates()).LiquidAmount == 255;
+
+							float startingOffset = Main.rand.NextFloat(minOffset, maxOffset);
+
+							float startingProportion = Main.rand.NextBool(3) ? 0 : Main.rand.NextFloat(1f);
+
+							float projPositionX = player.Center.X + startingOffset * startingProportion;
+							for (int i = 0; i < 20; i++)
+                            {
+								if (projPositionX >= Main.maxTilesX * 16) break;
+
+								//new projectile
+								CreateFlamePillar();
+
+								//increase proj offset
+								projPositionX += Main.rand.NextFloat(minOffset, maxOffset);
+							}
+							projPositionX = player.Center.X - startingOffset * (1 - startingProportion);
+							for (int i = 0; i < 20; i++)
+							{
+								if (projPositionX <= 0) break;
+
+								//new projectile
+								CreateFlamePillar();
+
+								//increase proj offset
+								projPositionX -= Main.rand.NextFloat(minOffset, maxOffset);
+							}
+
+							void CreateFlamePillar()
+							{
+								Vector2 projPosition = new Vector2(projPositionX, 16 * (int)(player.Center.Y / 16));
+
+								if (playerInLava)
+								{
+									if (Framing.GetTileSafely(projPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(projPosition.ToTileCoordinates()).TileType])
+									{
+										while (Framing.GetTileSafely(projPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(projPosition.ToTileCoordinates()).TileType])
+										{
+											projPosition.Y -= 16;
+
+											if (projPosition.Y <= 0) break;
+										}
+										projPosition.Y += 16;
+									}
+									else
+									{
+										while (!Framing.GetTileSafely(projPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(projPosition.ToTileCoordinates()).TileType])
+										{
+											projPosition.Y += 16;
+
+											if (projPosition.Y >= Main.maxTilesY * 16) break;
+										}
+									}
+								}
+								else
+								{
+									if ((Framing.GetTileSafely(projPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(projPosition.ToTileCoordinates()).TileType]) || (Framing.GetTileSafely(projPosition.ToTileCoordinates()).LiquidType == LiquidID.Lava && Framing.GetTileSafely(projPosition.ToTileCoordinates()).LiquidAmount == 255))
+									{
+										while ((Framing.GetTileSafely(projPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(projPosition.ToTileCoordinates()).TileType]) || (Framing.GetTileSafely(projPosition.ToTileCoordinates()).LiquidType == LiquidID.Lava && Framing.GetTileSafely(projPosition.ToTileCoordinates()).LiquidAmount == 255))
+										{
+											projPosition.Y -= 16;
+
+											if (projPosition.Y <= 0) break;
+										}
+										projPosition.Y += 16;
+									}
+									else
+									{
+										while (!((Framing.GetTileSafely(projPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(projPosition.ToTileCoordinates()).TileType]) || (Framing.GetTileSafely(projPosition.ToTileCoordinates()).LiquidType == LiquidID.Lava && Framing.GetTileSafely(projPosition.ToTileCoordinates()).LiquidAmount == 255)))
+										{
+											projPosition.Y += 16;
+
+											if (projPosition.Y >= Main.maxTilesY * 16) break;
+										}
+									}
+									//adjust to match lava surface
+									if (Framing.GetTileSafely(projPosition.ToTileCoordinates()).LiquidType == LiquidID.Lava)
+									{
+										projPosition.Y -= 16 * (Framing.GetTileSafely(projPosition.ToTileCoordinates()).LiquidAmount / 255f);
+									}
+								}
+								projPosition.Y += 16;
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), projPosition, new Vector2(0, -1), ProjectileType<ConvectiveWandererFlamePillar>(), 25, 2f, player.whoAmI, ai0: Main.rand.Next(4095), ai1: inPhase2 ? 0.5f : 0f);
+							}
+						}
+
+						tentacleAngleMultiplier += (NPC.ai[2] * 0.1f - tentacleAngleMultiplier) / 10f;
+						angleSpeed = NPC.velocity.Length() * 0.075f * tentacleAngleMultiplier;
+
+						NPC.ai[1]++;
+						if (NPC.ai[1] == totalAttackTime)
+                        {
+							gotoNextAttack = true;
+                        }
                     }
 					break;
 				#endregion
@@ -943,7 +1086,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				}
 
 				//TODO: go to next attack with a SC/Sentinel-like system
-				NPC.ai[0] = (NPC.ai[0] + Main.rand.Next(0, 4)) % 5 + 1;
+				NPC.ai[0] = (NPC.ai[0] + Main.rand.Next(0, 5)) % 6 + 1;
 				NPC.ai[1] = 0;
 			}
 
@@ -1669,20 +1812,12 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			switch ((int)Projectile.ai[0])
 			{
 				case 0:
-					Projectile.timeLeft = 450;
-					break;
-				case 1:
-					Projectile.timeLeft = 600;
-					break;
-				case 2:
-					Projectile.timeLeft = 600;
-					break;
 				case 3:
-					Projectile.timeLeft = 450;
-					break;
 				case 4:
 					Projectile.timeLeft = 450;
 					break;
+				case 1:
+				case 2:
 				case 5:
 					Projectile.timeLeft = 600;
 					break;
@@ -2190,6 +2325,71 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			}
 
 			return false;
+		}
+	}
+
+	public class ConvectiveWandererFlamePillar : ModProjectile
+    {
+		public override string Texture => "Polarities/Textures/Pixel";
+
+		public override void SetDefaults()
+		{
+			Projectile.width = 60;
+			Projectile.height = 60;
+			Projectile.aiStyle = -1;
+			Projectile.hostile = true;
+			Projectile.penetrate = -1;
+			Projectile.timeLeft = 120;
+			Projectile.tileCollide = false;
+			Projectile.hide = false;
+		}
+
+        public override void OnSpawn(IEntitySource source)
+		{
+			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+		}
+
+		public override bool ShouldUpdatePosition() => false;
+
+        public override void AI()
+		{
+			float progress = 1 - Projectile.timeLeft / 120f;
+			Projectile.ai[0] = (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1);
+		}
+
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			float progress = 1 - Projectile.timeLeft / 120f;
+			float width = 16f * (Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 1.5f);
+			return CustomCollision.CheckAABBvTriangle(targetHitbox, Projectile.Center + new Vector2(0, -128f).RotatedBy(Projectile.rotation) * (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f, Projectile.Center + new Vector2(width, 0), Projectile.Center - new Vector2(width, 0));
+		}
+
+		public override bool? CanDamage()
+		{
+			float progress = 1 - Projectile.timeLeft / 120f;
+			return (progress < 0.5f || progress > 0.9f) ? false : null;
+		}
+
+		public override bool PreDraw(ref Color lightColor)
+		{
+			float progress = 1 - Projectile.timeLeft / 120f;
+			Vector2 flameScale = new Vector2(Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 1.5f, (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1)) * (Math.Min(progress * 4, 1) + 1f) * 0.15f;
+			Vector2 flamePos = Projectile.Center - Main.screenPosition + new Vector2(0, -64 * flameScale.X).RotatedBy(Projectile.rotation);
+
+            AsthenosProjectile.asthenosRandomValues.SetIndex((int)Projectile.ai[0]);
+			AsthenosProjectile.DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation, flameScale, 0.5f + Projectile.ai[1], PolaritiesSystem.timer * 3, 2, alpha: 1f, goalAngle: Projectile.rotation);
+
+			return false;
+		}
+
+		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+		{
+			DrawLayer.AddProjectile<DrawLayerAdditiveAfterLiquids>(index);
+		}
+
+        public override void OnHitPlayer(Player target, int damage, bool crit)
+		{
+			target.AddBuff(BuffType<Incinerating>(), 60, true);
 		}
 	}
 }

@@ -269,12 +269,14 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 			Vector2 flameScale = new Vector2(Math.Min((progress + 1) / 2f, (1 - progress) * 2f) * 1.5f, progress * 16 + 1) * (progress + 1f) * 0.15f;
 			Vector2 flamePos = Projectile.Center - Main.screenPosition + new Vector2(0, -20 - 64 * flameScale.X).RotatedBy(Projectile.rotation + MathHelper.PiOver4);
 
-			AsthenosProjectile.DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation + MathHelper.PiOver4, flameScale, 0.5f, new Terraria.Utilities.UnifiedRandom(19011), PolaritiesSystem.timer * 3, 2, alpha: 1f, goalAngle: Projectile.rotation + MathHelper.PiOver4);
+			AsthenosProjectile.asthenosRandomValues.SetIndex(0);
+			AsthenosProjectile.DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation + MathHelper.PiOver4, flameScale, 0.5f, PolaritiesSystem.timer * 3, 2, alpha: 1f, goalAngle: Projectile.rotation + MathHelper.PiOver4);
 
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
 
-			AsthenosProjectile.DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation + MathHelper.PiOver4, flameScale, 0.5f, new Terraria.Utilities.UnifiedRandom(19011), PolaritiesSystem.timer * 3, 2, alpha: 1f, goalAngle: Projectile.rotation + MathHelper.PiOver4);
+			AsthenosProjectile.asthenosRandomValues.SetIndex(0);
+			AsthenosProjectile.DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation + MathHelper.PiOver4, flameScale, 0.5f, PolaritiesSystem.timer * 3, 2, alpha: 1f, goalAngle: Projectile.rotation + MathHelper.PiOver4);
 
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
@@ -317,7 +319,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
 			float progress = 1 - Projectile.timeLeft / 120f;
-			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(0, -128f).RotatedBy(Projectile.rotation + MathHelper.PiOver4) * (Math.Min(progress * 4, 1) * 16 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f);
+			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(0, -128f).RotatedBy(Projectile.rotation) * (Math.Min(progress * 4, 1) * 16 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f);
 		}
 
 		public override bool PreDraw(ref Color lightColor)
@@ -326,7 +328,8 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 			Vector2 flameScale = new Vector2(Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 1.5f, Math.Min(progress * 4, 1) * 16 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f;
 			Vector2 flamePos = Projectile.Center - Main.screenPosition + new Vector2(0, - 64 * flameScale.X).RotatedBy(Projectile.rotation);
 
-			AsthenosProjectile.DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation, flameScale, 0.5f, new Terraria.Utilities.UnifiedRandom(19011), PolaritiesSystem.timer * 3, 2, alpha: 1f, goalAngle: Projectile.rotation);
+			AsthenosProjectile.asthenosRandomValues.SetIndex(0);
+			AsthenosProjectile.DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation, flameScale, 0.5f, PolaritiesSystem.timer * 3, 2, alpha: 1f, goalAngle: Projectile.rotation);
 
 			return false;
 		}
