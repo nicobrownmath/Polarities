@@ -260,6 +260,21 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				}
 			}
 
+			//Despawn if the player leaves the underworld for too long
+			if (!player.ZoneUnderworldHeight)
+            {
+				NPC.localAI[3]++;
+				if (NPC.localAI[3] > 600)
+				{
+					NPC.ai[0] = -1;
+					NPC.ai[1] = 0;
+				}
+			}
+			else
+            {
+				NPC.localAI[3] = 0;
+            }
+
 			//things for use with tentacle methods
 			float tentacleBaseAngle = SegmentAngle(TENTACLE_ATTACH_SEGMENT_INDEX);
 			float tentacleBaseRotation = SegmentRotation(TENTACLE_ATTACH_SEGMENT_INDEX) + MathHelper.PiOver2;
@@ -280,6 +295,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			//drawcode values
 			if (NPC.ai[0] >= 0)
 			{
+				//only reset these if we're in the actual fight and not despawning or dying or something
 				tendrilOutwardness = 0f;
 				tentacleCompression = 1f;
 				tentacleTiltAngle = 0f;
@@ -769,7 +785,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: this attack isn't really harder in p2 currently, I should probably like make it move out of the way more slowly
+				//note: this attack isn't really harder in p2 currently, I should probably like make it move out of the way more slowly or target the player more accurately or something
 				#region Tentacles spin and rotate outwards, producing projectiles
 				case 5:
 					{
@@ -1072,7 +1088,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: this currently feels very similar to attack 5, I should do more to differentiate them
+				//note: this currently feels very similar to attack 5, I should do more to differentiate them, its setup is also a bit inconsistent
 				#region Tentacles point backwards, boss shoots giant mouth flamethrower
 				case 7:
 					{

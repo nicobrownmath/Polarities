@@ -1029,7 +1029,7 @@ namespace Polarities
 			}
 
 			int maxLakeX = (int)(Main.maxTilesX * 0.23f);
-			int lakeSurfaceY = Main.maxTilesY - 140;
+			int lakeSurfaceY = Main.maxTilesY - 130;
 
 			Tile frameTile;
 
@@ -1054,7 +1054,7 @@ namespace Polarities
 					else if (y < walkHeight)
 					{
 						frameTile.HasTile = false;
-						frameTile.LiquidType = 1;
+						frameTile.LiquidType = LiquidID.Lava;
 						frameTile.LiquidAmount = 255;
 					}
 					else
@@ -1211,7 +1211,7 @@ namespace Polarities
 				{
 					Tile frameTile = Framing.GetTileSafely(x, y);
 					frameTile.HasTile = false;
-					frameTile.LiquidType = 1;
+					frameTile.LiquidType = LiquidID.Lava;
 					frameTile.LiquidAmount = 255;
 				}
 				levelWidth += Main.rand.NextFloat(-2.5f, 2f);
@@ -1235,6 +1235,40 @@ namespace Polarities
 						if (Main.tile[k, l].TileType == TileType<SaltTile>())
 						{
 							Main.tile[k, l].TileType = (ushort)TileType<RockSaltTile>();
+						}
+					}
+				}
+			}
+
+			//fill in the gaps in the lava ocean
+			//TODO: This will require adjustment for special seeds
+			{
+				int x;
+				int y;
+
+				int direction = WorldGen.dungeonX < Main.maxTilesX / 2 ? 1 : -1;
+				int GetX()
+				{
+					if (direction == 1)
+					{
+						return x;
+					}
+					return Main.maxTilesX - 1 - x;
+				}
+
+				int maxLakeX = (int)(Main.maxTilesX * 0.23f);
+				int lakeSurfaceY = Main.maxTilesY - 130;
+
+				for (x = 0; x < maxLakeX; x++)
+				{
+					for (y = lakeSurfaceY; y < Main.maxTilesY; y++)
+					{
+						Tile frameTile = Framing.GetTileSafely(GetX(), y);
+
+						if (!frameTile.HasTile)
+						{
+							frameTile.LiquidType = LiquidID.Lava;
+							frameTile.LiquidAmount = 255;
 						}
 					}
 				}
