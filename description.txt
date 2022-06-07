@@ -92,6 +92,7 @@ v0.11 Changelog
     Adjusted the trajectory of darts to match vanilla darts
     Removed hallowed bars from the sunlight emblem's recipe
     Adjusted the lava ocean's worldgen
+    Changed the mod's icon
 
 Things I should do:
   Replace using AIType to control platform falling with CanFallThroughPlatforms

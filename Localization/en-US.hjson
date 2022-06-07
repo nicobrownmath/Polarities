@@ -310,6 +310,7 @@
 			"EsophageSummonItem": "Fleshy Capsid",
 			"AltBiomeMimicSummon": "Weird Key of Night",
 			"BetsySummonItem": "Infernia Crystal",
+			"ConvectiveWandererSummonItem": "Seismophone",
 
 			//critters
 			"GemflyItem": " Gemfly",
@@ -568,6 +569,7 @@
 			"EsophageSummonItemExtra": "It oozes blood under the red moon...",
 			"AltBiomeMimicSummon": "'Charged with the essence of strange souls'",
 			"BetsySummonItem": "Summons Betsy\nNot consumable",
+			"ConvectiveWandererSummonItem": "Summons a Convective Wanderer when used by the lava ocean\nNot consumable",
 
 			//critters
 			"GemflyItem": "May attract bats",

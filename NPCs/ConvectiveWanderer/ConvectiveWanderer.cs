@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using Polarities.Effects;
 using MultiHitboxNPCLibrary;
 using Polarities.Items.Weapons.Melee;
+using Terraria.Localization;
 
 namespace Polarities.NPCs.ConvectiveWanderer
 {
@@ -170,7 +171,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			NPC.height = 72;
 
 			NPC.defense = 25;
-			NPC.damage = 50;
+			NPC.damage = 32;
 			NPC.knockBackResist = 0f;
 			NPC.lifeMax = Main.masterMode ? 168000 / 3 : Main.expertMode ? 136000 / 2 : 100000;
 			NPC.noTileCollide = true;
@@ -219,6 +220,14 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		float upDashTelegraphProgress = 0f;
 
 		bool inPhase2 = false;
+
+
+		public static void SpawnOn(Player player)
+		{
+			NPC wanderer = Main.npc[NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), (int)player.Center.X, (int)player.Center.Y + 1400, NPCType<ConvectiveWanderer>())];
+			Main.NewText(Language.GetTextValue("Announcement.HasAwoken", wanderer.TypeName), 171, 64, 255);
+			SoundEngine.PlaySound(SoundID.Roar, player.position);
+		}
 		#endregion
 
 		#region AI
@@ -457,7 +466,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								if (inPhase2 && (attackProgress - (attackSetupTime + attackFreezeTime)) % 2 == 0 && attackProgress != attackSetupTime + attackFreezeTime) //exclude the first projectile because it looks weird
 								{
 									float projSpeed = 0.2f;
-									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(280, 0).RotatedBy(NPC.rotation), new Vector2(projSpeed, 0).RotatedBy(NPC.rotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 25, 2f, Main.myPlayer, ai0: 2f, ai1: inPhase2 ? 0.5f : 0f);
+									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(280, 0).RotatedBy(NPC.rotation), new Vector2(projSpeed, 0).RotatedBy(NPC.rotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 2f, ai1: inPhase2 ? 0.5f : 0f);
 								}
 							}
 						}
@@ -472,6 +481,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				#endregion
 
 				//note: This attack has a super long wind-down time which it should do something during
+				//note: the p2 version of this attack can require super precise vertical stability for a long time which may be excessive, I may want to replace it with just denser lines
 				#region Dash by player and produce projectiles
 				case 2:
 					{
@@ -578,7 +588,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 										if (inPhase2)
 										{
 											//phase 2 projectiles
-											Projectile.NewProjectile(NPC.GetSource_FromAI(), position, new Vector2(0, 1).RotatedBy(rotation), ProjectileType<ConvectiveWandererLateralDeathray>(), 25, 2f, Main.myPlayer);
+											Projectile.NewProjectile(NPC.GetSource_FromAI(), position, new Vector2(0, 1).RotatedBy(rotation), ProjectileType<ConvectiveWandererLateralDeathray>(), 12, 2f, Main.myPlayer);
 										}
 
 										float radius = SegmentRadius(i);
@@ -589,7 +599,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 										for (int j = 0; j < projsPerSegment; j++)
 										{
-											Projectile.NewProjectile(NPC.GetSource_FromAI(), position + new Vector2(0, radius).RotatedBy(rotation) * (float)Math.Sin(angle + j * MathHelper.TwoPi / projsPerSegment), new Vector2(0, projSpeed).RotatedBy(rotation) * (float)Math.Sin(angle + j * MathHelper.TwoPi / projsPerSegment), ProjectileType<ConvectiveWandererAcceleratingShot>(), 25, 2f, Main.myPlayer, ai0: 0f, ai1: inPhase2 ? 0.5f : 0f);
+											Projectile.NewProjectile(NPC.GetSource_FromAI(), position + new Vector2(0, radius).RotatedBy(rotation) * (float)Math.Sin(angle + j * MathHelper.TwoPi / projsPerSegment), new Vector2(0, projSpeed).RotatedBy(rotation) * (float)Math.Sin(angle + j * MathHelper.TwoPi / projsPerSegment), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 0f, ai1: inPhase2 ? 0.5f : 0f);
 										}
                                     } 
                                 }
@@ -608,7 +618,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: The p1 version is a bit easy
+				//note: The p1 version is a bit easy, it feels like both p1 and p2 could use a little something extra
 				#region Dash up and produce projectiles
 				case 3:
                     {
@@ -683,7 +693,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 									float angleBonus = i * MathHelper.TwoPi / numPerRow;
 									const float projSpeed = 2f;
 									float projSpeedMult = (float)Math.Sin(angle + angleBonus);
-									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - NPC.velocity * j / (float)rowsProjectiles + new Vector2(radius * projSpeedMult, 0), new Vector2(projSpeed * projSpeedMult, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 25, 2f, Main.myPlayer, ai0: 1f, ai1: inPhase2 ? 0.5f : 0f);
+									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - NPC.velocity * j / (float)rowsProjectiles + new Vector2(radius * projSpeedMult, 0), new Vector2(projSpeed * projSpeedMult, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 1f, ai1: inPhase2 ? 0.5f : 0f);
 								}
 							}*/
 
@@ -691,7 +701,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 							for (int i = -1; i <= 1; i += 2)
 							{
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(radius * i, 0), NPC.velocity / 2 + new Vector2(projSpeed * i, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 25, 2f, Main.myPlayer, ai0: 5f, ai1: inPhase2 ? 0.5f : 0f);
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(radius * i, 0), NPC.velocity / 2 + new Vector2(projSpeed * i, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 5f, ai1: inPhase2 ? 0.5f : 0f);
 							}
 						}
 
@@ -704,7 +714,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: the final explosion from this attack is underwhelming
+				//note: the final explosion from this attack is underwhelming, and the projectiles may be a bit dense
 				#region Circle player while charging up heat pulse
 				case 4:
 					{
@@ -741,7 +751,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							if (NPC.ai[1] == preSetupTime + setupTime)
 							{
 								float ai0 = side > 0 ? 3 : 3.5f;
-								Main.projectile[Projectile.NewProjectile(NPC.GetSource_FromAI(), arenaTargetPosition, Vector2.Zero, ProjectileType<ConvectiveWandererHeatVortex>(), 25, 2f, Main.myPlayer, ai0: NPC.whoAmI, ai1: inPhase2 ? 0.5f : 0f)].localAI[0] = ai0;
+								Main.projectile[Projectile.NewProjectile(NPC.GetSource_FromAI(), arenaTargetPosition, Vector2.Zero, ProjectileType<ConvectiveWandererHeatVortex>(), 16, 2f, Main.myPlayer, ai0: NPC.whoAmI, ai1: inPhase2 ? 0.5f : 0f)].localAI[0] = ai0;
 							}
 
 							float goalDistance = (NPC.Center - arenaTargetPosition).Length();
@@ -785,7 +795,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: this attack isn't really harder in p2 currently, I should probably like make it move out of the way more slowly or target the player more accurately or something
+				//note: this attack isn't really harder in p2 currently, just more punishing if you mess up, I should probably like make it move out of the way more slowly or target the player more accurately or something
+				//it's currently way too stunlocky as well it may honestly be better to just remove/totally redo it
 				#region Tentacles spin and rotate outwards, producing projectiles
 				case 5:
 					{
@@ -895,7 +906,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 										Vector2 spot = TentacleSegmentPosition(32, tentacleBaseAngle + i * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
 										float angle = MathHelper.Pi + TentacleSegmentRotation(32, tentacleBaseAngle + i * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
 
-										Projectile.NewProjectile(NPC.GetSource_FromAI(), spot, new Vector2(1, 0).RotatedBy(angle), ProjectileType<ConvectiveWandererTentacleDeathray>(), 25, 2f, Main.myPlayer, ai0: i, ai1: NPC.whoAmI);
+										Projectile.NewProjectile(NPC.GetSource_FromAI(), spot, new Vector2(1, 0).RotatedBy(angle), ProjectileType<ConvectiveWandererTentacleDeathray>(), 12, 2f, Main.myPlayer, ai0: i, ai1: NPC.whoAmI);
 									}
 								}
 							}
@@ -906,7 +917,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 									Vector2 spot = TentacleSegmentPosition(32, tentacleBaseAngle + i * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
 									float angle = MathHelper.Pi + TentacleSegmentRotation(32, tentacleBaseAngle + i * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
 
-									Projectile.NewProjectile(NPC.GetSource_FromAI(), spot, new Vector2(2, 0).RotatedBy(angle), ProjectileType<ConvectiveWandererAcceleratingShot>(), 25, 2f, Main.myPlayer, ai0: 1f, ai1: inPhase2 ? 0.5f : 0f);
+									Projectile.NewProjectile(NPC.GetSource_FromAI(), spot, new Vector2(2, 0).RotatedBy(angle), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 1f, ai1: inPhase2 ? 0.5f : 0f);
 								}
 							}
 						}
@@ -935,7 +946,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: this attack could probably be trivialized by hollowing out everything everywhere so I should prevent that
+				//note: this attack could probably be trivialized by hollowing out everything everywhere and ceiling grappling or using inf flight so I should prevent that by either adding a height cap or making the pillar heights adaptive
 				#region Create flame pillars from terrain, while dashing at them from below and to the side
 				case 6:
 					{
@@ -1072,7 +1083,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 									}
 								}
 								projPosition.Y += 16;
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), projPosition, new Vector2(0, -1), ProjectileType<ConvectiveWandererFlamePillar>(), 25, 2f, player.whoAmI, ai1: inPhase2 ? 0.5f : 0f);
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), projPosition, new Vector2(0, -1), ProjectileType<ConvectiveWandererFlamePillar>(), 12, 2f, player.whoAmI, ai1: inPhase2 ? 0.5f : 0f);
 							}
 						}
 
@@ -1088,7 +1099,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: this currently feels very similar to attack 5, I should do more to differentiate them, its setup is also a bit inconsistent
+				//note: setup is also a bit inconsistent, p2 version may be too difficult, boss should maybe slow down and not rotate a little before spawning the flamethrower? (only do that last one if I get complaints about the flamethrower I think it's fine but I could be wrong)
 				#region Tentacles point backwards, boss shoots giant mouth flamethrower
 				case 7:
 					{
@@ -1138,19 +1149,19 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							float angularSpeed = 0.02f / (NPC.velocity.Length() + 1);
 							NPC.rotation += angularSpeed * NPC.ai[2];
 							useDefaultRotation = false;
-							rotationAmount *= 1.5f;
+							rotationAmount *= 2f;//1.5f;
 							NPC.velocity = new Vector2(Math.Max(0.1f, NPC.velocity.Length() * 0.9f), 0).RotatedBy(NPC.rotation);
 
 							if (attackProgress == setupTime)
 							{
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(80, 0).RotatedBy(NPC.rotation), new Vector2(1, 0).RotatedBy(NPC.rotation), ProjectileType<ConvectiveWandererFlamethrower>(), 25, 2f, Main.myPlayer, ai0: NPC.whoAmI, ai1: inPhase2 ? 0.5f : 0);
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(80, 0).RotatedBy(NPC.rotation), new Vector2(1, 0).RotatedBy(NPC.rotation), ProjectileType<ConvectiveWandererFlamethrower>(), 16, 2f, Main.myPlayer, ai0: NPC.whoAmI, ai1: inPhase2 ? 0.5f : 0);
 							}
 							if ((attackProgress - setupTime) % 60 == 0 && attackProgress > setupTime)
                             {
 								int numProjectiles = (inPhase2 ? 8 : 4);
 								for (int i = 0; i < numProjectiles; i++)
 								{
-									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(112, 0).RotatedBy(NPC.rotation), new Vector2(4, 0).RotatedBy(NPC.rotation + i * MathHelper.TwoPi / numProjectiles + MathHelper.TwoPi / 8f), ProjectileType<ConvectiveWandererAcceleratingShot>(), 25, 2f, Main.myPlayer, ai0: 1, ai1: inPhase2 ? 0.5f : 0);
+									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(112, 0).RotatedBy(NPC.rotation), new Vector2(4, 0).RotatedBy(NPC.rotation + i * MathHelper.TwoPi / numProjectiles + MathHelper.TwoPi / 8f), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 1, ai1: inPhase2 ? 0.5f : 0);
 								}
                             }
 
@@ -2127,7 +2138,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					float randRotation = Main.rand.NextFloat(MathHelper.TwoPi);
 					for (int i = 0; i < numProjectiles; i++)
 					{
-						Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(4, 0).RotatedBy(i * MathHelper.TwoPi / numProjectiles + randRotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 25, 2f, Main.myPlayer, ai0: Projectile.localAI[0], ai1: Projectile.ai[1]);
+						Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(4, 0).RotatedBy(i * MathHelper.TwoPi / numProjectiles + randRotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: Projectile.localAI[0], ai1: Projectile.ai[1]);
 					}
 				}
 
@@ -2167,7 +2178,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				{
 					float speedMult = (5 - j) / 5f;
 					float rotationAmount = (1 - speedMult) * 0.004f;
-					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(8 * speedMult, 0).RotatedBy(j * MathHelper.Pi + i * MathHelper.TwoPi / numProjectiles + randRotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 25, 2f, Main.myPlayer, ai0: 4.5f + 0.5f * rotationAmount * Projectile.spriteDirection, ai1: Projectile.ai[1]);
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(8 * speedMult, 0).RotatedBy(j * MathHelper.Pi + i * MathHelper.TwoPi / numProjectiles + randRotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 4.5f + 0.5f * rotationAmount * Projectile.spriteDirection, ai1: Projectile.ai[1]);
 				}
 			}
 
