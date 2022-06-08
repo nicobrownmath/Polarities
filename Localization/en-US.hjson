@@ -53,6 +53,7 @@
 			"TentacleClub": "Tentaclub",
 			"Ukonvasara": "Ukonvasara",
 			"SeismicStriker": "Seismic Striker",
+			"Nemesis": "Nemesis",
 
 			//ranged weapons
 			"SaltShaker": "Salt Shaker",
@@ -400,6 +401,7 @@
 			"TentacleClub": "{$Mods.Polarities.ItemTooltip.WarhammerBase}\nRight click to use as a javelin",
 			"Ukonvasara": "{$Mods.Polarities.ItemTooltip.WarhammerBase}",
 			"SeismicStriker": "{$Mods.Polarities.ItemTooltip.WarhammerBase}\nIncinerates enemies and produces pillars of fire on impact with tiles\nRight click to use as a flamethrower spear",
+			"Nemesis": "{$Mods.Polarities.ItemTooltip.WarhammerBase}\nRight click or hit things to rain projectiles from the sky",
 
 			//ranged weapons
 			"SaltShaker": "'Ideal for family Thanksgivings'",

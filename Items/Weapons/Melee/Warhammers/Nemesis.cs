@@ -27,9 +27,9 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Nemesis");
-			Tooltip.SetDefault("Reduces enemy defense by 50 for 30 seconds\nRight click or hit enemies to rain projectiles from the sky");
 			Item.staff[Type] = true;
+
+			base.SetStaticDefaults();
 		}
 
 		public override void SetDefaults()
