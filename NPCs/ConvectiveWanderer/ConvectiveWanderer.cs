@@ -481,7 +481,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				#endregion
 
 				//note: This attack has a super long wind-down time which it should do something during
-				//note: the p2 version of this attack can require super precise vertical stability for a long time which may be excessive, I may want to replace it with just denser lines
 				#region Dash by player and produce projectiles
 				case 2:
 					{
@@ -585,17 +584,17 @@ namespace Polarities.NPCs.ConvectiveWanderer
 										Vector2 position = SegmentPosition(i);
 										float rotation = SegmentRotation(i);
 
-										if (inPhase2)
+										/*if (inPhase2)
 										{
 											//phase 2 projectiles
 											Projectile.NewProjectile(NPC.GetSource_FromAI(), position, new Vector2(0, 1).RotatedBy(rotation), ProjectileType<ConvectiveWandererLateralDeathray>(), 12, 2f, Main.myPlayer);
-										}
+										}*/
 
 										float radius = SegmentRadius(i);
 										float angle = SegmentAngle(i);
 
 										const float projSpeed = 32f;
-										int projsPerSegment = 16;
+										int projsPerSegment = inPhase2 ? 16 : 8;
 
 										for (int j = 0; j < projsPerSegment; j++)
 										{
@@ -618,7 +617,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: The p1 version is a bit easy, it feels like both p1 and p2 could use a little something extra
 				#region Dash up and produce projectiles
 				case 3:
                     {
@@ -633,7 +631,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						float attackProgress = (int)(NPC.ai[1] - firstAttackExtraSetup) % totalAttackTime;
 
 						int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
-						bool playerAhead = Vector2.Dot(NPC.Center - player.Center, new Vector2(-1, 0).RotatedBy(NPC.rotation)) > 0;
 
 						if (NPC.ai[1] >= totalAttackTime * attackRepetitions)
 						{
@@ -702,6 +699,10 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							for (int i = -1; i <= 1; i += 2)
 							{
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(radius * i, 0), NPC.velocity / 2 + new Vector2(projSpeed * i, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 5f, ai1: inPhase2 ? 0.5f : 0f);
+
+								//TODO: could be a random value for each dash instead of 1 to force you to look at the screen
+								//1 has them stop at player height so it's probably the most dangerous value and therefore we may want to bias towards it
+								if (attackProgress % 3 == 1) Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(radius * i, 0), NPC.velocity / 4 + new Vector2(projSpeed / 2f * i, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 5f, ai1: inPhase2 ? 0.5f : 0f);
 							}
 						}
 
@@ -714,7 +715,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: the final explosion from this attack is underwhelming, and the projectiles may be a bit dense
+				//note: the final explosion from this attack is underwhelming, and it should chase the player for a bit longer before slowing down
+				//note: the projectiles during the first part may be a bit dense in p2
 				#region Circle player while charging up heat pulse
 				case 4:
 					{
@@ -1099,7 +1101,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: setup is also a bit inconsistent, p2 version may be too difficult, boss should maybe slow down and not rotate a little before spawning the flamethrower? (only do that last one if I get complaints about the flamethrower I think it's fine but I could be wrong)
+				//note: setup is also a bit inconsistent, p2 version may be too difficult (not sure), rotation speed feels a little fast, attack may repeat too many times, boss should maybe slow down and not rotate a little before spawning the flamethrower? (only do that last one if I get complaints about the flamethrower I think it's fine but I could be wrong)
 				#region Tentacles point backwards, boss shoots giant mouth flamethrower
 				case 7:
 					{
@@ -2282,6 +2284,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		}
     }
 
+	//TODO: Remove this if it ends up unused
 	public class ConvectiveWandererLateralDeathray : ModProjectile
     {
 		public override string Texture => "Polarities/Textures/Glow58";
