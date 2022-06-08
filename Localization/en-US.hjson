@@ -137,6 +137,7 @@
 			"GlobusCruciger": "Globus Cruciger",
 			"AlkalineOrb": "Alkaline Orb",
 			"SpiritBottle": "Spirit Bottle",
+			"StardustTowerOrb": "Stardust Tower Orb",
 
 			//tools
 			"SunplateHamaxe": "Sunplate Hamaxe",
@@ -469,6 +470,7 @@
 			"GlobusCruciger": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons a sword-wielding hallowed statue that provides a slight regen boost when nearby",
 			"AlkalineOrb": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons a twisted mass of alkaline wraiths which shoots small defense-reducing spirits",
 			"SpiritBottle": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons a pair of spirits to bite enemies, causing your minions to deal up to 20 additional damage to them",
+			"StardustTowerOrb": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons an image of the stardust pillar",
 
 			//tools
 			"Everlight": "Illuminates the cursor when held\nGrants rifle scope effect",
@@ -728,7 +730,9 @@
 			"MiniProbe": "Mini Probe",
 			"MiniProbleLaser": "MiniProbeLaser",
 			"NebulaRayProjectile": "Nebula Beam",
-			"CelestialStormProjectile": "Vortex"
+			"CelestialStormProjectile": "Vortex",
+			"StardustWeaverMinion": "Stardust Weaver",
+			"StardustPillarMinion": "Stardust Tower"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
