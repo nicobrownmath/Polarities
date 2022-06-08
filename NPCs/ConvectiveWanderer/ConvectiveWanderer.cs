@@ -1183,7 +1183,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							velocityFade = 0.9f;
 							NPC.velocity = new Vector2(32f * (timeLeft / windDownTime) * (1 - timeLeft / windDownTime), 0).RotatedBy(NPC.rotation + MathHelper.Pi);
 
-							tentacleCompression = (1 - timeLeft / windDownTime);
+							tentacleCompression = 1 - timeLeft / windDownTime;
 
 							angleSpeed = NPC.ai[2] * 0.1f * (timeLeft / windDownTime);
 							tentacleAngleMultiplier += (-0.1f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
@@ -1201,21 +1201,113 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//drill into nearby tiles/lava and fling debris everywhere?
-				//open tentacles and cup them forwards, spin rapidly to produce a giant sphere of heat, then like shoot it at the player or something
+				#region Open tentacles and cup them forwards, spin rapidly to produce a giant sphere of heat, then like shoot it at the player
+				case 8:
+                    {
+						const int startSetupTime = 120;
+						const int setupTime = 60;
+						const int attackRepetitions = 4;
+						const int mainAttackPartTime = 240;
+						const int mainAttackTime = attackRepetitions * mainAttackPartTime;
+						const int windDownTime = 60;
+						const int endWindDownTime = 0;
+						const int totalAttackTime = setupTime + mainAttackTime + windDownTime;
+
+						int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
+
+						float attackProgress = (int)(NPC.ai[1] - startSetupTime) % totalAttackTime;
+
+						if (NPC.ai[1] >= startSetupTime + totalAttackTime)
+						{
+							//end-attack-series wind down
+							Idle(startSetupTime + endWindDownTime + totalAttackTime - NPC.ai[1]);
+						}
+						else if (attackProgress < setupTime)
+						{
+							//setup
+							if (NPC.ai[1] == 0) NPC.ai[2] = side;
+
+							float timeLeft = setupTime - Math.Max(0, attackProgress);
+
+							Vector2 goalPosition = player.Center;
+							Vector2 goalVelocity = (goalPosition - NPC.Center) / 120f;
+							NPC.velocity += (goalVelocity - NPC.velocity) / Math.Max(1, timeLeft - 30f);
+
+							angleSpeed = 0f;
+							tentacleAngleMultiplier += (-0.3f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
+							tentacleCompression = timeLeft / setupTime;
+
+							float tentacleRotProgress = (1 - timeLeft / setupTime);
+							tentacleTiltAngle = tentacleRotProgress * tentacleRotProgress * (3 - 2 * tentacleRotProgress) * 1.4f;
+							tentacleCurveAmount = -tentacleTiltAngle / 2f;
+						}
+						else if (attackProgress < setupTime + mainAttackTime)
+						{
+							//attack
+							float timeLeft = (setupTime + mainAttackTime - attackProgress) % mainAttackPartTime;
+
+							if (timeLeft == 0)
+							{
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(240, 0).RotatedBy(NPC.rotation), NPC.velocity, ProjectileType<ConvectiveWandererChargedShot>(), 16, 2f, Main.myPlayer, ai0: NPC.whoAmI, ai1: inPhase2 ? 0.5f : 0);
+							}
+
+							Vector2 goalPosition = player.Center;
+							Vector2 goalVelocity = (goalPosition - NPC.Center) / 120f * (2f - timeLeft / mainAttackPartTime);
+
+							float accFactor = (timeLeft + 1) * (mainAttackPartTime - timeLeft) / mainAttackPartTime;
+							NPC.velocity += (goalVelocity - NPC.velocity) / accFactor;
+
+							float angleForRotation = ((attackProgress - setupTime) % (mainAttackPartTime * 2)) / mainAttackPartTime * MathHelper.Pi;
+							angleSpeed = NPC.ai[2] * (float)Math.Sin(angleForRotation) * 0.1f;
+							tentacleAngleMultiplier += (-0.3f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
+							tentacleCompression = 0;
+							tentacleTiltAngle = 1.4f;
+							tentacleCurveAmount = -tentacleTiltAngle / 2f;
+						}
+						else
+						{
+							//wind down
+							float timeLeft = setupTime + mainAttackTime + windDownTime - attackProgress;
+
+							NPC.velocity *= 0.98f;
+
+							angleSpeed = 0f;
+							tentacleAngleMultiplier += (-0.3f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
+							tentacleCompression = 1 - timeLeft / windDownTime;
+
+							float tentacleRotProgress = timeLeft / windDownTime;
+							tentacleTiltAngle = tentacleRotProgress * tentacleRotProgress * (3 - 2 * tentacleRotProgress) * 1.4f;
+							tentacleCurveAmount = -tentacleTiltAngle / 2f;
+						}
+
+						NPC.ai[1]++;
+						if (NPC.ai[1] == startSetupTime + endWindDownTime + totalAttackTime)
+						{
+							gotoNextAttack = true;
+						}
+					}
+					break;
+				#endregion
+
+				//some sonic attack based on the clicking sounds of that one polychaete
 			}
 
+			//TODO: I feel like a last-ditch attack of some sort would fit this boss pretty well
+			//TODO: Make attacks using the tentacles not start occuring until a certain health threshold
 			if (gotoNextAttack)
 			{
+				//TODO: Change this health threshold depending on difficulty
 				if (NPC.life * 2 < NPC.lifeMax)
 				{
 					inPhase2 = true;
+					//TODO: Proper phase transition
 				}
 
 				//TODO: go to next attack with a SC/Sentinel-like system
-				NPC.ai[0] = (NPC.ai[0] + Main.rand.Next(0, 6)) % 7 + 1;
+				NPC.ai[0] = (NPC.ai[0] + Main.rand.Next(0, 7)) % 8 + 1;
 				NPC.ai[1] = 0;
 			}
+
 
 			//TODO: Add a bit of occasional random variation to some of the attacks to ensure their positioning is varied
 			//(This should only be varied some of the time, a la sun pixie's projectile rings)
@@ -1224,7 +1316,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			//avoiding the player is important okay
 			//TODO: Make this take into account our direction better to avoid sudden curvature
 			//TODO: Maximum turn parameter
-			//TODO: Use this in attack 2 setup
 			void GoTowardsRadial(Vector2 goalPosition, Vector2 orbitPoint, float timeLeft, float maxSpeed = float.PositiveInfinity)
 			{
 				if (timeLeft == 1)
@@ -2044,6 +2135,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		}
 	}
 
+	//TODO: This currently has a really small hitbox, may want to make it a big bigger
 	public class ConvectiveWandererHeatVortex : ModProjectile
 	{
 		/*public override void Load()
@@ -2239,6 +2331,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		}
 
 		public int owner = -1;
+		public int projectileOwner = -1;
 		public float angling;
 
 		public override void AI()
@@ -2278,6 +2371,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			Asset<Texture2D> particleTexture = particleTextures[Type];
 
 			Vector2 drawPosition = Position - Main.screenPosition;
+			if (projectileOwner > -1) drawPosition += Main.projectile[projectileOwner].Center;
 			Color drawColor = Glow ? Color * Alpha : Lighting.GetColor(drawPosition.ToTileCoordinates()).MultiplyRGBA(Color * Alpha);
 
 			spritebatch.Draw(particleTexture.Value, drawPosition, particleTexture.Frame(), drawColor, Rotation, particleTexture.Size() / 2, Scale * new Vector2(Velocity.Length() / 2f * Alpha, 1), SpriteEffects.None, 0f);
@@ -2595,6 +2689,141 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		public override void OnHitPlayer(Player target, int damage, bool crit)
 		{
 			target.AddBuff(BuffType<Incinerating>(), 60, true);
+		}
+	}
+
+	public class ConvectiveWandererChargedShot : ModProjectile
+	{
+		public override string Texture => "Polarities/Items/Weapons/Ranged/ContagunProjectile";
+
+		public override void SetDefaults()
+		{
+			Projectile.aiStyle = -1;
+			Projectile.scale = 0.1f;
+			Projectile.width = 128;
+			Projectile.height = 128;
+			Projectile.alpha = 0;
+			Projectile.timeLeft = 720;
+			Projectile.penetrate = -1;
+			Projectile.hostile = true;
+			Projectile.tileCollide = false;
+			Projectile.ignoreWater = true;
+
+			Projectile.hide = false;
+		}
+
+		public override void AI()
+		{
+			Projectile.rotation += 0.05f;
+
+			if (Projectile.timeLeft >= 600)
+			{
+				float scaleFactor = (720 - Projectile.timeLeft) / 120f;
+				Projectile.scale = 2f * scaleFactor * (2 - scaleFactor);
+
+				Projectile.width = (int)(Projectile.scale * 128);
+				Projectile.height = (int)(Projectile.scale * 128);
+
+				NPC owner = Main.npc[(int)Projectile.ai[0]];
+				Projectile.velocity = new Vector2(1, 0).RotatedBy(owner.rotation);
+				Projectile.Center = owner.Center + 240 * Projectile.velocity;
+
+				if (Projectile.timeLeft == 600)
+				{
+					Projectile.velocity = new Vector2(4, 0).RotatedBy(owner.rotation) + owner.velocity;
+				}
+
+				//TODO: Ensure other attached projectiles die if the owner dies
+				if (!owner.active) Projectile.Kill();
+
+				if (Projectile.timeLeft >= 630)
+				{
+					float colorPulse = (3 + (float)Math.Sin(Projectile.timeLeft * MathHelper.TwoPi / 30f)) / 4;
+					Color drawColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(colorPulse * 0.25f + 0.25f + Projectile.ai[1], 2));
+
+					Vector2 particlePos = new Vector2(240, 0).RotatedByRandom(MathHelper.TwoPi);
+					ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(particlePos, -particlePos / 20f, 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: drawColor);
+					particle.projectileOwner = Projectile.whoAmI;
+					ParticleLayer.AfterLiquidsAdditive.Add(particle);
+				}
+			}
+			else
+            {
+				Projectile.velocity *= 1.01f;
+
+				//explode if too far
+				if (Projectile.Distance(Main.LocalPlayer.Center) > 1200)
+                {
+					int numProjectiles = 16;
+					float rotationOffset = Main.rand.NextFloat(MathHelper.TwoPi);
+
+					for (int i = 0; i < numProjectiles; i++)
+                    {
+						Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, new Vector2(8, 0).RotatedBy(i * MathHelper.TwoPi / numProjectiles + rotationOffset), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Projectile.owner, ai0: 1, ai1: Projectile.ai[1]);
+                    }
+					if (Projectile.ai[1] != 0)
+					{
+						for (int i = 0; i < numProjectiles; i++)
+						{
+							Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, new Vector2(6, 0).RotatedBy(i * MathHelper.TwoPi / numProjectiles + MathHelper.Pi / numProjectiles + rotationOffset), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Projectile.owner, ai0: 1, ai1: Projectile.ai[1]);
+						}
+					}
+
+					Projectile.Kill();
+                }
+            }
+		}
+
+		void MakeParticle(float minSpeed = 12f, float maxSpeed = 20f)
+		{
+			float colorPulse = (3 + (float)Math.Sin(Projectile.timeLeft * MathHelper.TwoPi / 30f)) / 4;
+			Color drawColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(colorPulse * 0.25f + 0.25f + Projectile.ai[1], 2));
+
+			ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(Projectile.Center, new Vector2(Main.rand.NextFloat(minSpeed, maxSpeed), 0).RotatedByRandom(MathHelper.TwoPi), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: drawColor);
+			ParticleLayer.AfterLiquidsAdditive.Add(particle);
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			for (int i = 0; i < (Projectile.ai[1] == 0f ? 1 : 2) * 100; i++)
+			{
+				MakeParticle(maxSpeed: 40);
+			}
+		}
+
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			return CustomCollision.CheckAABBvDisc(targetHitbox, new Circle(Projectile.Center, Projectile.width / 2));
+		}
+
+		public override bool? CanDamage()
+		{
+			return Projectile.timeLeft > 690 ? false : null;
+		}
+
+		public override void OnHitPlayer(Player target, int damage, bool crit)
+		{
+			target.AddBuff(BuffType<Incinerating>(), 60, true);
+		}
+
+		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+		{
+			DrawLayer.AddProjectile<DrawLayerAdditiveAfterLiquids>(index);
+		}
+
+		public override bool PreDraw(ref Color lightColor)
+		{
+			float colorPulse = (3 + (float)Math.Sin(Projectile.timeLeft * MathHelper.TwoPi / 30f)) / 4;
+			Color drawColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(colorPulse * 0.25f + 0.25f + Projectile.ai[1], 2));
+
+			//TODO: Trail when moving
+
+			Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), drawColor * 0.25f, Projectile.rotation, TextureAssets.Projectile[Type].Size() / 2, Projectile.scale / 2, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), drawColor * 0.25f, -Projectile.rotation + MathHelper.PiOver2, TextureAssets.Projectile[Type].Size() / 2, Projectile.scale / 2, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), drawColor * 0.25f, Projectile.rotation * 2, TextureAssets.Projectile[Type].Size() / 2, Projectile.scale / 2, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), drawColor * 0.25f, -Projectile.rotation * 2 + MathHelper.PiOver2, TextureAssets.Projectile[Type].Size() / 2, Projectile.scale / 2, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			Main.EntitySpriteDraw(Textures.Glow256.Value, Projectile.Center - Main.screenPosition, Textures.Glow256.Frame(), drawColor, 0f, Textures.Glow256.Size() / 2, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			return false;
 		}
 	}
 }
