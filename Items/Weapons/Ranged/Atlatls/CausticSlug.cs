@@ -65,7 +65,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 			return false;
         }
 
-        public override bool DoDartDraw(int index)
+        public override bool DoDartDraw(int index, ref PlayerDrawSet drawInfo)
         {
             return index == 0;
         }

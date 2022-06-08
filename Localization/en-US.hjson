@@ -85,6 +85,7 @@
 			"CausticSlug": "Caustic Slug",
 			"JunglesRage": "Jungle's Rage",
 			"CandyCaneAtlatl": "Candy Cane Atlatl",
+			"CelestialStorm": "Celestial Storm",
 
 			//ammo
 			"WoodenDart": "Wooden Dart",
@@ -420,6 +421,7 @@
 			"Ehecatl": "Shoots three darts at once",
 			"CausticSlug": "Shoots corrosive slugs that fall when they reach the cursor",
 			"CandyCaneAtlatl": "Hitting enemies increases swing speed and decreases accuracy",
+			"CelestialStorm": "Shoots portals which fire darts at the cursor\n'My god, it's full of darts'",
 
 			//ammo
 			"BouncyDart": "Bounces up to three times",
@@ -725,7 +727,8 @@
 			"MiniPrimeArmSlash": "Arm Flailing",
 			"MiniProbe": "Mini Probe",
 			"MiniProbleLaser": "MiniProbeLaser",
-			"NebulaRayProjectile": "Nebula Beam"
+			"NebulaRayProjectile": "Nebula Beam",
+			"CelestialStormProjectile": "Vortex"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",

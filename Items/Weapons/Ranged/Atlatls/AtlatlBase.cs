@@ -113,7 +113,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
             return player.position + player.fullRotationOrigin + (player.itemLocation - (player.position + player.fullRotationOrigin) + new Vector2(player.direction * shotDistance.X, -shotDistance.Y).RotatedBy(player.itemRotation).RotatedBy(player.gravDir == 1 ? 0 : player.direction * MathHelper.PiOver2)).RotatedBy(player.fullRotation);
         }
 
-        public void DrawHeldItem(ref PlayerDrawSet drawInfo)
+        public virtual void DrawHeldItem(ref PlayerDrawSet drawInfo)
         {
             Vector2 oldLocation = drawInfo.drawPlayer.itemLocation;
             float oldRotation = drawInfo.drawPlayer.itemRotation;
@@ -126,7 +126,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
             //for some reason vanilla darts don't draw until a few ticks after spawning so this can look strange with them
             for (int i = 0; i < usedShots.Length; i++)
             {
-                if (usedShots[i] == 0 && DoDartDraw(i))
+                if (usedShots[i] == 0 && DoDartDraw(i, ref drawInfo))
                 {
                     Texture2D dartTexture = TextureAssets.Projectile[mostRecentShotTypes[i]].Value;
 
@@ -163,12 +163,9 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
             drawInfo.drawPlayer.itemRotation = oldRotation;
         }
 
-        public virtual bool DoDartDraw(int index) => true;
+        public virtual bool DoDartDraw(int index, ref PlayerDrawSet drawInfo) => true;
 
-        public bool DoVanillaDraw()
-        {
-            return true;
-        }
+        public virtual bool DoVanillaDraw() => true;
     }
 
     public interface ICustomAtlatlDart
