@@ -113,6 +113,7 @@
 			"ShadeStorm": "Shade Storm",
 			"LifeGrasper": "Life Grasper",
 			"HadeanUpwelling": "Hadean Upwelling",
+			"NebulaRay": "Nebula Ray",
 
 			//summon weapons
 			"ZombatStaff": "Zombat Staff",
@@ -443,6 +444,7 @@
 			"ShadeStorm": "Shoots erratically curving shadows that tend to move towards enemies",
 			"LifeGrasper": "Summons a circular aura to drain life from enemies",
 			"HadeanUpwelling": "Summons a ring of fire around you, which turns into a directed fireblast",
+			"NebulaRay": "'Cast the light of distant stars upon your enemies'",
 
 			//summon weapons
 			"ZombatStaff": "Summons baby zombats to protect you",
@@ -723,6 +725,7 @@
 			"MiniPrimeArmSlash": "Arm Flailing",
 			"MiniProbe": "Mini Probe",
 			"MiniProbleLaser": "MiniProbeLaser",
+			"NebulaRayProjectile": "Nebula Beam"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
