@@ -84,6 +84,7 @@ v0.11 Changelog
     Added some help quotes to the guide
     Nerfed the draconian, pyroclastic onslaught, volcanic plume
     Seismic striker now produces pillars of fire on impact with tiles
+    Nemesis now aims projectile rain from hitting enemies (and tiles) towards the point of impact instead of the cursor
     Adjusted the tooltip of the molten spirit staff buff
     Reworked and resprited convective armor
     Reworked the salt killifish staff

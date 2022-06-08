@@ -19,9 +19,6 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 {
 	public class SeismicStriker : WarhammerBase, IDrawHeldItem
 	{
-		private static int hammerLength = 98;
-		private static int hammerHeadSize = 30;
-
         public override int HammerLength => 98;
         public override int HammerHeadSize => 30;
         public override int DefenseLoss => 48;
@@ -126,8 +123,8 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 
 				for (int i = 1; i < trailLength; i++)
 				{
-					Vector2 positionI = drawInfo.drawPlayer.itemLocation + new Vector2(drawInfo.drawPlayer.direction, -drawInfo.drawPlayer.gravDir).RotatedBy(drawInfo.drawPlayer.itemRotation - drawInfo.drawPlayer.direction * drawInfo.drawPlayer.gravDir * i * trailStretching) * (hammerLength + 2) * Item.scale;
-					Vector2 positionI2 = drawInfo.drawPlayer.itemLocation + new Vector2(drawInfo.drawPlayer.direction, -drawInfo.drawPlayer.gravDir).RotatedBy(drawInfo.drawPlayer.itemRotation - drawInfo.drawPlayer.direction * drawInfo.drawPlayer.gravDir * (i - 1) * trailStretching) * (hammerLength + 2) * Item.scale;
+					Vector2 positionI = drawInfo.drawPlayer.itemLocation + new Vector2(drawInfo.drawPlayer.direction, -drawInfo.drawPlayer.gravDir).RotatedBy(drawInfo.drawPlayer.itemRotation - drawInfo.drawPlayer.direction * drawInfo.drawPlayer.gravDir * i * trailStretching) * (HammerLength + 2) * Item.scale;
+					Vector2 positionI2 = drawInfo.drawPlayer.itemLocation + new Vector2(drawInfo.drawPlayer.direction, -drawInfo.drawPlayer.gravDir).RotatedBy(drawInfo.drawPlayer.itemRotation - drawInfo.drawPlayer.direction * drawInfo.drawPlayer.gravDir * (i - 1) * trailStretching) * (HammerLength + 2) * Item.scale;
 
 					float progress = 1 - i / (float)trailLength;
 					Vector2 scale = new Vector2(progress * 0.1f, (positionI - positionI2).Length() * 0.02f);
