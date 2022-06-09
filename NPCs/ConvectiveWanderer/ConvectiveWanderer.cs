@@ -1428,7 +1428,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					Vector2 spot = TentacleSegmentPosition(indexForDrawing, tentacleBaseAngle + tentacleIndex * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
 					float radius = TentacleRadius(indexForDrawing);
 
-					hitboxes.Add(new RectangleHitboxData(new Rectangle((int)(spot.X - radius), (int)(spot.Y - radius), (int)(radius * 2), (int)(radius * 2))));
+					bool? canBeDamaged = Math.Abs((float)Math.Cos(TentacleBaseAngleOffset(indexForDrawing) + tentacleBaseAngle + tentacleIndex * MathHelper.TwoPi / NUM_TENTACLES)) <= Math.Sin(MathHelper.Pi / NUM_TENTACLES);
+					hitboxes.Add(new RectangleHitboxData(new Rectangle((int)(spot.X - radius), (int)(spot.Y - radius), (int)(radius * 2), (int)(radius * 2)), canBeDamaged: canBeDamaged));
 				}
 			}
 
@@ -1438,7 +1439,10 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				Vector2 spot = h == numSegments ?
 					 SegmentPosition(-(segmentsPerHitbox - hitboxSegmentOffset) * specialSegmentsHeadMultiplier) : //head segment
 					 segmentPositions[h * segmentsPerHitbox + hitboxSegmentOffset]; //body/tail segment
-				hitboxes.Add(new RectangleHitboxData(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height)));
+				bool? canBeDamaged = h == numSegments ?
+					tentacleCompression != 1f :
+					null; //body/tail segment
+				hitboxes.Add(new RectangleHitboxData(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height), canBeDamaged : canBeDamaged));
 			}
 
 			NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(hitboxes);
