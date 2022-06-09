@@ -314,6 +314,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 			NPC.noGravity = true;
 
+			NPC.ai[0] = 2;
 			#region Main AI
 			//TODO: All attacks need sounds
 			//TODO: Most attacks could use some particles
@@ -353,7 +354,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: The p1 version is a bit easy
 				#region Head Swing Attack
 				case 1:
 					{
@@ -480,7 +480,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: This attack has a super long wind-down time which it should do something during
 				#region Dash by player and produce projectiles
 				case 2:
 					{
@@ -489,7 +488,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						const int totalAttackDashTime = 90;
 						const int totalAttackStoppedTime = 60;
 						const int totalAttackTime = totalAttackSetupTime + totalAttackDashTime + totalAttackStoppedTime;
-						const int extraTimeForProjectileDisappearance = 210; //TODO: Maybe do something during this time
+						const int extraTimeForProjectileDisappearance = 300;
 
 						const float dashStartDistance = 3600f;
 						const float dashStartVelocity = 110f;
@@ -505,12 +504,24 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							//allow extra time for projectiles to despawn
 							float timeLeft = totalAttackTime * attackRepetitions + totalAttackSetupTime + extraTimeForProjectileDisappearance - NPC.ai[1];
 
-							Idle(timeLeft);
-
-							if (NPC.ai[1] > totalAttackSetupTime)
+							if (timeLeft > 60)
 							{
-								tendrilOutwardness = timeLeft / totalAttackSetupTime;
+								//chase the player through the minefield
+								Vector2 goalPosition = player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * 100f;
+								Vector2 goalVelocity = (goalPosition - NPC.Center) / 60f;
+								NPC.velocity += (goalVelocity - NPC.velocity) / 30f;
+
+								if (NPC.ai[1] == totalAttackTime * attackRepetitions + totalAttackSetupTime) NPC.velocity = goalVelocity;
+
+								tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+								angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
 							}
+							else
+							{
+								Idle();
+							}
+
+							tendrilOutwardness = 0;
 						}
 						else if (attackProgress < totalAttackSetupTime)
 						{
@@ -584,12 +595,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 										Vector2 position = SegmentPosition(i);
 										float rotation = SegmentRotation(i);
 
-										/*if (inPhase2)
-										{
-											//phase 2 projectiles
-											Projectile.NewProjectile(NPC.GetSource_FromAI(), position, new Vector2(0, 1).RotatedBy(rotation), ProjectileType<ConvectiveWandererLateralDeathray>(), 12, 2f, Main.myPlayer);
-										}*/
-
 										float radius = SegmentRadius(i);
 										float angle = SegmentAngle(i);
 
@@ -636,7 +641,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						{
 							//allow extra time for projectiles to leave
 							float timeLeft = totalAttackTime * attackRepetitions + extraTimeForProjectileDisappearance - NPC.ai[1];
-							Idle(timeLeft);
+							Idle();
 						}
 						else if (attackProgress < attackSetupTime)
 						{
@@ -716,7 +721,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				#endregion
 
 				//note: the final explosion from this attack is underwhelming, and it should chase the player for a bit longer before slowing down
-				//note: the projectiles during the first part may be a bit dense in p2
 				#region Circle player while charging up heat pulse
 				case 4:
 					{
@@ -728,7 +732,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 						if (NPC.ai[1] < preSetupTime)
 						{
-							Idle(preSetupTime - NPC.ai[1]);
+							Idle();
 						}
 						else if (NPC.ai[1] < preSetupTime + setupTime + chaseTime)
                         {
@@ -785,7 +789,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						}
 						else
                         {
-							Idle(totalAttackTime - NPC.ai[1]);
+							Idle();
                         }
 
 						NPC.ai[1]++;
@@ -799,6 +803,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 				//note: this attack isn't really harder in p2 currently, just more punishing if you mess up, I should probably like make it move out of the way more slowly or target the player more accurately or something
 				//it's currently way too stunlocky as well it may honestly be better to just remove/totally redo it
+				//it's also the only attack I'd currently consider actively unfair
 				#region Tentacles spin and rotate outwards, producing projectiles
 				case 5:
 					{
@@ -817,7 +822,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 						if (NPC.ai[1] >= totalAttackTime * attackRepetitions + extraStartSetupTime)
                         {
-							Idle(totalAttackTime * attackRepetitions + extraStartSetupTime + extraEndTime - NPC.ai[1]);
+							Idle();
                         }
 						else if (attackProgress < setupTime)
                         {
@@ -830,7 +835,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							{
 								if (attackProgress < -60)
 								{
-									Idle(-60 - attackProgress);
+									Idle();
 								}
 								else
 								{
@@ -974,7 +979,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 						if (NPC.ai[1] >= setupTime + mainAttackTime)
                         {
-							Idle(totalAttackTime - NPC.ai[1]);
+							Idle();
                         }
 						else if ((NPC.ai[1] - setupTime) % 180 < 60)
 						{
@@ -1119,7 +1124,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 						if (NPC.ai[1] >= startSetupTime + totalAttackTime * attackRepetitions)
                         {
-							Idle(startSetupTime + endWindDownTime + totalAttackTime * attackRepetitions - NPC.ai[1]);
+							Idle();
 						}
 						else if (attackProgress < setupTime)
 						{
@@ -1135,7 +1140,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							tentacleTiltAngle = tentacleRotProgress * tentacleRotProgress * (3 - 2 * tentacleRotProgress) * MathHelper.TwoPi * 7f / 16f;
 							tentacleCurveAmount = -2f * tentacleRotProgress * (1 - tentacleRotProgress) * (1 - tentacleCompression);
 
-							Vector2 goalPosition = player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * 200f;
+							Vector2 goalPosition = player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * Math.Min(200f, (NPC.Center - player.Center).Length());
 							Vector2 goalVelocity = (goalPosition - NPC.Center) / (timeLeft + 5);
 							NPC.velocity += (goalVelocity - NPC.velocity) / Math.Max(1, timeLeft - 30f);
 						}
@@ -1201,6 +1206,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
+				//TODO: This attack needs more charging visuals coming from the boss itself
 				#region Open tentacles and cup them forwards, spin rapidly to produce a giant sphere of heat, then like shoot it at the player
 				case 8:
                     {
@@ -1210,7 +1216,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						const int mainAttackPartTime = 240;
 						const int mainAttackTime = attackRepetitions * mainAttackPartTime;
 						const int windDownTime = 60;
-						const int endWindDownTime = 0;
+						const int endWindDownTime = 60;
 						const int totalAttackTime = setupTime + mainAttackTime + windDownTime;
 
 						int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
@@ -1220,7 +1226,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						if (NPC.ai[1] >= startSetupTime + totalAttackTime)
 						{
 							//end-attack-series wind down
-							Idle(startSetupTime + endWindDownTime + totalAttackTime - NPC.ai[1]);
+							Idle();
 						}
 						else if (attackProgress < setupTime)
 						{
@@ -1289,7 +1295,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//some sonic attack based on the clicking sounds of that one polychaete
+				//some sonic attack (a charge?) based on the clicking sounds of that one polychaete
 			}
 
 			//TODO: I feel like a last-ditch attack of some sort would fit this boss pretty well
@@ -1347,7 +1353,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			}
 
 			//idle behavior
-			void Idle(float timeLeft)
+			void Idle()
 			{
 				int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
 
@@ -2228,7 +2234,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 				if (Projectile.timeLeft % 60 == 0 && Projectile.timeLeft <= 600)
 				{
-					int numProjectiles = Projectile.ai[1] == 0 ? 6 : 12;
+					int numProjectiles = Projectile.ai[1] == 0 ? 4 : 8;
 					float randRotation = Main.rand.NextFloat(MathHelper.TwoPi);
 					for (int i = 0; i < numProjectiles; i++)
 					{
@@ -2692,6 +2698,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		}
 	}
 
+	//TODO: I think this shares the hitbox issue
 	public class ConvectiveWandererChargedShot : ModProjectile
 	{
 		public override string Texture => "Polarities/Items/Weapons/Ranged/ContagunProjectile";
