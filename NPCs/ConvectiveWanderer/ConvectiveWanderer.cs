@@ -33,6 +33,8 @@ using MultiHitboxNPCLibrary;
 using Polarities.Items.Weapons.Melee;
 using Terraria.Localization;
 using ReLogic.Utilities;
+using Terraria.Graphics;
+using Terraria.Graphics.Shaders;
 
 namespace Polarities.NPCs.ConvectiveWanderer
 {
@@ -156,6 +158,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				}
 			};
 			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+
+			//trails for head swing
+			NPCID.Sets.TrailCacheLength[Type] = 30;
 		}
 
 		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -223,6 +228,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		float tendrilOutwardness = 0f;
 		float tendrilGlow = 0f;
 		float upDashTelegraphProgress = 0f;
+		float headSwingAlpha = 0f;
 
 		bool inPhase2 = false;
 
@@ -317,11 +323,12 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				tendrilGlow = 0f;
 			}
 			upDashTelegraphProgress = 0f;
+			headSwingAlpha = 0f;
 
 			NPC.noGravity = true;
 
 			#region Main AI
-			//TODO: All attacks need sounds
+			//TODO: Attacks need sounds
 			//TODO: Most attacks could use some particles
 			switch (NPC.ai[0])
 			{
@@ -370,7 +377,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						const int totalAttackTime = attackSetupTime + attackFreezeTime + attackSwingTime;
 
 						//TODO: Better visual cues (both for charging time and for freeze)
-						//TODO: Prim trail for swing?
 						float attackProgress = (int)(NPC.ai[1] - attackFirstSetupExtraTime) % totalAttackTime;
 
 						bool playerAhead = Vector2.Dot(NPC.Center - player.Center, new Vector2(-1, 0).RotatedBy(NPC.rotation)) > 0;
@@ -466,13 +472,13 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								tentacleAngleMultiplier += (NPC.ai[2] * 0.1f - tentacleAngleMultiplier) / 10f;
 								angleSpeed = angularSpeed * 2f * NPC.ai[2];
 
-								//TODO: Consider bringing back the p1 projectiles and adding more projectiles in p2 (possibly staggered) if this is too easy
-								//TODO: Possibly (in phase 2) charge after the last attack?
 								if (inPhase2 && (attackProgress - (attackSetupTime + attackFreezeTime)) % 2 == 0 && attackProgress != attackSetupTime + attackFreezeTime) //exclude the first projectile because it looks weird
 								{
 									float projSpeed = 0.2f;
 									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(280, 0).RotatedBy(NPC.rotation), new Vector2(projSpeed, 0).RotatedBy(NPC.rotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 2f, ai1: inPhase2 ? 0.5f : 0f);
 								}
+
+								headSwingAlpha = Math.Min(1f, 8f * (attackProgress - (attackSetupTime + attackFreezeTime)) * ((attackSetupTime + attackFreezeTime + attackSwingTime) - attackProgress) / (attackSwingTime * attackSwingTime));
 							}
 						}
 
@@ -740,7 +746,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: the final explosion from this attack is underwhelming, and it should chase the player for a bit longer before slowing down
 				#region Circle player while charging up heat pulse
 				case 4:
 					{
@@ -944,7 +949,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 									Vector2 spot = TentacleSegmentPosition(32, tentacleBaseAngle + i * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
 									float angle = MathHelper.Pi + TentacleSegmentRotation(32, tentacleBaseAngle + i * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
 
-									Projectile.NewProjectile(NPC.GetSource_FromAI(), spot, new Vector2(2, 0).RotatedBy(angle), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 1f, ai1: inPhase2 ? 0.5f : 0f);
+									Projectile.NewProjectile(NPC.GetSource_FromAI(), spot, new Vector2(8, 0).RotatedBy(angle), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 1f, ai1: inPhase2 ? 0.5f : 0f);
 								}
 							}
 						}
@@ -1232,7 +1237,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//TODO: This attack needs more charging visuals coming from the boss itself
+				//note: this attack needs more charging visuals coming from the boss itself
+				//note: this attack probably needs denser projectiles
 				#region Open tentacles and cup them forwards, spin rapidly to produce a giant sphere of heat, then like shoot it at the player
 				case 8:
                     {
@@ -1433,6 +1439,15 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				segmentPulseScaleAngles[i] = Utils.AngleLerp(segmentPulseScaleAngles[i], segmentPulseScaleAngles[i - 1], pulseLerpAmount);
 			}
 
+			//custom update trail
+			for (int num7 = NPC.oldPos.Length - 1; num7 > 0; num7--)
+			{
+				NPC.oldPos[num7] = NPC.oldPos[num7 - 1];
+				NPC.oldRot[num7] = NPC.oldRot[num7 - 1];
+			}
+			NPC.oldPos[0] = NPC.Center;
+			NPC.oldRot[0] = NPC.rotation;
+
 
 			//position hitbox segments
 			//the order in which we do this matters as it determines hit priority
@@ -1579,7 +1594,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						}
 					}
 				}
-            }
+				if (headSwingAlpha > 0) DrawHeadSwingPrimTrail();
+			}
 			else
 			{
 				//stuff to draw to our target (includes main worm)
@@ -1617,6 +1633,54 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		{
 			RenderTargetLayer.AddNPC<ConvectiveWandererTarget>(index);
 			DrawLayer.AddNPC<DrawLayerAdditiveAfterLiquids>(index);
+		}
+
+		void DrawHeadSwingPrimTrail()
+        {
+			float trailWidth = 288;
+
+			MiscShaderData miscShaderData = GameShaders.Misc["FinalFractal"];
+			int num = 1;
+			int num2 = 0;
+			int num3 = 0;
+			int num4 = 1;
+			miscShaderData.UseShaderSpecificData(new Vector4(num, num2, num3, num4));
+			miscShaderData.UseImage0("Images/Extra_" + 201);
+			miscShaderData.UseImage1("Images/Extra_" + 195);
+			miscShaderData.Apply();
+
+			Vector2 previousInnerPoint = NPC.Center + new Vector2(0, -NPC.ai[2] * 70).RotatedBy(NPC.rotation);
+			Vector2[] oldCenters = new Vector2[NPC.oldPos.Length];
+			float[] oldRotInverses = new float[NPC.oldRot.Length];
+			for (int i = 0; i < oldCenters.Length; i++)
+			{
+				Vector2 arcPoint = NPC.oldPos[i] + new Vector2(trailWidth, -NPC.ai[2] * 8).RotatedBy(NPC.oldRot[i]);
+				Vector2 innerPoint = arcPoint + (previousInnerPoint - arcPoint).SafeNormalize(Vector2.Zero) * trailWidth;
+
+				oldCenters[i] = (arcPoint + innerPoint) / 2;
+				oldRotInverses[i] = (arcPoint - innerPoint).ToRotation() + MathHelper.PiOver2;
+
+				previousInnerPoint = innerPoint;
+			}
+
+			VertexStrip vertexStrip = new VertexStrip();
+
+			Color StripColors(float progressOnStrip)
+			{
+				Color result = ModUtils.ConvectiveFlameColor((float)Math.Pow((1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip)) * 0.5f + (inPhase2 ? 0.5f : 0), 2)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip));
+				result.A /= 2;
+				result *= headSwingAlpha;
+				return result;
+			}
+
+			float StripWidth(float progressOnStrip)
+			{
+				return trailWidth / 2f;
+			}
+
+			vertexStrip.PrepareStrip(oldCenters, oldRotInverses, StripColors, StripWidth, -Main.screenPosition, NPC.oldPos.Length, includeBacksides: true);
+			vertexStrip.DrawTrail();
+			Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 		}
 
 
@@ -2291,7 +2355,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			}
 			else
             {
-				Projectile.velocity = (Main.LocalPlayer.Center - Projectile.Center) / 120f * (Projectile.timeLeft / 120f);
+				Projectile.velocity = (Main.LocalPlayer.Center - Projectile.Center) / 120f * (float)Math.Sqrt(Projectile.timeLeft / 120f);
 
 				for (int i = 0; i < (Projectile.ai[1] == 0f ? 1 : 2); i++)
 					if (Main.rand.Next(120) >= Projectile.timeLeft)
@@ -2316,16 +2380,18 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 		public override void Kill(int timeLeft)
 		{
-			int numProjectiles = Projectile.ai[1] == 0 ? 16 : 32;
+			int numProjectilesPerRing = (Projectile.ai[1] == 0 ? 1 : 2) * 16;
+			int numProjectilesPerAngle = 5;
+
 			float randRotation = Main.rand.NextFloat(MathHelper.TwoPi);
 
-			for (int i = 0; i < numProjectiles; i++)
+			for (int i = 0; i < numProjectilesPerRing; i++)
 			{
-				for (int j = 0; j < 5; j++)
+				for (int j = 0; j < numProjectilesPerAngle; j++)
 				{
-					float speedMult = (5 - j) / 5f;
+					float speedMult = (numProjectilesPerAngle - j) / (float)numProjectilesPerAngle;
 					float rotationAmount = (1 - speedMult) * 0.004f;
-					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(8 * speedMult, 0).RotatedBy(j * MathHelper.Pi + i * MathHelper.TwoPi / numProjectiles + randRotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 4.5f + 0.5f * rotationAmount * Projectile.spriteDirection, ai1: Projectile.ai[1]);
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(8 * speedMult, 0).RotatedBy(j * MathHelper.Pi + i * MathHelper.TwoPi / numProjectilesPerRing + randRotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 4.5f + 0.5f * rotationAmount * Projectile.spriteDirection, ai1: Projectile.ai[1]);
 				}
 			}
 
