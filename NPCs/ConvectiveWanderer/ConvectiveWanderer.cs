@@ -221,6 +221,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		float tentacleTiltAngle = 0f;
 		float tentacleCurveAmount = 0f;
 		float tendrilOutwardness = 0f;
+		float tendrilGlow = 0f;
 		float upDashTelegraphProgress = 0f;
 
 		bool inPhase2 = false;
@@ -313,6 +314,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				tentacleCompression = 1f;
 				tentacleTiltAngle = 0f;
 				tentacleCurveAmount = 0f;
+				tendrilGlow = 0f;
 			}
 			upDashTelegraphProgress = 0f;
 
@@ -332,6 +334,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						tentacleCompression = ModUtils.Lerp(tentacleCompression, 1f, 0.1f);
 						tentacleTiltAngle = ModUtils.Lerp(tentacleTiltAngle, 0f, 0.1f);
 						tentacleCurveAmount = ModUtils.Lerp(tentacleCurveAmount, 0f, 0.1f);
+						tendrilGlow = ModUtils.Lerp(tendrilGlow, 0f, 0.1f);
 
 						NPC.velocity.Y += 0.3f;
 						if (NPC.velocity.Y < 0)
@@ -591,12 +594,12 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 							tendrilOutwardness = 1f;
 
-							//TODO: Drawcode tendrils glowing brighter in preparation
+							float timeLeft = totalAttackSetupTime + totalAttackDashTime + totalAttackStoppedTime - attackProgress;
+							tendrilGlow = 4f * timeLeft * (totalAttackStoppedTime - timeLeft) / (totalAttackStoppedTime * totalAttackStoppedTime);
 
 							if (attackProgress == totalAttackSetupTime + totalAttackDashTime + totalAttackStoppedTime / 2)
                             {
 								//TODO: Create sound on projectile firing
-								//TODO: Orthogonal flashes on projectile creation
 								for (int i = 0; i < segmentPositions.Length - segmentsTailTendrils - 2; i++)
                                 {
 									if (TendrilIndex(i) == 0)
@@ -1325,7 +1328,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				NPC.ai[0] = (NPC.ai[0] + Main.rand.Next(0, 7)) % 8 + 1;
 				NPC.ai[1] = 0;
 			}
-
+			NPC.ai[0] = 2;
 
 			//TODO: Add a bit of occasional random variation to some of the attacks to ensure their positioning is varied
 			//(This should only be varied some of the time, a la sun pixie's projectile rings)
@@ -1549,6 +1552,22 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					//TODO: Possibly replace with/add a screenshake
 					Main.spriteBatch.Draw(Textures.Glow256.Value, NPC.Center - screenPos, Textures.Glow256.Frame(), ModUtils.ConvectiveFlameColor(upDashTelegraphProgress * upDashTelegraphProgress * 0.125f + (inPhase2 ? 0.875f : 0f)) * upDashTelegraphProgress, 0f, Textures.Glow256.Size() / 2, new Vector2(1, 64), SpriteEffects.None, 0);
                 }
+				if (tendrilGlow > 0 && NPC.ai[0] >= 0)
+                {
+					Color telegraphColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(tendrilGlow * 0.5f + (inPhase2 ? 0.5f : 0f), 2)) * tendrilGlow;
+					for (int i = 0; i < segmentPositions.Length - segmentsTailTendrils - 2; i++)
+					{
+						if (TendrilIndex(i) == 0)
+						{
+							Vector2 position = SegmentPosition(i);
+							float rotation = SegmentRotation(i);
+
+							float radius = SegmentRadius(i);
+
+							Main.spriteBatch.Draw(Textures.Glow256.Value, position - screenPos, Textures.Glow256.Frame(), telegraphColor, rotation, Textures.Glow256.Size() / 2, new Vector2(1 / 4f, tendrilGlow * 2 + radius / 128), SpriteEffects.None, 0);
+						}
+					}
+				}
             }
 			else
 			{
@@ -1790,8 +1809,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 			//tendril 'skirts'
 			//TODO: make gradient more continuous with a custom sprite a la denizen's telegraphs
-			//TODO: Make brighter?
-			//TODO: Adjust color to be darker when cold and more unilaterally blue-white when hot
 			if (index > 0 && index < segmentPositions.Length - 2)
 			{
 				//don't draw if our tendrils are pointing more outwards
@@ -1801,6 +1818,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 				//don't adjust outwardness for the tail tendrils
 				float effectiveOutwardness = index < segmentPositions.Length - segmentsTailTendrils - 2 ? tendrilOutwardness : 0f;
+				float effectiveGlow = index < segmentPositions.Length - segmentsTailTendrils - 2 ? tendrilGlow : 0f;
 
 				float effectiveIndexForPositioning = index - tendrilIndex * effectiveOutwardness;
 
@@ -1842,7 +1860,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					Vector2 endPosition = (tendrilPos1 + tendrilPos2) / 2;
 
 					float depthColorModifier = ((float)Math.Cos(totalAngle1) + 3) / 4;
-					Color tendrilColor = ModUtils.ConvectiveFlameColor(tendrilProgress * tendrilProgress * 0.5f + (inPhase2 ? 0.5f : 0)).MultiplyRGB(new Color(new Vector3(depthColorModifier))) * tendrilProgress;
+					Color tendrilColor = Color.Lerp(ModUtils.ConvectiveFlameColor(tendrilProgress * tendrilProgress * 0.5f + (inPhase2 ? 0.5f : 0)).MultiplyRGB(new Color(new Vector3(depthColorModifier))), Color.White, effectiveGlow) * tendrilProgress;
 					float tendrilWidth = tendrilProgress * 2f + 2f;
 
 					drawDatas.Enqueue(new DrawData(Textures.PixelTexture.Value, startPosition - screenPos, Textures.PixelTexture.Frame(), color.MultiplyRGBA(tendrilColor), (endPosition - startPosition).ToRotation(), new Vector2(0, 0.5f), new Vector2((endPosition - startPosition).Length(), tendrilWidth), SpriteEffects.None, 0), (float)Math.Cos(totalAngle1) * 64f - globalSegmentDepthModifier);
