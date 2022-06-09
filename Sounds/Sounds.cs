@@ -19,9 +19,17 @@ namespace Polarities
     {
         public static SoundStyle Rattle;
 
+        public static SoundStyle ConvectiveWandererRoar;
+        public static SoundStyle ConvectiveWandererFlamethrowerStart;
+        public static SoundStyle ConvectiveWandererFlamethrowerLoop;
+
         public void Load(Mod mod)
         {
             Rattle = new SoundStyle("Polarities/Sounds/Rattle") { Volume = 0.7f, PitchVariance = 0.5f };
+
+            ConvectiveWandererRoar = new SoundStyle("Polarities/Sounds/ConvectiveWandererRoar");
+            ConvectiveWandererFlamethrowerStart = new SoundStyle("Polarities/Sounds/ConvectiveWandererFlamethrowerStart");
+            ConvectiveWandererFlamethrowerLoop = new SoundStyle("Polarities/Sounds/ConvectiveWandererFlamethrowerLoop") { IsLooped = false };
         }
 
         public void Unload()

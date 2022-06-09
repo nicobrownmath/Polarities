@@ -32,10 +32,14 @@ using Polarities.Effects;
 using MultiHitboxNPCLibrary;
 using Polarities.Items.Weapons.Melee;
 using Terraria.Localization;
+using ReLogic.Utilities;
 
 namespace Polarities.NPCs.ConvectiveWanderer
 {
 	[AutoloadBossHead]
+	//TODO: Localization for projectiles
+	//TODO: Localization for boss
+	//TODO: Bestiary entry
 	public class ConvectiveWanderer : ModNPC, IMultiHitboxSegmentUpdate
 	{
 		public override void Load()
@@ -482,7 +486,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				#region Dash by player and produce projectiles
 				case 2:
 					{
-						const int attackRepetitions = 4;
+						const int attackRepetitions = 3;
 						const int totalAttackSetupTime = 90;
 						const int totalAttackDashTime = 90;
 						const int totalAttackStoppedTime = 60;
@@ -953,6 +957,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
+				//note: have the boss drill into the ground/lava surface to trigger this attack, helps make it feel less disconnected
 				//note: this attack could probably be trivialized by hollowing out everything everywhere and ceiling grappling or using inf flight so I should prevent that by either adding a height cap or making the pillar heights adaptive
 				#region Create flame pillars from terrain, while dashing at them from below and to the side
 				case 6:
@@ -1505,6 +1510,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		}
         #endregion
 
+		//TODO: Smoother transition from head to body
         #region Drawcode
         //a whole bunch of drawing stuff and helper methods
         //abandon all hope ye who enter here
@@ -2660,6 +2666,36 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			Projectile.Center = owner.Center + 112 * Projectile.velocity;
 
 			Projectile.rotation = owner.rotation + MathHelper.PiOver2;
+
+			float progress = 1 - Projectile.timeLeft / 300f;
+			float widthMult = Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * (1 + Projectile.ai[1]);
+
+			float colorPulse = (3 + (float)Math.Sin(Projectile.timeLeft * MathHelper.TwoPi / 30f)) / 4;
+			Color drawColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(colorPulse * 0.25f + 0.25f + Projectile.ai[1], 2));
+
+			float length = 128f * (Math.Min(Math.Max(progress - 0.01f, 0) * 4, 1) * 96 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f;
+			for (int i = 0; i < 4 * (1 + Projectile.ai[1]) * widthMult; i++)
+			{
+				ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(Projectile.Center + new Vector2(Main.rand.NextFloat(-1f, 1f) * 16f * widthMult, -(float)Math.Pow(Main.rand.NextFloat(), 2) * length).RotatedBy(Projectile.rotation), new Vector2(0, -Main.rand.NextFloat(4f, 32f)).RotatedBy(Projectile.rotation), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: drawColor);
+				ParticleLayer.AfterLiquidsAdditive.Add(particle);
+			}
+
+			if (Projectile.timeLeft == 300)
+			{
+				SoundEngine.PlaySound(Sounds.ConvectiveWandererFlamethrowerStart, Projectile.Center);
+			}
+			if (Projectile.soundDelay == 0 && Projectile.timeLeft >= 134)
+            {
+				//TODO: Make this an actual looped sound and give it volume control
+				SoundEngine.PlaySound(Sounds.ConvectiveWandererFlamethrowerLoop, Projectile.Center);
+
+				Projectile.soundDelay = 134;
+			}
+
+			if (Projectile.timeLeft >= 10)
+			{
+				Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().AddScreenShake(8 * widthMult, 10);
+			}
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
