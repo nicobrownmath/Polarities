@@ -487,7 +487,7 @@ namespace Polarities
 
         public void AddScreenShake(float magnitude, float timeLeft)
         {
-			float endTime = timeLeft + (float)Main.timeForVisualEffects;
+			float endTime = timeLeft + PolaritiesSystem.timer;
 			if (screenShakes.ContainsKey(endTime))
 			{
 				screenShakes[endTime] += magnitude / timeLeft;
@@ -507,13 +507,13 @@ namespace Polarities
 				Polarities.preGeneratedRand.SetIndex(screenshakeRandomSeed);
 				foreach (float timeLeft in screenShakes.Keys)
 				{
-					if (timeLeft <= Main.timeForVisualEffects)
+					if (timeLeft <= PolaritiesSystem.timer)
 					{
 						removeTimesLeft.Add(timeLeft);
 					}
 					else
 					{
-						Main.screenPosition += new Vector2(Polarities.preGeneratedRand.NextNormallyDistributedFloat(screenShakes[timeLeft] * (timeLeft - (float)Main.timeForVisualEffects)), 0).RotatedBy(Polarities.preGeneratedRand.NextFloat(MathHelper.TwoPi));
+						Main.screenPosition += new Vector2(Polarities.preGeneratedRand.NextNormallyDistributedFloat(screenShakes[timeLeft] * (timeLeft - (float)PolaritiesSystem.timer)), 0).RotatedBy(Polarities.preGeneratedRand.NextFloat(MathHelper.TwoPi));
 					}
 				}
 				foreach (float timeLeft in removeTimesLeft) screenShakes.Remove(timeLeft);

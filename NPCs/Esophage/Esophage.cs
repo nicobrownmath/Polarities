@@ -1462,6 +1462,7 @@ namespace Polarities.NPCs.Esophage
         }
     }
 
+    //TODO: Greater transparency as it gets closer for fake plates
     public class EsophageCapsidPlate : ModProjectile
     {
         public override void SetStaticDefaults()

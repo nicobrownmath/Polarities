@@ -323,7 +323,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			#region Main AI
 			//TODO: All attacks need sounds
 			//TODO: Most attacks could use some particles
-			//TODO: Some of the attacks could use a little screenshake
 			switch (NPC.ai[0])
 			{
                 #region Despawning
@@ -522,6 +521,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 									NPC.velocity = goalVelocity;
 									//TODO: This roar should maybe be different to telegraph the different behavior
 									SoundEngine.PlaySound(new SoundStyle("Polarities/Sounds/ConvectiveWandererRoar") { Pitch = 1.5f }, player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * Math.Min(600f, (NPC.Center - player.Center).Length()));
+
+									player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(40, 120);
 								}
 
 								tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
@@ -582,6 +583,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								}
 							}
 
+							player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(0.25f * NPC.velocity.Length() / Math.Max(NPC.Distance(player.Center) / 200f, 1f), 10);
+
 							tendrilOutwardness = 1 - timeLeft / totalAttackStoppedTime;
 
 							tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
@@ -599,6 +602,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 							if (attackProgress == totalAttackSetupTime + totalAttackDashTime + totalAttackStoppedTime / 2)
                             {
+								player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(36, 30);
+
 								//TODO: Create sound on projectile firing
 								for (int i = 0; i < segmentPositions.Length - segmentsTailTendrils - 2; i++)
                                 {
@@ -722,6 +727,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								//1 has them stop at player height so it's probably the most dangerous value and therefore we may want to bias towards it
 								if (attackProgress % 3 == 1) Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(radius * i, 0), NPC.velocity / 4 + new Vector2(projSpeed / 2f * i, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 5f, ai1: inPhase2 ? 0.5f : 0f);
 							}
+
+							player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(0.25f * NPC.velocity.Length() / Math.Max(NPC.Distance(player.Center) / 200f, 1f), 10);
 						}
 
 						NPC.ai[1]++;
@@ -1108,6 +1115,11 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							}
 						}
 
+						if ((NPC.ai[1] - 60) % (inPhase2 ? 40 : 60) == 0 && (NPC.ai[1] - 60) >= setupTime && (NPC.ai[1] - 60) < totalAttackTime - windDownTime)
+                        {
+							player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(10, 60);
+						}
+
 						tentacleAngleMultiplier += (NPC.ai[2] * 0.1f - tentacleAngleMultiplier) / 10f;
 						angleSpeed = NPC.velocity.Length() * 0.075f * tentacleAngleMultiplier;
 
@@ -1328,7 +1340,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				NPC.ai[0] = (NPC.ai[0] + Main.rand.Next(0, 7)) % 8 + 1;
 				NPC.ai[1] = 0;
 			}
-			NPC.ai[0] = 2;
 
 			//TODO: Add a bit of occasional random variation to some of the attacks to ensure their positioning is varied
 			//(This should only be varied some of the time, a la sun pixie's projectile rings)
@@ -2290,6 +2301,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 				Projectile.rotation += 0.1f * 120f / (Projectile.timeLeft) * Projectile.spriteDirection;
 			}
+
+			Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().AddScreenShake(2f * Projectile.scale * Projectile.scale / Math.Max(Projectile.Distance(Main.LocalPlayer.Center) / (Projectile.width / 2), 1f), 10);
 		}
 
 		void MakeParticle(float minSpeed = 12f, float maxSpeed = 20f)
@@ -2320,6 +2333,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			{
 				MakeParticle(maxSpeed: 40);
 			}
+
+			Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().AddScreenShake(48, 60);
 		}
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -2799,6 +2814,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				Projectile.velocity = new Vector2(1, 0).RotatedBy(owner.rotation);
 				Projectile.Center = owner.Center + 240 * Projectile.velocity;
 
+				Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().AddScreenShake(Projectile.scale, 10);
+
 				if (Projectile.timeLeft == 600)
 				{
 					Projectile.velocity = new Vector2(4, 0).RotatedBy(owner.rotation) + owner.velocity;
@@ -2839,6 +2856,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, new Vector2(6, 0).RotatedBy(i * MathHelper.TwoPi / numProjectiles + MathHelper.Pi / numProjectiles + rotationOffset), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Projectile.owner, ai0: 1, ai1: Projectile.ai[1]);
 						}
 					}
+
+					Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().AddScreenShake(36, 30);
 
 					Projectile.Kill();
                 }
