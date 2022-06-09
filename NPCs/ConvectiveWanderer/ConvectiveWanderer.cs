@@ -314,7 +314,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 			NPC.noGravity = true;
 
-			NPC.ai[0] = 2;
 			#region Main AI
 			//TODO: All attacks need sounds
 			//TODO: Most attacks could use some particles
@@ -622,6 +621,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
+				//note: this attack has some issues with the telegraph
+				//it should feel less arbitrary, and should probably be visible earlier, while still movable, to clue the player in that they need to manipulate it
 				#region Dash up and produce projectiles
 				case 3:
                     {
@@ -646,7 +647,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						else if (attackProgress < attackSetupTime)
 						{
 							//set up attack
-							//TODO: Telegraph should feel less arbitrary
 							float timeLeft = attackSetupTime - attackSetupFrozenTime - attackProgress;
 
 							if (timeLeft > 0)
@@ -1106,11 +1106,11 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: setup is also a bit inconsistent, p2 version may be too difficult (not sure), rotation speed feels a little fast, attack may repeat too many times, boss should maybe slow down and not rotate a little before spawning the flamethrower? (only do that last one if I get complaints about the flamethrower I think it's fine but I could be wrong)
+				//note: p2 version may be too difficult (not sure), rotation speed feels a little fast at times, boss should maybe slow down and not rotate a little before spawning the flamethrower? (only do that last one if I get complaints about the flamethrower I think it's fine but I could be wrong)
 				#region Tentacles point backwards, boss shoots giant mouth flamethrower
 				case 7:
 					{
-						const int attackRepetitions = 4;
+						const int attackRepetitions = 3;
 						const int startSetupTime = 120;
 						const int setupTime = 60;
 						const int attackTime = 300;
