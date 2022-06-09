@@ -230,7 +230,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		{
 			NPC wanderer = Main.npc[NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), (int)player.Center.X, (int)player.Center.Y + 1400, NPCType<ConvectiveWanderer>())];
 			Main.NewText(Language.GetTextValue("Announcement.HasAwoken", wanderer.TypeName), 171, 64, 255);
-			SoundEngine.PlaySound(SoundID.Roar, player.position);
+			SoundEngine.PlaySound(Sounds.ConvectiveWandererRoar, player.position);
 		}
 		#endregion
 
@@ -514,7 +514,12 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								Vector2 goalVelocity = (goalPosition - NPC.Center) / 60f;
 								NPC.velocity += (goalVelocity - NPC.velocity) / 30f;
 
-								if (NPC.ai[1] == totalAttackTime * attackRepetitions + totalAttackSetupTime) NPC.velocity = goalVelocity;
+								if (NPC.ai[1] == totalAttackTime * attackRepetitions + totalAttackSetupTime)
+								{
+									NPC.velocity = goalVelocity;
+									//TODO: This roar should maybe be different to telegraph the different behavior
+									SoundEngine.PlaySound(new SoundStyle("Polarities/Sounds/ConvectiveWandererRoar") { Pitch = 1.5f }, player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * Math.Min(600f, (NPC.Center - player.Center).Length()));
+								}
 
 								tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
 								angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
@@ -554,6 +559,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 									NPC.ai[2] = Main.rand.NextBool() ? 1 : -1;
 								}
 								NPC.velocity = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(NPC.ai[2] * 0.33f) * dashStartVelocity;
+								SoundEngine.PlaySound(Sounds.ConvectiveWandererRoar, player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * Math.Min(600f, (NPC.Center - player.Center).Length()));
 							}
 							else
 							{
@@ -626,7 +632,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				#endregion
 
 				//note: this attack has some issues with the telegraph
-				//it should feel less arbitrary, and should probably be visible earlier, while still movable, to clue the player in that they need to manipulate it
+				//it should feel less arbitrary, and should probably be visible earlier, while it's still movable, to clue the player in that they need to manipulate it
 				#region Dash up and produce projectiles
 				case 3:
                     {
@@ -645,7 +651,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						if (NPC.ai[1] >= totalAttackTime * attackRepetitions)
 						{
 							//allow extra time for projectiles to leave
-							float timeLeft = totalAttackTime * attackRepetitions + extraTimeForProjectileDisappearance - NPC.ai[1];
 							Idle();
 						}
 						else if (attackProgress < attackSetupTime)
@@ -676,6 +681,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							if (attackProgress == attackSetupTime)
 							{
 								NPC.velocity = new Vector2(0, -100);
+								SoundEngine.PlaySound(Sounds.ConvectiveWandererRoar, player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * Math.Min(600f, (NPC.Center - player.Center).Length()));
 
 								NPC.ai[2] = side;
 							}
@@ -957,7 +963,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: have the boss drill into the ground/lava surface to trigger this attack, helps make it feel less disconnected
+				//note: maybe have the boss drill into the ground/lava surface to trigger this attack, helps make it feel less disconnected (or maybe use this drilling for something else)
 				//note: this attack could probably be trivialized by hollowing out everything everywhere and ceiling grappling or using inf flight so I should prevent that by either adding a height cap or making the pillar heights adaptive
 				#region Create flame pillars from terrain, while dashing at them from below and to the side
 				case 6:
@@ -1219,10 +1225,10 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						const int setupTime = 60;
 						const int attackRepetitions = 4;
 						const int mainAttackPartTime = 240;
-						const int mainAttackTime = attackRepetitions * mainAttackPartTime;
 						const int windDownTime = 60;
+						const int mainAttackTime = (int)(attackRepetitions * (mainAttackPartTime - 0.5f)) + windDownTime;
 						const int endWindDownTime = 60;
-						const int totalAttackTime = setupTime + mainAttackTime + windDownTime;
+						const int totalAttackTime = setupTime + mainAttackTime;
 
 						int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
 
@@ -1268,27 +1274,28 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							float accFactor = (timeLeft + 1) * (mainAttackPartTime - timeLeft) / mainAttackPartTime;
 							NPC.velocity += (goalVelocity - NPC.velocity) / accFactor;
 
-							float angleForRotation = ((attackProgress - setupTime) % (mainAttackPartTime * 2)) / mainAttackPartTime * MathHelper.Pi;
-							angleSpeed = NPC.ai[2] * (float)Math.Sin(angleForRotation) * 0.1f;
-							tentacleAngleMultiplier += (-0.3f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
-							tentacleCompression = 0;
-							tentacleTiltAngle = 1.4f;
-							tentacleCurveAmount = -tentacleTiltAngle / 2f;
-						}
-						else
-						{
-							//wind down
-							float timeLeft = setupTime + mainAttackTime + windDownTime - attackProgress;
+							if (setupTime + mainAttackTime - attackProgress > windDownTime)
+							{
+								float angleForRotation = ((attackProgress - setupTime) % (mainAttackPartTime * 2)) / mainAttackPartTime * MathHelper.Pi;
+								angleSpeed = NPC.ai[2] * (float)Math.Sin(angleForRotation) * 0.1f;
+								tentacleAngleMultiplier += (-0.3f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
+								tentacleCompression = 0;
+								tentacleTiltAngle = 1.4f;
+								tentacleCurveAmount = -tentacleTiltAngle / 2f;
+							}
+							else
+							{
+								//close up during the wind down
+								timeLeft = setupTime + mainAttackTime - attackProgress;
 
-							NPC.velocity *= 0.98f;
+								angleSpeed = 0f;
+								tentacleAngleMultiplier += (-0.3f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
+								tentacleCompression = 1 - timeLeft / windDownTime;
 
-							angleSpeed = 0f;
-							tentacleAngleMultiplier += (-0.3f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
-							tentacleCompression = 1 - timeLeft / windDownTime;
-
-							float tentacleRotProgress = timeLeft / windDownTime;
-							tentacleTiltAngle = tentacleRotProgress * tentacleRotProgress * (3 - 2 * tentacleRotProgress) * 1.4f;
-							tentacleCurveAmount = -tentacleTiltAngle / 2f;
+								float tentacleRotProgress = timeLeft / windDownTime;
+								tentacleTiltAngle = tentacleRotProgress * tentacleRotProgress * (3 - 2 * tentacleRotProgress) * 1.4f;
+								tentacleCurveAmount = -tentacleTiltAngle / 2f;
+							}
 						}
 
 						NPC.ai[1]++;
@@ -1514,7 +1521,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		}
         #endregion
 
-		//TODO: Smoother transition from head to body
         #region Drawcode
         //a whole bunch of drawing stuff and helper methods
         //abandon all hope ye who enter here
@@ -1685,8 +1691,10 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			int GetSegmentFrontPoint(int index)
 			{
 				return index < 1 ?
-					(264 - drawWidthPerSegment) - segmentWidth * (index + specialSegmentsHead - 1) : //head
-					(160 - drawWidthPerSegment) - segmentWidth * (index - 1) % 128; //body and tail
+					(336 - drawWidthPerSegment) - segmentWidth * (index + specialSegmentsHead - 1) : //head
+					index < 6 ?
+						(232 - drawWidthPerSegment) - segmentWidth * (index - 1) : //head transition
+						(152 - drawWidthPerSegment) - segmentWidth * (index - 6) % 128; //body and tail
 			}
 
 			float globalDepthModifier = index * 16f;
@@ -1952,7 +1960,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			return BASE_TENTACLE_TEXTURE_HEIGHT / MathHelper.TwoPi * SIDES_PER_TENTACLE_SEGMENT * TentacleRadiusMult(index);
 		}
 
-		//TODO: Make the tentacles more smoothly merge into the body?
 		void DrawTentacleSegment(PriorityQueue<DrawData, float> drawDatas, SpriteBatch spriteBatch, Vector2 screenPos, float baseAngle, float baseRotation, Vector2 originalBasePosition, float baseRadius, int index, Color color)
 		{
 			Vector2 segmentPosition = TentacleSegmentPosition(index, baseAngle, baseRotation, baseRadius, originalBasePosition);
@@ -1984,7 +1991,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			float scaleMultToMatch = (float)Math.Tan(MathHelper.Pi / DRAWS_PER_TENTACLE_SEGMENT) * segmentRadius;
 
 			float effectiveIndexForFraming = index < 0 ? index * TENTACLE_HEAD_SEPARATION_SCALE_MULT : index;
-			int segmentFramePoint = (int)((360 - drawWidthPerSegment) - (segmentWidth * (effectiveIndexForFraming + 64 - 1) % 64));
+			int segmentFramePoint = (int)((440 - drawWidthPerSegment) - (segmentWidth * (effectiveIndexForFraming + 64 - 1) % 64));
 
 			float generalDepthFromAngle = (float)Math.Cos(baseAngle + TentacleBaseAngleOffset(index));
 			float segmentDepthModifier = (generalDepthFromAngle + 0.5f) * (specialSegmentsHead * 65536f + index) + specialSegmentsHead * 512f;
@@ -2151,7 +2158,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		}
 	}
 
-	//TODO: This currently has a really small hitbox, may want to make it a big bigger
 	public class ConvectiveWandererHeatVortex : ModProjectile
 	{
 		/*public override void Load()
@@ -2213,8 +2219,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		{
 			Projectile.aiStyle = -1;
 			Projectile.scale = 0.1f;
-			Projectile.width = 128;
-			Projectile.height = 128;
+			Projectile.width = 180;
+			Projectile.height = 180;
 			Projectile.alpha = 0;
 			Projectile.timeLeft = 720;
 			Projectile.penetrate = -1;
@@ -2238,8 +2244,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 				Projectile.scale = 1.5f * (1 - (Projectile.timeLeft - 120) / 600f);
 
-				Projectile.width = (int)(Projectile.scale * 128);
-				Projectile.height = (int)(Projectile.scale * 128);
+				Projectile.width = (int)(Projectile.scale * 180);
+				Projectile.height = (int)(Projectile.scale * 180);
 				Projectile.Center = oldCenter;
 
 				if (Projectile.timeLeft % 60 == 0 && Projectile.timeLeft <= 600)
@@ -2475,6 +2481,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		}
 	}
 
+	//TODO: Remove this if it ends up unused
 	public class ConvectiveWandererTentacleDeathray : ModProjectile
 	{
 		public override string Texture => "Polarities/Textures/Glow58";
@@ -2680,7 +2687,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			float length = 128f * (Math.Min(Math.Max(progress - 0.01f, 0) * 4, 1) * 96 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f;
 			for (int i = 0; i < 4 * (1 + Projectile.ai[1]) * widthMult; i++)
 			{
-				ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(Projectile.Center + new Vector2(Main.rand.NextFloat(-1f, 1f) * 16f * widthMult, -(float)Math.Pow(Main.rand.NextFloat(), 2) * length).RotatedBy(Projectile.rotation), new Vector2(0, -Main.rand.NextFloat(4f, 32f)).RotatedBy(Projectile.rotation), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: drawColor);
+				ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(Projectile.Center + new Vector2(Main.rand.NextFloat(-1f, 1f) * 16f * widthMult, -(float)(1 - Math.Sqrt(Main.rand.NextFloat())) * length).RotatedBy(Projectile.rotation), new Vector2(0, -Main.rand.NextFloat(4f, 32f)).RotatedBy(Projectile.rotation), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: drawColor);
 				ParticleLayer.AfterLiquidsAdditive.Add(particle);
 			}
 
@@ -2738,7 +2745,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		}
 	}
 
-	//TODO: I think this shares the hitbox issue
 	public class ConvectiveWandererChargedShot : ModProjectile
 	{
 		public override string Texture => "Polarities/Items/Weapons/Ranged/ContagunProjectile";
@@ -2747,8 +2753,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		{
 			Projectile.aiStyle = -1;
 			Projectile.scale = 0.1f;
-			Projectile.width = 128;
-			Projectile.height = 128;
+			Projectile.width = 180;
+			Projectile.height = 180;
 			Projectile.alpha = 0;
 			Projectile.timeLeft = 720;
 			Projectile.penetrate = -1;
@@ -2768,8 +2774,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				float scaleFactor = (720 - Projectile.timeLeft) / 120f;
 				Projectile.scale = 2f * scaleFactor * (2 - scaleFactor);
 
-				Projectile.width = (int)(Projectile.scale * 128);
-				Projectile.height = (int)(Projectile.scale * 128);
+				Projectile.width = (int)(Projectile.scale * 180);
+				Projectile.height = (int)(Projectile.scale * 180);
 
 				NPC owner = Main.npc[(int)Projectile.ai[0]];
 				Projectile.velocity = new Vector2(1, 0).RotatedBy(owner.rotation);
