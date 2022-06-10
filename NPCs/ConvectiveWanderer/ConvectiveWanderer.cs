@@ -41,7 +41,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 	[AutoloadBossHead]
 	//TODO: Localization for projectiles
 	//TODO: Localization for boss
-	//TODO: Bestiary entry
+	//TODO: Bestiary entry image
 	public class ConvectiveWanderer : ModNPC, IMultiHitboxSegmentUpdate
 	{
 		public override void Load()
@@ -478,7 +478,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(280, 0).RotatedBy(NPC.rotation), new Vector2(projSpeed, 0).RotatedBy(NPC.rotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 2f, ai1: inPhase2 ? 0.5f : 0f);
 								}
 
-								headSwingAlpha = Math.Min(1f, 8f * (attackProgress - (attackSetupTime + attackFreezeTime)) * ((attackSetupTime + attackFreezeTime + attackSwingTime) - attackProgress) / (attackSwingTime * attackSwingTime));
+								headSwingAlpha = Math.Min(1f, 4f * (attackProgress - (attackSetupTime + attackFreezeTime)) * ((attackSetupTime + attackFreezeTime + attackSwingTime) - attackProgress) / (attackSwingTime * attackSwingTime));
 							}
 						}
 
@@ -1489,9 +1489,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			target.AddBuff(BuffType<Incinerating>(), 60, true);
 		}
 
-		//TODO: Make it so that we can actually hit the head segment even when only partially open
 		public void MultiHitboxSegmentUpdate(NPC npc, RectangleHitbox mostRecentHitbox)
 		{
+			//TODO: Hit sounds could be modified
 			if (mostRecentHitbox.index < NUM_TENTACLES * HITBOXES_PER_TENTACLE)
 			{
 				//hitting tentacle segments is bad
@@ -2794,13 +2794,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			{
 				SoundEngine.PlaySound(Sounds.ConvectiveWandererFlamethrowerStart, Projectile.Center);
 			}
-			if (Projectile.soundDelay == 0 && Projectile.timeLeft >= 134)
-            {
-				//TODO: Make this an actual looped sound and give it volume control
-				SoundEngine.PlaySound(Sounds.ConvectiveWandererFlamethrowerLoop, Projectile.Center);
-
-				Projectile.soundDelay = 134;
-			}
+			Sounds.ConvectiveWandererFlamethrowerLoop.UpdateWith(Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 2f, Projectile.Center);
 
 			if (Projectile.timeLeft >= 10)
 			{

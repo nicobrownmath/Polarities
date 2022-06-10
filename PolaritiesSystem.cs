@@ -1395,7 +1395,12 @@ namespace Polarities
 			timeRate *= timeRateMultiplier;
 		}
 
-		public static bool ranGemflyAmbience;
+        public override void PreUpdateWorld()
+		{
+			LoopedSound.UpdateLoopedSounds();
+		}
+
+        public static bool ranGemflyAmbience;
 		public override void PreUpdateNPCs()
         {
 			ranGemflyAmbience = false;

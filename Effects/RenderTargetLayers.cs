@@ -171,7 +171,7 @@ namespace Polarities.Effects
 		}
 	}
 
-	//TODO: Fix issue where layers don't show up on the first load
+	//TODO: Fix issue where layers don't show up on the first load (actually this looks to be a tmod issue with ON edits)
 	public class ConvectiveWandererTarget : RenderTargetLayer
 	{
 		public override void Load(Mod mod)
