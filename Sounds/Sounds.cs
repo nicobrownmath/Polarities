@@ -41,7 +41,7 @@ namespace Polarities
 
         public void Unload()
         {
-
+            ConvectiveWandererFlamethrowerLoop = null;
         }
 
         //adapted from vanilla sound playing
@@ -105,12 +105,12 @@ namespace Polarities
     }
 
     //system for looped sounds based on that from overhaul
-    public struct LoopedSound : ILoadable
+    public class LoopedSound : ILoadable
     {
         public SoundStyle Style { get; private set; }
         public SlotId SlotId { get; private set; }
 
-        public bool active { get; private set; }
+        public bool Active { get; private set; }
 
         public LoopedSound(SoundStyle Style)
         {
@@ -120,20 +120,23 @@ namespace Polarities
             Style.SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest;
             this.Style = Style;
             SlotId = SlotId.Invalid;
-            active = false;
+            Active = false;
 
             loopedSounds.Add(this);
         }
 
         void Reset()
         {
-            if (!active)
+            if (!Active && SlotId.IsValid)
             {
-                UpdateWith(0);
+                SoundEngine.TryGetActiveSound(SlotId, out ActiveSound sound);
+
+                sound?.Stop();
+                SlotId = SlotId.Invalid;
             }
             else
             {
-                active = false;
+                Active = false;
             }
         }
 
@@ -144,7 +147,7 @@ namespace Polarities
 
             if (volume > 0)
             {
-                active = true;
+                Active = true;
 
                 if (sound == null)
                 {
@@ -159,7 +162,7 @@ namespace Polarities
             }
             else
             {
-                active = false;
+                Active = false;
 
                 sound?.Stop();
                 SlotId = SlotId.Invalid;
