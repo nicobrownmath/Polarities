@@ -35,6 +35,7 @@ using Terraria.Localization;
 using ReLogic.Utilities;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
+using Terraria.Utilities;
 
 namespace Polarities.NPCs.ConvectiveWanderer
 {
@@ -263,6 +264,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			{
 				segmentPositions[i] = segmentPositions[i - 1] - new Vector2(NPC.width, 0).RotatedBy(NPC.rotation);
 			}
+
+			InitializeAIStates();
 		}
 
         public override void AI()
@@ -362,7 +365,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
                 #region Spawn Animation
                 case 0:
 					//TODO: spawn animation
-					NPC.ai[0] = 1;
+					gotoNextAttack = true;
 					break;
 				#endregion
 
@@ -1336,15 +1339,13 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			if (gotoNextAttack)
 			{
 				//TODO: Change this health threshold depending on difficulty
-				if (NPC.life * 2 < NPC.lifeMax)
+				if (NPC.life < NPC.lifeMax * 0.5f)
 				{
 					inPhase2 = true;
 					//TODO: Proper phase transition
 				}
 
-				//TODO: go to next attack with a SC/Sentinel-like system
-				NPC.ai[0] = (NPC.ai[0] + Main.rand.Next(0, 7)) % 8 + 1;
-				NPC.ai[1] = 0;
+				GotoNextAIState();
 			}
 
 			//TODO: Add a bit of occasional random variation to some of the attacks to ensure their positioning is varied
@@ -1483,6 +1484,67 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 			NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(hitboxes);
 		}
+
+
+		private float[] aiWeights = new float[8];
+		void GotoNextAIState()
+        {
+			float[] aiWeightMultipliers = new float[aiWeights.Length];
+
+			WeightedRandom<int> aiStatePool = new WeightedRandom<int>();
+			for (int state = 0; state < aiWeights.Length; state++)
+			{
+				//weights are squared to bias more towards attacks that haven't been used in a while
+				float aiWeightMultiplier = 1f;
+				switch (state + 1)
+                {
+					case 1:
+						aiWeightMultiplier = 1.5f;
+						break;
+					case 5: //TODO: Remove if attack 5 stops using tentacles
+					case 7:
+					case 8:
+						//restrict tentacle-based attacks
+						if (NPC.life > NPC.lifeMax * 0.75f) aiWeightMultiplier = 0f; //TODO: Adjust threshold depending on difficulty
+						break;
+                }
+				//TODO: I may want to replace this with just guaranteeing any tentacle attack at this point
+				if (NPC.life <= NPC.lifeMax * 0.75f && state != 6 && aiWeights[6] == 1f) //special case to guarantee flamethrower attack at 75% health (TODO: Adjust health threshold here too)
+				{
+					aiWeightMultiplier = 0f;
+                }
+
+				aiWeightMultipliers[state] = aiWeightMultiplier;
+
+				aiStatePool.Add(state, Math.Pow(aiWeights[state] * aiWeightMultiplier, 2));
+			}
+
+			NPC.ai[0] = aiStatePool + 1;
+
+			float totalWeightMultiplier = 0;
+			for (int state = 0; state < aiWeights.Length; state++)
+			{
+				if (NPC.ai[0] - 1 != state) totalWeightMultiplier += aiWeights[state];
+			}
+
+			for (int state = 0; state < aiWeights.Length; state++)
+			{
+				if (NPC.ai[0] - 1 != state)
+					aiWeights[state] += aiWeights[(int)NPC.ai[0] - 1] * ((totalWeightMultiplier == 0) ? 1 : aiWeightMultipliers[state] / totalWeightMultiplier);
+			}
+			aiWeights[(int)NPC.ai[0] - 1] = 0f;
+
+			NPC.ai[1] = 0;
+		}
+
+		private void InitializeAIStates()
+		{
+			for (int state = 0; state < aiWeights.Length; state++)
+			{
+				aiWeights[state] = 1f;
+			}
+		}
+
 
 		public override void OnHitPlayer(Player target, int damage, bool crit)
 		{
