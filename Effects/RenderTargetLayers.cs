@@ -29,6 +29,8 @@ using Polarities.Items.Materials;
 using Terraria.ModLoader.Utilities;
 using System.Collections.Generic;
 using Terraria.Graphics.Effects;
+using Polarities.NPCs.ConvectiveWanderer;
+using Terraria.Graphics.Shaders;
 
 namespace Polarities.Effects
 {
@@ -224,7 +226,9 @@ namespace Polarities.Effects
 			}
 		}
 
-        private void ScreenObstruction_Draw(On.Terraria.GameContent.Events.ScreenObstruction.orig_Draw orig, SpriteBatch spriteBatch)
+		public static float extraGlow = 0f;
+
+		private void ScreenObstruction_Draw(On.Terraria.GameContent.Events.ScreenObstruction.orig_Draw orig, SpriteBatch spriteBatch)
 		{
 			spriteBatch.End();
 
@@ -232,13 +236,22 @@ namespace Polarities.Effects
 
 			spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
 
+			ParticleLayer.AfterLiquidsAdditive.Draw(Main.spriteBatch);
+
 			if (GetRenderTargetLayer<ConvectiveEnemyTarget>().HasContent())
 				GetRenderTargetLayer<ConvectiveEnemyTarget>().Draw(spriteBatch, Vector2.Zero, Color.White);
 
 			if (HasContent())
+			{
 				Draw(Main.spriteBatch, Vector2.Zero, Color.White);
 
-			ParticleLayer.AfterLiquidsAdditive.Draw(Main.spriteBatch);
+				spriteBatch.End();
+				spriteBatch.Begin((SpriteSortMode)1, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+
+				GameShaders.Armor.GetShaderFromItemId(ItemID.ColorOnlyDye).Apply();
+
+				Draw(Main.spriteBatch, Vector2.Zero, Color.White * extraGlow);
+			}
 
 			spriteBatch.End();
 			spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);

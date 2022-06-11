@@ -231,8 +231,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		float upDashTelegraphProgress = 0f;
 		float headSwingAlpha = 0f;
 
-		bool inPhase2 = false;
-
+		float phase2TransitionProgress = 0f;
+		bool inPhase2 => phase2TransitionProgress >= 0.5f;
 
 		public static void SpawnOn(Player player)
 		{
@@ -268,7 +268,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			InitializeAIStates();
 		}
 
-        public override void AI()
+		public override void AI()
 		{
 			Player player = Main.player[NPC.target];
 			if (!player.active || player.dead)
@@ -328,6 +328,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			upDashTelegraphProgress = 0f;
 			headSwingAlpha = 0f;
 
+			ConvectiveWandererTarget.extraGlow = 0f;
+
 			NPC.noGravity = true;
 
 			#region Main AI
@@ -335,8 +337,28 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			//TODO: Most attacks could use some particles
 			switch (NPC.ai[0])
 			{
-                #region Despawning
-                case -1:
+                #region Phase transition
+                case -2:
+					{
+						const int phaseTransitionTime = 240;
+
+						Idle(radius: 600f);
+
+						phase2TransitionProgress = (NPC.ai[1] + 1) / phaseTransitionTime;
+						ConvectiveWandererTarget.extraGlow = (float)Math.Pow(4f * phase2TransitionProgress * (1 - phase2TransitionProgress), 2);
+
+						NPC.ai[1]++;
+						if (NPC.ai[1] == phaseTransitionTime)
+						{
+							phase2TransitionProgress = 1f;
+							gotoNextAttack = true;
+						}
+					}
+					break;
+				#endregion
+
+				#region Despawning
+				case -1:
 					//despawning
 					{
 						tendrilOutwardness = ModUtils.Lerp(tendrilOutwardness, 0f, 0.1f);
@@ -653,7 +675,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				#region Dash up and produce projectiles
 				case 3:
                     {
-						const int attackRepetitions = 4;
+						int attackRepetitions = inPhase2 ? 4 : 3;
 						int attackSetupTime = inPhase2 ? 45 : 120;
 						int firstAttackExtraSetup = 120 - attackSetupTime;
 						const int attackSetupFrozenTime = 30;
@@ -1339,14 +1361,24 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			if (gotoNextAttack)
 			{
 				//TODO: Change this health threshold depending on difficulty
-				if (NPC.life < NPC.lifeMax * 0.5f)
+				if (NPC.life < NPC.lifeMax * 0.5f && !inPhase2)
 				{
-					inPhase2 = true;
-					//TODO: Proper phase transition
+					NPC.ai[0] = -2;
+					NPC.ai[1] = 0;
 				}
-
-				GotoNextAIState();
+				else
+				{
+					GotoNextAIState();
+				}
 			}
+
+			if (phase2TransitionProgress == 1f)
+            {
+				float amountLeft = 2f * NPC.life / (float)NPC.lifeMax; //TODO: This also needs to change w/ the health threshold
+				float glowAmount = (1 - amountLeft) / 2f;
+				NPC.localAI[2] += 0.05f;
+				ConvectiveWandererTarget.extraGlow = (float)Math.Pow(Math.Sin(NPC.localAI[2]), 2) * glowAmount;
+            }
 
 			//TODO: Add a bit of occasional random variation to some of the attacks to ensure their positioning is varied
 			//(This should only be varied some of the time, a la sun pixie's projectile rings)
@@ -1386,11 +1418,11 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			}
 
 			//idle behavior
-			void Idle()
+			void Idle(float radius = 1200f)
 			{
 				int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
 
-				Vector2 goalPosition = player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero).RotatedBy(side) * 1200f;
+				Vector2 goalPosition = player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero).RotatedBy(side) * radius;
 				Vector2 goalVelocity = (goalPosition - NPC.Center) / 30f;
 				NPC.velocity += (goalVelocity - NPC.velocity) / 30f;
 
@@ -1508,7 +1540,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						if (NPC.life > NPC.lifeMax * 0.75f) aiWeightMultiplier = 0f; //TODO: Adjust threshold depending on difficulty
 						break;
                 }
-				//TODO: I may want to replace this with just guaranteeing any tentacle attack at this point
+				//TODO: I may not want this
 				if (NPC.life <= NPC.lifeMax * 0.75f && state != 6 && aiWeights[6] == 1f) //special case to guarantee flamethrower attack at 75% health (TODO: Adjust health threshold here too)
 				{
 					aiWeightMultiplier = 0f;
@@ -1628,7 +1660,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		{
 			if (NPC.IsABestiaryIconDummy)
 			{
-				//TODO: Bestiary portrait
 				return false;
 			}
 
@@ -1637,7 +1668,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				//stuff to draw additively after most things (mostly telegraphs and effects
 				if (upDashTelegraphProgress > 0)
                 {
-					//TODO: Possibly replace with/add a screenshake
+					//TODO: Needs updating
 					Main.spriteBatch.Draw(Textures.Glow256.Value, NPC.Center - screenPos, Textures.Glow256.Frame(), ModUtils.ConvectiveFlameColor(upDashTelegraphProgress * upDashTelegraphProgress * 0.125f + (inPhase2 ? 0.875f : 0f)) * upDashTelegraphProgress, 0f, Textures.Glow256.Size() / 2, new Vector2(1, 64), SpriteEffects.None, 0);
                 }
 				if (tendrilGlow > 0 && NPC.ai[0] >= 0)
@@ -1780,7 +1811,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			return Utils.AngleLerp(SegmentRotation((int)Math.Floor(index)), SegmentRotation((int)Math.Ceiling(index)), index % 1);
 		}
 
-		//TODO: Enable opening/closing mouth via PulseScale or something similar
 		public float SegmentAngle(int index)
 		{
 			if (index < 1) index = 1;
@@ -1823,7 +1853,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 		void DrawSegment(PriorityQueue<DrawData, float> drawDatas, SpriteBatch spriteBatch, Vector2 screenPos, int index, Color color)
 		{
-			//TODO: Give tail doubled-up segments for a more continuous appearance, since it changes width
 			Vector2 segmentPosition = SegmentPosition(index);
 
 			//don't draw if offscreen
@@ -1945,7 +1974,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			}
 
 			//tendril 'skirts'
-			//TODO: make gradient more continuous with a custom sprite a la denizen's telegraphs
 			if (index > 0 && index < segmentPositions.Length - 2)
 			{
 				//don't draw if our tendrils are pointing more outwards
@@ -1997,7 +2025,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					Vector2 endPosition = (tendrilPos1 + tendrilPos2) / 2;
 
 					float depthColorModifier = ((float)Math.Cos(totalAngle1) + 3) / 4;
-					Color tendrilColor = Color.Lerp(ModUtils.ConvectiveFlameColor(tendrilProgress * tendrilProgress * 0.5f + (inPhase2 ? 0.5f : 0)).MultiplyRGB(new Color(new Vector3(depthColorModifier))), Color.White, effectiveGlow) * tendrilProgress;
+					Color tendrilColor = Color.Lerp(ModUtils.ConvectiveFlameColor(tendrilProgress * tendrilProgress * 0.5f + phase2TransitionProgress * 0.5f).MultiplyRGB(new Color(new Vector3(depthColorModifier))), Color.White, effectiveGlow) * tendrilProgress;
 					float tendrilWidth = tendrilProgress * 2f + 2f;
 
 					drawDatas.Enqueue(new DrawData(Textures.PixelTexture.Value, startPosition - screenPos, Textures.PixelTexture.Frame(), color.MultiplyRGBA(tendrilColor), (endPosition - startPosition).ToRotation(), new Vector2(0, 0.5f), new Vector2((endPosition - startPosition).Length(), tendrilWidth), SpriteEffects.None, 0), (float)Math.Cos(totalAngle1) * 64f - globalSegmentDepthModifier);
