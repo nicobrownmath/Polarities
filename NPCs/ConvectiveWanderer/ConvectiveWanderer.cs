@@ -348,8 +348,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 						Idle(radius: 600f);
 
-						//TODO: Maybe do a sound and some particles here
-
 						phase2TransitionProgress = (NPC.ai[1] + 1) / phaseTransitionTime;
 						ConvectiveWandererTarget.extraGlow = (float)Math.Pow(4f * phase2TransitionProgress * (1 - phase2TransitionProgress), 2);
 
@@ -3018,8 +3016,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
             {
 				Projectile.velocity *= 1.01f;
 
-				//explode if too far
-				if (Vector2.Distance(Projectile.Center, Main.LocalPlayer.Center + Main.LocalPlayer.velocity * 30f) > 800)
+				//explode if too far and moving away
+				if (Vector2.Distance(Projectile.Center, Main.LocalPlayer.Center + Main.LocalPlayer.velocity * 15f) > 900 && Vector2.Dot(Projectile.velocity, Main.LocalPlayer.Center - Projectile.Center) < 0)
                 {
 					int numProjectiles = 16;
 					float rotationOffset = Main.rand.NextFloat(MathHelper.TwoPi);
