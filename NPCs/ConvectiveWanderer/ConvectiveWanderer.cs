@@ -268,6 +268,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			InitializeAIStates();
 		}
 
+		float tentacleAttacksHealthThreshold => Main.getGoodWorld ? 1f : Main.expertMode ? 0.75f : 0.66f;
+		float phase2HealthThreshold => Main.expertMode ? 0.5f : 0.33f; //we start in phase 2 in ftw
+
 		public override void AI()
 		{
 			Player player = Main.player[NPC.target];
@@ -332,17 +335,20 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 			NPC.noGravity = true;
 
+			if (Main.getGoodWorld) phase2TransitionProgress = 1f;
+
 			#region Main AI
-			//TODO: Attacks need sounds
-			//TODO: Most attacks could use some particles
+			//TODO: Some attacks need sounds
 			switch (NPC.ai[0])
 			{
                 #region Phase transition
                 case -2:
 					{
-						const int phaseTransitionTime = 240;
+						const int phaseTransitionTime = 180;
 
 						Idle(radius: 600f);
+
+						//TODO: Maybe do a sound and some particles here
 
 						phase2TransitionProgress = (NPC.ai[1] + 1) / phaseTransitionTime;
 						ConvectiveWandererTarget.extraGlow = (float)Math.Pow(4f * phase2TransitionProgress * (1 - phase2TransitionProgress), 2);
@@ -463,7 +469,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							else
 							{
 								//turn towards player
-								float angularSpeed = 0.1f / (NPC.velocity.Length() + 1) * Math.Abs(Vector2.Dot((NPC.Center - player.Center).SafeNormalize(Vector2.Zero), new Vector2(1, 0).RotatedBy(NPC.rotation)));
+								float angularSpeed = 0.1f / (NPC.velocity.Length() + 1) * Math.Abs(-1 + Vector2.Dot((NPC.Center - player.Center).SafeNormalize(Vector2.Zero), new Vector2(1, 0).RotatedBy(NPC.rotation)));
 								NPC.rotation += angularSpeed * side;
 								useDefaultRotation = false;
 								NPC.velocity = new Vector2(Math.Max(0.1f, NPC.velocity.Length() * 0.95f), 0).RotatedBy(NPC.rotation);
@@ -593,7 +599,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
                                 {
 									NPC.ai[2] = Main.rand.NextBool() ? 1 : -1;
 								}
-								NPC.velocity = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(NPC.ai[2] * 0.33f) * dashStartVelocity;
+								NPC.velocity = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(NPC.ai[2] * 0.33f) * dashStartVelocity * (Main.rand.NextBool(3) ? Main.rand.NextFloat(1f, 1.018f) : 1f);
 								SoundEngine.PlaySound(Sounds.ConvectiveWandererRoar, player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * Math.Min(600f, (NPC.Center - player.Center).Length()));
 							}
 							else
@@ -671,7 +677,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				#endregion
 
 				//note: this attack has some issues with the telegraph
-				//it should feel less arbitrary, and should probably be visible earlier, while it's still movable, to clue the player in that they need to manipulate it
+				//it should feel more diegetic, and should probably be visible earlier, while it's still movable, to clue the player in that they need to manipulate it
 				#region Dash up and produce projectiles
 				case 3:
                     {
@@ -723,6 +729,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								SoundEngine.PlaySound(Sounds.ConvectiveWandererRoar, player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * Math.Min(600f, (NPC.Center - player.Center).Length()));
 
 								NPC.ai[2] = side;
+
+								NPC.ai[3] = Main.rand.Next(3);
 							}
 
 							NPC.velocity *= timeLeft / (timeLeft + 1);
@@ -754,9 +762,14 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							{
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(radius * i, 0), NPC.velocity / 2 + new Vector2(projSpeed * i, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 5f, ai1: inPhase2 ? 0.5f : 0f);
 
-								//TODO: could be a random value for each dash instead of 1 to force you to look at the screen
-								//1 has them stop at player height so it's probably the most dangerous value and therefore we may want to bias towards it
-								if (attackProgress % 3 == 1) Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(radius * i, 0), NPC.velocity / 4 + new Vector2(projSpeed / 2f * i, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 5f, ai1: inPhase2 ? 0.5f : 0f);
+								if (attackProgress % 3 == NPC.ai[3]) Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(radius * i, 0), NPC.velocity / 4 + new Vector2(projSpeed / 2f * i, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 5f, ai1: inPhase2 ? 0.5f : 0f);
+							}
+
+							for (int i = 0; i < 8; i++)
+							{
+								int segmentToSpawnParticleFrom = (int)Math.Ceiling((1 - (1 - Main.rand.NextFloat()) * (1 - Main.rand.NextFloat())) * numSegments * segmentsPerHitbox);
+								ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(NPC.Center + new Vector2(0, segmentToSpawnParticleFrom * segmentSeparation) + new Vector2(Main.rand.NextFloat() * SegmentRadius(segmentToSpawnParticleFrom), 0).RotatedByRandom(MathHelper.TwoPi), NPC.velocity * Main.rand.NextFloat(0.25f, 0.5f) + new Vector2(Main.rand.NextFloat(-1f, 1f) * 4f, 0), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: ModUtils.ConvectiveFlameColor((inPhase2 ? 1f : 0.4f) * Main.rand.NextFloat(0.5f, 1f)));
+								ParticleLayer.AfterLiquidsAdditive.Add(particle);
 							}
 
 							player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(0.25f * NPC.velocity.Length() / Math.Max(NPC.Distance(player.Center) / 200f, 1f), 10);
@@ -771,6 +784,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
+				//note: I may want the tentacles to open up during this attack and for the boss to shoot a stream of decelerating mines out from them
 				#region Circle player while charging up heat pulse
 				case 4:
 					{
@@ -1026,8 +1040,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 						GoTowardsRadial(goalPosition, player.Center, 45f);*/
 
-						//TODO: This attack should have some screenshakes due to the environmental effects
-
 						if (NPC.ai[1] >= setupTime + mainAttackTime)
                         {
 							Idle();
@@ -1050,7 +1062,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							{
 								NPC.velocity *= (float)Math.Pow(8, 1 / 120f);
 							}
-							//TODO: Try making sideways projectiles during the dash and see if that's still avoidable
 						}
 
 						if (NPC.ai[1] % (inPhase2 ? 40 : 60) == 0 && NPC.ai[1] >= setupTime && NPC.ai[1] < totalAttackTime - windDownTime)
@@ -1065,7 +1076,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							float startingProportion = Main.rand.NextBool(3) ? 0 : Main.rand.NextFloat(1f);
 
 							float projPositionX = player.Center.X + startingOffset * startingProportion;
-							for (int i = 0; i < 20; i++)
+							for (int i = 0; i < 6; i++)
                             {
 								if (projPositionX >= Main.maxTilesX * 16) break;
 
@@ -1076,7 +1087,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								projPositionX += Main.rand.NextFloat(minOffset, maxOffset);
 							}
 							projPositionX = player.Center.X - startingOffset * (1 - startingProportion);
-							for (int i = 0; i < 20; i++)
+							for (int i = 0; i < 6; i++)
 							{
 								if (projPositionX <= 0) break;
 
@@ -1262,8 +1273,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: this attack needs more charging visuals coming from the boss itself
-				//note: this attack probably needs denser projectiles
+				//note: this attack probably needs denser projectiles or better-timed explosions
 				#region Open tentacles and cup them forwards, spin rapidly to produce a giant sphere of heat, then like shoot it at the player
 				case 8:
                     {
@@ -1274,7 +1284,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						const int windDownTime = 60;
 						const int mainAttackTime = (int)(attackRepetitions * (mainAttackPartTime - 0.5f)) + windDownTime;
 						const int endWindDownTime = 60;
-						const int totalAttackTime = setupTime + mainAttackTime;
+						const int totalAttackTime = mainAttackTime;
 
 						int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
 
@@ -1285,33 +1295,29 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							//end-attack-series wind down
 							Idle();
 						}
-						else if (attackProgress < setupTime)
+						else if (attackProgress < 0)
 						{
 							//setup
 							if (NPC.ai[1] == 0) NPC.ai[2] = side;
 
-							float timeLeft = setupTime - Math.Max(0, attackProgress);
+							float timeLeft = -Math.Max(0, attackProgress);
 
 							Vector2 goalPosition = player.Center;
 							Vector2 goalVelocity = (goalPosition - NPC.Center) / 120f;
 							NPC.velocity += (goalVelocity - NPC.velocity) / Math.Max(1, timeLeft - 30f);
 
-							angleSpeed = 0f;
-							tentacleAngleMultiplier += (-0.3f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
-							tentacleCompression = timeLeft / setupTime;
-
-							float tentacleRotProgress = (1 - timeLeft / setupTime);
-							tentacleTiltAngle = tentacleRotProgress * tentacleRotProgress * (3 - 2 * tentacleRotProgress) * 1.4f;
-							tentacleCurveAmount = -tentacleTiltAngle / 2f;
+							tentacleAngleMultiplier += (NPC.ai[2] * 0.1f - tentacleAngleMultiplier) / 10f;
+							float angleForRotation = ((attackProgress + mainAttackPartTime * 2) % (mainAttackPartTime * 2)) / mainAttackPartTime * MathHelper.Pi;
+							angleSpeed = NPC.ai[2] * (float)Math.Sin(angleForRotation) * 0.1f;
 						}
-						else if (attackProgress < setupTime + mainAttackTime)
+						else if (attackProgress < mainAttackTime)
 						{
 							//attack
-							float timeLeft = (setupTime + mainAttackTime - attackProgress) % mainAttackPartTime;
+							float timeLeft = (mainAttackTime - attackProgress) % mainAttackPartTime;
 
 							if (timeLeft == 0)
 							{
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(240, 0).RotatedBy(NPC.rotation), NPC.velocity, ProjectileType<ConvectiveWandererChargedShot>(), 16, 2f, Main.myPlayer, ai0: NPC.whoAmI, ai1: inPhase2 ? 0.5f : 0);
+								NPC.ai[3] = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(240, 0).RotatedBy(NPC.rotation), NPC.velocity, ProjectileType<ConvectiveWandererChargedShot>(), 16, 2f, Main.myPlayer, ai0: NPC.whoAmI, ai1: inPhase2 ? 0.5f : 0);
 							}
 
 							Vector2 goalPosition = player.Center;
@@ -1320,9 +1326,20 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							float accFactor = (timeLeft + 1) * (mainAttackPartTime - timeLeft) / mainAttackPartTime;
 							NPC.velocity += (goalVelocity - NPC.velocity) / accFactor;
 
-							if (setupTime + mainAttackTime - attackProgress > windDownTime)
+							if (attackProgress < setupTime)
 							{
-								float angleForRotation = ((attackProgress - setupTime) % (mainAttackPartTime * 2)) / mainAttackPartTime * MathHelper.Pi;
+								float angleForRotation = (attackProgress % (mainAttackPartTime * 2)) / mainAttackPartTime * MathHelper.Pi;
+								angleSpeed = NPC.ai[2] * (float)Math.Sin(angleForRotation) * 0.1f;
+								tentacleAngleMultiplier += (-0.3f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
+								tentacleCompression = (setupTime - attackProgress) / setupTime;
+
+								float tentacleRotProgress = (1 - (setupTime - attackProgress) / setupTime);
+								tentacleTiltAngle = tentacleRotProgress * tentacleRotProgress * (3 - 2 * tentacleRotProgress) * 1.4f;
+								tentacleCurveAmount = -tentacleTiltAngle / 2f;
+							}
+							else if (mainAttackTime - attackProgress > windDownTime)
+							{
+								float angleForRotation = (attackProgress % (mainAttackPartTime * 2)) / mainAttackPartTime * MathHelper.Pi;
 								angleSpeed = NPC.ai[2] * (float)Math.Sin(angleForRotation) * 0.1f;
 								tentacleAngleMultiplier += (-0.3f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
 								tentacleCompression = 0;
@@ -1332,7 +1349,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							else
 							{
 								//close up during the wind down
-								timeLeft = setupTime + mainAttackTime - attackProgress;
+								timeLeft = mainAttackTime - attackProgress;
 
 								angleSpeed = 0f;
 								tentacleAngleMultiplier += (-0.3f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
@@ -1360,8 +1377,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			//TODO: Make attacks using the tentacles not start occuring until a certain health threshold
 			if (gotoNextAttack)
 			{
-				//TODO: Change this health threshold depending on difficulty
-				if (NPC.life < NPC.lifeMax * 0.5f && !inPhase2)
+				if (NPC.life < NPC.lifeMax * phase2HealthThreshold && !inPhase2)
 				{
 					NPC.ai[0] = -2;
 					NPC.ai[1] = 0;
@@ -1374,19 +1390,14 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 			if (phase2TransitionProgress == 1f)
             {
-				float amountLeft = 2f * NPC.life / (float)NPC.lifeMax; //TODO: This also needs to change w/ the health threshold
+				float amountLeft = 1 / phase2HealthThreshold * NPC.life / (float)NPC.lifeMax;
 				float glowAmount = (1 - amountLeft) / 2f;
 				NPC.localAI[2] += 0.05f;
 				ConvectiveWandererTarget.extraGlow = (float)Math.Pow(Math.Sin(NPC.localAI[2]), 2) * glowAmount;
             }
 
-			//TODO: Add a bit of occasional random variation to some of the attacks to ensure their positioning is varied
-			//(This should only be varied some of the time, a la sun pixie's projectile rings)
-
 			//yes, I stole this from sun pixie
 			//avoiding the player is important okay
-			//TODO: Make this take into account our direction better to avoid sudden curvature
-			//TODO: Maximum turn parameter
 			void GoTowardsRadial(Vector2 goalPosition, Vector2 orbitPoint, float timeLeft, float maxSpeed = float.PositiveInfinity)
 			{
 				if (timeLeft == 1)
@@ -1430,9 +1441,10 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
 			}
 
-			#endregion
+            #endregion
 
-			NPC.noGravity = true;
+            #region End AI
+            NPC.noGravity = true;
 
 			tendrilOutwardness = Math.Clamp(tendrilOutwardness, 0, 1);
 
@@ -1498,7 +1510,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					float radius = TentacleRadius(indexForDrawing);
 
 					bool? canBeDamaged = Math.Abs((float)Math.Cos(TentacleBaseAngleOffset(indexForDrawing) + tentacleBaseAngle + tentacleIndex * MathHelper.TwoPi / NUM_TENTACLES)) <= Math.Sin(MathHelper.Pi / NUM_TENTACLES);
-					hitboxes.Add(new RectangleHitboxData(new Rectangle((int)(spot.X - radius), (int)(spot.Y - radius), (int)(radius * 2), (int)(radius * 2)), canBeDamaged: canBeDamaged));
+					hitboxes.Add(new RectangleHitboxData(new Rectangle((int)(spot.X - radius), (int)(spot.Y - radius), (int)(radius * 2), (int)(radius * 2)), canDamage: canBeDamaged, canBeDamaged: canBeDamaged));
 				}
 			}
 
@@ -1511,14 +1523,15 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				bool? canBeDamaged = h == numSegments ?
 					tentacleCompression != 1f :
 					null; //body/tail segment
-				hitboxes.Add(new RectangleHitboxData(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height), canBeDamaged : canBeDamaged));
+				hitboxes.Add(new RectangleHitboxData(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height), canDamage: canBeDamaged, canBeDamaged : canBeDamaged));
 			}
 
 			NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(hitboxes);
-		}
+            #endregion
+        }
 
 
-		private float[] aiWeights = new float[8];
+        private float[] aiWeights = new float[8];
 		void GotoNextAIState()
         {
 			float[] aiWeightMultipliers = new float[aiWeights.Length];
@@ -1537,13 +1550,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					case 7:
 					case 8:
 						//restrict tentacle-based attacks
-						if (NPC.life > NPC.lifeMax * 0.75f) aiWeightMultiplier = 0f; //TODO: Adjust threshold depending on difficulty
+						if (NPC.life > NPC.lifeMax * tentacleAttacksHealthThreshold) aiWeightMultiplier = 0f; //TODO: Adjust threshold depending on difficulty
 						break;
-                }
-				//TODO: I may not want this
-				if (NPC.life <= NPC.lifeMax * 0.75f && state != 6 && aiWeights[6] == 1f) //special case to guarantee flamethrower attack at 75% health (TODO: Adjust health threshold here too)
-				{
-					aiWeightMultiplier = 0f;
                 }
 
 				aiWeightMultipliers[state] = aiWeightMultiplier;
@@ -2797,6 +2805,14 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
         public override void AI()
 		{
+			float progress = 1 - Projectile.timeLeft / 120f;
+			float width = 16f * (Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 1.5f);
+			float heightMultiplier = (384f + 128f * (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f) / 384f;
+			float speedMultiplier = Main.rand.NextFloat(0f, 1f);
+
+			ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(Projectile.Center + new Vector2(Main.rand.NextFloat(width), 0).RotatedByRandom(MathHelper.TwoPi), new Vector2(0, -4f * speedMultiplier * heightMultiplier).RotatedByRandom(4f * (1 - speedMultiplier) / heightMultiplier) * new Vector2(1, 4), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: ModUtils.ConvectiveFlameColor(((Projectile.ai[1] == 0) ? 0.4f : 1f) * Main.rand.NextFloat(0.5f, 1f)));
+			particle.Position += particle.Velocity;
+			ParticleLayer.AfterLiquidsAdditive.Add(particle);
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -2983,6 +2999,19 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(particlePos, -particlePos / 20f, 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: drawColor);
 					particle.projectileOwner = Projectile.whoAmI;
 					ParticleLayer.AfterLiquidsAdditive.Add(particle);
+
+					//random particle from a tentacle
+					ConvectiveWanderer wanderer = owner.ModNPC as ConvectiveWanderer;
+
+					float tentacleBaseAngle = wanderer.SegmentAngle(ConvectiveWanderer.TENTACLE_ATTACH_SEGMENT_INDEX);
+					float tentacleBaseRotation = wanderer.SegmentRotation(ConvectiveWanderer.TENTACLE_ATTACH_SEGMENT_INDEX) + MathHelper.PiOver2;
+					float tentacleBaseRadius = wanderer.SegmentRadius(ConvectiveWanderer.TENTACLE_ATTACH_SEGMENT_INDEX) + wanderer.TentacleRadius(0);
+					Vector2 tentacleBasePosition = wanderer.SegmentPosition(ConvectiveWanderer.TENTACLE_ATTACH_SEGMENT_INDEX);
+
+					particlePos = wanderer.TentacleSegmentPosition(Main.rand.Next(0, 33), tentacleBaseAngle + Main.rand.Next(ConvectiveWanderer.NUM_TENTACLES) * MathHelper.TwoPi / ConvectiveWanderer.NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition) - Projectile.Center;// new Vector2(240, 0).RotatedByRandom(MathHelper.TwoPi);
+					particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(particlePos, -particlePos / 20f, 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: drawColor);
+					particle.projectileOwner = Projectile.whoAmI;
+					ParticleLayer.AfterLiquidsAdditive.Add(particle);
 				}
 			}
 			else
@@ -2990,7 +3019,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				Projectile.velocity *= 1.01f;
 
 				//explode if too far
-				if (Projectile.Distance(Main.LocalPlayer.Center) > 1200)
+				if (Vector2.Distance(Projectile.Center, Main.LocalPlayer.Center + Main.LocalPlayer.velocity * 30f) > 800)
                 {
 					int numProjectiles = 16;
 					float rotationOffset = Main.rand.NextFloat(MathHelper.TwoPi);
