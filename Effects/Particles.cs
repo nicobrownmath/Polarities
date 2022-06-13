@@ -54,7 +54,7 @@ namespace Polarities.Effects
 			AfterLiquidsAdditive = null;
 		}
 
-		List<Particle> particles = new List<Particle>();
+		HashSet<Particle> particles = new HashSet<Particle>();
 
 		public void Add(Particle particle)
         {
@@ -63,16 +63,13 @@ namespace Polarities.Effects
 
 		public void Update()
 		{
-			for (int i = 0; i < particles.Count; i++)
+			HashSet<Particle> toRemove = new HashSet<Particle>();
+			foreach (Particle p in particles)
 			{
-				Particle p = particles[i];
 				p.Update();
-				if (!p.active)
-				{
-					particles.Remove(p);
-					i--;
-				}
+				if (!p.active) toRemove.Add(p);
 			}
+			foreach (Particle p in toRemove) particles.Remove(p);
 		}
 
 		public void Draw(SpriteBatch spriteBatch)

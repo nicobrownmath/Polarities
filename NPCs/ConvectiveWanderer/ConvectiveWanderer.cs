@@ -754,13 +754,13 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								}
 							}*/
 
-							float projSpeed = 64f * (float)Math.Pow(1 - timeLeft / (attackDashTime + 4), 2);
+							float projSpeed = 32f * (float)Math.Pow(1 - timeLeft / (attackDashTime + 12), 2);
 
 							for (int i = -1; i <= 1; i += 2)
 							{
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(radius * i, 0), NPC.velocity / 2 + new Vector2(projSpeed * i, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 5f, ai1: inPhase2 ? 0.5f : 0f);
+								if (attackProgress % 2 == 0) Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(radius * i, 0), NPC.velocity / 2 + new Vector2(projSpeed * i, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 5f, ai1: inPhase2 ? 0.5f : 0f);
 
-								if (attackProgress % 3 == NPC.ai[3]) Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(radius * i, 0), NPC.velocity / 4 + new Vector2(projSpeed / 2f * i, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 5f, ai1: inPhase2 ? 0.5f : 0f);
+								if (attackProgress % 3 == NPC.ai[3]) Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(radius * i, 0), NPC.velocity / 4 + new Vector2(projSpeed * i, 0), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 5f, ai1: inPhase2 ? 0.5f : 0f);
 							}
 
 							for (int i = 0; i < 8; i++)
@@ -1438,7 +1438,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
 				angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
 			}
-
             #endregion
 
             #region End AI
