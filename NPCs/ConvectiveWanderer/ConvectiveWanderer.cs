@@ -1368,12 +1368,149 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//some sonic attack (a charge?) based on the clicking sounds of that one polychaete
-			}
+				#region charge and clap to produce projectiles
+				case 9:
+					{
+						const int attackRepetitions = 6;
+						const int startSetupTime = 60;
+						const int dashSetupTime = 90;
+						const int dashStartTime = 30;
+						const int dashTime = 80;
+						const int endWindDownTime = 60;
+						const int totalAttackTime = dashSetupTime + dashStartTime + dashTime;
 
-			//TODO: I feel like a last-ditch attack of some sort would fit this boss pretty well
-			//TODO: Make attacks using the tentacles not start occuring until a certain health threshold
-			if (gotoNextAttack)
+						float dashVelocity = ModUtils.Lerp(((player.Center - NPC.Center).Length() + 600f) / dashTime, 24f, 0.75f);
+
+						int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
+
+						float attackProgress = (int)(NPC.ai[1] - startSetupTime) % totalAttackTime;
+
+						if (NPC.ai[1] >= startSetupTime + totalAttackTime * attackRepetitions)
+						{
+							//in the end wind down
+							Idle();
+						}
+						if (attackProgress < dashSetupTime)
+						{
+							//setup
+							float timeLeft = dashSetupTime - attackProgress;
+
+							NPC.ai[2] = side;
+
+							if (attackProgress == 0)
+							{
+								if (NPC.ai[1] == 0)
+								{
+									NPC.ai[3] = (NPC.Center - player.Center).ToRotation() + Main.rand.NextFloat(MathHelper.Pi / 3, 2 * MathHelper.Pi / 3) * side;
+								}
+								else
+								{
+									NPC.ai[3] = NPC.velocity.ToRotation() + Main.rand.NextFloat(MathHelper.Pi / 3, 2 * MathHelper.Pi / 3) * side;
+								}
+
+								NPC.velocity *= 0.5f;
+
+								player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(36, 30);
+							}
+
+							//position to dash from an approximately orthogonal angle
+							Vector2 oldVelocity = NPC.velocity;
+							float goalAngle = NPC.ai[3];
+							Vector2 goalPosition = player.Center + new Vector2(1050, 0).RotatedBy(goalAngle);
+							GoTowardsRadial(goalPosition, player.Center, timeLeft);
+
+							float velLerpAmount = timeLeft / dashSetupTime;
+							if ((int)(NPC.ai[1] - startSetupTime) / totalAttackTime <= 0)
+                            {
+								velLerpAmount = timeLeft / (dashSetupTime + startSetupTime);
+							}
+							if (timeLeft == 1) velLerpAmount = 0f;
+							NPC.velocity = Vector2.Lerp(NPC.velocity, oldVelocity, velLerpAmount);
+
+							angleSpeed = NPC.ai[2] * 0.1f;
+							tentacleAngleMultiplier += (-0.1f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
+							tentacleTiltAngle = 0f;
+							tentacleCompression = 1f;
+							tentacleCurveAmount = 0f;
+						}
+						else if (attackProgress < dashSetupTime + dashStartTime)
+						{
+							NPC.ai[2] = side;
+
+							float timeLeft = dashSetupTime + dashStartTime - attackProgress;
+
+							float goalVelMult = 1 - timeLeft / dashStartTime;
+							Vector2 goalVelocity = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero) * dashVelocity * goalVelMult;
+							NPC.velocity += (goalVelocity - NPC.velocity) / Math.Max(1, attackProgress / 2 - timeLeft);
+
+							angleSpeed = NPC.ai[2] * 0.1f;
+							tentacleAngleMultiplier += (-0.1f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
+							float animProgressLeft = 1 - timeLeft / dashStartTime;
+							tentacleTiltAngle = animProgressLeft * (MathHelper.TwoPi * 7f / 16f);
+							tentacleCompression = 1f - animProgressLeft;
+							tentacleTiltAngle = animProgressLeft * animProgressLeft * (3 - 2 * animProgressLeft) * MathHelper.TwoPi * 7f / 16f;
+							tentacleCurveAmount = -4f * animProgressLeft * (1 - animProgressLeft) * (1 - tentacleCompression);
+
+							if (attackProgress == dashSetupTime)
+							{
+								SoundEngine.PlaySound(Sounds.ConvectiveWandererRoar, player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * Math.Min(600f, (NPC.Center - player.Center).Length()));
+							}
+
+							player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(0.25f * NPC.velocity.Length() / Math.Max(NPC.Distance(player.Center) / 200f, 1f), 10);
+						}
+						else
+						{
+							float timeLeft = dashSetupTime + dashStartTime + dashTime - attackProgress;
+
+							if (attackProgress == dashSetupTime + dashStartTime)
+							{
+								NPC.velocity = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero) * dashVelocity;
+							}
+
+							//interesting motion idea which doesn't work here but which I should save for later: NPC.velocity = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero) * Math.Max(0, Vector2.Dot(NPC.velocity, (player.Center - NPC.Center).SafeNormalize(Vector2.Zero)));
+
+							angleSpeed = NPC.ai[2] * 0.1f;
+							tentacleAngleMultiplier += (-0.1f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
+							float animProgressLeft = Math.Min(1f, 6f * timeLeft / dashTime);
+							tentacleCompression = 1 - animProgressLeft;
+							tentacleTiltAngle = animProgressLeft * animProgressLeft * (3 - 2 * animProgressLeft) * MathHelper.TwoPi * 7f / 16f;
+							tentacleCurveAmount = 4f * animProgressLeft * (1 - animProgressLeft) * (1 - tentacleCompression);
+
+							player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(0.25f * NPC.velocity.Length() / Math.Max(NPC.Distance(player.Center) / 200f, 1f), 10);
+
+							if (timeLeft == 1)
+                            {
+								int numProjectiles = inPhase2 ? 32 : 16;
+
+								for (int i = 0; i < numProjectiles; i++)
+								{
+									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(112, 0).RotatedBy(NPC.rotation), new Vector2((inPhase2 && i % 2 == 1) ? 6 : 8, 0).RotatedBy(i * MathHelper.TwoPi / numProjectiles + NPC.rotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 1, ai1: inPhase2 ? 0.5f : 0);
+								}
+
+								for (int i = 0; i < (inPhase2 ? 2 : 1) * 100; i++)
+								{
+									float colorPulse = Main.rand.NextFloat(0.5f, 1f);
+									Color drawColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(colorPulse * 0.25f + 0.25f + (inPhase2 ? 0.5f : 0), 2));
+
+									ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(NPC.Center + new Vector2(112, 0).RotatedBy(NPC.rotation), new Vector2(Main.rand.NextFloat(12f, 40f), 0).RotatedByRandom(MathHelper.TwoPi), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: drawColor);
+									ParticleLayer.AfterLiquidsAdditive.Add(particle);
+								}
+							}
+						}
+
+						NPC.ai[1]++;
+						if (NPC.ai[1] == startSetupTime + endWindDownTime + totalAttackTime * attackRepetitions)
+						{
+							gotoNextAttack = true;
+						}
+					}
+					break;
+                #endregion
+            }
+
+            //TODO: I feel like a last-ditch attack of some sort would fit this boss pretty well
+            //TODO: Make attacks using the tentacles not start occuring until a certain health threshold
+            if (gotoNextAttack)
 			{
 				if (NPC.life < NPC.lifeMax * phase2HealthThreshold && !inPhase2)
 				{
@@ -1528,7 +1665,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
         }
 
 
-        private float[] aiWeights = new float[8];
+        private float[] aiWeights = new float[9];
 		void GotoNextAIState()
         {
 			float[] aiWeightMultipliers = new float[aiWeights.Length];
@@ -1543,13 +1680,16 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					case 1:
 						aiWeightMultiplier = 1.5f;
 						break;
-					case 5: //TODO: Remove if attack 5 stops using tentacles
+					case 5:
+						aiWeightMultiplier = 0f;
+						break;
 					case 7:
 					case 8:
+					case 9:
 						//restrict tentacle-based attacks
 						if (NPC.life > NPC.lifeMax * tentacleAttacksHealthThreshold) aiWeightMultiplier = 0f; //TODO: Adjust threshold depending on difficulty
 						break;
-                }
+				}
 
 				aiWeightMultipliers[state] = aiWeightMultiplier;
 
