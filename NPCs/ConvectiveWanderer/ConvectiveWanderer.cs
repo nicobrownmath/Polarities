@@ -1368,7 +1368,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				#region charge and clap to produce projectiles
+				#region Charge and clap to produce projectiles
 				case 9:
 					{
 						const int attackRepetitions = 6;
