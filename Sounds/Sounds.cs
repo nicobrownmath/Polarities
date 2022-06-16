@@ -25,6 +25,8 @@ namespace Polarities
 
         public static SoundStyle ConvectiveWandererRoar;
         public static SoundStyle ConvectiveWandererFlamethrowerStart;
+        public static SoundStyle StarConstructScream;
+        public static SoundStyle StarConstructRoar;
 
         public static LoopedSound ConvectiveWandererFlamethrowerLoop;
 
@@ -34,6 +36,9 @@ namespace Polarities
 
             ConvectiveWandererRoar = new SoundStyle("Polarities/Sounds/ConvectiveWandererRoar");
             ConvectiveWandererFlamethrowerStart = new SoundStyle("Polarities/Sounds/ConvectiveWandererFlamethrowerStart");
+
+            StarConstructScream = new SoundStyle("Polarities/Sounds/StarConstructScream");
+            StarConstructRoar = new SoundStyle("Polarities/Sounds/StarConstructRoar");
 
             //sound loops
             ConvectiveWandererFlamethrowerLoop = new LoopedSound(new SoundStyle("Polarities/Sounds/ConvectiveWandererFlamethrowerLoop"));
