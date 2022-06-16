@@ -355,6 +355,32 @@ namespace Polarities
 			return output;
         }
 
+		public static float[] FractalNoise1D(this UnifiedRandom rand, int size, int startFactor = 1)
+		{
+			int scaleSize = size / startFactor;
+
+			float[] output = new float[size];
+
+			int depth = 0;
+
+			while (scaleSize > 0)
+			{
+				Vector2[,] perlinBaseVectors = rand.PerlinBaseVectors(size / scaleSize, 1);
+
+				float amplitude = (float)Math.Pow(0.5f, depth);
+
+				for (int i = 0; i < size; i++)
+				{
+					output[i] += PerlinNoiseValue(perlinBaseVectors, i / (float)size, 0) * amplitude;
+				}
+
+				scaleSize /= 2;
+				depth++;
+			}
+
+			return output;
+		}
+
 
 		public static Color ConvectiveFlameColor(float progress)
 		{

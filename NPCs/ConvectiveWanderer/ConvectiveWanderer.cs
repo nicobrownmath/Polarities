@@ -407,7 +407,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 							tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
 							angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
-						}
+
+							player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(1, part2Time);
+ 						}
 						else
                         {
 							Idle(radius: 600f);
@@ -579,7 +581,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								if (NPC.ai[1] == totalAttackTime * attackRepetitions + totalAttackSetupTime)
 								{
 									NPC.velocity = goalVelocity;
-									//TODO: This roar should maybe be different to telegraph the different behavior
 									SoundEngine.PlaySound(new SoundStyle("Polarities/Sounds/ConvectiveWandererRoar") { Pitch = 1.5f }, player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * Math.Min(600f, (NPC.Center - player.Center).Length()));
 
 									player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(40, 120);
@@ -888,9 +889,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: this attack isn't really harder in p2 currently, just more punishing if you mess up, I should probably like make it move out of the way more slowly or target the player more accurately or something
-				//it's currently way too stunlocky as well it may honestly be better to just remove/totally redo it
-				//it's also the only attack I'd currently consider actively unfair
+				//TODO: Replace this attack
 				#region Tentacles spin and rotate outwards, producing projectiles
 				case 5:
 					{
@@ -942,7 +941,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								{
 									float timeLeftForSetupStart = setupStartTime - attackProgress;
 
-									//TODO: Don't point away from the player quite as much
 									float offsetAmount = Math.Max(0, (600f - (NPC.Center - player.Center).Length()) / 200f) * MathHelper.Pi / 6f;
 									Vector2 goalPosition = player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * 400f;
 									goalPosition = NPC.Center + (goalPosition - NPC.Center).RotatedBy(-side * offsetAmount);
@@ -1040,37 +1038,108 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: maybe have the boss drill into the ground/lava surface to trigger this attack, helps make it feel less disconnected (or maybe use this drilling for something else)
-				//note: this attack could probably be trivialized by hollowing out everything everywhere and ceiling grappling or using inf flight so I should prevent that by either adding a height cap or making the pillar heights adaptive
+				//note: I'm not yet sure if I want the pillars to be able to spawn on platforms or not
 				#region Create flame pillars from terrain, while dashing at them from below and to the side
 				case 6:
 					{
-						const int setupTime = 60;
+						const int setupStartTime = 60;
+						const int setupMidTime = 120;
+						const int setupEndTime = 60;
+						const int setupEndExtraTime = 60;
+						const int setupTime = setupStartTime + setupMidTime + setupEndTime + setupEndExtraTime;
 						const int mainAttackTime = 720;
 						const int windDownTime = 40;
 						const int totalAttackTime = setupTime + mainAttackTime + windDownTime;
 
-						if (NPC.ai[1] == 0)
-                        {
-                            NPC.ai[2] = Vector2.Dot(NPC.Center - (player.Center + new Vector2(0, 600)), new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
-						}
-
-						//old motion from before I added the dashes, could be useful for something else
-						/*Vector2 orbitPoint = player.Center + new Vector2((float)Math.Sin(NPC.ai[1] * 0.01f) * NPC.ai[2] * 300, 500);
-						float angle = ((NPC.Center - orbitPoint) * new Vector2(1, 4)).ToRotation();
-						float dist = ((NPC.Center - orbitPoint) * new Vector2(1, 4)).Length();
-						Vector2 goalPosition = orbitPoint + new Vector2(800, 0).RotatedBy(angle + MathHelper.PiOver2 * dist / 800f * NPC.ai[2]) * new Vector2(1, 0.25f);
-
-						GoTowardsRadial(goalPosition, player.Center, 45f);*/
+						bool playerInLava = Framing.GetTileSafely(player.Center.ToTileCoordinates()).LiquidAmount == 255;
 
 						if (NPC.ai[1] >= setupTime + mainAttackTime)
                         {
 							Idle();
                         }
+						else if (NPC.ai[1] < setupTime)
+						{
+							int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
+
+							if (NPC.ai[1] < setupStartTime)
+							{
+								GoTowardsRadial(player.Center + new Vector2(0, -1200), player.Center, setupStartTime - NPC.ai[1]);
+
+								tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+								angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
+							}
+							else if (NPC.ai[1] < setupStartTime + setupMidTime)
+							{
+								float setupMidTimePart1 = setupMidTime * 0.75f;
+								float setupMidTimePart2 = setupMidTime - setupMidTimePart1;
+
+								if (NPC.ai[1] == setupStartTime)
+                                {
+									NPC.velocity = new Vector2(0, (GetPillarPosition(player.Center).Y - 80 - NPC.Center.Y) / setupMidTimePart1 * 2f);
+                                }
+
+								if (NPC.ai[1] < setupStartTime + setupMidTimePart1)
+								{
+									NPC.velocity *= (setupStartTime + setupMidTimePart1 - 1 - NPC.ai[1]) / (setupStartTime + setupMidTimePart1 - NPC.ai[1]);
+								}
+								else
+                                {
+									NPC.velocity = Vector2.Zero;
+
+									for (int i = 0; i < 2; i++)
+									{
+										if (Main.rand.NextFloat() > (NPC.ai[1] - (setupStartTime + setupMidTimePart1)) / setupMidTimePart2)
+										{
+											float angle = Main.rand.NextFloat(MathHelper.TwoPi);
+											float direction = (float)(Math.Cos(angle) + Math.Cos(3 * angle) / 9) * 9f / 8f; //bias towards edges
+											ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(NPC.Center + new Vector2(44 * direction, 80), new Vector2(direction * Main.rand.NextFloat(1f, 6f), -Main.rand.NextFloat(3f, 20f)), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: ModUtils.ConvectiveFlameColor((inPhase2 ? 1f : 0.4f) * Main.rand.NextFloat(0.5f, 1f)));
+											ParticleLayer.AfterLiquidsAdditive.Add(particle);
+										}
+									}
+
+									player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(3f * (NPC.ai[1] - (setupStartTime + setupMidTimePart1)) / setupMidTimePart2, 10);
+								}
+
+								tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+								angleSpeed = 30f / (setupStartTime + setupMidTime - NPC.ai[1] + 30f) * 3f * tentacleAngleMultiplier;
+							}
+							else if (NPC.ai[1] < setupStartTime + setupMidTime + setupEndTime)
+							{
+								NPC.velocity = Vector2.Zero;
+
+								tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+								angleSpeed = 3f * tentacleAngleMultiplier;
+
+								for (int i = 0; i < 2; i++)
+								{
+									float angle = Main.rand.NextFloat(MathHelper.TwoPi);
+									float direction = (float)(Math.Cos(angle) + Math.Cos(3 * angle) / 9) * 9f / 8f; //bias towards edges
+									ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(NPC.Center + new Vector2(44 * direction, 80), new Vector2(direction * Main.rand.NextFloat(1f, 6f), -Main.rand.NextFloat(3f, 20f)), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: ModUtils.ConvectiveFlameColor((inPhase2 ? 1f : 0.4f) * Main.rand.NextFloat(0.5f, 1f)));
+									ParticleLayer.AfterLiquidsAdditive.Add(particle);
+								}
+
+								player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(3, 10);
+							}
+							else
+                            {
+								NPC.velocity = new Vector2(0, 24f * (NPC.ai[1] - (setupStartTime + setupMidTime + setupEndTime)) / setupEndExtraTime);
+
+								tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+								angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
+							}
+						}
 						else if ((NPC.ai[1] - setupTime) % 180 < 60)
 						{
+							if (NPC.ai[1] == setupTime)
+							{
+								NPC.ai[2] = Vector2.Dot(NPC.Center - (player.Center + new Vector2(0, 600)), new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
+							}
+
 							Vector2 goalPosition = player.Center + new Vector2(-NPC.ai[2] * 600, 400);
 							GoTowardsRadial(goalPosition, player.Center, 60 - (NPC.ai[1] - setupTime) % 180);
+
+							tentacleAngleMultiplier += (NPC.ai[2] * 0.1f - tentacleAngleMultiplier) / 10f;
+							angleSpeed = NPC.velocity.Length() * 0.075f * tentacleAngleMultiplier;
 						}
 						else
 						{
@@ -1085,14 +1154,15 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							{
 								NPC.velocity *= (float)Math.Pow(8, 1 / 120f);
 							}
+
+							tentacleAngleMultiplier += (NPC.ai[2] * 0.1f - tentacleAngleMultiplier) / 10f;
+							angleSpeed = NPC.velocity.Length() * 0.075f * tentacleAngleMultiplier;
 						}
 
-						if (NPC.ai[1] % (inPhase2 ? 40 : 60) == 0 && NPC.ai[1] >= setupTime && NPC.ai[1] < totalAttackTime - windDownTime)
+						if (NPC.ai[1] % (inPhase2 ? 40 : 60) == 0 && NPC.ai[1] >= setupStartTime + setupMidTime && NPC.ai[1] < totalAttackTime - windDownTime)
                         {
 							const float minOffset = 200f;
 							const float maxOffset = 400f;
-
-							bool playerInLava = Framing.GetTileSafely(player.Center.ToTileCoordinates()).LiquidAmount == 255;
 
 							float startingOffset = Main.rand.NextFloat(minOffset, maxOffset);
 
@@ -1123,69 +1193,74 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 							void CreateFlamePillar()
 							{
-								Vector2 projPosition = new Vector2(projPositionX, 16 * (int)(player.Center.Y / 16));
-
-								if (playerInLava)
-								{
-									if (Framing.GetTileSafely(projPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(projPosition.ToTileCoordinates()).TileType])
-									{
-										while (Framing.GetTileSafely(projPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(projPosition.ToTileCoordinates()).TileType])
-										{
-											projPosition.Y -= 16;
-
-											if (projPosition.Y <= 0) break;
-										}
-										projPosition.Y += 16;
-									}
-									else
-									{
-										while (!Framing.GetTileSafely(projPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(projPosition.ToTileCoordinates()).TileType])
-										{
-											projPosition.Y += 16;
-
-											if (projPosition.Y >= Main.maxTilesY * 16) break;
-										}
-									}
-								}
-								else
-								{
-									if ((Framing.GetTileSafely(projPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(projPosition.ToTileCoordinates()).TileType]) || (Framing.GetTileSafely(projPosition.ToTileCoordinates()).LiquidAmount == 255))
-									{
-										while ((Framing.GetTileSafely(projPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(projPosition.ToTileCoordinates()).TileType]) || (Framing.GetTileSafely(projPosition.ToTileCoordinates()).LiquidAmount == 255))
-										{
-											projPosition.Y -= 16;
-
-											if (projPosition.Y <= 0) break;
-										}
-										projPosition.Y += 16;
-									}
-									else
-									{
-										while (!((Framing.GetTileSafely(projPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(projPosition.ToTileCoordinates()).TileType]) || (Framing.GetTileSafely(projPosition.ToTileCoordinates()).LiquidAmount == 255)))
-										{
-											projPosition.Y += 16;
-
-											if (projPosition.Y >= Main.maxTilesY * 16) break;
-										}
-									}
-									//adjust to match lava surface
-									if (Framing.GetTileSafely(projPosition.ToTileCoordinates()).LiquidAmount > 0)
-									{
-										projPosition.Y -= 16 * (Framing.GetTileSafely(projPosition.ToTileCoordinates()).LiquidAmount / 255f);
-									}
-								}
-								projPosition.Y += 16;
+								Vector2 projPosition = GetPillarPosition(new Vector2(projPositionX, 16 * (int)(player.Center.Y / 16)));
+								
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), projPosition, new Vector2(0, -1), ProjectileType<ConvectiveWandererFlamePillar>(), 12, 2f, player.whoAmI, ai1: inPhase2 ? 0.5f : 0f);
 							}
 						}
 
-						if ((NPC.ai[1] - 60) % (inPhase2 ? 40 : 60) == 0 && (NPC.ai[1] - 60) >= setupTime && (NPC.ai[1] - 60) < totalAttackTime - windDownTime)
+						Vector2 GetPillarPosition(Vector2 basePosition)
+                        {
+							Vector2 outPosition = basePosition;
+
+							if (playerInLava)
+							{
+								if (Framing.GetTileSafely(outPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(outPosition.ToTileCoordinates()).TileType])
+								{
+									while (Framing.GetTileSafely(outPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(outPosition.ToTileCoordinates()).TileType])
+									{
+										outPosition.Y -= 16;
+
+										if (outPosition.Y <= 0) break;
+									}
+									outPosition.Y += 16;
+								}
+								else
+								{
+									while (!Framing.GetTileSafely(outPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(outPosition.ToTileCoordinates()).TileType])
+									{
+										outPosition.Y += 16;
+
+										if (outPosition.Y >= Main.maxTilesY * 16) break;
+									}
+								}
+							}
+							else
+							{
+								if ((Framing.GetTileSafely(outPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(outPosition.ToTileCoordinates()).TileType]) || (Framing.GetTileSafely(outPosition.ToTileCoordinates()).LiquidAmount == 255))
+								{
+									while ((Framing.GetTileSafely(outPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(outPosition.ToTileCoordinates()).TileType]) || (Framing.GetTileSafely(outPosition.ToTileCoordinates()).LiquidAmount == 255))
+									{
+										outPosition.Y -= 16;
+
+										if (outPosition.Y <= 0) break;
+									}
+									outPosition.Y += 16;
+								}
+								else
+								{
+									while (!((Framing.GetTileSafely(outPosition.ToTileCoordinates()).HasUnactuatedTile && Main.tileSolid[Framing.GetTileSafely(outPosition.ToTileCoordinates()).TileType]) || (Framing.GetTileSafely(outPosition.ToTileCoordinates()).LiquidAmount == 255)))
+									{
+										outPosition.Y += 16;
+
+										if (outPosition.Y >= Main.maxTilesY * 16) break;
+									}
+								}
+								//adjust to match lava surface
+								if (Framing.GetTileSafely(outPosition.ToTileCoordinates()).LiquidAmount > 0)
+								{
+									outPosition.Y -= 16 * (Framing.GetTileSafely(outPosition.ToTileCoordinates()).LiquidAmount / 255f);
+								}
+							}
+							outPosition.Y += 16;
+
+							return outPosition;
+						}
+
+						if ((NPC.ai[1] - 60) % (inPhase2 ? 40 : 60) == 0 && (NPC.ai[1] - 60) >= setupStartTime + setupMidTime && (NPC.ai[1] - 60) < totalAttackTime - windDownTime)
                         {
 							player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(10, 60);
 						}
-
-						tentacleAngleMultiplier += (NPC.ai[2] * 0.1f - tentacleAngleMultiplier) / 10f;
-						angleSpeed = NPC.velocity.Length() * 0.075f * tentacleAngleMultiplier;
 
 						NPC.ai[1]++;
 						if (NPC.ai[1] == totalAttackTime)
@@ -1296,7 +1371,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: this attack probably needs denser projectiles or better-timed explosions
 				#region Open tentacles and cup them forwards, spin rapidly to produce a giant sphere of heat, then like shoot it at the player
 				case 8:
                     {
@@ -1492,8 +1566,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								NPC.velocity = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero) * dashVelocity;
 							}
 
-							//interesting motion idea which doesn't work here but which I should save for later: NPC.velocity = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero) * Math.Max(0, Vector2.Dot(NPC.velocity, (player.Center - NPC.Center).SafeNormalize(Vector2.Zero)));
-
 							angleSpeed = NPC.ai[2] * 0.1f;
 							tentacleAngleMultiplier += (-0.1f * angleSpeed - tentacleAngleMultiplier) * 0.1f;
 							float animProgressLeft = Math.Min(1f, 6f * timeLeft / dashTime);
@@ -1534,7 +1606,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
             }
 
             //TODO: I feel like a last-ditch attack of some sort would fit this boss pretty well
-            //TODO: Make attacks using the tentacles not start occuring until a certain health threshold
+			//TODO: Death anim
             if (gotoNextAttack)
 			{
 				if (NPC.life < NPC.lifeMax * phase2HealthThreshold && !inPhase2)
@@ -1637,7 +1709,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			}
 
 			//update pulse scales
-			segmentPulseScaleAngles[0] = (float)Math.IEEERemainder(segmentAngles[0] + pulseSpeed, MathHelper.TwoPi);
+			segmentPulseScaleAngles[0] = (float)Math.IEEERemainder(segmentPulseScaleAngles[0] + pulseSpeed, MathHelper.TwoPi);
 			for (int i = 1; i < segmentPulseScaleAngles.Length; i++)
 			{
 				segmentPulseScaleAngles[i] = Utils.AngleLerp(segmentPulseScaleAngles[i], segmentPulseScaleAngles[i - 1], pulseLerpAmount);
@@ -1712,7 +1784,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					case 8:
 					case 9:
 						//restrict tentacle-based attacks
-						if (NPC.life > NPC.lifeMax * tentacleAttacksHealthThreshold) aiWeightMultiplier = 0f; //TODO: Adjust threshold depending on difficulty
+						if (NPC.life > NPC.lifeMax * tentacleAttacksHealthThreshold) aiWeightMultiplier = 0f;
 						break;
 				}
 
@@ -1772,7 +1844,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			{
 				//hitting the head is great
 				npc.HitSound = SoundID.NPCHit1;
-				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 2f;
+				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 1.5f;
 			}
 		}
 		#endregion
@@ -2513,14 +2585,66 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 	public class ConvectiveWandererHeatVortex : ModProjectile
 	{
-		/*public override void Load()
+		public static Asset<Texture2D> PulseTexture;
+
+		public override void Load()
         {
-            IL.Terraria.Main.UpdateMenu += Main_UpdateMenu;
+			PulseTexture = Request<Texture2D>(Texture + "_Pulse");
+
+			/*IL.Terraria.Main.UpdateMenu += Main_UpdateMenu;
 		}
 
-        private void Main_UpdateMenu(MonoMod.Cil.ILContext il)
+		private void Main_UpdateMenu(MonoMod.Cil.ILContext il)
         {
             MonoMod.Cil.ILCursor c = new MonoMod.Cil.ILCursor(il);
+
+			c.EmitDelegate<Action>(() =>
+			{
+				if (!(bool)(typeof(ModLoader).GetField("isLoading", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).GetValue(null)))
+				{
+					String filePath = Main.SavePath + System.IO.Path.DirectorySeparatorChar + "ConvectiveWandererHeatVortex_Pulse.png";
+
+					if (!System.IO.File.Exists(filePath))
+					{
+						const int textureSize = 256;
+
+						Terraria.Utilities.UnifiedRandom rand = new Terraria.Utilities.UnifiedRandom(5203);
+
+						const int noiseSize = 512;
+						float[] fractalNoise = rand.FractalNoise1D(noiseSize, 32);
+
+						Texture2D texture = new Texture2D(Main.spriteBatch.GraphicsDevice, textureSize, textureSize, false, SurfaceFormat.Color);
+						System.Collections.Generic.List<Color> list = new System.Collections.Generic.List<Color>();
+						for (int i = 0; i < texture.Width; i++)
+						{
+							for (int j = 0; j < texture.Height; j++)
+							{
+								float x = (2 * i / (float)(texture.Width - 1) - 1);
+								float y = (2 * j / (float)(texture.Height - 1) - 1);
+
+								float distance = (float)Math.Sqrt(x * x + y * y);
+								float angle = (float)Math.Atan2(y, x);
+								
+								int noiseIndex = (int)(((angle / MathHelper.TwoPi + 1.5f) % 1f) * noiseSize);
+
+								float baseVal = 0.25f;
+								float peakMult = 10f * ModUtils.Lerp((float)Math.Pow(2f * (fractalNoise[noiseIndex] + 0.5f), 1), 1f, 0.5f);
+								float alphaMultiplier = baseVal + peakMult * (1 - (1 + baseVal / peakMult * (fractalNoise[noiseIndex] + 0.5f)) * distance) * (float)Math.Pow(distance, 4);
+
+								float alpha = distance >= 1 ? 0 : alphaMultiplier;
+
+								int r = 255;
+								int g = 255;
+								int b = 255;
+
+								list.Add(new Color((int)(r * alpha), (int)(g * alpha), (int)(b * alpha), (int)(255 * alpha)));
+							}
+						}
+						texture.SetData(list.ToArray());
+						texture.SaveAsPng(new System.IO.FileStream(filePath, System.IO.FileMode.Create), texture.Width, texture.Height);
+					}
+				}
+			});
 
 			c.EmitDelegate<Action>(() =>
 			{
@@ -2565,8 +2689,13 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						texture.SaveAsPng(new System.IO.FileStream(filePath, System.IO.FileMode.Create), texture.Width, texture.Height);
 					}
 				}
-			});
-        }*/
+			});*/
+		}
+
+        public override void Unload()
+		{
+			PulseTexture = null;
+		}
 
 		public override void SetDefaults()
 		{
@@ -2591,6 +2720,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			if (Projectile.timeLeft > 120)
 			{
 				NPC owner = Main.npc[(int)Projectile.ai[0]];
+
+				if (!owner.active || owner.ai[0] != 4) Projectile.active = false;
+
 				Projectile.velocity = new Vector2(owner.ai[2], owner.ai[3]) - Projectile.Center;
 
 				Vector2 oldCenter = Projectile.Center;
@@ -2660,6 +2792,18 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				MakeParticle(maxSpeed: 40);
 			}
 
+			float colorPulse = (3 + (float)Math.Sin(Projectile.timeLeft * MathHelper.TwoPi / 30f)) / 4;
+			Color drawColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(colorPulse * 0.25f + 0.25f + Projectile.ai[1], 2));
+
+			float numPulses = (Projectile.ai[1] == 0) ? 3 : 4;
+			for (int i = 0; i < numPulses; i++)
+			{
+				float pulseScale = ((Math.Abs(Projectile.rotation * 0.25f + i / numPulses)) % 1f);
+
+				ConvectiveWandererExplosionPulseParticle particle = Particle.NewParticle<ConvectiveWandererExplosionPulseParticle>(Projectile.Center, Vector2.Zero, 0f, 0f, Scale: Projectile.scale * pulseScale * 2f, Color: drawColor * (1.6f * pulseScale * (1 - pulseScale)));
+				ParticleLayer.AfterLiquidsAdditive.Add(particle);
+			}
+
 			Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().AddScreenShake(48, 60);
 		}
 
@@ -2683,19 +2827,32 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			DrawLayer.AddProjectile<DrawLayerAdditiveAfterLiquids>(index);
 		}
 
-		//TODO: Should probably have inward pulses of some sort
-		//TODO: Those should switch to rapidly-speeding-up outward pulses when about to explode (also should emit sparks then)
-		//TODO: Explosion should look better
 		public override bool PreDraw(ref Color lightColor)
 		{
 			float colorPulse = (3 + (float)Math.Sin(Projectile.timeLeft * MathHelper.TwoPi / 30f)) / 4;
 			Color drawColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(colorPulse * 0.25f + 0.25f + Projectile.ai[1], 2));
+
+			//pulses (these go inward while charging, outward while preparing to explode)
+			float pulseAlpha = Math.Clamp(Math.Max((Projectile.timeLeft - 120) / 30f, (120 - Projectile.timeLeft) / 30f), 0, 1);
+			if (pulseAlpha > 0)
+			{
+				float numPulses = (Projectile.ai[1] == 0) ? 3 : 4;
+				for (int i = 0; i < numPulses; i++)
+				{
+					float pulseScale = Projectile.timeLeft > 120 ?
+						1f - ((Math.Abs(Projectile.rotation * 0.25f + i / numPulses)) % 1f) :
+						((Math.Abs(Projectile.rotation * 0.25f + i / numPulses)) % 1f);
+
+					Main.EntitySpriteDraw(PulseTexture.Value, Projectile.Center - Main.screenPosition, PulseTexture.Frame(), drawColor * (0.8f * pulseScale * (1 - pulseScale) * pulseAlpha), Main.rand.NextFloat(MathHelper.TwoPi), PulseTexture.Size() / 2, Projectile.scale * pulseScale * 2f, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+				}
+			}
 
 			Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), drawColor * 0.5f, Projectile.rotation, TextureAssets.Projectile[Type].Size() / 2, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 			Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), drawColor * 0.5f, Projectile.rotation + MathHelper.PiOver2, TextureAssets.Projectile[Type].Size() / 2, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 			Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), drawColor * 0.5f, Projectile.rotation * 2, TextureAssets.Projectile[Type].Size() / 2, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 			Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), drawColor * 0.5f, Projectile.rotation * 2 + MathHelper.PiOver2, TextureAssets.Projectile[Type].Size() / 2, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 			Main.EntitySpriteDraw(Textures.Glow256.Value, Projectile.Center - Main.screenPosition, Textures.Glow256.Frame(), drawColor * 0.5f, 0f, Textures.Glow256.Size() / 2, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+
 			return false;
 		}
 	}
@@ -2758,6 +2915,26 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			spritebatch.Draw(particleTexture.Value, drawPosition, particleTexture.Frame(), drawColor, Rotation, particleTexture.Size() / 2, Scale * new Vector2(Velocity.Length() / 2f * Alpha, 1), SpriteEffects.None, 0f);
 		}
     }
+
+	public class ConvectiveWandererExplosionPulseParticle : Particle
+	{
+		public override string Texture => "Polarities/NPCs/ConvectiveWanderer/ConvectiveWandererHeatVortex_Pulse";
+
+		public override void Initialize()
+		{
+			Color = Color.White;
+			Glow = true;
+			TimeLeft = 120;
+		}
+
+		public override void AI()
+		{
+			Scale += 12f / (float)MaxTimeLeft;
+			Alpha = 1 - (float)Math.Pow(1 - TimeLeft / (float)MaxTimeLeft, 2);
+
+			Rotation = Main.rand.NextFloat(MathHelper.TwoPi);
+		}
+	}
 
 	//TODO: Remove this if it ends up unused
 	public class ConvectiveWandererLateralDeathray : ModProjectile
@@ -2955,21 +3132,29 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			Projectile.timeLeft = 120;
 			Projectile.tileCollide = false;
 			Projectile.hide = false;
+
+			Projectile.GetGlobalProjectile<PolaritiesProjectile>().ForceDraw = true;
 		}
 
         public override void OnSpawn(IEntitySource source)
 		{
 			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			Projectile.localAI[0] = Main.rand.Next(4095);
+			Projectile.ai[0] = 1f;
 		}
 
 		public override bool ShouldUpdatePosition() => false;
 
         public override void AI()
 		{
+			if (Projectile.timeLeft == 60)
+            {
+				Projectile.ai[0] = Math.Max(1f, (Projectile.Center.Y - Main.LocalPlayer.Center.Y) / 1267.2f + 0.5f); //gives extra height if the player is too high
+            }
+
 			float progress = 1 - Projectile.timeLeft / 120f;
 			float width = 16f * (Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 1.5f);
-			float heightMultiplier = (384f + 128f * (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f) / 384f;
+			float heightMultiplier = (384f + 128f * (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f * Projectile.ai[0]) / 384f;
 			float speedMultiplier = Main.rand.NextFloat(0f, 1f);
 
 			ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(Projectile.Center + new Vector2(Main.rand.NextFloat(width), 0).RotatedByRandom(MathHelper.TwoPi), new Vector2(0, -4f * speedMultiplier * heightMultiplier).RotatedByRandom(4f * (1 - speedMultiplier) / heightMultiplier) * new Vector2(1, 4), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: ModUtils.ConvectiveFlameColor(((Projectile.ai[1] == 0) ? 0.4f : 1f) * Main.rand.NextFloat(0.5f, 1f)));
@@ -2981,7 +3166,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		{
 			float progress = 1 - Projectile.timeLeft / 120f;
 			float width = 16f * (Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 1.5f);
-			return CustomCollision.CheckAABBvTriangle(targetHitbox, Projectile.Center + new Vector2(0, -128f).RotatedBy(Projectile.rotation) * (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f, Projectile.Center + new Vector2(width, 0), Projectile.Center - new Vector2(width, 0));
+			return CustomCollision.CheckAABBvTriangle(targetHitbox, Projectile.Center + new Vector2(0, -128f).RotatedBy(Projectile.rotation) * (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f * Projectile.ai[0], Projectile.Center + new Vector2(width, 0), Projectile.Center - new Vector2(width, 0));
 		}
 
 		public override bool? CanDamage()
@@ -2993,7 +3178,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		public override bool PreDraw(ref Color lightColor)
 		{
 			float progress = 1 - Projectile.timeLeft / 120f;
-			Vector2 flameScale = new Vector2(Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 1.5f, (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1)) * (Math.Min(progress * 4, 1) + 1f) * 0.15f;
+			Vector2 flameScale = new Vector2(Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 1.5f, (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1) * Projectile.ai[0]) * (Math.Min(progress * 4, 1) + 1f) * 0.15f;
 			Vector2 flamePos = Projectile.Center - Main.screenPosition + new Vector2(0, -64 * flameScale.X).RotatedBy(Projectile.rotation);
 
             AsthenosProjectile.asthenosRandomValues.SetIndex((int)Projectile.localAI[0]);
@@ -3040,6 +3225,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		public override void AI()
 		{
 			NPC owner = Main.npc[(int)Projectile.ai[0]];
+
+			if (!owner.active || owner.ai[0] != 7) Projectile.active = false;
+
 			Projectile.velocity = new Vector2(1, 0).RotatedBy(owner.rotation);
 			Projectile.Center = owner.Center + 112 * Projectile.velocity;
 
@@ -3149,8 +3337,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					Projectile.velocity = new Vector2(4, 0).RotatedBy(owner.rotation) + owner.velocity;
 				}
 
-				//TODO: Ensure other attached projectiles die if the owner dies
-				if (!owner.active) Projectile.Kill();
+				if (!owner.active || owner.ai[0] != 8) Projectile.active = false;
 
 				if (Projectile.timeLeft >= 630)
 				{
@@ -3246,8 +3433,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		{
 			float colorPulse = (3 + (float)Math.Sin(Projectile.timeLeft * MathHelper.TwoPi / 30f)) / 4;
 			Color drawColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(colorPulse * 0.25f + 0.25f + Projectile.ai[1], 2));
-
-			//TODO: Trail when moving
 
 			Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), drawColor * 0.25f, Projectile.rotation, TextureAssets.Projectile[Type].Size() / 2, Projectile.scale / 2, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 			Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), drawColor * 0.25f, -Projectile.rotation + MathHelper.PiOver2, TextureAssets.Projectile[Type].Size() / 2, Projectile.scale / 2, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
