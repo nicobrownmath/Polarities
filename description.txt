@@ -26,7 +26,7 @@ v0.11 Changelog
     Stellar remote is now non-consumable and generates in sky chests
     Dormant construct now spawns using the same system as normal enemies
     Decreased the recovery period after star construct's helicopter attack
-    Updated the visuals of star construct, some of its weapons, and stellated slimes
+    Updated the visuals and sounds of star construct, some of its weapons, and stellated slimes
     Strange clock now speeds up time faster
     Buffed sunplate armor's dash
     Cloud and stormcloud cichlids are now affected by wind

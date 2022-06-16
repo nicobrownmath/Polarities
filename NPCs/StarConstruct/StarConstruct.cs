@@ -39,6 +39,7 @@ namespace Polarities.NPCs.StarConstruct
 			ClawTexture = Mod.GetAsset<Texture2D>("NPCs/StarConstruct/StarConstructClaw");
 			DashTexture = Mod.GetAsset<Texture2D>("NPCs/StarConstruct/StarConstructDash");
 
+			//TODO: Use the old scream style on like april fools or something
 			//Scream = new SoundStyle("Terraria/Sounds/Roar_2") { Volume = 1f, Pitch = 0.7f };
 
 			/*IL.Terraria.Main.UpdateMenu += Main_UpdateMenu;

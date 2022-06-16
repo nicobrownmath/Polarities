@@ -175,4 +175,5 @@ namespace Polarities.Items.Placeable.Relics
 	public class GigabatRelic : RelicBase { public override int RelicIndex => 1; }
 	public class SunPixieRelic : RelicBase { public override int RelicIndex => 2; }
 	public class EsophageRelic : RelicBase { public override int RelicIndex => 3; }
+	public class ConvectiveWandererRelic : RelicBase { public override int RelicIndex => 4; }
 }

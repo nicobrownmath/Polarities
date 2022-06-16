@@ -36,6 +36,7 @@ using ReLogic.Utilities;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
 using Terraria.Utilities;
+using Polarities.Items.Placeable.Relics;
 
 namespace Polarities.NPCs.ConvectiveWanderer
 {
@@ -1859,30 +1860,15 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				PolaritiesSystem.GenerateMantellarOre();
 			}
 
-			/*TODO: Gores:
-			for (int i = 0; i < NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.Length; i++)
-			{
-				Vector2 gorePos = NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes[i].TopLeft();
-				if (i == 0)
-				{
-					Gore.NewGore(NPC.GetSource_Death(), gorePos, Vector2.Zero, Mod.Find<ModGore>("ConvectiveWandererGore1").Type);
-				}
-				else if (i == NPC.GetGlobalNPC<MultiHitboxNPC>().hitboxes.Length - 1)
-				{
-
-					Gore.NewGore(NPC.GetSource_Death(), gorePos, Vector2.Zero, Mod.Find<ModGore>("ConvectiveWandererGore3").Type);
-				}
-				else
-				{
-					Gore.NewGore(NPC.GetSource_Death(), gorePos, Vector2.Zero, Mod.Find<ModGore>("ConvectiveWandererGore2").Type);
-				}
-			}*/
+			//TODO: Death behavior
 			return true;
 		}
 
 		public override void ModifyNPCLoot(NPCLoot npcLoot)
 		{
-			//TODO:
+			//TODO: Finish this
+			//TODO: Make sure this drops from a reasonable location
+			npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ItemType<ConvectiveWandererRelic>()));
 		}
         #endregion
 
