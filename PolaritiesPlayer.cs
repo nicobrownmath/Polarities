@@ -487,14 +487,17 @@ namespace Polarities
 
         public void AddScreenShake(float magnitude, float timeLeft)
         {
-			float endTime = timeLeft + PolaritiesSystem.timer;
-			if (screenShakes.ContainsKey(endTime))
+			if (magnitude > 0 && timeLeft > 0)
 			{
-				screenShakes[endTime] += magnitude / timeLeft;
-			}
-			else
-			{
-				screenShakes.Add(endTime, magnitude / timeLeft);
+				float endTime = timeLeft + PolaritiesSystem.timer;
+				if (screenShakes.ContainsKey(endTime))
+				{
+					screenShakes[endTime] += magnitude / timeLeft;
+				}
+				else
+				{
+					screenShakes.Add(endTime, magnitude / timeLeft);
+				}
 			}
 		}
 

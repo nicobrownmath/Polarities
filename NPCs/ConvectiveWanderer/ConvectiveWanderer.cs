@@ -270,8 +270,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 		float tentacleAttacksHealthThreshold => Main.getGoodWorld ? 1f : Main.expertMode ? 0.75f : 0.66f;
 		float phase2HealthThreshold => Main.expertMode ? 0.5f : 0.33f; //we start in phase 2 in ftw
+		float phase3HealthThreshold => Main.getGoodWorld ? 0.2f : Main.expertMode ? 0.1f : 0f;
 
-		public override void AI()
+        public override void AI()
 		{
 			Player player = Main.player[NPC.target];
 			if (!player.active || player.dead)
@@ -390,8 +391,32 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
                 #region Spawn Animation
                 case 0:
-					//TODO: spawn animation
-					gotoNextAttack = true;
+					{
+						const int part1Time = 60;
+						const int part2Time = 60;
+
+						if (NPC.ai[1] < part1Time)
+						{
+							int side = (NPC.ai[1] == 0) ? (Main.rand.NextBool() ? 1 : -1) : (Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1);
+
+							float timeLeft = part1Time - NPC.ai[1];
+
+							Vector2 oldVelocity = NPC.velocity;
+							GoTowardsRadial(player.Center + new Vector2(-side * 1, -500), player.Center, timeLeft);
+							NPC.velocity = Vector2.Lerp(oldVelocity, NPC.velocity, timeLeft / part1Time);
+
+							tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+							angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
+						}
+						else
+                        {
+							Idle(radius: 600f);
+                        }
+
+						NPC.ai[1]++;
+						if (NPC.ai[1] == part1Time + part2Time)
+							gotoNextAttack = true;
+					}
 					break;
 				#endregion
 
@@ -2601,7 +2626,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				Projectile.rotation += 0.1f * 120f / (Projectile.timeLeft) * Projectile.spriteDirection;
 			}
 
-			Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().AddScreenShake(2f * Projectile.scale * Projectile.scale / Math.Max(Projectile.Distance(Main.LocalPlayer.Center) / (Projectile.width / 2), 1f), 10);
+			Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().AddScreenShake(2f * Projectile.scale * Projectile.scale / Math.Max((Main.LocalPlayer.Center - Projectile.Center).Length() / (Projectile.width / 2), 1f), 10);
 		}
 
 		void MakeParticle(float minSpeed = 12f, float maxSpeed = 20f)
