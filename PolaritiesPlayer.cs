@@ -352,7 +352,7 @@ namespace Polarities
 					amountOfDay = (float)Math.Abs(Main.time - Main.nightLength / 2) / (float)Main.nightLength;
 				}
 				Player.GetDamage(DamageClass.Generic) += 0.12f * amountOfDay;
-				Player.statLifeMax2 = (int)(Player.statLifeMax2 * (1 + 0.1f * (1 - amountOfDay)));
+				Player.endurance *= (1 - 0.1f * (1 - amountOfDay));
 			}
 
 			//wing time boost

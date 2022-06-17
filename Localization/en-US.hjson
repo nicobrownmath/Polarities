@@ -489,7 +489,7 @@
 			"ReadingGlasses": "Allows you to have two book buffs at once",
 			"SpectralLenses": "Allows you to have three book buffs at once",
 			"Stormcore": "Attracts schools of friendly cloudfish while at the surface, gradually filling up your available minion slots",
-			"StargelAmulet": "Increases your maximum health and damage depending on the time of day, up to 10% and 12% respectively\nDamage is increased more during the day and health is increased more at night",
+			"StargelAmulet": "Increases your damage resisted and damage dealt depending on the time of day, up to 10% and 12% respectively\nDamage is increased more during the day and health is increased more at night",
 			"HopperCrystal": "Provides a slight boost to jump height and grants auto-jump\nBoosts horizontal speed when jumping",
 			"SaltatoryLeg": "Increases jump speed and allows auto-jump\nIncreases fall resistance\nBoosts horizontal speed when jumping\n'Weirdly twitchy'",
 			"CorrosivePolish": "Warhammers remove 10 more defense for 10 more seconds",
@@ -502,7 +502,7 @@
 			"RotKnuckles": "5% increased damage and critical strike chance",
 			"InfestedBrain": "Reduces damage taken by 12%\nHas a chance to create illusions and dodge an attack\nTemporarily increase critical chance after dodge\nMay confuse nearby enemies after being struck",
 			"WyvernsNest": "Summons Etherian wyverns to help your sentries keep up with you",
-			"CelestialAmulet": "Increases your maximum health by 10% at night\nIncreases all damage by 12% during the day\nMinor increase to damage, melee speed, critical strike chance,\nlife regeneration, defense, mining speed, and minion knockback",
+			"CelestialAmulet": "Increases your damage resisted and damage dealt depending on the time of day, up to 10% and 12% respectively\nDamage is increased more during the day and health is increased more at night\nMinor increase to damage, melee speed, critical strike chance,\nlife regeneration, defense, mining speed, and minion knockback",
 			"SunlightEmblem": "15% increased magic damage\n10% reduced mana usage\n10% increased non-magic damage while not at full mana\nHitting enemies with non-magic weapons restores your mana",
 			"SymbioticSapling": "Increases summon damage the more distinct types of minions you have",
 
@@ -734,7 +734,12 @@
 			"NebulaRayProjectile": "Nebula Beam",
 			"CelestialStormProjectile": "Vortex",
 			"StardustWeaverMinion": "Stardust Weaver",
-			"StardustPillarMinion": "Stardust Tower"
+			"StardustPillarMinion": "Stardust Tower",
+			"ConvectiveWandererAcceleratingShot": "Magma Droplet",
+			"ConvectiveWandererHeatVortex": "Heat Vortex",
+			"ConvectiveWandererFlamePillar": "Flame Pillar",
+			"ConvectiveWandererFlamethrower": "Mega Flamethrower",
+			"ConvectiveWandererChargedShot": "Heat Orb"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
@@ -787,7 +792,8 @@
 			"RavenousCursed": "Ravenous Cursed",
 			"Esophage": "Esophage",
 			"EsophageClaw": "Esophage Claw",
-			"MantleOWar": "Mantle O' War"
+			"MantleOWar": "Mantle O' War",
+			"ConvectiveWanderer": "Convective Wanderer"
 		},
 		"Bestiary": {
 			"Rattler": "This small, venomous snake prefers dry climates. It loudly rattles to ward off any predators, but it’s just too cute to avoid!",
@@ -835,7 +841,8 @@
 			"TendrilAmalgam": "What is seen above ground is but a small piece of an even larger unseen hivemind, linked underground through a complex network of tendrils. It breaches from the soil and rubble to search for unassimilated mass with its many uncoordinated eyes.",
 			"LivingSpine": "No biomass goes to waste in the Crimson, even bones belonging to long since decayed bodies are welcomed into the Crimson’s collective. As such, even solitary spines dutifully burrow through the blood caked earth, expanding their region’s territory.",
 			"RavenousCursed": "The favorite spawns of the Corruption are no doubt the worms it frequently births. Dreadful fire surges through its body as if it were blood.",
-			"Esophage": "Empowered with all that is evil, this gargantuan parasite stalks the land in search of a host. Without a source of vitality to empower it, it cannot be truly considered either alive or dead."
+			"Esophage": "Empowered with all that is evil, this gargantuan parasite stalks the land in search of a host. Without a source of vitality to empower it, it cannot be truly considered either alive or dead.",
+			"ConvectiveWanderer": "This immense magma-dweller can tolerate the extreme temperatures of the Earth's core, using its tentacle-like gills both to drill through solid metal and to protect is more vulnerable head. Highly protective of its much smaller offspring."
 		},
 		"MapObject": {
 			"SaltCrystalsTile": "{$Mods.Polarities.ItemName.SaltCrystals}",

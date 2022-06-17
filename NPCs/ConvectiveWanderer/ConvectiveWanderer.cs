@@ -41,8 +41,6 @@ using Polarities.Items.Placeable.Relics;
 namespace Polarities.NPCs.ConvectiveWanderer
 {
 	[AutoloadBossHead]
-	//TODO: Localization for projectiles
-	//TODO: Localization for boss
 	//TODO: Bestiary entry image
 	public class ConvectiveWanderer : ModNPC, IMultiHitboxSegmentUpdate
 	{
@@ -516,7 +514,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						const int attackSwingTime = 20;
 						const int totalAttackTime = attackSetupTime + attackFreezeTime + attackSwingTime;
 
-						//TODO: Better visual cues (both for charging time and for freeze)
 						float attackProgress = (int)(NPC.ai[1] - attackFirstSetupExtraTime) % totalAttackTime;
 
 						bool playerAhead = Vector2.Dot(NPC.Center - player.Center, new Vector2(-1, 0).RotatedBy(NPC.rotation)) > 0;
@@ -784,8 +781,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: this attack has some issues with the telegraph
-				//it should feel more diegetic, and should probably be visible earlier, while it's still movable, to clue the player in that they need to manipulate it
 				#region Dash up and produce projectiles
 				case 3:
                     {
@@ -1989,7 +1984,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				//stuff to draw additively after most things (mostly telegraphs and effects
 				if (upDashTelegraphProgress > 0)
                 {
-					//TODO: Needs updating
 					Main.spriteBatch.Draw(Textures.Glow256.Value, NPC.Center - screenPos, Textures.Glow256.Frame(), ModUtils.ConvectiveFlameColor(upDashTelegraphProgress * upDashTelegraphProgress * 0.125f + (inPhase2 ? 0.875f : 0f)) * upDashTelegraphProgress, 0f, Textures.Glow256.Size() / 2, new Vector2(1, 64), SpriteEffects.None, 0);
                 }
 				if (tendrilGlow > 0 && NPC.ai[0] >= 0)
