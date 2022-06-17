@@ -193,7 +193,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			NPC.behindTiles = false;
 			NPC.value = Item.sellPrice(gold: 15);
 			NPC.HitSound = SoundID.NPCHit1;
-			NPC.DeathSound = SoundID.NPCDeath1;
+			NPC.DeathSound = SoundID.NPCDeath14;
 
 			NPC.hide = true;
 
@@ -231,6 +231,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		float tendrilGlow = 0f;
 		float upDashTelegraphProgress = 0f;
 		float headSwingAlpha = 0f;
+		float deathAnimProgress = 0f;
 
 		float phase2TransitionProgress = 0f;
 		bool inPhase2 => phase2TransitionProgress >= 0.5f;
@@ -343,6 +344,88 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			//TODO: Some attacks need sounds
 			switch (NPC.ai[0])
 			{
+				#region Death animation
+				case -3:
+					{
+						//move to above the player before dying
+						const int deathAnimationTime = 240;
+
+						deathAnimProgress = NPC.ai[1] / deathAnimationTime;
+
+						float timeLeft = deathAnimationTime - NPC.ai[1];
+
+						if (NPC.ai[1] == 0)
+                        {
+							NPC.ai[2] = player.Center.X + 200 * ((NPC.Center.X > player.Center.X) ? -1 : 1);
+							NPC.ai[3] = player.Center.Y - 200;
+						}
+
+						Vector2 goalPosition = new Vector2(NPC.ai[2], NPC.ai[3]);
+
+						Vector2 oldVelocity = NPC.velocity;
+						GoTowardsRadial(goalPosition, player.Center, timeLeft / 2);
+						NPC.velocity = Vector2.Lerp(NPC.velocity, oldVelocity, (float)Math.Pow(deathAnimProgress, 2));
+
+						int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
+
+						tentacleAngleMultiplier += (side * 0.1f - tentacleAngleMultiplier) / 10f;
+						angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier;
+
+						tendrilOutwardness = ModUtils.Lerp(tendrilOutwardness, 0f, 0.1f);
+						tentacleCompression = ModUtils.Lerp(tentacleCompression, 1f, 0.1f);
+						tentacleTiltAngle = ModUtils.Lerp(tentacleTiltAngle, 0f, 0.1f);
+						tentacleCurveAmount = ModUtils.Lerp(tentacleCurveAmount, 0f, 0.1f);
+						tendrilGlow = ModUtils.Lerp(tendrilGlow, 0f, 0.1f);
+
+						ConvectiveWandererTarget.extraGlow = deathAnimProgress;
+
+						//particles from body
+						for (int i = 0; i < 8; i++)
+						{
+							int segmentToSpawnParticleFrom = (int)((Main.rand.NextFloat(1 / 8f) + (1 - deathAnimProgress * 9 / 8f)) * (numSegments * segmentsPerHitbox));
+							if (segmentToSpawnParticleFrom >= 0 && segmentToSpawnParticleFrom <= numSegments * segmentsPerHitbox)
+							{
+								Vector2 particleSpawnPos = SegmentPosition(segmentToSpawnParticleFrom) + new Vector2(0, Main.rand.NextFloat(-1f, 1f)).RotatedBy(SegmentRotation(segmentToSpawnParticleFrom)) * SegmentRadius(segmentToSpawnParticleFrom);
+								Vector2 particleVelocity = new Vector2(-Main.rand.NextFloat(6f, 20f), Main.rand.NextFloat(-4f, 4f)).RotatedBy(SegmentRotation(segmentToSpawnParticleFrom));
+								ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(particleSpawnPos, particleVelocity, 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: ModUtils.ConvectiveFlameColor((inPhase2 ? 1f : 0.4f) * Main.rand.NextFloat(0.5f, 1f)));
+								ParticleLayer.AfterLiquidsAdditive.Add(particle);
+							}
+						}
+
+						player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(2 * deathAnimProgress, 10);
+
+						NPC.ai[1]++;
+						if (NPC.ai[1] == deathAnimationTime)
+						{
+
+							float colorPulse = Main.rand.NextFloat(0.5f, 1f);
+							Color drawColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(colorPulse * 0.25f + 0.25f + (inPhase2 ? 0.5f : 0), 2));
+
+							//final death behavior
+							for (int i = 0; i < 200; i++)
+							{
+								ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(NPC.Center + new Vector2(112, 0).RotatedBy(NPC.rotation), new Vector2(Main.rand.NextFloat(12f, 40f), 0).RotatedByRandom(MathHelper.TwoPi), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: drawColor);
+								ParticleLayer.AfterLiquidsAdditive.Add(particle);
+							}
+
+							for (int i = 0; i < 4; i++)
+							{
+								float pulseScale = i / 4f + 1 / 8f;
+
+								ConvectiveWandererExplosionPulseParticle particle = Particle.NewParticle<ConvectiveWandererExplosionPulseParticle>(NPC.Center + new Vector2(112, 0).RotatedBy(NPC.rotation), Vector2.Zero, 0f, 0f, Scale: 0f, Color: drawColor * (1.6f * pulseScale * (1 - pulseScale)), TimeLeft: 60);
+								particle.ScaleIncrement = pulseScale * 24f;
+								ParticleLayer.AfterLiquidsAdditive.Add(particle);
+							}
+
+							player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(36, 30);
+
+							NPC.life = 0;
+							NPC.checkDead();
+						}
+					}
+					break;
+                #endregion
+
                 #region Phase transition
                 case -2:
 					{
@@ -1585,11 +1668,11 @@ namespace Polarities.NPCs.ConvectiveWanderer
 									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(112, 0).RotatedBy(NPC.rotation), new Vector2((inPhase2 && i % 2 == 1) ? 6 : 8, 0).RotatedBy(i * MathHelper.TwoPi / numProjectiles + NPC.rotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 1, ai1: inPhase2 ? 0.5f : 0);
 								}
 
+								float colorPulse = Main.rand.NextFloat(0.5f, 1f);
+								Color drawColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(colorPulse * 0.25f + 0.25f + (inPhase2 ? 0.5f : 0), 2));
+
 								for (int i = 0; i < (inPhase2 ? 2 : 1) * 100; i++)
 								{
-									float colorPulse = Main.rand.NextFloat(0.5f, 1f);
-									Color drawColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(colorPulse * 0.25f + 0.25f + (inPhase2 ? 0.5f : 0), 2));
-
 									ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(NPC.Center + new Vector2(112, 0).RotatedBy(NPC.rotation), new Vector2(Main.rand.NextFloat(12f, 40f), 0).RotatedByRandom(MathHelper.TwoPi), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: drawColor);
 									ParticleLayer.AfterLiquidsAdditive.Add(particle);
 								}
@@ -1607,7 +1690,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
             }
 
             //TODO: I feel like a last-ditch attack of some sort would fit this boss pretty well
-			//TODO: Death anim
             if (gotoNextAttack)
 			{
 				if (NPC.life < NPC.lifeMax * phase2HealthThreshold && !inPhase2)
@@ -1626,7 +1708,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				float amountLeft = 1 / phase2HealthThreshold * NPC.life / (float)NPC.lifeMax;
 				float glowAmount = (1 - amountLeft) / 2f;
 				NPC.localAI[2] += 0.05f;
-				ConvectiveWandererTarget.extraGlow = (float)Math.Pow(Math.Sin(NPC.localAI[2]), 2) * glowAmount;
+				ConvectiveWandererTarget.extraGlow += (float)Math.Pow(Math.Sin(NPC.localAI[2]), 2) * glowAmount;
             }
 
 			//yes, I stole this from sun pixie
@@ -1853,21 +1935,31 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		#region Death Behavior
 		public override bool CheckDead()
 		{
+			if (NPC.ai[0] != -3)
+            {
+				NPC.ai[0] = -3;
+				NPC.ai[1] = 0;
+				NPC.life = 1;
+				NPC.dontTakeDamage = true;
+				NPC.damage = 0;
+				return false;
+            }
+
 			if (!PolaritiesSystem.downedConvectiveWanderer)
 			{
 				NPC.SetEventFlagCleared(ref PolaritiesSystem.downedConvectiveWanderer, -1);
 
 				PolaritiesSystem.GenerateMantellarOre();
 			}
+			NPC.Center = NPC.Center + new Vector2(112, 0).RotatedBy(NPC.rotation); //so the loot drops from the middle of the drill
 
-			//TODO: Death behavior
+			//TODO: Enclose loot in a box of convective bricks
 			return true;
 		}
 
-		public override void ModifyNPCLoot(NPCLoot npcLoot)
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
 		{
 			//TODO: Finish this
-			//TODO: Make sure this drops from a reasonable location
 			npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ItemType<ConvectiveWandererRelic>()));
 		}
         #endregion
@@ -1880,6 +1972,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
         PriorityQueue<DrawData, float> drawDatas;
 
 		//The maximum capacity potentially required by drawDatas
+		//TODO: Recheck this
 		int MAX_DRAW_CAPACITY = 8740;
 
 		public const int NUM_TENTACLES = 8;
@@ -1925,14 +2018,18 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				//register body data
 				for (int i = segmentPositions.Length - 1; i > -specialSegmentsHead; i--)
 				{
-					//most draws I've recorded as needed for this is: 6796
-					DrawSegment(drawDatas, spriteBatch, screenPos, i, NPC.GetNPCColorTintedByBuffs(Color.White));
+					//alpha multiplier for death animation
+					const float fadeMultiplier = 8;
+					float maxSegment = segmentPositions.Length - 1;
+					float segmentProgress = (maxSegment - Math.Max(0, i)) / maxSegment;
+					float alphaMultiplier = Math.Clamp(fadeMultiplier * segmentProgress - (fadeMultiplier + 1) * deathAnimProgress + 1, 0, 1);
+
+					if (alphaMultiplier > 0) DrawSegment(drawDatas, spriteBatch, screenPos, i, NPC.GetNPCColorTintedByBuffs(Color.White), alphaMultiplier);
 				}
 
 				//register tentacle data
 				for (int i = 0; i < NUM_TENTACLES; i++)
 				{
-					//most draws I've recorded as needed for this is needed for this is: 1873
 					DrawTentacle(drawDatas, spriteBatch, screenPos, i * MathHelper.TwoPi / NUM_TENTACLES, NPC.GetNPCColorTintedByBuffs(Color.White));
 				}
 
@@ -2003,8 +2100,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			vertexStrip.DrawTrail();
 			Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 		}
-
-
 
 		const int BASE_TEXTURE_HEIGHT = 128;
 		const int SIDES_PER_SEGMENT = 2;
@@ -2079,7 +2174,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			return indexInTailTendrils;
 		}
 
-		void DrawSegment(PriorityQueue<DrawData, float> drawDatas, SpriteBatch spriteBatch, Vector2 screenPos, int index, Color color)
+		void DrawSegment(PriorityQueue<DrawData, float> drawDatas, SpriteBatch spriteBatch, Vector2 screenPos, int index, Color color, float alphaMultiplier)
 		{
 			Vector2 segmentPosition = SegmentPosition(index);
 
@@ -2141,7 +2236,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						Vector2 scale = new Vector2(1, (float)Math.Cos(totalAngle) * scaleMultToMatch / (BASE_TEXTURE_HEIGHT / DRAWS_PER_SIDE) * 2);
 
 						float depthColorModifier = ((float)Math.Cos(totalAngle) + 2) / 3;
-						Color depthModifiedColor = color.MultiplyRGB(new Color(new Vector3(depthColorModifier)));
+						Color depthModifiedColor = color.MultiplyRGB(new Color(new Vector3(depthColorModifier))) * alphaMultiplier;
 
 						SpriteEffects bodyEffects = SpriteEffects.None;
 
@@ -2253,7 +2348,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					Vector2 endPosition = (tendrilPos1 + tendrilPos2) / 2;
 
 					float depthColorModifier = ((float)Math.Cos(totalAngle1) + 3) / 4;
-					Color tendrilColor = Color.Lerp(ModUtils.ConvectiveFlameColor(tendrilProgress * tendrilProgress * 0.5f + phase2TransitionProgress * 0.5f).MultiplyRGB(new Color(new Vector3(depthColorModifier))), Color.White, effectiveGlow) * tendrilProgress;
+					Color tendrilColor = Color.Lerp(ModUtils.ConvectiveFlameColor(tendrilProgress * tendrilProgress * 0.5f + phase2TransitionProgress * 0.5f).MultiplyRGB(new Color(new Vector3(depthColorModifier))), Color.White, effectiveGlow) * tendrilProgress * alphaMultiplier;
 					float tendrilWidth = tendrilProgress * 2f + 2f;
 
 					drawDatas.Enqueue(new DrawData(Textures.PixelTexture.Value, startPosition - screenPos, Textures.PixelTexture.Frame(), color.MultiplyRGBA(tendrilColor), (endPosition - startPosition).ToRotation(), new Vector2(0, 0.5f), new Vector2((endPosition - startPosition).Length(), tendrilWidth), SpriteEffects.None, 0), (float)Math.Cos(totalAngle1) * 64f - globalSegmentDepthModifier);
@@ -2913,9 +3008,11 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			TimeLeft = 120;
 		}
 
+		public float ScaleIncrement = 12f;
+
 		public override void AI()
 		{
-			Scale += 12f / (float)MaxTimeLeft;
+			Scale += ScaleIncrement / (float)MaxTimeLeft;
 			Alpha = 1 - (float)Math.Pow(1 - TimeLeft / (float)MaxTimeLeft, 2);
 
 			Rotation = Main.rand.NextFloat(MathHelper.TwoPi);
