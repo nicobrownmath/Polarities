@@ -264,7 +264,7 @@ namespace Polarities.NPCs.Enemies.Salt
             if (spawnInfo.Player.InModBiome(GetInstance<SaltCave>()) && (spawnInfo.SpawnTileType == TileType<SaltTile>() || spawnInfo.SpawnTileType == TileType<RockSaltTile>() || playerTile.TileType == TileType<SaltTile>() || playerTile.TileType == TileType<RockSaltTile>()))
             {
                 if (spawnInfo.Water)
-                    return 4f;
+                    return 2f;
             }
             return 0f;
         }

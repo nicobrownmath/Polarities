@@ -310,7 +310,7 @@ namespace Polarities.NPCs.Enemies.Limestone
             }
             else if (Main.tile[rootTile.X, rootTile.Y].TileType == TileType<LimestoneTile>() && Main.tile[rootTile.X, rootTile.Y].WallType == WallType<LimestoneWallNatural>())
             {
-                return 3.5f;
+                return 1.75f;
             }
             return 0f;
         }

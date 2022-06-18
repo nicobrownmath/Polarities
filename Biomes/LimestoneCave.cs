@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 
 namespace Polarities.Biomes
 {
+	//TODO: Tone down spawn rates
 	public class LimestoneCave : ModBiome
 	{
 		public override SceneEffectPriority Priority => SceneEffectPriority.None;

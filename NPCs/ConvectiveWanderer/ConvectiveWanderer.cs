@@ -287,6 +287,13 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				}
 			}
 
+			//despawn immediately if too far away from the player
+			if ((player.Center - NPC.Center).Length() > 5000)
+            {
+				NPC.active = false;
+				return;
+            }
+
 			//Despawn if the player leaves the underworld for too long
 			if (!player.ZoneUnderworldHeight)
             {
@@ -1856,7 +1863,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						aiWeightMultiplier = 1.5f;
 						break;
 					case 5:
-						aiWeightMultiplier = 0f;
+						//final phase attack
+						if (NPC.life > NPC.lifeMax * phase3HealthThreshold) aiWeightMultiplier = 0f;
 						break;
 					case 7:
 					case 8:
@@ -1865,6 +1873,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						if (NPC.life > NPC.lifeMax * tentacleAttacksHealthThreshold) aiWeightMultiplier = 0f;
 						break;
 				}
+
+				if (NPC.life <= NPC.lifeMax * phase3HealthThreshold && state + 1 != 5 && aiWeights[5] > 0) aiWeightMultiplier = 0; //always use attack 5 if it's allowed
 
 				aiWeightMultipliers[state] = aiWeightMultiplier;
 

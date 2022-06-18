@@ -379,6 +379,7 @@ namespace Polarities
 
 		//TODO: Make salt and limestone generate ambience that doesn't override things like heart crystals but does override generic ambience, a la the granite/marble biomes
 		//TODO: Salt pots
+		//TODO: Maybe do submerged salt crates to incentivize a bit more diving and to hint at salt fishing
 		//TODO: Localization for worldgen pass messages
 		private void GenSaltCaves(GenerationProgress progress, GameConfiguration configuration)
 		{

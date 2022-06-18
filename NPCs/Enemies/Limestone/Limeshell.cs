@@ -215,7 +215,7 @@ namespace Polarities.NPCs.Enemies.Limestone
             Tile playerTile = Main.tile[(int)(spawnInfo.Player.Center.X / 16), (int)((spawnInfo.Player.Center.Y + 1 + spawnInfo.Player.height / 2) / 16)];
             if (spawnInfo.Player.InModBiome(GetInstance<LimestoneCave>()) && (spawnInfo.SpawnTileType == TileType<LimestoneTile>() || playerTile.TileType == TileType<LimestoneTile>()))
             {
-                return 2f;
+                return 1f;
             }
             return 0f;
         }
