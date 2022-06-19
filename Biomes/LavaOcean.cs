@@ -19,7 +19,6 @@ using static Terraria.ModLoader.ModContent;
 namespace Polarities.Biomes
 {
     //TODO: Background should remove all rocky hell BG elements, add flocks of lavafowl
-    //TODO: Increase heat shader intensity here
     public class LavaOcean : ModBiome
     {
         public override SceneEffectPriority Priority => SceneEffectPriority.None;

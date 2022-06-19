@@ -12,6 +12,7 @@ using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
 using Polarities.Items.Weapons.Ranged;
 using Polarities.NPCs.Esophage;
+using Terraria.GameContent;
 
 namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 {
@@ -19,7 +20,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 	{
 		public override void SetStaticDefaults()
 		{
-			Main.npcFrameCount[Type] = 2;
+			Main.npcFrameCount[Type] = 6;
 
 			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
 			{
@@ -46,9 +47,9 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 		public override void SetDefaults()
 		{
 			NPC.aiStyle = -1;
-			NPC.width = 110;
-			NPC.height = 110;
-			DrawOffsetY = 22;
+			NPC.width = 60;
+			NPC.height = 60;
+			DrawOffsetY = 25;
 
 			NPC.defense = 28;
 			NPC.damage = 50;
@@ -80,7 +81,9 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			if (!PolaritiesSystem.worldEvilInvasion)
 			{
 				//flee if not in the invasion
-				NPC.frame.Y = NPC.frame.Height;
+
+				NPC.frame.X = NPC.frame.Width;
+				NPC.frame.Y = NPC.frame.Height * 4;
 
 				NPC.velocity *= 0.99f;
 
@@ -95,13 +98,17 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			{
 				groundFlag = true;
 
-				NPC.frame.Y = 0;
-
 				switch (NPC.ai[0])
 				{
 					case 0:
-						//big jump at player once
-						NPC.ai[1]++;
+                        //big jump at player once
+                        if (NPC.ai[1] == 0)
+                        {
+                            NPC.frame.X = NPC.frame.Width;
+                            NPC.frame.Y = 0;
+                        }
+
+                        NPC.ai[1]++;
 						if (NPC.ai[1] == 30)
 						{
 							NPC.velocity = new Vector2(9 * NPC.direction, -18);
@@ -115,8 +122,14 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 						}
 						break;
 					case 1:
-						//small jumps at player repeatedly
-						NPC.ai[1]++;
+                        //small jumps at player repeatedly
+                        if (NPC.ai[1] == 0)
+                        {
+                            NPC.frame.X = NPC.frame.Width;
+                            NPC.frame.Y = 0;
+                        }
+
+                        NPC.ai[1]++;
 						if (NPC.ai[1] % 30 == 0)
 						{
 							NPC.velocity = new Vector2(7 * NPC.direction, -10);
@@ -143,13 +156,16 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 						int ichorSprayPeriod = 12;
 						float ichorSprayVelocity = 12;
 
-						if (NPC.ai[1] == 0)
+						if (NPC.ai[1] == 30)
 						{
 							NPC.ai[2] = NPC.direction;
-						}
+
+                            NPC.frame.X = NPC.frame.Width * 2;
+							NPC.frame.Y = 0;
+                        }
 						if (Main.netMode != 1)
 						{
-							if (NPC.ai[1] >= 30)
+							if (NPC.ai[1] >= 60)
 							{
 								float angle = NPC.ai[2] * 0.25f * (1 - (NPC.ai[1] - 30) / 150f);
 								if (NPC.ai[1] % ichorSprayPeriod == ichorSprayPeriod - 1)
@@ -162,7 +178,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 						}
 
 						NPC.ai[1]++;
-						if (NPC.ai[1] == 180)
+						if (NPC.ai[1] == 210)
 						{
 							if (Main.netMode != 1)
 							{
@@ -176,8 +192,20 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 					case 3:
 						//shoot ichor upwards in clump that lands on the player
 
-						NPC.ai[1]++;
-						if (NPC.ai[1] == 60)
+						if (NPC.ai[1] == 30)
+                        {
+                            NPC.frame.X = 0;
+                            NPC.frame.Y = 0;
+                        }
+						if (NPC.ai[1] == 40)
+                        {
+                            NPC.frame.X = NPC.frame.Width * 2;
+                            NPC.frame.Y = 0;
+                        }
+
+                        NPC.ai[1]++;
+
+                        if (NPC.ai[1] == 60)
 						{
 							if (Main.netMode != 1)
 							{
@@ -240,27 +268,95 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			else
 			{
 				//while in the air
-				NPC.frame.Y = NPC.frame.Height;
+				NPC.frame.X = NPC.frame.Width;
 
-				NPC.velocity *= 0.99f;
+				if (NPC.velocity.Y > 1f)
+                {
+					NPC.frame.Y = NPC.frame.Height * 4;
+                }
+                else if (NPC.velocity.Y > 0f)
+                {
+                    NPC.frame.Y = NPC.frame.Height * 3;
+                }
+                else if (NPC.velocity.Y > -1f)
+                {
+                    NPC.frame.Y = NPC.frame.Height * 2;
+                }
+				else
+                {
+					NPC.frame.Y = NPC.frame.Height;
+                }
+
+				NPC.rotation = -(float)Math.Atan(0.05f * NPC.velocity.Y * NPC.velocity.X) / MathHelper.TwoPi;
+
+                NPC.velocity *= 0.99f;
 			}
 
 			NPC.velocity.Y += 0.3f;
 
-			if (NPC.velocity.Y > 0 && Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height) != new Vector2(0, NPC.velocity.Y))
+			if (NPC.velocity.Y > 0 && Collision.TileCollision(NPC.position + new Vector2(0, 25), new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height) != new Vector2(0, NPC.velocity.Y))
 			{
-				NPC.velocity = Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height);
+				NPC.velocity = Collision.TileCollision(NPC.position + new Vector2(0, 25), new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height);
 				NPC.position.Y += NPC.velocity.Y;
 				NPC.velocity.Y = 0;
 
 				if (!groundFlag)
 				{
 					MakeDusts();
-				}
+                    NPC.frame.Y = NPC.frame.Height * 5;
+					NPC.rotation = 0f;
+                }
 			}
-		}
+        }
 
-		private void MakeDusts()
+        public override void FindFrame(int frameHeight)
+        {
+            NPC.frame.Width = TextureAssets.Npc[Type].Width() / 3;
+
+			if (NPC.frame.X == 0)
+            {
+				NPC.frameCounter++;
+				if (NPC.frameCounter >= 5)
+                {
+					NPC.frameCounter = 0;
+					NPC.frame.Y += NPC.frame.Height;
+					if (NPC.frame.Y >= NPC.frame.Height * 6)
+                    {
+						NPC.frame.Y = 0;
+                    }
+                }
+
+				DrawOffsetY = 25;
+            }
+			else if (NPC.frame.X == NPC.frame.Width)
+            {
+				if (NPC.frame.Y == 0 || NPC.frame.Y == 5 * NPC.frame.Height)
+                {
+                    DrawOffsetY = 25;
+                }
+				else
+                {
+                    DrawOffsetY = 73;
+                }
+            }
+            else if (NPC.frame.X == 2 * NPC.frame.Width)
+            {
+                NPC.frameCounter++;
+                if (NPC.frameCounter >= 5)
+                {
+                    NPC.frameCounter = 0;
+                    NPC.frame.Y += NPC.frame.Height;
+                    if (NPC.frame.Y >= NPC.frame.Height * 4)
+                    {
+                        NPC.frame.Y = 0;
+                    }
+                }
+
+                DrawOffsetY = 25;
+            }
+        }
+
+        private void MakeDusts()
 		{
 			SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Killed_14")
 			{
@@ -310,7 +406,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 
 		public override bool CheckDead()
 		{
-			for (int i = 1; i <= 2; i++)
+			for (int i = 1; i <= 4; i++)
 				Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>("UraraneidGore" + i).Type);
 
 			for (int i = 0; i < 64; i++)
@@ -344,5 +440,29 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			npcLoot.Add(ItemDropRule.Common(ItemType<Splattergun>(), 8));
 			npcLoot.Add(ItemDropRule.Common(ItemID.Ichor, 1, 2, 5));
 		}
-	}
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            //adapted from vanilla npc drawcode
+            drawColor = NPC.GetNPCColorTintedByBuffs(drawColor);
+            Vector2 halfSize = NPC.frame.Size() / 2;
+            SpriteEffects spriteEffects = (SpriteEffects)0;
+            if (NPC.spriteDirection == 1)
+            {
+                spriteEffects = (SpriteEffects)1;
+            }
+
+            Texture2D npcTexture = TextureAssets.Npc[Type].Value;
+
+            int numHorizontalFrames = 3;
+
+            Main.spriteBatch.Draw(npcTexture, new Vector2(NPC.Center.X - screenPos.X - npcTexture.Width * NPC.scale / 2f / numHorizontalFrames + halfSize.X * NPC.scale, NPC.position.Y - screenPos.Y + NPC.height - npcTexture.Height * NPC.scale / Main.npcFrameCount[Type] + 4f + halfSize.Y * NPC.scale + Main.NPCAddHeight(NPC) + NPC.gfxOffY), NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, halfSize, NPC.scale, spriteEffects, 0f);
+            if (NPC.confused)
+            {
+                Main.spriteBatch.Draw(TextureAssets.Confuse.Value, new Vector2(NPC.position.X - screenPos.X + (float)(NPC.width / 2) - (float)TextureAssets.Npc[Type].Width() * NPC.scale / 2f / numHorizontalFrames + halfSize.X * NPC.scale, NPC.position.Y - screenPos.Y + (float)NPC.height - (float)TextureAssets.Npc[Type].Height() * NPC.scale / (float)Main.npcFrameCount[Type] + 4f + halfSize.Y * NPC.scale + Main.NPCAddHeight(NPC) - (float)TextureAssets.Confuse.Height() - 20f), (Rectangle?)new Rectangle(0, 0, TextureAssets.Confuse.Width(), TextureAssets.Confuse.Height()), new Color(250, 250, 250, 70), NPC.velocity.X * -0.05f, new Vector2((float)(TextureAssets.Confuse.Width() / 2), (float)(TextureAssets.Confuse.Height() / 2)), Main.essScale + 0.2f, (SpriteEffects)0, 0f);
+            }
+
+            return false;
+        }
+    }
 }
