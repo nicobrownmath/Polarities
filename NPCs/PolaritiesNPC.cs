@@ -33,6 +33,7 @@ using Polarities.Buffs;
 using Polarities.Items.Weapons.Melee;
 using Polarities.Items.Weapons.Ranged.Atlatls;
 using Polarities.Items.Armor.MechaMayhemArmor;
+using Polarities.Items.Materials;
 
 namespace Polarities.NPCs
 {
@@ -870,6 +871,12 @@ namespace Polarities.NPCs
 
             switch(npc.type)
             {
+                case NPCID.GraniteFlyer:
+                case NPCID.GraniteGolem:
+                    npcLoot.Add(ItemDropRule.Common(ItemType<BlueQuartz>(), 2, 1, 2));
+                    break;
+
+                //bosses (mostly flawless stuff)
                 case NPCID.KingSlime:
                     npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Gelthrower>()));
                     break;

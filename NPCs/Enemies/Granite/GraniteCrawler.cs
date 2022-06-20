@@ -20,6 +20,7 @@ using MultiHitboxNPCLibrary;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using ReLogic.Content;
+using Polarities.Items.Materials;
 
 namespace Polarities.NPCs.Enemies.Granite
 {
@@ -65,8 +66,6 @@ namespace Polarities.NPCs.Enemies.Granite
             NPC.noTileCollide = true;
             NPC.HitSound = SoundID.NPCHit7;
             NPC.DeathSound = SoundID.NPCDeath6;
-
-            NPC.buffImmune[BuffID.Confused] = true;
 
             Banner = Type;
             BannerItem = ItemType<GraniteCrawlerBanner>();
@@ -252,6 +251,21 @@ namespace Polarities.NPCs.Enemies.Granite
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color lightColor)
         {
+            if (NPC.IsABestiaryIconDummy)
+            {
+                NPC.rotation = MathHelper.Pi;
+                NPC.Center -= new Vector2(20, 0);
+                segmentPositions[0] = NPC.Center + new Vector2(NPC.width / 2 - 2, 0).RotatedBy(NPC.rotation);
+                const float rotAmoutPerSegment = 0.01f;
+                for (int i = 1; i < segmentPositions.Length; i++)
+                {
+                    segmentPositions[i] = segmentPositions[i - 1] - new Vector2(2, 0).RotatedBy(NPC.rotation + rotAmoutPerSegment * i);
+                }
+
+                NPC.ai[2] = 0f;
+                NPC.ai[3] = 1f;
+            }
+
             //draw legs
             Texture2D legTexture = LegTexture.Value;
             Texture2D clawTexture = ClawTexture.Value;
@@ -263,18 +277,18 @@ namespace Polarities.NPCs.Enemies.Granite
                 float segmentRotation = (segmentPositions[i - 1] - segmentPositions[i]).ToRotation();
 
                 float rotationOffset = (float)Math.Sin(NPC.ai[2] * 0.05f + h) + 1f;
-                spriteBatch.Draw(legTexture, new Vector2(0, 8).RotatedBy(segmentRotation) + segmentPosition - Main.screenPosition, legTexture.Frame(), NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(segmentPosition.X / 16), (int)(segmentPosition.Y / 16))), segmentRotation + rotationOffset, new Vector2(3, 3), 1f, SpriteEffects.FlipVertically, 0f);
-                spriteBatch.Draw(clawTexture, new Vector2(0, 8).RotatedBy(segmentRotation) + new Vector2(14, 0).RotatedBy(segmentRotation + rotationOffset) + segmentPosition - Main.screenPosition, clawTexture.Frame(), NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(segmentPosition.X / 16), (int)(segmentPosition.Y / 16))), segmentRotation + rotationOffset / 2f - 1f, new Vector2(19, 7), 1f, SpriteEffects.FlipVertically, 0f);
+                spriteBatch.Draw(legTexture, new Vector2(0, 8).RotatedBy(segmentRotation) + segmentPosition - screenPos, legTexture.Frame(), NPC.IsABestiaryIconDummy ? Color.White : NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(segmentPosition.X / 16), (int)(segmentPosition.Y / 16))), segmentRotation + rotationOffset, new Vector2(3, 3), 1f, SpriteEffects.FlipVertically, 0f);
+                spriteBatch.Draw(clawTexture, new Vector2(0, 8).RotatedBy(segmentRotation) + new Vector2(14, 0).RotatedBy(segmentRotation + rotationOffset) + segmentPosition - screenPos, clawTexture.Frame(), NPC.IsABestiaryIconDummy ? Color.White : NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(segmentPosition.X / 16), (int)(segmentPosition.Y / 16))), segmentRotation + rotationOffset / 2f - 1f, new Vector2(19, 7), 1f, SpriteEffects.FlipVertically, 0f);
 
-                spriteBatch.Draw(legTexture, new Vector2(0, -8).RotatedBy(segmentRotation) + segmentPosition - Main.screenPosition, legTexture.Frame(), NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(segmentPosition.X / 16), (int)(segmentPosition.Y / 16))), segmentRotation - rotationOffset, new Vector2(3, 3), 1f, SpriteEffects.None, 0f);
-                spriteBatch.Draw(clawTexture, new Vector2(0, -8).RotatedBy(segmentRotation) + new Vector2(14, 0).RotatedBy(segmentRotation - rotationOffset) + segmentPosition - Main.screenPosition, clawTexture.Frame(), NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(segmentPosition.X / 16), (int)(segmentPosition.Y / 16))), segmentRotation - rotationOffset / 2f + 1f, new Vector2(19, 3), 1f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(legTexture, new Vector2(0, -8).RotatedBy(segmentRotation) + segmentPosition - screenPos, legTexture.Frame(), NPC.IsABestiaryIconDummy ? Color.White : NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(segmentPosition.X / 16), (int)(segmentPosition.Y / 16))), segmentRotation - rotationOffset, new Vector2(3, 3), 1f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(clawTexture, new Vector2(0, -8).RotatedBy(segmentRotation) + new Vector2(14, 0).RotatedBy(segmentRotation - rotationOffset) + segmentPosition - screenPos, clawTexture.Frame(), NPC.IsABestiaryIconDummy ? Color.White : NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(segmentPosition.X / 16), (int)(segmentPosition.Y / 16))), segmentRotation - rotationOffset / 2f + 1f, new Vector2(19, 3), 1f, SpriteEffects.None, 0f);
             }
 
             //draw tail
             Texture2D tailTexture = TailTexture.Value;
             Vector2 tailPosition = segmentPositions[segmentPositions.Length - 1];
             float tailRotation = (segmentPositions[segmentPositions.Length - 2] - segmentPositions[segmentPositions.Length - 1]).ToRotation();
-            spriteBatch.Draw(tailTexture, tailPosition - Main.screenPosition, tailTexture.Frame(), NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(tailPosition.X / 16), (int)(tailPosition.Y / 16))), tailRotation, new Vector2(18, 9), 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tailTexture, tailPosition - screenPos, tailTexture.Frame(), NPC.IsABestiaryIconDummy ? Color.White : NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(tailPosition.X / 16), (int)(tailPosition.Y / 16))), tailRotation, new Vector2(18, 9), 1f, SpriteEffects.None, 0f);
 
             //draw body
             Texture2D bodyTexture = BodyTexture.Value;
@@ -284,12 +298,12 @@ namespace Polarities.NPCs.Enemies.Granite
                 float rotation = (segmentPositions[i - 1] - segmentPositions[i]).ToRotation();
                 float scale = 1f;//(segmentPositions.Length - i) / (float)(segmentPositions.Length - 1);
 
-                spriteBatch.Draw(bodyTexture, drawPosition - Main.screenPosition, new Rectangle(((segmentPositions.Length + 8 - i) % 9) * 2, 0, 4, 18), NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(drawPosition.X / 16), (int)(drawPosition.Y / 16))), rotation, new Vector2(2, 9), new Vector2(scale, 1), SpriteEffects.None, 0f);
+                spriteBatch.Draw(bodyTexture, drawPosition - screenPos, new Rectangle(((segmentPositions.Length + 8 - i) % 9) * 2, 0, 4, 18), NPC.IsABestiaryIconDummy ? Color.White : NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(drawPosition.X / 16), (int)(drawPosition.Y / 16))), rotation, new Vector2(2, 9), new Vector2(scale, 1), SpriteEffects.None, 0f);
             }
 
             //draw head
             Texture2D headTexture = TextureAssets.Npc[Type].Value;
-            spriteBatch.Draw(headTexture, NPC.Center - Main.screenPosition, headTexture.Frame(), NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16))), NPC.rotation, new Vector2(12, 11), new Vector2(1, 1), SpriteEffects.None, 0f);
+            spriteBatch.Draw(headTexture, NPC.Center - screenPos, headTexture.Frame(), NPC.IsABestiaryIconDummy ? Color.White : NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16))), NPC.rotation, new Vector2(12, 11), new Vector2(1, 1), SpriteEffects.None, 0f);
 
             //draw mandibles
             Texture2D mandibleTexture = JawTexture.Value;
@@ -297,8 +311,8 @@ namespace Polarities.NPCs.Enemies.Granite
             //mandible distance goes from -1 to 11
             float mandibleDistance = ModUtils.Lerp(-1, 11, NPC.ai[3]);
 
-            spriteBatch.Draw(mandibleTexture, NPC.Center - Main.screenPosition, mandibleTexture.Frame(), NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16))), NPC.rotation, new Vector2(14, mandibleDistance + 12), 1f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(mandibleTexture, NPC.Center - Main.screenPosition, mandibleTexture.Frame(), NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16))), NPC.rotation, new Vector2(14, -mandibleDistance), 1f, SpriteEffects.FlipVertically, 0f);
+            spriteBatch.Draw(mandibleTexture, NPC.Center - screenPos, mandibleTexture.Frame(), NPC.IsABestiaryIconDummy ? Color.White : NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16))), NPC.rotation, new Vector2(14, mandibleDistance + 12), 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(mandibleTexture, NPC.Center - screenPos, mandibleTexture.Frame(), NPC.IsABestiaryIconDummy ? Color.White : NPC.GetNPCColorTintedByBuffs(Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16))), NPC.rotation, new Vector2(14, -mandibleDistance), 1f, SpriteEffects.FlipVertically, 0f);
 
 
             return false;
@@ -315,8 +329,11 @@ namespace Polarities.NPCs.Enemies.Granite
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
+            npcLoot.Add(ItemDropRule.Common(ItemID.Spaghetti, 50));
             npcLoot.Add(ItemDropRule.Common(ItemID.Granite, 1, 5, 10));
             npcLoot.Add(ItemDropRule.Common(ItemID.NightVisionHelmet, 30));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Geode, 20));
+            npcLoot.Add(ItemDropRule.Common(ItemType<BlueQuartz>(), 2, 1, 2));
         }
 
         public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
