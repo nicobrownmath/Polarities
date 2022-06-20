@@ -35,8 +35,6 @@ namespace Polarities.NPCs.Enemies.Limestone
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Flow Worm");
-
 			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
 			{
 				SpecificallyImmuneTo = new int[] {

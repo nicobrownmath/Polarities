@@ -793,7 +793,8 @@
 			"Esophage": "Esophage",
 			"EsophageClaw": "Esophage Claw",
 			"MantleOWar": "Mantle O' War",
-			"ConvectiveWanderer": "Convective Wanderer"
+			"ConvectiveWanderer": "Convective Wanderer",
+			"GraniteCrawler": "Granite Crawler"
 		},
 		"Bestiary": {
 			"Rattler": "This small, venomous snake prefers dry climates. It loudly rattles to ward off any predators, but it’s just too cute to avoid!",
@@ -842,7 +843,8 @@
 			"LivingSpine": "No biomass goes to waste in the Crimson, even bones belonging to long since decayed bodies are welcomed into the Crimson’s collective. As such, even solitary spines dutifully burrow through the blood caked earth, expanding their region’s territory.",
 			"RavenousCursed": "The favorite spawns of the Corruption are no doubt the worms it frequently births. Dreadful fire surges through its body as if it were blood.",
 			"Esophage": "Empowered with all that is evil, this gargantuan parasite stalks the land in search of a host. Without a source of vitality to empower it, it cannot be truly considered either alive or dead.",
-			"ConvectiveWanderer": "This immense magma-dweller can tolerate the extreme temperatures of the Earth's core, using its tentacle-like gills both to drill through solid metal and to protect is more vulnerable head. Highly protective of its much smaller offspring."
+			"ConvectiveWanderer": "This immense magma-dweller can tolerate the extreme temperatures of the Earth's core, using its tentacle-like gills both to drill through solid metal and to protect is more vulnerable head. Highly protective of its much smaller offspring.",
+			"GraniteCrawler": "An unsettling amalgamate of granite molded into a familiar shape, it scurries across the caves at high speed while shielding its vulnerable core-eye from damage."
 		},
 		"MapObject": {
 			"SaltCrystalsTile": "{$Mods.Polarities.ItemName.SaltCrystals}",

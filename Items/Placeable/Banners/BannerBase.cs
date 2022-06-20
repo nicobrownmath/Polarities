@@ -16,6 +16,7 @@ using Polarities.NPCs.Enemies.Salt;
 using Polarities.NPCs.Enemies.Limestone;
 using Polarities.NPCs.Enemies.HallowInvasion;
 using Polarities.NPCs.Enemies.WorldEvilInvasion;
+using Polarities.NPCs.Enemies.Granite;
 
 namespace Polarities.Items.Placeable.Banners
 {
@@ -196,5 +197,6 @@ namespace Polarities.Items.Placeable.Banners
 	public class PainbowBanner : BannerBase { public override int BannerIndex => 48; public override int NPCType => NPCType<Painbow>(); }
 	public class AequoreanBanner : BannerBase { public override int BannerIndex => 49; public override int NPCType => NPCType<Aequorean>(); }
 	public class BrineDwellerBanner : BannerBase { public override int BannerIndex => 50; public override int NPCType => NPCType<BrineDweller>(); }
-	public class SlimeyBanner : BannerBase { public override int BannerIndex => 52; public override int NPCType => NPCType<Slimey>(); }
+    public class GraniteCrawlerBanner : BannerBase { public override int BannerIndex => 51; public override int NPCType => NPCType<GraniteCrawler>(); }
+    public class SlimeyBanner : BannerBase { public override int BannerIndex => 52; public override int NPCType => NPCType<Slimey>(); }
 }
