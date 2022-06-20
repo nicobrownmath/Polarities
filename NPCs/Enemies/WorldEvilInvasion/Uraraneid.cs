@@ -102,7 +102,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 				{
 					case 0:
                         //big jump at player once
-                        if (NPC.ai[1] == 0)
+                        if (NPC.ai[1] == 20)
                         {
                             NPC.frame.X = NPC.frame.Width;
                             NPC.frame.Y = 0;
@@ -123,7 +123,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 						break;
 					case 1:
                         //small jumps at player repeatedly
-                        if (NPC.ai[1] == 0)
+                        if (NPC.ai[1] % 30 == 20)
                         {
                             NPC.frame.X = NPC.frame.Width;
                             NPC.frame.Y = 0;
@@ -159,9 +159,11 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 						if (NPC.ai[1] == 30)
 						{
 							NPC.ai[2] = NPC.direction;
-
+                        }
+						if (NPC.ai[1] == 60)
+                        {
                             NPC.frame.X = NPC.frame.Width * 2;
-							NPC.frame.Y = 0;
+                            NPC.frame.Y = 0;
                         }
 						if (Main.netMode != 1)
 						{
@@ -197,7 +199,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
                             NPC.frame.X = 0;
                             NPC.frame.Y = 0;
                         }
-						if (NPC.ai[1] == 40)
+						if (NPC.ai[1] == 50)
                         {
                             NPC.frame.X = NPC.frame.Width * 2;
                             NPC.frame.Y = 0;
@@ -253,15 +255,18 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 								}
 							}
 							SoundEngine.PlaySound(SoundID.NPCDeath13, NPC.Center);
-
-							if (Main.netMode != 1)
-							{
-								NPC.ai[0] = (3 + Main.rand.Next(1, 4)) % 4;
-							}
-							NPC.netUpdate = true;
-
-							NPC.ai[1] = 0;
 						}
+
+						if (NPC.ai[1] == 70)
+                        {
+                            if (Main.netMode != 1)
+                            {
+                                NPC.ai[0] = (3 + Main.rand.Next(1, 4)) % 4;
+                            }
+                            NPC.netUpdate = true;
+
+                            NPC.ai[1] = 0;
+                        }
 						break;
 				}
 			}
@@ -338,6 +343,21 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
                 {
                     DrawOffsetY = 73;
                 }
+
+				if (NPC.frame.Y == 5 * NPC.frame.Height)
+				{
+					NPC.frameCounter++;
+					if (NPC.frameCounter >= 10)
+                    {
+                        NPC.frameCounter = 0;
+						NPC.frame.X = 0;
+						NPC.frame.Y = 0;
+                    }
+				}
+				else
+				{
+					NPC.frameCounter = 0;
+				}
             }
             else if (NPC.frame.X == 2 * NPC.frame.Width)
             {
