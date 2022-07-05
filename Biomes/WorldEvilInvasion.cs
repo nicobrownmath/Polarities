@@ -58,14 +58,9 @@ namespace Polarities.Biomes
             return (player.ZoneCrimson || player.ZoneCorrupt) && player.ZoneOverworldHeight && PolaritiesSystem.worldEvilInvasion;
         }
 
-        public override void SpecialVisuals(Player player)
+        public override void SpecialVisuals(Player player, bool isActive)
         {
-            player.ManageSpecialBiomeVisuals("Polarities:WorldEvilInvasion", IsBiomeActive(player));
-        }
-
-        public override void OnLeave(Player player)
-        {
-            player.ManageSpecialBiomeVisuals("Polarities:WorldEvilInvasion", false);
+            player.ManageSpecialBiomeVisuals("Polarities:WorldEvilInvasion", isActive);
         }
 
         public static bool ValidNPC(int npcType)

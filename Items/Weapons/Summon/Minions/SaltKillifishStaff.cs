@@ -79,6 +79,7 @@ namespace Polarities.Items.Weapons.Summon.Minions
 		}
 	}
 
+	//TODO: Probably make able to go through tiles/platforms
 	public class SaltKillifishMinion : ModProjectile
     {
 		public override void SetStaticDefaults()

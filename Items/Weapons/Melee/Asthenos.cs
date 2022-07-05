@@ -19,6 +19,7 @@ namespace Polarities.Items.Weapons.Melee
 {
 	public class Asthenos : ModItem
 	{
+		//TODO: Give a prim trail when swung
         public override void SetStaticDefaults()
 		{
 			this.SetResearch(1);

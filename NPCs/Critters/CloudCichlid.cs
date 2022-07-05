@@ -138,7 +138,7 @@ namespace Polarities.NPCs.Critters
 
         public override void AddRecipes()
         {
-            Mod.CreateRecipe(ItemID.Cloud, 5)
+            Recipe.Create(ItemID.Cloud, 5)
                 .AddIngredient(Type)
                 .Register();
         }

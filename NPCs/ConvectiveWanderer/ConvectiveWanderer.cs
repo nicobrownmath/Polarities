@@ -202,7 +202,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			segmentAngles = new float[segmentPositions.Length];
 			segmentPulseScaleAngles = new float[segmentPositions.Length + specialSegmentsHead];
 
-			drawDatas = new PriorityQueue<DrawData, float>(MAX_DRAW_CAPACITY);
+			drawDatas = new PriorityQueue<DrawData, float>();
 		}
 
         int numSegments;
@@ -270,7 +270,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 		float tentacleAttacksHealthThreshold => Main.getGoodWorld ? 1f : Main.expertMode ? 0.75f : 0.66f;
 		float phase2HealthThreshold => Main.expertMode ? 0.5f : 0.33f; //we start in phase 2 in ftw
-		float phase3HealthThreshold => Main.getGoodWorld ? 0.2f : Main.expertMode ? 0.1f : 0f;
 
         public override void AI()
 		{
@@ -894,7 +893,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: I may want the tentacles to open up during this attack and for the boss to shoot a stream of decelerating mines out from them
 				#region Circle player while charging up heat pulse
 				case 4:
 					{
@@ -975,158 +973,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//TODO: Replace this attack
-				#region Tentacles spin and rotate outwards, producing projectiles
-				case 5:
-					{
-						const int attackRepetitions = 4;
-						const int extraStartSetupTime = 120;
-						const int setupStartTime = 30;
-						const int setupTime = 60;
-						const int attackTime = 120;
-						const int resetTime = 30;
-						const int extraEndTime = 120;
-						const int totalAttackTime = setupTime + attackTime + resetTime;
-
-						float attackProgress = (int)(NPC.ai[1] - extraStartSetupTime) % totalAttackTime;
-
-						int side = Vector2.Dot(NPC.Center - player.Center, new Vector2(0, -1).RotatedBy(NPC.rotation)) > 0 ? 1 : -1;
-
-						if (NPC.ai[1] >= totalAttackTime * attackRepetitions + extraStartSetupTime)
-                        {
-							Idle();
-                        }
-						else if (attackProgress < setupTime)
-                        {
-							if (NPC.ai[1] == 0)
-								NPC.ai[2] = side;
-							if (attackProgress == 0 && NPC.ai[1] > extraStartSetupTime)
-								NPC.ai[2] *= -1;
-
-							if (attackProgress < 0)
-							{
-								if (attackProgress < -60)
-								{
-									Idle();
-								}
-								else
-								{
-									if ((NPC.Center - player.Center).Length() > 600f)
-									{
-										GoTowardsRadial(player.Center + new Vector2(0, -600).RotatedBy(NPC.Center.X > player.Center.X ? MathHelper.Pi / 3 : -MathHelper.Pi / 3), player.Center, -attackProgress);
-									}
-									else
-									{
-										NPC.ai[1] = extraStartSetupTime;
-									}
-								}
-							}
-							else
-							{
-								if (attackProgress < setupStartTime && (NPC.Center - player.Center).Length() > 400f)
-								{
-									float timeLeftForSetupStart = setupStartTime - attackProgress;
-
-									float offsetAmount = Math.Max(0, (600f - (NPC.Center - player.Center).Length()) / 200f) * MathHelper.Pi / 6f;
-									Vector2 goalPosition = player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * 400f;
-									goalPosition = NPC.Center + (goalPosition - NPC.Center).RotatedBy(-side * offsetAmount);
-									Vector2 goalVelocity = (goalPosition - NPC.Center) / timeLeftForSetupStart;
-									NPC.velocity += (goalVelocity - NPC.velocity) / (float)Math.Sqrt(timeLeftForSetupStart);
-								}
-								else
-								{
-									if (Vector2.Dot((NPC.Center - player.Center).SafeNormalize(Vector2.Zero), new Vector2(-1, 0).RotatedBy(NPC.rotation)) > 0.5)
-									{
-										NPC.velocity = Vector2.Zero;
-									}
-									else
-									{
-										//turn towards player
-										float angularSpeed = 0.075f / (NPC.velocity.Length() + 1) * Math.Abs(-0.5f + Vector2.Dot((NPC.Center - player.Center).SafeNormalize(Vector2.Zero), new Vector2(-1, 0).RotatedBy(NPC.rotation)));
-										NPC.rotation += angularSpeed * side;
-										useDefaultRotation = false;
-										NPC.velocity = new Vector2(Math.Max(0.1f, NPC.velocity.Length() * 0.95f), 0).RotatedBy(NPC.rotation);
-									}
-
-									rotationAmount *= 2f;
-								}
-							}
-
-							float timeLeft = setupTime - Math.Max(attackProgress, 0);
-
-							tentacleAngleMultiplier += (-NPC.ai[2] * 0.1f * (1 - timeLeft / setupTime) - tentacleAngleMultiplier) / timeLeft;
-							angleSpeed = NPC.velocity.Length() * 0.03f * tentacleAngleMultiplier + attackProgress / setupTime * NPC.ai[2] * 0.06f;
-
-							tentacleCompression = timeLeft / setupTime;
-						}
-						else if (attackProgress < setupTime + attackTime)
-						{
-							float timeLeft = setupTime + attackTime - attackProgress;
-
-							rotationAmount *= 2f;
-
-							tentacleAngleMultiplier += (-NPC.ai[2] * 0.1f * timeLeft / attackTime - tentacleAngleMultiplier) / 10f;
-							angleSpeed = NPC.ai[2] * 0.06f;
-							tentacleCompression = 0f;
-
-							float tentacleRotProgress = (1 - timeLeft / attackTime);
-							tentacleTiltAngle = tentacleRotProgress * tentacleRotProgress * (3 - 2 * tentacleRotProgress) * MathHelper.Pi * 0.625f;
-							tentacleCurveAmount = -tentacleTiltAngle / 8;
-
-							NPC.velocity = Vector2.Zero;
-
-							if (inPhase2)
-							{
-								if (attackProgress == setupTime)
-								{
-									for (int i = 0; i < NUM_TENTACLES; i++)
-									{
-										Vector2 spot = TentacleSegmentPosition(32, tentacleBaseAngle + i * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
-										float angle = MathHelper.Pi + TentacleSegmentRotation(32, tentacleBaseAngle + i * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
-
-										Projectile.NewProjectile(NPC.GetSource_FromAI(), spot, new Vector2(1, 0).RotatedBy(angle), ProjectileType<ConvectiveWandererTentacleDeathray>(), 12, 2f, Main.myPlayer, ai0: i, ai1: NPC.whoAmI);
-									}
-								}
-							}
-							if (attackProgress % 5 == 0)
-							{
-								for (int i = 0; i < NUM_TENTACLES; i++)
-								{
-									Vector2 spot = TentacleSegmentPosition(32, tentacleBaseAngle + i * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
-									float angle = MathHelper.Pi + TentacleSegmentRotation(32, tentacleBaseAngle + i * MathHelper.TwoPi / NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
-
-									Projectile.NewProjectile(NPC.GetSource_FromAI(), spot, new Vector2(8, 0).RotatedBy(angle), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 1f, ai1: inPhase2 ? 0.5f : 0f);
-								}
-							}
-						}
-						else
-						{
-							NPC.velocity = Vector2.Zero;
-
-							rotationAmount *= 2f;
-
-							float timeLeft = setupTime + attackTime + resetTime - attackProgress;
-
-							tentacleAngleMultiplier = NPC.ai[2] * 0.1f * (1 - timeLeft / resetTime);
-							angleSpeed = NPC.ai[2] * 0.06f * timeLeft / resetTime;
-							tentacleCompression = 1 - timeLeft / resetTime;
-							float tentacleRotProgress = timeLeft / resetTime;
-							tentacleTiltAngle = tentacleRotProgress * tentacleRotProgress * (3 - 2 * tentacleRotProgress) * MathHelper.Pi * 0.625f;
-							tentacleCurveAmount = -tentacleTiltAngle / 8;
-						}
-
-						NPC.ai[1]++;
-						if (NPC.ai[1] == totalAttackTime * attackRepetitions + extraStartSetupTime + extraEndTime)
-						{
-							gotoNextAttack = true;
-						}
-					}
-					break;
-				#endregion
-
 				//note: I'm not yet sure if I want the pillars to be able to spawn on platforms or not
 				#region Create flame pillars from terrain, while dashing at them from below and to the side
-				case 6:
+				case 5:
 					{
 						const int setupStartTime = 60;
 						const int setupMidTime = 120;
@@ -1359,10 +1208,10 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 				//note: p2 version may be too difficult (not sure), rotation speed feels a little fast at times, boss should maybe slow down and not rotate a little before spawning the flamethrower? (only do that last one if I get complaints about the flamethrower I think it's fine but I could be wrong)
 				#region Tentacles point backwards, boss shoots giant mouth flamethrower
-				case 7:
-					{
-						const int attackRepetitions = 3;
-						const int startSetupTime = 120;
+				case 6:
+                    {
+                        int attackRepetitions = inPhase2 ? 3 : 1;
+                        const int startSetupTime = 120;
 						const int setupTime = 60;
 						const int attackTime = 300;
 						const int windDownTime = 60;
@@ -1458,7 +1307,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				#endregion
 
 				#region Open tentacles and cup them forwards, spin rapidly to produce a giant sphere of heat, then like shoot it at the player
-				case 8:
+				case 7:
                     {
 						const int startSetupTime = 120;
 						const int setupTime = 60;
@@ -1554,9 +1403,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				#endregion
 
 				#region Charge and clap to produce projectiles
-				case 9:
+				case 8:
 					{
-						const int attackRepetitions = 6;
+						const int attackRepetitions = 4;
 						const int startSetupTime = 60;
 						const int dashSetupTime = 90;
 						const int dashStartTime = 30;
@@ -1691,7 +1540,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
                 #endregion
             }
 
-            //TODO: I feel like a last-ditch attack of some sort would fit this boss pretty well
             if (gotoNextAttack)
 			{
 				if (NPC.life < NPC.lifeMax * phase2HealthThreshold && !inPhase2)
@@ -1847,7 +1695,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
         }
 
 
-        private float[] aiWeights = new float[9];
+        private float[] aiWeights = new float[8];
 		void GotoNextAIState()
         {
 			float[] aiWeightMultipliers = new float[aiWeights.Length];
@@ -1862,19 +1710,13 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					case 1:
 						aiWeightMultiplier = 1.5f;
 						break;
-					case 5:
-						//final phase attack
-						if (NPC.life > NPC.lifeMax * phase3HealthThreshold) aiWeightMultiplier = 0f;
-						break;
+					case 6:
 					case 7:
 					case 8:
-					case 9:
 						//restrict tentacle-based attacks
 						if (NPC.life > NPC.lifeMax * tentacleAttacksHealthThreshold) aiWeightMultiplier = 0f;
 						break;
 				}
-
-				if (NPC.life <= NPC.lifeMax * phase3HealthThreshold && state + 1 != 5 && aiWeights[5] > 0) aiWeightMultiplier = 0; //always use attack 5 if it's allowed
 
 				aiWeightMultipliers[state] = aiWeightMultiplier;
 
@@ -1976,9 +1818,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
         //a PriorityQueue that stores our drawData
         PriorityQueue<DrawData, float> drawDatas;
 
-		//The maximum capacity potentially required by drawDatas
-		//TODO: Recheck this
-		int MAX_DRAW_CAPACITY = 8740;
+		//int maxDrawCapacity = 0;
 
 		public const int NUM_TENTACLES = 8;
 
@@ -2038,8 +1878,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				}
 
 				//debug stuff that lets us know if we've gone above the default max draw capacity (this doesn't really cause problems but I would like to know when it occurs)
-				if (drawDatas.Count > MAX_DRAW_CAPACITY) Main.NewText("drawData capacity exceeded: " + drawDatas.Count + " > " + MAX_DRAW_CAPACITY); //for finding max capacity used
-				if (drawDatas.Count > MAX_DRAW_CAPACITY) MAX_DRAW_CAPACITY = drawDatas.Count;
+				//if (drawDatas.Count > maxDrawCapacity) Main.NewText("drawData capacity exceeded: " + drawDatas.Count + " > " + maxDrawCapacity); //for finding max capacity used
+				//if (drawDatas.Count > maxDrawCapacity) maxDrawCapacity = drawDatas.Count;
 
 				//draw all data
 				while (drawDatas.TryDequeue(out var drawData, out _))
@@ -3023,188 +2863,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		}
 	}
 
-	//TODO: Remove this if it ends up unused
-	public class ConvectiveWandererLateralDeathray : ModProjectile
-    {
-		public override string Texture => "Polarities/Textures/Glow58";
-
-		public override void SetDefaults()
-		{
-			Projectile.aiStyle = -1;
-			Projectile.width = 2;
-			Projectile.height = 2;
-			Projectile.timeLeft = 180;
-			Projectile.penetrate = -1;
-			Projectile.hostile = true;
-			Projectile.tileCollide = false;
-			Projectile.ignoreWater = true;
-		}
-
-		public override void OnSpawn(IEntitySource source)
-		{
-			Projectile.rotation = Projectile.velocity.ToRotation();
-		}
-
-		public override void AI()
-		{
-			float progress = (float)Math.Pow(Projectile.timeLeft / 180f, 0.25f);
-
-			Projectile.scale = 0.5f * (float)Math.Sqrt(progress) * 30f;
-			if (Projectile.timeLeft < 30) Projectile.scale *= Projectile.timeLeft / 30f;
-			if (Projectile.timeLeft > 170) Projectile.scale *= (180f - Projectile.timeLeft) / 10f;
-		}
-
-		public override bool? CanDamage()
-		{
-			return (Projectile.timeLeft < 30 || Projectile.timeLeft > 170) ? false : null;
-		}
-
-		public override void OnHitPlayer(Player target, int damage, bool crit)
-		{
-			target.AddBuff(BuffType<Incinerating>(), 60, true);
-		}
-
-		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
-		{
-			DrawLayer.AddProjectile<DrawLayerAdditiveAfterLiquids>(index);
-		}
-
-		public override bool ShouldUpdatePosition() => false;
-
-		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-		{
-			float length = 4000;
-
-			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center - new Vector2(length / 2, 0).RotatedBy(Projectile.rotation), Projectile.Center + new Vector2(length / 2, 0).RotatedBy(Projectile.rotation));
-		}
-
-		public override bool PreDraw(ref Color lightColor)
-		{
-			Texture2D texture = TextureAssets.Projectile[Type].Value;
-
-			float length = 4000;
-
-			Rectangle lineFrame = new Rectangle(29, 0, 1, 58);
-			Vector2 lineCenter = lineFrame.Size() / 2;
-
-			float progress = (float)Math.Pow(Projectile.timeLeft / 180f, 0.25f);
-			float colorPulse = (3 + (float)Math.Sin(Projectile.timeLeft * MathHelper.TwoPi / 60f)) / 3;
-			Color drawColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(0.5f * progress * colorPulse + 0.5f, 2)) * progress;
-
-			Vector2 drawPos = Projectile.Center - Main.screenPosition;
-
-			for (int i = 1; i <= 4; i++)
-			{
-				float drawScale = Projectile.scale * i / 4f;
-
-				Main.EntitySpriteDraw(texture, drawPos, lineFrame, drawColor, Projectile.rotation, lineCenter, new Vector2(length, drawScale / lineFrame.Height), SpriteEffects.None, 0);
-			}
-
-			return false;
-		}
-	}
-
-	//TODO: Remove this if it ends up unused
-	public class ConvectiveWandererTentacleDeathray : ModProjectile
-	{
-		public override string Texture => "Polarities/Textures/Glow58";
-
-		public override void SetDefaults()
-		{
-			Projectile.aiStyle = -1;
-			Projectile.width = 2;
-			Projectile.height = 2;
-			Projectile.timeLeft = 120;
-			Projectile.penetrate = -1;
-			Projectile.hostile = true;
-			Projectile.tileCollide = false;
-			Projectile.ignoreWater = true;
-		}
-
-		public override void OnSpawn(IEntitySource source)
-		{
-			Projectile.rotation = Projectile.velocity.ToRotation();
-		}
-
-		public override void AI()
-		{
-			float progress = (float)Math.Pow(Projectile.timeLeft / 180f, 0.25f);
-
-			Projectile.scale = 0.5f * (float)Math.Sqrt(progress) * 60f;
-			if (Projectile.timeLeft < 10) Projectile.scale *= Projectile.timeLeft / 10f;
-			if (Projectile.timeLeft > 110) Projectile.scale *= (120f - Projectile.timeLeft) / 10f;
-
-
-			int i = (int)Projectile.ai[0];
-			NPC owner = Main.npc[(int)Projectile.ai[1]];
-			ConvectiveWanderer wanderer = owner.ModNPC as ConvectiveWanderer;
-
-			float tentacleBaseAngle = wanderer.SegmentAngle(ConvectiveWanderer.TENTACLE_ATTACH_SEGMENT_INDEX);
-			float tentacleBaseRotation = wanderer.SegmentRotation(ConvectiveWanderer.TENTACLE_ATTACH_SEGMENT_INDEX) + MathHelper.PiOver2;
-			float tentacleBaseRadius = wanderer.SegmentRadius(ConvectiveWanderer.TENTACLE_ATTACH_SEGMENT_INDEX) + wanderer.TentacleRadius(0);
-			Vector2 tentacleBasePosition = wanderer.SegmentPosition(ConvectiveWanderer.TENTACLE_ATTACH_SEGMENT_INDEX);
-
-			Vector2 spot = wanderer.TentacleSegmentPosition(32, tentacleBaseAngle + i * MathHelper.TwoPi / ConvectiveWanderer.NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
-			float angle = MathHelper.Pi + wanderer.TentacleSegmentRotation(32, tentacleBaseAngle + i * MathHelper.TwoPi / ConvectiveWanderer.NUM_TENTACLES, tentacleBaseRotation, tentacleBaseRadius, tentacleBasePosition);
-
-			Projectile.Center = spot + new Vector2(Projectile.scale / 2f, 0).RotatedBy(angle);
-			Projectile.rotation = angle;
-		}
-
-		public override bool? CanDamage()
-		{
-			return (Projectile.timeLeft < 10 || Projectile.timeLeft > 110) ? false : null;
-		}
-
-		public override void OnHitPlayer(Player target, int damage, bool crit)
-		{
-			target.AddBuff(BuffType<Incinerating>(), 60, true);
-		}
-
-		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
-		{
-			DrawLayer.AddProjectile<DrawLayerAdditiveAfterLiquids>(index);
-		}
-
-		public override bool ShouldUpdatePosition() => false;
-
-		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-		{
-			float length = 2000;
-
-			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(length / 2, 0).RotatedBy(Projectile.rotation));
-		}
-
-		public override bool PreDraw(ref Color lightColor)
-		{
-			Texture2D texture = TextureAssets.Projectile[Type].Value;
-
-			float length = 2000;
-
-			Rectangle lineFrame = new Rectangle(29, 0, 1, 58);
-			Vector2 lineCenter = new Vector2(0, lineFrame.Height / 2);
-
-			Rectangle capFrame = new Rectangle(0, 0, 29, 58);
-			Vector2 capCenter = new Vector2(capFrame.Width, capFrame.Height / 2);
-
-			float progress = (float)Math.Pow(Projectile.timeLeft / 120f, 0.25f);
-			float colorPulse = (3 + (float)Math.Sin(Projectile.timeLeft * MathHelper.TwoPi / 60f)) / 3;
-			Color drawColor = ModUtils.ConvectiveFlameColor((float)Math.Pow(0.5f * progress * colorPulse + 0.5f, 2)) * progress;
-
-			Vector2 drawPos = Projectile.Center - Main.screenPosition;
-
-			for (int i = 1; i <= 4; i++)
-			{
-				float drawScale = Projectile.scale * i / 4f;
-
-				Main.EntitySpriteDraw(texture, drawPos, lineFrame, drawColor * 0.5f, Projectile.rotation, lineCenter, new Vector2(length, drawScale / lineFrame.Height), SpriteEffects.None, 0);
-				Main.EntitySpriteDraw(texture, drawPos, capFrame, drawColor * 0.5f, Projectile.rotation, capCenter, drawScale / lineFrame.Height, SpriteEffects.None, 0);
-			}
-
-			return false;
-		}
-	}
-
 	public class ConvectiveWandererFlamePillar : ModProjectile
     {
 		public override string Texture => "Polarities/Textures/Pixel";
@@ -3313,7 +2971,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		{
 			NPC owner = Main.npc[(int)Projectile.ai[0]];
 
-			if (!owner.active || owner.ai[0] != 7) Projectile.active = false;
+			if (!owner.active || owner.ai[0] != 6) Projectile.active = false;
 
 			Projectile.velocity = new Vector2(1, 0).RotatedBy(owner.rotation);
 			Projectile.Center = owner.Center + 112 * Projectile.velocity;
@@ -3424,7 +3082,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					Projectile.velocity = new Vector2(4, 0).RotatedBy(owner.rotation) + owner.velocity;
 				}
 
-				if (!owner.active || owner.ai[0] != 8) Projectile.active = false;
+				if (!owner.active || owner.ai[0] != 7) Projectile.active = false;
 
 				if (Projectile.timeLeft >= 630)
 				{

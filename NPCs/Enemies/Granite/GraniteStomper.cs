@@ -54,9 +54,9 @@ namespace Polarities.NPCs.Enemies.Granite
             NPC.width = 40;
             NPC.height = 40;
 
-            NPC.defense = 8;
+            NPC.defense = 15;
             NPC.damage = 60;
-            NPC.lifeMax = 100;
+            NPC.lifeMax = 400;
 
             NPC.knockBackResist = 0f;
             NPC.value = Item.sellPrice(gold: 1);
@@ -327,6 +327,7 @@ namespace Polarities.NPCs.Enemies.Granite
             GlowTexture = null;
         }
 
+        //TODO: Probably make it do something where the legs move more independently
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color lightColor)
         {
             //draw legs

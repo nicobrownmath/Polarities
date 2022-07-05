@@ -45,14 +45,9 @@ namespace Polarities.Biomes
 			return player.ZoneHallow && player.ZoneOverworldHeight && PolaritiesSystem.hallowInvasion;
 		}
 
-        public override void SpecialVisuals(Player player)
+        public override void SpecialVisuals(Player player, bool isActive)
         {
-            player.ManageSpecialBiomeVisuals("Polarities:HallowInvasion", IsBiomeActive(player));
-        }
-
-        public override void OnLeave(Player player)
-        {
-            player.ManageSpecialBiomeVisuals("Polarities:HallowInvasion", false);
+            player.ManageSpecialBiomeVisuals("Polarities:HallowInvasion", isActive);
         }
 
         public static bool ValidNPC(int npcType)

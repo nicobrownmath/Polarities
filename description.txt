@@ -1,4 +1,4 @@
-﻿A content mod which aims to add mechanically interesting bosses, enemies, items, and more! Currently adds ten new bosses, several new enemies, a variety of weapons and accessories, some tiles and armor sets, two new mini-biomes, a new subworld, and a new town NPC.
+A content mod which aims to add mechanically interesting bosses, enemies, items, and more! Currently adds ten new bosses, several new enemies, a variety of weapons and accessories, some tiles and armor sets, two new mini-biomes, a new subworld, and a new town NPC.
 
 Note that the music is contained in a separate music mod.
 
@@ -96,8 +96,10 @@ v0.11 Changelog
     Adjusted the lava ocean's worldgen
     Reworked convective wanderer into a boss
     Changed the mod's icon
+    Added the granite stomper
 
 Things I should do:
+  Make pegasus saddle draw on ridden pegasi
   Replace using AIType to control platform falling with CanFallThroughPlatforms
   Move more boss drops to being craftable
     Bat slimes should be an alt source for gigabat's material
