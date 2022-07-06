@@ -68,7 +68,7 @@ v0.11 Changelog
     Aequoreans and light eaters can now teleport to their clones
     Resprited the tolerance potion buff icon, starburst scepter, strange jewelry, strange samples, halite warhammer, salt knife, cavern carver, stormcore and its minion, épée, seeping death, wooden dart, wooden atlatls, ratlatl, thistle thrower, all books, draconian, salt, rock salt, salt brick and salt brick walls, halite brick, salt killifish staff and minion, stargel amulet, uraraneid
     Atlatls are now rotated differently in the inventory
-    Reworked the luminous slime staff
+    Reworked the luminous slime staff and salt killifish staff
     Adjusted Sun Pixie's deathray attacks, and it now automatically recreates its arena if you leave it early
     Flarecaller beams now have an enlarged hitbox at the point of impact to better match their visuals
     Solar scarab minions now fall faster in their inactive state
@@ -88,7 +88,6 @@ v0.11 Changelog
     Nemesis now aims projectile rain from hitting enemies (and tiles) towards the point of impact instead of the cursor
     Adjusted the tooltip of the molten spirit staff buff
     Reworked and resprited convective armor
-    Reworked the salt killifish staff
     Added the shroomite visor
     Decreased the knockback of atlatls
     Adjusted the trajectory of darts to match vanilla darts

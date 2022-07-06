@@ -19,6 +19,11 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
         public abstract int HammerHeadSize { get; }
         public abstract int DefenseLoss { get; }
         public abstract int DebuffTime { get; }
+        public virtual bool CollideWithTiles => true;
+        public virtual float WindupAmount => MathHelper.PiOver2;
+        public virtual float MainSwingAmount => 1.25f * MathHelper.Pi;
+        public virtual float WindupTilt => 0.1f;
+        public virtual float SwingTilt => 0.5f;
 
         //the total time spent on the actual swing
         public virtual float SwingTime => 10f;
@@ -77,18 +82,18 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
                 if (animationProgress < swingWindup)
                 {
                     float motionProgress = 1 - (1 - animationProgress / swingWindup) * (1 - animationProgress / swingWindup);
-                    player.itemRotation = -MathHelper.PiOver4 - MathHelper.PiOver2 * motionProgress;
+                    player.itemRotation = (float)Math.IEEERemainder(-MathHelper.PiOver4 - WindupAmount * motionProgress, MathHelper.TwoPi);
 
                     if (!player.mount.Active)
-                        player.fullRotation = -player.direction * player.gravDir * 0.1f * motionProgress;
+                        player.fullRotation = (float)Math.IEEERemainder(-player.direction * player.gravDir * WindupTilt * motionProgress, MathHelper.TwoPi);
                 }
                 else
                 {
                     float motionProgress = (animationProgress - swingWindup) / (1 - swingWindup);
-                    player.itemRotation = -3 * MathHelper.PiOver4 + MathHelper.Pi * 1.25f * motionProgress;
+                    player.itemRotation = (float)Math.IEEERemainder(-MathHelper.PiOver4 - WindupAmount + MainSwingAmount * motionProgress, MathHelper.TwoPi);
 
                     if (!player.mount.Active)
-                        player.fullRotation = player.direction * player.gravDir * (-0.1f + 0.5f * motionProgress);
+                        player.fullRotation = (float)Math.IEEERemainder(player.direction * player.gravDir * (-WindupTilt + SwingTilt * motionProgress), MathHelper.TwoPi);
                 }
 
                 float fullRot = player.fullRotation;
@@ -100,7 +105,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 
                 Rectangle hitbox = GetHitbox(player);
 
-                if (!hasHitTile && oldHitboxPosition != Vector2.Zero && !goodRotation)
+                if (CollideWithTiles && !hasHitTile && oldHitboxPosition != Vector2.Zero && !goodRotation)
                 {
                     int steps = Math.Max(1, (int)(hitbox.TopLeft() - oldHitboxPosition).Length() / 4);
                     Vector2 velocity = (hitbox.TopLeft() - oldHitboxPosition) / steps;

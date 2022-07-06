@@ -60,6 +60,7 @@ namespace Polarities.NPCs
         public int tentacleClubs;
         public int chlorophyteDarts;
         public int contagunPhages;
+        public int boneShards;
 
         public int desiccation;
         public int incineration;
@@ -540,6 +541,20 @@ namespace Polarities.NPCs
             {
                 hammerTimes.Remove(i);
             }
+
+            contagunPhages = 0;
+            tentacleClubs = 0;
+            chlorophyteDarts = 0;
+            boneShards = 0;
+            desiccation = 0;
+            incineration = 0;
+            coneVenom = false;
+
+            if (!spiritBite)
+            {
+                spiritBiteLevel = 0;
+            }
+            spiritBite = false;
         }
 
         public override bool PreAI(NPC npc)
@@ -574,6 +589,8 @@ namespace Polarities.NPCs
             defense -= hammerDefenseLoss;
 
             defense -= ignoredDefenseFromCritAmount;
+
+            defense -= boneShards;
         }
 
         public override void UpdateLifeRegen(NPC npc, ref int damage)
@@ -613,6 +630,19 @@ namespace Polarities.NPCs
                         npc.lifeRegen = 0;
                     }
                     int amountLoss = contagunPhages * 10;
+                    npc.lifeRegen -= amountLoss * 2;
+                    if (damage < amountLoss)
+                    {
+                        damage = amountLoss;
+                    }
+                }
+                if (boneShards > 0)
+                {
+                    if (npc.lifeRegen > 0)
+                    {
+                        npc.lifeRegen = 0;
+                    }
+                    int amountLoss = boneShards * 2;
                     npc.lifeRegen -= amountLoss * 2;
                     if (damage < amountLoss)
                     {
@@ -659,19 +689,6 @@ namespace Polarities.NPCs
                     }
                 }
             }
-
-            if (!spiritBite)
-            {
-                spiritBiteLevel = 0;
-            }
-
-            contagunPhages = 0;
-            tentacleClubs = 0;
-            chlorophyteDarts = 0;
-            desiccation = 0;
-            incineration = 0;
-            coneVenom = false;
-            spiritBite = false;
 
             UpdateCustomSoulDrain(npc);
         }
@@ -895,7 +912,7 @@ namespace Polarities.NPCs
                     npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<RoyalOrb>()));
                     break;
                 case NPCID.SkeletronHead:
-                    //TODO: npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Melee.Warhammers.BonyBackhand>()));
+                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Melee.Warhammers.BonyBackhand>()));
                     break;
                 case NPCID.WallofFlesh:
                     npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<MawOfFlesh>()));
