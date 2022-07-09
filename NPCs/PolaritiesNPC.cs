@@ -527,6 +527,7 @@ namespace Polarities.NPCs
         public override void ResetEffects(NPC npc)
         {
             defenseMultiplier = 1f;
+            neutralTakenDamageMultiplier = 1f;
 
             List<int> removeKeys = new List<int>();
             foreach (int i in hammerTimes.Keys)

@@ -521,6 +521,10 @@ namespace Polarities
 				}
 				foreach (float timeLeft in removeTimesLeft) screenShakes.Remove(timeLeft);
 			}
+
+			//to prevent jittering of some things
+            Main.screenPosition.X = (int)Main.screenPosition.X;
+            Main.screenPosition.Y = (int)Main.screenPosition.Y;
         }
 
         public override void HideDrawLayers(PlayerDrawSet drawInfo)

@@ -705,14 +705,17 @@ namespace Polarities.NPCs.ConvectiveWanderer
 						{
 							float timeLeft = totalAttackSetupTime + totalAttackDashTime - attackProgress;
 
-							if (attackProgress == totalAttackSetupTime)
+                            float reducedDistance = (player.Center - NPC.Center).Length() / dashApproachDistance;
+                            float offsetAngle = Math.Min(MathHelper.PiOver2, MathHelper.PiOver2 / reducedDistance);
+
+                            if (attackProgress == totalAttackSetupTime)
 							{
 								//set clockwise vs. counterclockwise on the first attack, so it's the same every time, to ensure we get a good mixture of angles
 								if (NPC.ai[1] == totalAttackSetupTime)
                                 {
 									NPC.ai[2] = Main.rand.NextBool() ? 1 : -1;
 								}
-								NPC.velocity = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(NPC.ai[2] * 0.01f) * dashStartVelocity * (Main.rand.NextBool(3) ? Main.rand.NextFloat(1f, 1.022f) : 1f);
+								NPC.velocity = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(NPC.ai[2] * offsetAngle) * dashStartVelocity * (Main.rand.NextBool(3) ? Main.rand.NextFloat(1f, 1.02f) : 1f);
 								SoundEngine.PlaySound(Sounds.ConvectiveWandererRoar, player.Center + (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * Math.Min(600f, (NPC.Center - player.Center).Length()));
 							}
 							else
@@ -720,11 +723,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								NPC.velocity *= timeLeft / (timeLeft + 1);
 								rotationAmount *= timeLeft / (timeLeft + 1);
 
-								float reducedDistance = (player.Center - NPC.Center).Length() / dashApproachDistance;
-
 								Vector2 oldVelocity = NPC.velocity;
-
-								float offsetAngle = Math.Min(MathHelper.PiOver2, MathHelper.PiOver2 / reducedDistance);
 								if (playerAhead)
 								{
 									NPC.velocity = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(-side * offsetAngle) * NPC.velocity.Length();
@@ -735,7 +734,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								}
 
 								//cap turn rate
-                                float maxTurn = 0.1f;
+                                float maxTurn = MathHelper.PiOver2 * Math.Min(1, 1 / reducedDistance);
                                 if (Vector2.Dot(NPC.velocity.SafeNormalize(Vector2.Zero), oldVelocity.SafeNormalize(Vector2.Zero)) < Math.Cos(maxTurn))
                                 {
 									NPC.velocity = oldVelocity.RotatedBy(side * maxTurn);
@@ -1553,7 +1552,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
                 #endregion
 
-				//TODO: This probably needs longer telegraphing
                 #region Instant dash leaving a lingering deathray
                 case 9:
                     {
@@ -1793,7 +1791,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				bool? canBeDamaged = h == numSegments ?
 					tentacleCompression != 1f :
 					null; //body/tail segment
-				hitboxes.Add(new RectangleHitboxData(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height), canDamage: canBeDamaged, canBeDamaged : canBeDamaged));
+				hitboxes.Add(new RectangleHitboxData(new Rectangle((int)spot.X - NPC.width / 2, (int)spot.Y - NPC.height / 2, NPC.width, NPC.height), canDamage: null, canBeDamaged : canBeDamaged));
 			}
 
 			NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(hitboxes);
@@ -1875,26 +1873,26 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			{
 				//hitting tentacle segments is bad
 				npc.HitSound = SoundID.Tink;
-				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 0.5f;
+				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier *= 0.5f;
 			}
 			else if (mostRecentHitbox.index < NUM_TENTACLES * HITBOXES_PER_TENTACLE + numSegments)
 			{
 				//hitting body segments is meh
 				npc.HitSound = SoundID.NPCHit2;
-				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 1f;
+				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier *= 1f;
 			}
 			else
 			{
 				//hitting the head is great
 				npc.HitSound = SoundID.NPCHit1;
-				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 1.5f;
+				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier *= 1.5f;
 			}
 
 			//prevent some damage if pre-phase transition to avoid melting
-			if (!inPhase2 && NPC.life <= NPC.lifeMax * phase2HealthThreshold)
+			if ((!inPhase2 || NPC.ai[0] == -2) && NPC.life <= NPC.lifeMax * phase2HealthThreshold)
             {
 				float progressLeft = NPC.life / (NPC.lifeMax * phase2HealthThreshold);
-				float multiplier = (float)Math.Max(0, Math.Pow(progressLeft, 2));
+				float multiplier = (float)Math.Max(0, Math.Pow(progressLeft, 2) * 0.5f);
                 npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier *= multiplier;
             }
 		}

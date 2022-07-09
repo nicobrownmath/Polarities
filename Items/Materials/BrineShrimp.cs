@@ -23,6 +23,14 @@ namespace Polarities.Items.Materials
 			Item.value = 500;
 			Item.rare = ItemRarityID.White;
 		}
-	}
+
+        public override void AddRecipes()
+        {
+			Recipe.Create(ItemID.CookedShrimp)
+				.AddIngredient(Type)
+				.AddTile(TileID.CookingPots)
+				.Register();
+        }
+    }
 }
 
