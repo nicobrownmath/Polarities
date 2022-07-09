@@ -20,8 +20,6 @@ namespace Polarities.Items.Weapons.Magic
         public override void SetStaticDefaults()
         {
             this.SetResearch(1);
-
-            Tooltip.SetDefault("Creates tendrils of heat");
         }
 
         public override void SetDefaults()
@@ -34,8 +32,8 @@ namespace Polarities.Items.Weapons.Magic
             Item.width = 30;
             Item.height = 32;
 
-            Item.useTime = 0;
-            Item.useAnimation = 0;
+            Item.useTime = 30;
+            Item.useAnimation = 30;
             Item.channel = true;
             Item.useStyle = 5;
             Item.autoReuse = false;
@@ -58,6 +56,7 @@ namespace Polarities.Items.Weapons.Magic
                 time++;
                 if (!player.ItemTimeIsZero) player.itemTime = player.itemTimeMax;
                 player.itemAnimation = player.itemAnimationMax;
+
                 player.manaRegen = Math.Min(player.manaRegen, 0);
                 if (time % 10 == 0)
                 {
@@ -70,6 +69,10 @@ namespace Polarities.Items.Weapons.Magic
                 {
                     SoundEngine.PlaySound((SoundStyle)Item.UseSound, player.position);
                 }
+            }
+            else
+            {
+                time = 0;
             }
         }
     }

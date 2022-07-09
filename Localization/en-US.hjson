@@ -740,8 +740,9 @@
 			"ConvectiveWandererFlamePillar": "Flame Pillar",
 			"ConvectiveWandererFlamethrower": "Mega Flamethrower",
 			"ConvectiveWandererChargedShot": "Heat Orb",
+			"ConvectiveWandererLingeringDeathray": "Convection Beam"
 			"GraniteStomperHomingCrystal": "Quartz Shard",
-			"GraniteStomperLaser": "Refraction Ray",
+			"GraniteStomperLaser": "Refraction Ray"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",

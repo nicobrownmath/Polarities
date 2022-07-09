@@ -182,7 +182,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			NPC.defense = 25;
 			NPC.damage = 32;
 			NPC.knockBackResist = 0f;
-			NPC.lifeMax = Main.masterMode ? 168000 / 3 : Main.expertMode ? 136000 / 2 : 100000;
+			NPC.lifeMax = Main.masterMode ? 210000 / 3 : Main.expertMode ? 168000 / 2 : 136000;
 			NPC.noTileCollide = true;
 			NPC.noGravity = true;
 			NPC.lavaImmune = true;
@@ -970,7 +970,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
 				#endregion
 
-				//note: I'm not yet sure if I want the pillars to be able to spawn on platforms or not
 				#region Create flame pillars from terrain, while dashing at them from below and to the side
 				case 5:
 					{
@@ -1101,7 +1100,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							float startingProportion = Main.rand.NextBool(3) ? 0 : Main.rand.NextFloat(1f);
 
 							float projPositionX = player.Center.X + startingOffset * startingProportion;
-							for (int i = 0; i < 6; i++)
+							for (int i = 0; i < 4; i++)
                             {
 								if (projPositionX >= Main.maxTilesX * 16) break;
 
@@ -1554,6 +1553,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					break;
                 #endregion
 
+				//TODO: This probably needs longer telegraphing
                 #region Instant dash leaving a lingering deathray
                 case 9:
                     {
@@ -1889,6 +1889,14 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				npc.HitSound = SoundID.NPCHit1;
 				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier = 1.5f;
 			}
+
+			//prevent some damage if pre-phase transition to avoid melting
+			if (!inPhase2 && NPC.life <= NPC.lifeMax * phase2HealthThreshold)
+            {
+				float progressLeft = NPC.life / (NPC.lifeMax * phase2HealthThreshold);
+				float multiplier = (float)Math.Max(0, Math.Pow(progressLeft, 2));
+                npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier *= multiplier;
+            }
 		}
 		#endregion
 
@@ -3038,7 +3046,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				Projectile.ai[0] = Math.Max(1f, (Projectile.Center.Y - Main.LocalPlayer.Center.Y) / 1267.2f + 0.5f); //gives extra height if the player is too high
             }
 
-			if (Main.rand.NextBool())
+			if (Main.rand.NextBool(4))
 			{
 				float progress = 1 - Projectile.timeLeft / 120f;
 				float width = 16f * (Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 1.5f);
