@@ -17,6 +17,7 @@ using Polarities.NPCs.Enemies.Limestone;
 using Polarities.NPCs.Enemies.HallowInvasion;
 using Polarities.NPCs.Enemies.WorldEvilInvasion;
 using Polarities.NPCs.Enemies.Granite;
+using Polarities.NPCs.Enemies.Marble;
 
 namespace Polarities.Items.Placeable.Banners
 {
@@ -187,7 +188,8 @@ namespace Polarities.Items.Placeable.Banners
 	public class UraraneidBanner : BannerBase { public override int BannerIndex => 29; public override int NPCType => NPCType<Uraraneid>(); }
 	public class LivingSpineBanner : BannerBase { public override int BannerIndex => 30; public override int NPCType => NPCType<LivingSpine>(); }
 	public class RavenousCursedBanner : BannerBase { public override int BannerIndex => 31; public override int NPCType => NPCType<RavenousCursed>(); }
-	public class FlowWormBanner : BannerBase { public override int BannerIndex => 34; public override int NPCType => NPCType<FlowWorm>(); }
+    public class HydraBanner : BannerBase { public override int BannerIndex => 33; public override int NPCType => NPCType<HydraBody>(); }
+    public class FlowWormBanner : BannerBase { public override int BannerIndex => 34; public override int NPCType => NPCType<FlowWorm>(); }
 	public class GlowWormBanner : BannerBase { public override int BannerIndex => 35; public override int NPCType => NPCType<GlowWorm>(); }
 	public class IlluminantScourerBanner : BannerBase { public override int BannerIndex => 43; public override int NPCType => NPCType<IlluminantScourer>(); }
 	public class PegasusBanner : BannerBase { public override int BannerIndex => 44; public override int NPCType => NPCType<Pegasus>(); }

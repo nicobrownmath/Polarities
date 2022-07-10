@@ -1917,10 +1917,45 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 				PolaritiesSystem.GenerateMantellarOre();
 			}
-			NPC.Center = NPC.Center + new Vector2(112, 0).RotatedBy(NPC.rotation); //so the loot drops from the middle of the drill
 
-			//TODO: Enclose loot in a box of convective bricks once those are added
-			return true;
+			//loot drops from the middle of the drill
+			Vector2 oldCenter = NPC.Center;
+			NPC.width = NPC.GetGlobalNPC<MultiHitboxNPC>().widthForInteractions;
+            NPC.height = NPC.GetGlobalNPC<MultiHitboxNPC>().heightForInteractions;
+            NPC.Center = oldCenter + new Vector2(112, 0).RotatedBy(NPC.rotation);
+
+			//generate a box of tiles around loot
+            int num = (int)(NPC.Center.X / 16);
+            int num2 = (int)(NPC.Center.Y / 16);
+            int num3 = NPC.width / 2 / 16 + 1;
+            for (int i = num - num3; i <= num + num3; i++)
+            {
+                for (int j = num2 - num3; j <= num2 + num3; j++)
+                {
+                    Tile tile = Framing.GetTileSafely(i, j);
+                    if (i == num - num3 || i == num + num3 || j == num2 - num3 || j == num2 + num3)
+                    {
+                        if (!tile.HasTile)
+                        {
+                            //TODO: Use convective bricks once those are added
+                            tile.TileType = TileID.HellstoneBrick;
+                            tile.HasTile = true;
+                        }
+                    }
+                    tile.LiquidAmount = 0;
+                    tile.LiquidType = LiquidID.Water;
+                    if (Main.netMode == 2)
+                    {
+                        NetMessage.SendTileSquare(-1, i, j);
+                    }
+                    else
+                    {
+                        WorldGen.SquareTileFrame(i, j);
+                    }
+                }
+            }
+
+            return true;
 		}
 
         public override void BossLoot(ref string name, ref int potionType)

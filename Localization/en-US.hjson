@@ -21,6 +21,7 @@
 			"TwistedTendril": "Twisted Tendril",
 			"ChainLacerator": "Chain Lacerator",
 			"Asthenos": "Asthenos",
+			"Lernaean": "Lernaean",
 
 			//warhammers
 			"WoodenWarhammer": "Wooden Warhammer",
@@ -369,6 +370,7 @@
 			"LaserCutter": "'Where does it end? Doesn't.'",
 			"TwistedTendril": "Stacks up to 3",
 			"Asthenos": "Charge and release to incinerate your enemies",
+			"Lernaean": "Summons smaller yoyos to orbit the main yoyo on striking enemies",
 
 			//warhammers
 			"WoodenWarhammer": "{$Mods.Polarities.ItemTooltip.WarhammerBase}",
@@ -740,9 +742,10 @@
 			"ConvectiveWandererFlamePillar": "Flame Pillar",
 			"ConvectiveWandererFlamethrower": "Mega Flamethrower",
 			"ConvectiveWandererChargedShot": "Heat Orb",
-			"ConvectiveWandererLingeringDeathray": "Convection Beam"
+			"ConvectiveWandererLingeringDeathray": "Convection Beam",
 			"GraniteStomperHomingCrystal": "Quartz Shard",
-			"GraniteStomperLaser": "Refraction Ray"
+			"GraniteStomperLaser": "Refraction Ray",
+			"LernaeanOrbiter": "Lernaean Orbiter"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
@@ -798,7 +801,8 @@
 			"MantleOWar": "Mantle O' War",
 			"ConvectiveWanderer": "Convective Wanderer",
 			"GraniteCrawler": "Granite Crawler",
-			"GraniteStomper": "Granite Stomper"
+			"GraniteStomper": "Granite Stomper",
+			"HydraBody": "Hydra"
 		},
 		"Bestiary": {
 			"Rattler": "This small, venomous snake prefers dry climates. It loudly rattles to ward off any predators, but it’s just too cute to avoid!",
@@ -849,7 +853,8 @@
 			"Esophage": "Empowered with all that is evil, this gargantuan parasite stalks the land in search of a host. Without a source of vitality to empower it, it cannot be truly considered either alive or dead.",
 			"ConvectiveWanderer": "This immense magma-dweller can tolerate the extreme temperatures of the Earth's core, using its tentacle-like gills both to drill through solid metal and to protect is more vulnerable head. Highly protective of its much smaller offspring.",
 			"GraniteCrawler": "An unsettling amalgamate of granite molded into a familiar shape, it scurries across the caves at high speed while shielding its vulnerable core-eye from damage.",
-			"GraniteStomper": "A construct of granite enclosing a brilliant but fragile refractive crystal, the stomper shelters within its pillar-like legs, only emerging to fend off threats."
+			"GraniteStomper": "A construct of granite enclosing a brilliant but fragile refractive crystal, the stomper shelters within its pillar-like legs, only emerging to fend off threats.",
+			"HydraBody": "The legendary beast appears at last! Remove one head, and two more will take its place... or you could simply take out the body supporting them instead."
 		},
 		"MapObject": {
 			"SaltCrystalsTile": "{$Mods.Polarities.ItemName.SaltCrystals}",
