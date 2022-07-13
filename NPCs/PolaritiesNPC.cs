@@ -34,6 +34,7 @@ using Polarities.Items.Weapons.Melee;
 using Polarities.Items.Weapons.Ranged.Atlatls;
 using Polarities.Items.Armor.MechaMayhemArmor;
 using Polarities.Items.Materials;
+using Terraria.Utilities;
 
 namespace Polarities.NPCs
 {
@@ -564,6 +565,28 @@ namespace Polarities.NPCs
             {
                 float slowingAmount = 2 * Math.Max(0, Math.Min(0.45f, npc.knockBackResist));
                 npc.position -= npc.velocity * slowingAmount;
+            }
+
+            switch (npc.type)
+            {
+                //despawn betsy if no crystal exists
+                case NPCID.DD2Betsy:
+                    if (Main.LocalPlayer.dead && !NPC.AnyNPCs(NPCID.DD2EterniaCrystal))
+                    {
+                        npc.ai[0] = -1;
+                    }
+
+                    if (npc.ai[0] == -1)
+                    {
+                        npc.velocity.Y += -0.1f;
+                        if (npc.Distance(Main.LocalPlayer.Center) > 12000)
+                        {
+                            npc.active = false;
+                            return false;
+                        }
+                    }
+
+                    break;
             }
 
             return true;

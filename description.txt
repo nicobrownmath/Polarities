@@ -97,6 +97,7 @@ v0.11 Changelog
     Changed the mod's icon
     Added the granite stomper
     Brine shrimp can now be cooked
+    Added hydra hide
 
 Things I should do:
   Make pegasus saddle draw on ridden pegasi

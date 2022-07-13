@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using Terraria.Audio;
 using Terraria.GameContent.Events;
+using Terraria.Localization;
 
 namespace Polarities.Items
 {
@@ -59,7 +60,8 @@ namespace Polarities.Items
 		public override bool? UseItem(Player player)
 		{
 			NPC.SpawnOnPlayer(player.whoAmI, NPCID.DD2Betsy);
-			SoundEngine.PlaySound(SoundID.Roar, player.Center);
+            Main.NewText(Language.GetTextValue("Announcement.HasAwoken", Main.npc[NPC.FindFirstNPC(NPCID.DD2Betsy)].TypeName), 171, 64, 255);
+            SoundEngine.PlaySound(SoundID.Roar, player.Center);
 			return true;
 		}
 	}
