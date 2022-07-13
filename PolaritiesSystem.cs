@@ -339,12 +339,56 @@ namespace Polarities
 			int dungeonIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Dungeon"));
 			if (dungeonIndex != -1)
 			{
-				//TODO: tasks.Insert(dungeonIndex + 1, new PassLegacy("More Biome Chests", AddBiomeChests));
+				tasks.Insert(dungeonIndex + 1, new PassLegacy("More Biome Chests", AddBiomeChests));
 				tasks.Insert(dungeonIndex + 2, new PassLegacy("Making Hell More Hellish", CustomHellGeneration));
 			}
-		}
+        }
 
-		static bool NonReplaceableTileForBiomes(Tile tile)
+        private void AddBiomeChests(GenerationProgress progress, GameConfiguration configuration)
+        {
+            progress.Message = "Generating more loot";
+            bool flag6 = false;
+			if (WorldGen.drunkWorldGen)
+			{
+				while (!flag6)
+				{
+					int num79 = WorldGen.genRand.Next(0, Main.maxTilesX);
+					int num78 = WorldGen.genRand.Next((int)Main.worldSurface, Main.maxTilesY);
+					if (!Main.wallDungeon[Main.tile[num79, num78].WallType] || Main.tile[num79, num78].HasTile)
+					{
+						continue;
+					}
+					int contain = 0;
+					int style2 = 0;
+					if (WorldGen.crimson)
+					{
+						style2 = 24;
+						contain = 1571;
+					}
+					else
+					{
+						style2 = 25;
+						contain = 1569;
+					}
+					flag6 = WorldGen.AddBuriedChest(num79, num78, contain, notNearOtherChests: false, style2);
+				}
+			}
+            /*TODO: flag6 = false;
+            while (!flag6)
+            {
+                int i = WorldGen.genRand.Next(0, Main.maxTilesX);
+                int j = WorldGen.genRand.Next((int)Main.worldSurface, Main.maxTilesY);
+                if (!Main.wallDungeon[Main.tile[i, j].WallType] || Main.tile[i, j].HasTile)
+                {
+                    continue;
+                }
+                int contain = ItemType<Radial>();
+
+                flag6 = AddBuriedModChest(i, j, contain, (ushort)TileType<Tiles.Furniture.FractalBiomeChest>(), notNearOtherChests: false, Style: 1);
+            }*/
+        }
+
+        static bool NonReplaceableTileForBiomes(Tile tile)
         {
 			int tileType = tile.TileType;
 			int wallType = tile.WallType;
@@ -1010,8 +1054,6 @@ namespace Polarities
 			}
 		}
 
-		//TODO: Drunk world and FTW compatibility
-		//TODO: Fix air gaps under islands
 		private void CustomHellGeneration(GenerationProgress progress, GameConfiguration configuration)
 		{
 			progress.Message = "Making hell more hellish";
@@ -1022,6 +1064,11 @@ namespace Polarities
 			int direction = WorldGen.dungeonX < Main.maxTilesX / 2 ? 1 : -1;
 			int GetX()
 			{
+				if (WorldGen.drunkWorldGen)
+                {
+					return x + (int)(Main.maxTilesX * 0.27f);
+                }
+
 				if (direction == 1)
 				{
 					return x;
@@ -1029,7 +1076,7 @@ namespace Polarities
 				return Main.maxTilesX - 1 - x;
 			}
 
-			int maxLakeX = (int)(Main.maxTilesX * 0.23f);
+			int maxLakeX = WorldGen.drunkWorldGen ? (int)(Main.maxTilesX * 0.46f) : (int)(Main.maxTilesX * 0.23f);
 			int lakeSurfaceY = Main.maxTilesY - 130;
 
 			Tile frameTile;
@@ -1102,7 +1149,7 @@ namespace Polarities
 			}
 			x = maxLakeX;
 			borderTransitionCurrHeight = borderTransitionHeight;
-			while (borderTransitionCurrHeight > 0 && x < Main.maxTilesX)
+			while (borderTransitionCurrHeight > 0 && GetX() < Main.maxTilesX && GetX() >= 0)
 			{
 				for (y = borderTransitionCurrHeight; y < Main.maxTilesY; y++)
 				{
@@ -1113,6 +1160,45 @@ namespace Polarities
 				borderTransitionCurrHeight += WorldGen.genRand.Next(-2, 7);
 				if (borderTransitionCurrHeight < borderTransitionHeight) borderTransitionCurrHeight = borderTransitionHeight;
 			}
+
+			//special case for drunk worlds
+			if (WorldGen.drunkWorldGen)
+            {
+                x = -1;
+                y = Main.maxTilesY - 150;
+                frameTile = Framing.GetTileSafely(GetX(), y);
+                while (!frameTile.HasTile && y < Main.maxTilesY - 70)
+                {
+                    y++;
+                    frameTile = Framing.GetTileSafely(GetX(), y);
+                }
+                borderTransitionHeight = y;
+                borderTransitionCurrHeight = borderTransitionHeight;
+                x++;
+                while (borderTransitionCurrHeight > 0 && x < maxLakeX && !Main.tile[GetX(), borderTransitionCurrHeight].HasTile)
+                {
+                    for (y = borderTransitionCurrHeight; y < Main.maxTilesY; y++)
+                    {
+                        WorldGen.PlaceTile(GetX(), y, TileID.Ash, mute: true, forced: true);
+                    }
+                    x++;
+                    borderTransitionCurrHeight += WorldGen.genRand.Next(-2, 4);
+                    if (borderTransitionCurrHeight < borderTransitionHeight) borderTransitionCurrHeight = borderTransitionHeight;
+                }
+                x = -1;
+                borderTransitionCurrHeight = borderTransitionHeight;
+                while (borderTransitionCurrHeight > 0 && GetX() < Main.maxTilesX && GetX() >= 0)
+                {
+                    for (y = borderTransitionCurrHeight; y < Main.maxTilesY; y++)
+                    {
+                        if (!Main.tile[GetX(), y].HasTile)
+                            WorldGen.PlaceTile(GetX(), y, TileID.Ash, mute: true, forced: true);
+                    }
+                    x--;
+                    borderTransitionCurrHeight += WorldGen.genRand.Next(-2, 7);
+                    if (borderTransitionCurrHeight < borderTransitionHeight) borderTransitionCurrHeight = borderTransitionHeight;
+                }
+            }
 
 			//extend lava into normal hell until it hits something
 			x = maxLakeX;
@@ -1131,9 +1217,29 @@ namespace Polarities
 				x++;
 			}
 
-			//generate ash islands and fissures
-			int lastIslandGenAt = 0;
-			for (x = 0; x < maxLakeX - 100; x++)
+			//Special case for drunk worlds
+			if (WorldGen.drunkWorldGen)
+			{
+                x = 0;
+                y = lakeSurfaceY;
+                while (!Main.tile[GetX(), y].HasTile)
+                {
+                    while (y < Main.maxTilesY && !Main.tile[GetX(), y].HasTile && Main.tile[GetX(), y].LiquidAmount == 0)
+                    {
+                        frameTile = Framing.GetTileSafely(GetX(), y);
+                        frameTile.LiquidType = 1;
+                        frameTile.LiquidAmount = 255;
+                        y++;
+                    }
+
+                    y = lakeSurfaceY;
+                    x--;
+                }
+            }
+
+            //generate ash islands and fissures
+            int lastIslandGenAt = 0;
+			for (x = WorldGen.drunkWorldGen ? 100 : 0; x < maxLakeX - 100; x++)
 			{
 				int testWidth = WorldGen.genRand.Next(2, 25) * 2;
 
@@ -1154,7 +1260,7 @@ namespace Polarities
 			//adapted from vanilla
 			for (int num552 = 0; num552 < maxLakeX; num552++)
 			{
-				x = WorldGen.genRand.Next(20, maxLakeX);
+				x = WorldGen.genRand.Next(20, maxLakeX - 20);
 				WorldGen.TileRunner(GetX(), WorldGen.genRand.Next(Main.maxTilesY - 180, Main.maxTilesY - 10), WorldGen.genRand.Next(2, 7), WorldGen.genRand.Next(2, 7), -2);
 			}
 			for (int num554 = 0; num554 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008 * (maxLakeX / (double)Main.maxTilesX)); num554++)
@@ -1242,34 +1348,50 @@ namespace Polarities
 			}
 
 			//fill in the gaps in the lava ocean
-			//TODO: This will require adjustment for special seeds
 			{
 				int x;
 				int y;
 
 				int direction = WorldGen.dungeonX < Main.maxTilesX / 2 ? 1 : -1;
-				int GetX()
-				{
-					if (direction == 1)
-					{
-						return x;
-					}
-					return Main.maxTilesX - 1 - x;
-				}
+                int GetX()
+                {
+                    if (WorldGen.drunkWorldGen)
+                    {
+                        return x + (int)(Main.maxTilesX * 0.27f);
+                    }
 
-				int maxLakeX = (int)(Main.maxTilesX * 0.23f);
-				int lakeSurfaceY = Main.maxTilesY - 130;
+                    if (direction == 1)
+                    {
+                        return x;
+                    }
+                    return Main.maxTilesX - 1 - x;
+                }
+
+                int maxLakeX = WorldGen.drunkWorldGen ? (int)(Main.maxTilesX * 0.46f) : (int)(Main.maxTilesX * 0.23f);
+                int lakeSurfaceY = Main.maxTilesY - 130;
 
 				for (x = 0; x < maxLakeX; x++)
 				{
-					for (y = lakeSurfaceY; y < Main.maxTilesY; y++)
+					for (y = lakeSurfaceY - 20; y < Main.maxTilesY; y++)
 					{
 						Tile frameTile = Framing.GetTileSafely(GetX(), y);
 
 						if (!frameTile.HasTile)
 						{
-							frameTile.LiquidType = LiquidID.Lava;
-							frameTile.LiquidAmount = 255;
+							if (y >= lakeSurfaceY)
+							{
+								frameTile.LiquidType = LiquidID.Lava;
+								frameTile.LiquidAmount = 255;
+							}
+							else
+                            {
+                                Tile aboveTile = Framing.GetTileSafely(GetX(), y - 1);
+								if (!aboveTile.HasTile && aboveTile.LiquidAmount == 0)
+								{
+									frameTile.LiquidType = LiquidID.Water;
+									frameTile.LiquidAmount = 0;
+								}
+                            }
 						}
 					}
 				}
@@ -1278,7 +1400,6 @@ namespace Polarities
 			//TODO: progress.Message = "Generating subworlds (this can take a while!)";
 		}
 
-		//TODO: Drunk world compatibility
 		public static void GenerateMantellarOre()
 		{
 			/*TODO: if (SLWorld.subworld)
@@ -1289,19 +1410,24 @@ namespace Polarities
 			int x;
 			int y;
 
-			int direction = WorldGen.dungeonX < Main.maxTilesX / 2 ? 1 : -1;
-			int GetX()
-			{
-				if (direction == 1)
-				{
-					return Utils.Clamp(x, 0, Main.maxTilesX - 1);
-				}
-				return Utils.Clamp(Main.maxTilesX - 1 - x, 0, Main.maxTilesX - 1);
-			}
+			int direction = Main.dungeonX < Main.maxTilesX / 2 ? 1 : -1;
+            int GetX()
+            {
+                if (Main.drunkWorld)
+                {
+                    return x + (int)(Main.maxTilesX * 0.27f);
+                }
 
-			int maxLakeX = (int)(Main.maxTilesX * 0.23f);
+                if (direction == 1)
+                {
+                    return x;
+                }
+                return Main.maxTilesX - 1 - x;
+            }
 
-			for (x = 0; x < maxLakeX; x++)
+            int maxLakeX = WorldGen.drunkWorldGen ? (int)(Main.maxTilesX * 0.46f) : (int)(Main.maxTilesX * 0.23f);
+
+            for (x = 0; x < maxLakeX; x++)
 			{
 				int startX = x;
 

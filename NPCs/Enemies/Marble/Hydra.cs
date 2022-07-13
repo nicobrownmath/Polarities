@@ -495,6 +495,7 @@ namespace Polarities.NPCs.Enemies.Marble
             npcLoot.Add(ItemDropRule.Common(ItemType<VenomGland>(), 25, 1, 3));
             npcLoot.Add(ItemDropRule.Common(ItemType<Lernaean>(), 100));
             npcLoot.Add(ItemDropRule.Common(ItemType<HydraHide>(), 100));
+            //TODO: npcLoot.Add(ItemDropRule.Common(ItemType<HydraWhip>(), 100));
         }
 
         public static Asset<Texture2D> ChainTexture;

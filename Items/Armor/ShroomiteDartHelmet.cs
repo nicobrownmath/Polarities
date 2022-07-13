@@ -45,10 +45,10 @@ namespace Polarities.Items.Armor
 
         public override void AddRecipes()
         {
-			//TODO: Recipe sorting
 			CreateRecipe()
 				.AddIngredient(ItemID.ShroomiteBar, 12)
 				.AddTile(TileID.MythrilAnvil)
+				.SortAfterFirstRecipesOf(ItemID.ShroomiteHelmet)
 				.Register();
         }
     }

@@ -149,7 +149,7 @@ Consistency concerns for special seeds:
     Salt and limestone swap generation styles (done!)
     Lava ocean generates in the middle of the underworld (this actually probably makes it easier to deal with than vanilla), convective spawns and mantellar gen also occur here
     Fractus are much more common and can grow larger
-    We don't need to add an extra biome chest because it already exists
+    We don't need to add an extra biome chest because it already exists (done!)
   Not the bees:
     Salt and limestone are replaced with honey above lava layer and crispy honey below lava layer (done!)
     Fractal dimension is painted yellow

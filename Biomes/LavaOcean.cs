@@ -31,7 +31,7 @@ namespace Polarities.Biomes
 
         public override bool IsBiomeActive(Player player)
         {
-            return player.ZoneUnderworldHeight && ((Main.dungeonX < Main.maxTilesX / 2) ? player.Center.X / 16f : Main.maxTilesX - 1 - player.Center.X / 16f) < Main.maxTilesX * 0.23f;
+            return player.ZoneUnderworldHeight && Main.drunkWorld ? (Math.Abs(player.Center.X / 16f - Main.maxTilesX / 2) < Main.maxTilesX * 0.23f) : ((Main.dungeonX < Main.maxTilesX / 2) ? player.Center.X / 16f : Main.maxTilesX - 1 - player.Center.X / 16f) < Main.maxTilesX * 0.23f;
         }
 
         public static bool SpawnValid(NPCSpawnInfo spawnInfo, bool requireLava = false)
