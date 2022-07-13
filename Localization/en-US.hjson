@@ -45,6 +45,7 @@
 			"Impactor": "Impactor",
 			"Warhammerhead": "Warhammerhead",
 			"SkullMelter": "Skull Melter",
+			"BonyBackhand": "Bony Backhand",
 			"CobaltWarhammer": "Cobalt Warhammer",
 			"PalladiumWarhammer": "Palladium Warhammer",
 			"MythrilWarhammer": "Mythril Warhammer",
@@ -171,6 +172,7 @@
 			"CelestialAmulet": "Celestial Amulet",
 			"SunlightEmblem": "Sunlight Emblem",
 			"SymbioticSapling": "Symbiotic Sapling",
+			"HydraHide": "Hydra Hide",
 
 			//mounts
 			"PegasusMountItem": "Bellerophon's Saddle",
@@ -394,6 +396,7 @@
 			"Impactor": "{$Mods.Polarities.ItemTooltip.WarhammerBase}\nExplodes on hitting enemies or tiles",
 			"Warhammerhead": "{$Mods.Polarities.ItemTooltip.WarhammerBase}",
 			"SkullMelter": "{$Mods.Polarities.ItemTooltip.WarhammerBase}\nSets enemies on fire\nRight click to use as a spear",
+			"BonyBackhand": "{$Mods.Polarities.ItemTooltip.WarhammerBase}\nReleases bone shards on enemy hits, which stick to enemies, reducing their defense and dealing damage",
 			"CobaltWarhammer": "{$Mods.Polarities.ItemTooltip.WarhammerBase}",
 			"PalladiumWarhammer": "{$Mods.Polarities.ItemTooltip.WarhammerBase}",
 			"MythrilWarhammer": "{$Mods.Polarities.ItemTooltip.WarhammerBase}",
@@ -507,6 +510,7 @@
 			"CelestialAmulet": "Increases your damage resisted and damage dealt depending on the time of day, up to 10% and 12% respectively\nDamage is increased more during the day and damage resistance is increased more at night\nMinor increase to damage, melee speed, critical strike chance,\nlife regeneration, defense, mining speed, and minion knockback",
 			"SunlightEmblem": "15% increased magic damage\n10% reduced mana usage\n10% increased non-magic damage while not at full mana\nHitting enemies with non-magic weapons restores your mana",
 			"SymbioticSapling": "Increases summon damage the more distinct types of minions you have",
+			"HydraHide": "Grants a significant boost to life regeneration for a short time after taking damage",
 
 			//mounts
 			"PegasusMountItem": "Summons a rideable pegasus mount",
@@ -745,7 +749,8 @@
 			"ConvectiveWandererLingeringDeathray": "Convection Beam",
 			"GraniteStomperHomingCrystal": "Quartz Shard",
 			"GraniteStomperLaser": "Refraction Ray",
-			"LernaeanOrbiter": "Lernaean Orbiter"
+			"LernaeanOrbiter": "Lernaean Orbiter",
+			"BonyBackhandShard": "Bone Shard"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",

@@ -100,6 +100,8 @@ namespace Polarities
 		public bool justHit;
 		public float candyCaneAtlatlBoost;
 		public StatModifier nonMagicDamage;
+		public bool hydraHide;
+		public float hydraHideTime = 0;
 
 		public bool flawlessMechArmorSet;
 		public int flawlessMechSetBonusTime;
@@ -165,16 +167,22 @@ namespace Polarities
 			dartDamage = StatModifier.Default;
 			justHit = false;
 			nonMagicDamage = StatModifier.Default;
+			hydraHide = false;
 
-			if (skeletronBookCooldown > 0) skeletronBookCooldown--;
+            if (skeletronBookCooldown > 0) skeletronBookCooldown--;
 			if (beeRingTimer > 0) beeRingTimer--;
 			if (limestoneShieldCooldown > 0) limestoneShieldCooldown--;
 			if (limestoneSetBonusHitCooldown > 0) limestoneSetBonusHitCooldown--;
 			if (moonLordLifestealCooldown > 0) moonLordLifestealCooldown--;
 			if (candyCaneAtlatlBoost > 0) candyCaneAtlatlBoost--;
+			if (hydraHideTime > 0)
+			{
+				hydraHideTime--;
+				Player.lifeRegenTime = 120;
+            }
 
-			//mech flawless stuff
-			flawlessMechArmorSet = false;
+            //mech flawless stuff
+            flawlessMechArmorSet = false;
 			flawlessMechChestplate = false;
 			flawlessMechMask = false;
 			flawlessMechTail = false;
@@ -196,7 +204,6 @@ namespace Polarities
 					}
 				}
 			}
-
 
 			screenshakeRandomSeed = Main.rand.Next();
 
@@ -723,6 +730,8 @@ namespace Polarities
 				limestoneSetBonusHitCooldown = 300;
 			}
 
+			hydraHideTime = 120;
+
 			justHit = true;
 		}
 
@@ -952,6 +961,32 @@ namespace Polarities
 			});
 			c.Emit(OpCodes.Stloc, 8);
 		}
+
+        public override void UpdateLifeRegen()
+        {
+			if (hydraHide && hydraHideTime > 0)
+            {
+                Player.lifeRegen += 10;
+                Player.lifeRegenTime = 3600;
+				Player.bleed = false; //force regen
+            }
+        }
+
+        public override void NaturalLifeRegen(ref float regen)
+        {
+			bool ignoreMovementPenalty = false;
+
+            if (hydraHide && hydraHideTime > 0)
+            {
+                regen *= 2f;
+				ignoreMovementPenalty = true;
+            }
+
+			if (ignoreMovementPenalty && Player.velocity.X != 0f && Player.grappling[0] <= 0)
+            {
+				regen *= 2.5f;
+            }
+        }
 
         public override void UpdateBadLifeRegen()
         {

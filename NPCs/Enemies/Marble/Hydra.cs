@@ -21,6 +21,7 @@ using Polarities.Items.Materials;
 using ReLogic.Content;
 using Terraria.GameContent.Bestiary;
 using Polarities.Items.Weapons.Melee;
+using Polarities.Items.Accessories;
 
 namespace Polarities.NPCs.Enemies.Marble
 {
@@ -493,6 +494,7 @@ namespace Polarities.NPCs.Enemies.Marble
         {
             npcLoot.Add(ItemDropRule.Common(ItemType<VenomGland>(), 25, 1, 3));
             npcLoot.Add(ItemDropRule.Common(ItemType<Lernaean>(), 100));
+            npcLoot.Add(ItemDropRule.Common(ItemType<HydraHide>(), 100));
         }
 
         public static Asset<Texture2D> ChainTexture;

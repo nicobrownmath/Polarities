@@ -1801,7 +1801,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
         private float[] aiWeights = new float[9];
 		void GotoNextAIState()
-        {
+		{
 			float[] aiWeightMultipliers = new float[aiWeights.Length];
 
 			WeightedRandom<int> aiStatePool = new WeightedRandom<int>();
@@ -1810,7 +1810,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				//weights are squared to bias more towards attacks that haven't been used in a while
 				float aiWeightMultiplier = 1f;
 				switch (state + 1)
-                {
+				{
 					case 1:
 						aiWeightMultiplier = 1.5f;
 						break;
@@ -1823,15 +1823,15 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					case 9:
 						if (NPC.life > NPC.lifeMax * phase2HealthThreshold) aiWeightMultiplier = 0f;
 						else aiWeightMultiplier = 2f;
-                        break;
-                }
+						break;
+				}
 
 				//force 9 when first available
 				if (NPC.life <= NPC.lifeMax * phase2HealthThreshold && state + 1 != 9 && aiWeights[8] == 1) aiWeightMultiplier = 0f;
 
-                aiWeightMultipliers[state] = aiWeightMultiplier;
+				aiWeightMultipliers[state] = aiWeightMultiplier;
 
-				aiStatePool.Add(state, Math.Pow(aiWeights[state] * aiWeightMultiplier, 2));
+				aiStatePool.Add(state, Math.Pow(aiWeights[state], 2) * aiWeightMultiplier);
 			}
 
 			NPC.ai[0] = aiStatePool + 1;
@@ -1850,7 +1850,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			aiWeights[(int)NPC.ai[0] - 1] = 0f;
 
 			NPC.ai[1] = 0;
-		}
+        }
 
 		private void InitializeAIStates()
 		{
