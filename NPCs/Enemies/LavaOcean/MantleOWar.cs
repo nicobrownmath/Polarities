@@ -136,7 +136,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
                 NPC.noGravity = true;
 
                 NPC.velocity.X += 0.1f * NPC.direction;
-                NPC.velocity.Y -= 0.1f;
+                NPC.velocity.Y -= 0.2f; //float upwards
                 NPC.velocity *= 0.9f;
             }
             else if (centerTile.HasUnactuatedTile && Main.tileSolid[centerTile.TileType])
@@ -181,12 +181,12 @@ namespace Polarities.NPCs.Enemies.LavaOcean
                 exitLoop:
 
                 NPC.velocity.X += 0.1f * NPC.direction;
-                NPC.velocity.Y -= 0.1f;
+                NPC.velocity.Y -= 0.2f; //float upwards
                 NPC.velocity *= 0.9f;
             }
             else
             {
-                NPC.noGravity = false;
+                NPC.noGravity = false; //fall downwards
 
                 NPC.velocity *= 0.9f;
             }
@@ -368,7 +368,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            //TODO: Loot
+            npcLoot.Add(ItemDropRule.Common(ItemType<MantellarOre>(), 1, 2, 4));
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)

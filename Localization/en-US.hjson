@@ -813,7 +813,8 @@
 			"ConvectiveWanderer": "Convective Wanderer",
 			"GraniteCrawler": "Granite Crawler",
 			"GraniteStomper": "Granite Stomper",
-			"HydraBody": "Hydra"
+			"HydraBody": "Hydra",
+			"InfernalArrow": "Infernal Arrow",
 		},
 		"Bestiary": {
 			"Rattler": "This small, venomous snake prefers dry climates. It loudly rattles to ward off any predators, but it’s just too cute to avoid!",
@@ -865,7 +866,9 @@
 			"ConvectiveWanderer": "This immense magma-dweller can tolerate the extreme temperatures of the Earth's core, using its tentacle-like gills both to drill through solid metal and to protect is more vulnerable head. Highly protective of its much smaller offspring.",
 			"GraniteCrawler": "An unsettling amalgamate of granite molded into a familiar shape, it scurries across the caves at high speed while shielding its vulnerable core-eye from damage.",
 			"GraniteStomper": "A construct of granite enclosing a brilliant but fragile refractive crystal, the stomper shelters within its pillar-like legs, only emerging to fend off threats.",
-			"HydraBody": "The legendary beast appears at last! Remove one head, and two more will take its place... or you could simply take out the body supporting them instead."
+			"HydraBody": "The legendary beast appears at last! Remove one head, and two more will take its place... or you could simply take out the body supporting them instead.",
+			"InfernalArrow": "Empowered by the fiery will of beings that dwell below even the underworld, this animated chunk of rock pursues any trespassers that enter its infernal abode.",
+			"MantleOWar": "This strange creature may look like a bizarre, molten jellyfish, but in fact it is a colonial organism made up of numerous smaller units called zooids.",
 		},
 		"MapObject": {
 			"SaltCrystalsTile": "{$Mods.Polarities.ItemName.SaltCrystals}",

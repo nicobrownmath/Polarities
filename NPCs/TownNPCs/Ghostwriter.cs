@@ -37,7 +37,6 @@ namespace Polarities.NPCs.TownNPCs
         }
 
 		//makes them leave rather than die
-		//TODO: Dust poof
         private void NPC_checkDead(ILContext il)
         {
 			ILCursor c = new ILCursor(il);
@@ -2070,6 +2069,48 @@ namespace Polarities.NPCs.TownNPCs
 				NPC.frame.Y = num;
 			}
 		}
+
+        public override void HitEffect(int hitDirection, double damage)
+        {
+			//produces a puff of dust on death
+            if (NPC.life <= 0)
+            {
+                for (int num585 = 0; num585 < 25; num585++)
+                {
+                    int num586 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Smoke, 0f, 0f, 100, default(Color), 2f);
+                    Dust dust30 = Main.dust[num586];
+                    Dust dust187 = dust30;
+                    dust187.velocity *= 1.4f;
+                    Main.dust[num586].noLight = true;
+                    Main.dust[num586].noGravity = true;
+                }
+                int num587 = 0;
+                Vector2 val15 = new Vector2(NPC.position.X + (float)(NPC.width / 2) - 24f, NPC.position.Y + (float)(NPC.height / 2) - 24f);
+                Vector2 center3 = default(Vector2);
+                num587 = Gore.NewGore(NPC.GetSource_Death(), val15, center3, Main.rand.Next(61, 64));
+                Main.gore[num587].scale = 1f;
+                Main.gore[num587].velocity.X += 1f;
+                Main.gore[num587].velocity.Y += 1f;
+                Vector2 val16 = new Vector2(NPC.position.X + (float)(NPC.width / 2) - 24f, NPC.position.Y + (float)(NPC.height / 2) - 24f);
+                center3 = default(Vector2);
+                num587 = Gore.NewGore(NPC.GetSource_Death(), val16, center3, Main.rand.Next(61, 64));
+                Main.gore[num587].scale = 1f;
+                Main.gore[num587].velocity.X -= 1f;
+                Main.gore[num587].velocity.Y += 1f;
+                Vector2 val17 = new Vector2(NPC.position.X + (float)(NPC.width / 2) - 24f, NPC.position.Y + (float)(NPC.height / 2) - 24f);
+                center3 = default(Vector2);
+                num587 = Gore.NewGore(NPC.GetSource_Death(), val17, center3, Main.rand.Next(61, 64));
+                Main.gore[num587].scale = 1f;
+                Main.gore[num587].velocity.X += 1f;
+                Main.gore[num587].velocity.Y -= 1f;
+                Vector2 val18 = new Vector2(NPC.position.X + (float)(NPC.width / 2) - 24f, NPC.position.Y + (float)(NPC.height / 2) - 24f);
+                center3 = default(Vector2);
+                num587 = Gore.NewGore(NPC.GetSource_Death(), val18, center3, Main.rand.Next(61, 64));
+                Main.gore[num587].scale = 1f;
+                Main.gore[num587].velocity.X -= 1f;
+                Main.gore[num587].velocity.Y -= 1f;
+            }
+        }
     }
 }
 

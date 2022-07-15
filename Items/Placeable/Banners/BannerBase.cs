@@ -18,6 +18,7 @@ using Polarities.NPCs.Enemies.HallowInvasion;
 using Polarities.NPCs.Enemies.WorldEvilInvasion;
 using Polarities.NPCs.Enemies.Granite;
 using Polarities.NPCs.Enemies.Marble;
+using Polarities.NPCs.Enemies.LavaOcean;
 
 namespace Polarities.Items.Placeable.Banners
 {
@@ -170,7 +171,8 @@ namespace Polarities.Items.Placeable.Banners
 	public class BrineFlyBanner : BannerBase { public override int BannerIndex => 2; public override int NPCType => NPCType<BrineFly>(); public override int BannerKills => 200; }
 	public class SalthopperBanner : BannerBase { public override int BannerIndex => 3; public override int NPCType => NPCType<Salthopper>(); }
 	public class MusselBanner : BannerBase { public override int BannerIndex => 4; public override int NPCType => NPCType<Mussel>(); }
-	public class ZombatBanner : BannerBase { public override int BannerIndex => 7; public override int NPCType => NPCType<Zombat>(); }
+    public class InfernalArrowBanner : BannerBase { public override int BannerIndex => 5; public override int NPCType => NPCType<InfernalArrow>(); } //TODO: This banner needs a resprite
+    public class ZombatBanner : BannerBase { public override int BannerIndex => 7; public override int NPCType => NPCType<Zombat>(); }
 	public class BloodBatBanner : BannerBase { public override int BannerIndex => 8; public override int NPCType => NPCType<BloodBat>(); }
 	public class StalagBeetleBanner : BannerBase { public override int BannerIndex => 9; public override int NPCType => NPCType<StalagBeetle>(); }
 	public class AlkaliSpiritBanner : BannerBase { public override int BannerIndex => 10; public override int NPCType => NPCType<AlkaliSpirit>(); }
