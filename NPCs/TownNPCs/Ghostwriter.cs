@@ -388,20 +388,25 @@ namespace Polarities.NPCs.TownNPCs
 			}
 			if (PolaritiesSystem.downedSunPixie)
 			{
-				//shop.item[nextSlot].SetDefaults(ItemType<SunPixieBook>());
+				shop.item[nextSlot].SetDefaults(ItemType<SunPixieBook>());
 				nextSlot++;
 			}
 			if (PolaritiesSystem.downedEsophage)
 			{
-				//shop.item[nextSlot].SetDefaults(ItemType<EsophageBook>());
+				shop.item[nextSlot].SetDefaults(ItemType<EsophageBook>());
 				nextSlot++;
 			}
 			if (NPC.downedPlantBoss)
 			{
 				shop.item[nextSlot].SetDefaults(ItemType<PlanteraBook>());
 				nextSlot++;
-			}
-			if (PolaritiesSystem.downedSelfsimilarSentinel)
+            }
+            if (PolaritiesSystem.downedConvectiveWanderer)
+            {
+                shop.item[nextSlot].SetDefaults(ItemType<ConvectiveWandererBook>());
+                nextSlot++;
+            }
+            if (PolaritiesSystem.downedSelfsimilarSentinel)
 			{
 				//shop.item[nextSlot].SetDefaults(ItemType<SelfsimilarSentinelBook>());
 				nextSlot++;
