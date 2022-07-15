@@ -97,7 +97,7 @@ v0.11 Changelog
     Changed the mod's icon
     Added the granite stomper
     Brine shrimp can now be cooked
-    Added hydra hide
+    Added hydra hide and the head splitter
 
 Things I should do:
   Make pegasus saddle draw on ridden pegasi
@@ -138,7 +138,6 @@ Things I should do:
 Planned FTW changes:
   Long cloudfish
   Giant rift denizen? Maybe w/ less attack delay? Possibly inflicts more fractalization?
-  Wanderer?
   Sentinel w/ smaller arena
   Total eclipxie (eye is bigger)?
   Hemorrphage?
@@ -147,7 +146,7 @@ Planned FTW changes:
 Consistency concerns for special seeds:
   Drunk world:
     Salt and limestone swap generation styles (done!)
-    Lava ocean generates in the middle of the underworld (this actually probably makes it easier to deal with than vanilla), convective spawns and mantellar gen also occur here
+    Lava ocean generates in the middle of the underworld (this actually probably makes it easier to deal with than vanilla), convective spawns and mantellar gen also occur here (done!)
     Fractus are much more common and can grow larger
     We don't need to add an extra biome chest because it already exists (done!)
   Not the bees:

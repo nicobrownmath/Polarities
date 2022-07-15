@@ -106,7 +106,6 @@ namespace Polarities.NPCs
 			{
 				//TODO: LOCALIZE THIS (can use Language.GetTextValueWith)
 				case NPCID.Guide:
-					//TODO: Advice quotes?
 					if (PolaritiesSystem.downedRiftDenizen)
 					{
 						chatPool.Add("That strange rift that showed up... Yeah I got nothing.");

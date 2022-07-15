@@ -142,6 +142,9 @@
 			"SpiritBottle": "Spirit Bottle",
 			"StardustTowerOrb": "Stardust Tower Orb",
 
+			//whips
+			"HeadSplitter": "Head Splitter",
+
 			//tools
 			"SunplateHamaxe": "Sunplate Hamaxe",
 			"Everlight": "Everlight",
@@ -478,6 +481,9 @@
 			"AlkalineOrb": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons a twisted mass of alkaline wraiths which shoots small defense-reducing spirits",
 			"SpiritBottle": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons a pair of spirits to bite enemies, causing your minions to deal up to 20 additional damage to them",
 			"StardustTowerOrb": "{$Mods.Polarities.ItemTooltip.OrbBase}\nSummons an image of the stardust pillar",
+
+			//whips
+			"HeadSplitter": "8 summon tag damage\nYour summons will focus struck enemies\nCan hit up to three targets at a time for full damage",
 
 			//tools
 			"Everlight": "Illuminates the cursor when held\nGrants rifle scope effect",

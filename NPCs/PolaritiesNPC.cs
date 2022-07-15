@@ -55,6 +55,7 @@ namespace Polarities.NPCs
         public bool usesProjectileHitCooldowns = false;
         public int projectileHitCooldownTime = 0;
         public int ignoredDefenseFromCritAmount;
+        public int whipTagDamage;
 
         public float defenseMultiplier;
 
@@ -552,6 +553,8 @@ namespace Polarities.NPCs
             incineration = 0;
             coneVenom = false;
 
+            whipTagDamage = 0;
+
             if (!spiritBite)
             {
                 spiritBiteLevel = 0;
@@ -597,6 +600,9 @@ namespace Polarities.NPCs
             if (projectile.IsTypeSummon())
             {
                 damage += spiritBiteLevel;
+
+                //TODO: This is inconsistent with vanilla whip tag damage, there will apparently be a better hook for this
+                damage += whipTagDamage;
             }
         }
 
