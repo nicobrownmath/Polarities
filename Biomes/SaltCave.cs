@@ -17,8 +17,8 @@ namespace Polarities.Biomes
 
         public override ModWaterStyle WaterStyle => ModContent.GetInstance<SaltWaterStyle>();
 
-        public override string BestiaryIcon => "Biomes/" + Name + "_BestiaryIcon";
-		public override string BackgroundPath => base.BackgroundPath;
+        public override string BestiaryIcon => (GetType().Namespace + "." + Name).Replace('.', '/') + "_BestiaryIcon";
+        public override string BackgroundPath => base.BackgroundPath;
 		public override Color? BackgroundColor => base.BackgroundColor;
 
 		public override bool IsBiomeActive(Player player)

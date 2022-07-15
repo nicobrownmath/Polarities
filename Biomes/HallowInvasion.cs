@@ -24,7 +24,7 @@ namespace Polarities.Biomes
 
 		public override int Music => MusicID.TheTowers;
 
-		public override string BestiaryIcon => "Biomes/" + Name + "_BestiaryIcon";
+        public override string BestiaryIcon => (GetType().Namespace + "." + Name).Replace('.', '/') + "_BestiaryIcon";
         public override string BackgroundPath => base.BackgroundPath; //this doesn't need to be the vanilla BG because all rapture enemies are also hallow enemies
 		public override Color? BackgroundColor => base.BackgroundColor;
 
@@ -32,7 +32,7 @@ namespace Polarities.Biomes
 
         public override void Load()
         {
-            EventIcon = Request<Texture2D>("Polarities/Biomes/" + Name + "_EventIcon");
+            EventIcon = Request<Texture2D>((GetType().Namespace + "." + Name).Replace('.', '/') + "_EventIcon");
         }
 
         public override void Unload()

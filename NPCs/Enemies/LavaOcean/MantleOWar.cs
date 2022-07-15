@@ -73,7 +73,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
 
             NPC.defense = 30;
             NPC.damage = 60;
-            NPC.lifeMax = 1200;
+            NPC.lifeMax = 1800;
             NPC.knockBackResist = 0f;
 
             NPC.npcSlots = 1f;

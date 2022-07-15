@@ -53,6 +53,12 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             };
             NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
 
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            {
+                Rotation = -3 * MathHelper.PiOver4
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifiers);
+
             Main.npcFrameCount[Type] = 5;
         }
 
@@ -71,6 +77,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             NPC.aiStyle = -1;
             NPC.width = 42;
             NPC.height = 42;
+            DrawOffsetY = 21;
             NPC.defense = 18;
             NPC.damage = 40;
             NPC.lifeMax = 200;
@@ -85,6 +92,8 @@ namespace Polarities.NPCs.Enemies.LavaOcean
 
             Banner = NPC.type;
             BannerItem = ItemType<InfernalArrowBanner>();
+
+            SpawnModBiomes = new int[1] { GetInstance<Biomes.LavaOcean>().Type };
 
             NPC.hide = true;
         }

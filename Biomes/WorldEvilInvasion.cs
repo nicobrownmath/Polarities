@@ -37,15 +37,15 @@ namespace Polarities.Biomes
             }
         }
 
-        public override string BestiaryIcon => "Biomes/" + Name + "_BestiaryIcon";
-        public override string BackgroundPath => "Biomes/" + Name + "_MapBG";
+        public override string BestiaryIcon => (GetType().Namespace + "." + Name).Replace('.', '/') + "_BestiaryIcon";
+        public override string BackgroundPath => (GetType().Namespace + "." + Name).Replace('.', '/') + "_MapBG";
         public override Color? BackgroundColor => base.BackgroundColor;
 
         public static Asset<Texture2D> EventIcon;
 
         public override void Load()
         {
-            EventIcon = Request<Texture2D>("Polarities/Biomes/" + Name + "_EventIcon");
+            EventIcon = Request<Texture2D>((GetType().Namespace + "." + Name).Replace('.', '/') + "_EventIcon");
         }
 
         public override void Unload()
