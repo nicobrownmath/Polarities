@@ -1005,7 +1005,7 @@
 				"LikeNPC": "I'd like to think I get {NPCName}.",
 				"DislikeNPC": "{NPCName} smells like fish, and I didn't even know I had a sense of smell.",
 				"HateNPC": "I don't have a place in {NPCName}'s world, not a fan of that.",
-				"MehAboutPrincess": "I'm not sold on {NPCName}, monarchies are cliche."
+				"MehAboutPrincess": "I'm not sold on {NPCName}, monarchies are cliche, but they're really hard to hate."
 			}
 		},
 		"TownNPCDialogue": {
@@ -1035,7 +1035,9 @@
 				"BloodMoon": "Everyone seems really on edge. I don't see what the big deal is.",
 				"PumpkinMoon": "Go on, turn those pumpkins into pie!",
 				"FrostMoon": "What in the world is all this?",
-				"Graveyard": "*spooky noises*"
+				"Graveyard": "*spooky noises*",
+				"Rain": "I hope I didn't leave any of my books outside.",
+				"WindyDay": "This weather we're having is quite incredible, you could even say it's blowing me away!"
 			}
 		},
 		"GuideHelpText": {

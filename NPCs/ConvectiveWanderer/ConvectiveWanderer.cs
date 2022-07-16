@@ -235,7 +235,26 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		float phase2TransitionProgress = 0f;
 		bool inPhase2 => phase2TransitionProgress >= 0.5f;
 
-		public static void SpawnOn(Player player)
+        public static void UpdateConvectiveWandererSpawning()
+        {
+            PolaritiesSystem.convectiveWandererSpawnTimer++;
+            if (PolaritiesSystem.convectiveWandererSpawnTimer > 60 * 5)
+            {
+                foreach (Player player in Main.player)
+                {
+                    if (Main.netMode != 1 && player.active && !player.dead)
+                    {
+                        SpawnOn(player);
+
+                        PolaritiesSystem.convectiveWandererSpawnTimer = 0;
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        public static void SpawnOn(Player player)
 		{
 			NPC wanderer = Main.npc[NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), (int)player.Center.X, (int)player.Center.Y + 1400, NPCType<ConvectiveWanderer>())];
 			Main.NewText(Language.GetTextValue("Announcement.HasAwoken", wanderer.TypeName), 171, 64, 255);
@@ -424,8 +443,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							}
 
 							player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(36, 30);
+                            SoundEngine.PlaySound(Sounds.ConvectiveBoom, NPC.Center);
 
-							NPC.life = 0;
+                            NPC.life = 0;
 							NPC.checkDead();
 						}
 					}
@@ -621,7 +641,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								{
 									float projSpeed = 0.2f;
 									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(280, 0).RotatedBy(NPC.rotation), new Vector2(projSpeed, 0).RotatedBy(NPC.rotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 2f, ai1: inPhase2 ? 0.5f : 0f);
-								}
+                                }
 
 								headSwingAlpha = Math.Min(1f, 4f * (attackProgress - (attackSetupTime + attackFreezeTime)) * ((attackSetupTime + attackFreezeTime + attackSwingTime) - attackProgress) / (attackSwingTime * attackSwingTime));
 							}
@@ -1104,28 +1124,28 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								if (projPositionX >= Main.maxTilesX * 16) break;
 
 								//new projectile
-								CreateFlamePillar();
+								CreateFlamePillar(-1 - i);
 
 								//increase proj offset
 								projPositionX += Main.rand.NextFloat(minOffset, maxOffset);
 							}
 							projPositionX = player.Center.X - startingOffset * (1 - startingProportion);
-							for (int i = 0; i < 6; i++)
+							for (int i = 0; i < 4; i++)
 							{
 								if (projPositionX <= 0) break;
 
 								//new projectile
-								CreateFlamePillar();
+								CreateFlamePillar(i);
 
 								//increase proj offset
 								projPositionX -= Main.rand.NextFloat(minOffset, maxOffset);
 							}
 
-							void CreateFlamePillar()
+							void CreateFlamePillar(int index)
 							{
 								Vector2 projPosition = GetPillarPosition(new Vector2(projPositionX, 16 * (int)(player.Center.Y / 16)));
 								
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), projPosition, new Vector2(0, -1), ProjectileType<ConvectiveWandererFlamePillar>(), 12, 2f, player.whoAmI, ai1: inPhase2 ? 0.5f : 0f);
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), projPosition, new Vector2(0, -1), ProjectileType<ConvectiveWandererFlamePillar>(), 12, 2f, player.whoAmI, ai0: index, ai1: inPhase2 ? 0.5f : 0f);
 							}
 						}
 
@@ -1185,11 +1205,6 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							outPosition.Y += 16;
 
 							return outPosition;
-						}
-
-						if ((NPC.ai[1] - 60) % (inPhase2 ? 40 : 60) == 0 && (NPC.ai[1] - 60) >= setupStartTime + setupMidTime && (NPC.ai[1] - 60) < totalAttackTime - windDownTime)
-                        {
-							player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(10, 60);
 						}
 
 						NPC.ai[1]++;
@@ -1282,7 +1297,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 								for (int i = 0; i < numProjectiles; i++)
 								{
 									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(112, 0).RotatedBy(NPC.rotation), new Vector2(4, 0).RotatedBy(NPC.rotation + i * MathHelper.TwoPi / numProjectiles + MathHelper.TwoPi / 8f), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: 1, ai1: inPhase2 ? 0.5f : 0);
-								}
+                                }
+                                SoundEngine.PlaySound(Sounds.ConvectiveProjectileFire, NPC.Center + new Vector2(112, 0).RotatedBy(NPC.rotation));
                             }
 
 							angleSpeed = NPC.ai[2] * (inPhase2 ? 0.15f : 0.1f);
@@ -1540,7 +1556,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 									ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(NPC.Center + new Vector2(112, 0).RotatedBy(NPC.rotation), new Vector2(Main.rand.NextFloat(12f, 40f), 0).RotatedByRandom(MathHelper.TwoPi), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: drawColor);
 									ParticleLayer.AfterLiquidsAdditive.Add(particle);
 								}
-							}
+
+                                SoundEngine.PlaySound(Sounds.ConvectiveBoom, NPC.Center);
+                            }
 						}
 
 						NPC.ai[1]++;
@@ -2840,8 +2858,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 					for (int i = 0; i < numProjectiles; i++)
 					{
 						Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(4, 0).RotatedBy(i * MathHelper.TwoPi / numProjectiles + randRotation), ProjectileType<ConvectiveWandererAcceleratingShot>(), 12, 2f, Main.myPlayer, ai0: Projectile.localAI[0], ai1: Projectile.ai[1]);
-					}
-				}
+                    }
+                    SoundEngine.PlaySound(Sounds.ConvectiveProjectileFire, Projectile.Center);
+                }
 
 				Projectile.rotation += 0.1f * Projectile.spriteDirection;
 			}
@@ -2905,7 +2924,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			}
 
 			Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().AddScreenShake(48, 60);
-		}
+
+            SoundEngine.PlaySound(Sounds.ConvectiveBoom, Vector2.Lerp(Projectile.Center, Main.LocalPlayer.Center, 0.5f));
+        }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
@@ -3067,7 +3088,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		{
 			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			Projectile.localAI[0] = Main.rand.Next(4095);
-			Projectile.ai[0] = 1f;
+            Projectile.localAI[1] = 1f;
 		}
 
 		public override bool ShouldUpdatePosition() => false;
@@ -3076,14 +3097,20 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		{
 			if (Projectile.timeLeft == 60)
             {
-				Projectile.ai[0] = Math.Max(1f, (Projectile.Center.Y - Main.LocalPlayer.Center.Y) / 1267.2f + 0.5f); //gives extra height if the player is too high
+				Projectile.localAI[1] = Math.Max(1f, (Projectile.Center.Y - Main.LocalPlayer.Center.Y) / 1267.2f + 0.5f); //gives extra height if the player is too high
+
+				if (Projectile.ai[0] == 0)
+                {
+                    Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().AddScreenShake(10, 60);
+                    SoundEngine.PlaySound(Sounds.ConvectiveFlamePillar, Main.LocalPlayer.Center);
+                }
             }
 
 			if (Main.rand.NextBool(4))
 			{
 				float progress = 1 - Projectile.timeLeft / 120f;
 				float width = 16f * (Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 1.5f);
-				float heightMultiplier = (384f + 128f * (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f * Projectile.ai[0]) / 384f;
+				float heightMultiplier = (384f + 128f * (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f * Projectile.localAI[1]) / 384f;
 				float speedMultiplier = Main.rand.NextFloat(0f, 1f);
 
 				ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(Projectile.Center + new Vector2(Main.rand.NextFloat(width), 0).RotatedByRandom(MathHelper.TwoPi), new Vector2(0, -4f * speedMultiplier * heightMultiplier).RotatedByRandom(4f * (1 - speedMultiplier) / heightMultiplier) * new Vector2(1, 4), 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: ModUtils.ConvectiveFlameColor(((Projectile.ai[1] == 0) ? 0.4f : 1f) * Main.rand.NextFloat(0.5f, 1f)));
@@ -3096,7 +3123,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		{
 			float progress = 1 - Projectile.timeLeft / 120f;
 			float width = 16f * (Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 1.5f);
-			return CustomCollision.CheckAABBvTriangle(targetHitbox, Projectile.Center + new Vector2(0, -128f).RotatedBy(Projectile.rotation) * (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f * Projectile.ai[0], Projectile.Center + new Vector2(width, 0), Projectile.Center - new Vector2(width, 0));
+			return CustomCollision.CheckAABBvTriangle(targetHitbox, Projectile.Center + new Vector2(0, -128f).RotatedBy(Projectile.rotation) * (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1) * (Math.Min(progress * 4, 1) + 1f) * 0.15f * Projectile.localAI[1], Projectile.Center + new Vector2(width, 0), Projectile.Center - new Vector2(width, 0));
 		}
 
 		public override bool? CanDamage()
@@ -3108,7 +3135,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 		public override bool PreDraw(ref Color lightColor)
 		{
 			float progress = 1 - Projectile.timeLeft / 120f;
-			Vector2 flameScale = new Vector2(Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 1.5f, (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1) * Projectile.ai[0]) * (Math.Min(progress * 4, 1) + 1f) * 0.15f;
+			Vector2 flameScale = new Vector2(Math.Min(0.5f, Math.Min(progress * 4f, (1 - progress) * 4f)) * 1.5f, (Math.Min(Math.Max(progress - 0.5f, 0) * 4, 1) * 32 + 1) * Projectile.localAI[1]) * (Math.Min(progress * 4, 1) + 1f) * 0.15f;
 			Vector2 flamePos = Projectile.Center - Main.screenPosition + new Vector2(0, -64 * flameScale.X).RotatedBy(Projectile.rotation);
 
             AsthenosProjectile.asthenosRandomValues.SetIndex((int)Projectile.localAI[0]);
@@ -3337,7 +3364,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			{
 				MakeParticle(maxSpeed: 40);
 			}
-		}
+
+            SoundEngine.PlaySound(Sounds.ConvectiveBoom, Projectile.Center);
+        }
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{

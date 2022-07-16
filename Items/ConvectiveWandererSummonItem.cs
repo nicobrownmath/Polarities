@@ -12,11 +12,11 @@ using Terraria.GameContent;
 using Terraria.Localization;
 using Polarities.NPCs.ConvectiveWanderer;
 using Polarities.Biomes;
+using Terraria.Audio;
 
 namespace Polarities.Items
 {
 	//TODO: Make this obtainable
-	//TODO: Sound like whatever the death sound of the baby wanderer is
 	public class ConvectiveWandererSummonItem : ModItem
 	{
 		public override void SetStaticDefaults()
@@ -38,14 +38,10 @@ namespace Polarities.Items
 			Item.consumable = false;
 		}
 
-		public override bool CanUseItem(Player player)
-		{
-			return !NPC.AnyNPCs(NPCType<ConvectiveWanderer>()) && player.InModBiome(GetInstance<LavaOcean>());
-		}
-
 		public override bool? UseItem(Player player)
-		{
-			ConvectiveWanderer.SpawnOn(player);
+        {
+            SoundEngine.PlaySound(Sounds.ConvectiveBabyDeath, player.position);
+			if (!NPC.AnyNPCs(NPCType<ConvectiveWanderer>()) && player.InModBiome(GetInstance<LavaOcean>()) && PolaritiesSystem.convectiveWandererSpawnTimer == 0) PolaritiesSystem.convectiveWandererSpawnTimer = 1;
 			return true;
 		}
 	}

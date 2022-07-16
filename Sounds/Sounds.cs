@@ -24,7 +24,11 @@ namespace Polarities
         public static SoundStyle Rattle;
 
         public static SoundStyle ConvectiveWandererRoar;
+        public static SoundStyle ConvectiveBabyDeath;
         public static SoundStyle ConvectiveWandererFlamethrowerStart;
+        public static SoundStyle ConvectiveFlamePillar;
+        public static SoundStyle ConvectiveProjectileFire;
+        public static SoundStyle ConvectiveBoom;
         public static SoundStyle StarConstructScream;
         public static SoundStyle StarConstructRoar;
 
@@ -35,7 +39,11 @@ namespace Polarities
             Rattle = new SoundStyle("Polarities/Sounds/Rattle") { Volume = 0.7f, PitchVariance = 0.5f };
 
             ConvectiveWandererRoar = new SoundStyle("Polarities/Sounds/ConvectiveWandererRoar");
+            ConvectiveBabyDeath = new SoundStyle("Polarities/Sounds/ConvectiveBabyDeath");
             ConvectiveWandererFlamethrowerStart = new SoundStyle("Polarities/Sounds/ConvectiveWandererFlamethrowerStart");
+            ConvectiveFlamePillar = new SoundStyle("Polarities/Sounds/ConvectiveFlamePillar");
+            ConvectiveProjectileFire = new SoundStyle("Polarities/Sounds/ConvectiveProjectileFire");
+            ConvectiveBoom = new SoundStyle("Polarities/Sounds/ConvectiveBoom");
 
             StarConstructScream = new SoundStyle("Polarities/Sounds/StarConstructScream");
             StarConstructRoar = new SoundStyle("Polarities/Sounds/StarConstructRoar");

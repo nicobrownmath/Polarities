@@ -259,12 +259,19 @@ namespace Polarities.NPCs.TownNPCs
 			if (Main.LocalPlayer.ZoneGraveyard)
 			{
 				chat.Add((baseDialogueString + "Graveyard", null));
-			}
-			//TODO: Dialogue for rain, windy days, and thunderstorms
-			//TODO: Maybe some dialogue for certain biomes?
-			//TODO: Fractal dimension dialogue that points out how they really shouldn't be there
+            }
+            if (Main.LocalPlayer.ZoneRain)
+            {
+                chat.Add((baseDialogueString + "Rain", null));
+            }
+            else if (Main.IsItAHappyWindyDay)
+            {
+                chat.Add((baseDialogueString + "WindyDay", null));
+            }
+            //TODO: Maybe some dialogue for certain biomes?
+            //TODO: Fractal dimension dialogue that points out how they really shouldn't be there
 
-			(string, object) output = chat;
+            (string, object) output = chat;
 			return Language.GetTextValueWith(output.Item1, output.Item2);
 		}
 

@@ -173,7 +173,9 @@ namespace Polarities
 		public static bool disabledEvilSpread;
 		public static bool disabledHallowSpread;
 
-		public static int timer;
+		public static int convectiveWandererSpawnTimer;
+
+        public static int timer;
 
 		public override void OnWorldLoad()
 		{
@@ -206,7 +208,9 @@ namespace Polarities
 
 			disabledEvilSpread = false;
 			disabledHallowSpread = false;
-		}
+
+			convectiveWandererSpawnTimer = 0;
+        }
 
         public override void OnWorldUnload()
 		{
@@ -239,7 +243,9 @@ namespace Polarities
 
 			disabledEvilSpread = false;
 			disabledHallowSpread = false;
-		}
+
+			convectiveWandererSpawnTimer = 0;
+        }
 
         public override void SaveWorldData(TagCompound tag)
 		{
@@ -1567,7 +1573,12 @@ namespace Polarities
 				esophageSpawnTimer++;
 			}
 
-			if (hallowInvasion)
+			if (convectiveWandererSpawnTimer > 0)
+            {
+				ConvectiveWanderer.UpdateConvectiveWandererSpawning();
+            }
+
+            if (hallowInvasion)
 			{
 				HallowInvasion.CheckInvasionProgress();
 				HallowInvasion.UpdateInvasion();
