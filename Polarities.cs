@@ -44,6 +44,10 @@ namespace Polarities
 
             //register hotkeys
             ArmorSetBonusHotkey = KeybindLoader.RegisterKeybind(this, "Convective Set Bonus", Keys.K);
+
+            string texture = GetModNPC(ModContent.NPCType<NPCs.StormCloudfish.StormCloudfish>()).BossHeadTexture + "_2";
+            AddBossHeadTexture(texture, -1);
+            NPCs.StormCloudfish.StormCloudfish.secondStageHeadSlot = ModContent.GetModBossHeadSlot(texture);
         }
 
         public override void Unload()

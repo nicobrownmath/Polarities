@@ -320,7 +320,7 @@ namespace Polarities.NPCs.TownNPCs
 			}
 			if (PolaritiesSystem.downedStormCloudfish)
 			{
-				//shop.item[nextSlot].SetDefaults(ItemType<StormCloudfishBook>());
+				shop.item[nextSlot].SetDefaults(ItemType<StormCloudfishBook>());
 				nextSlot++;
 			}
 			if (NPC.downedBoss1)

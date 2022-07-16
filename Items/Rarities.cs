@@ -29,6 +29,7 @@ namespace Polarities.Items
     }
 
     public class KingSlimeFlawlessRarity : ColorLerpCycleRarity { public override Color[] ColorCycle => new Color[] { Color.Gold, Color.RoyalBlue }; }
+    public class StormCloudfishFlawlessRarity : ColorLerpCycleRarity { public override Color[] ColorCycle => new Color[] { Color.LightSkyBlue, Color.DarkSlateGray }; }
     public class EyeOfCthulhuFlawlessRarity : ColorLerpCycleRarity { public override Color[] ColorCycle => new Color[] { Color.Blue, Color.White }; }
     public class StarConstructFlawlessRarity : ColorLerpCycleRarity { public override Color[] ColorCycle => new Color[] { Color.Blue, Color.Orange }; }
     public class GigabatFlawlessRarity : ColorLerpCycleRarity { public override Color[] ColorCycle => new Color[] { new Color(108, 94, 81), new Color(78, 70, 88) }; }

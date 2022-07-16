@@ -35,10 +35,5 @@ namespace Polarities.Items.Accessories
 			player.GetModPlayer<PolaritiesPlayer>().runSpeedBoost += 0.20f * (1 - (float)player.statLife / (float)player.statLifeMax2);
 			player.lifeRegen += (int)(10 * (1 - (float)player.statLife / (float)player.statLifeMax2));
 		}
-
-		public override void UpdateInventory(Player player)
-		{
-			Item.rare = ItemRarityID.Expert;
-		}
 	}
 }

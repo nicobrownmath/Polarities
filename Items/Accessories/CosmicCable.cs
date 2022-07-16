@@ -14,8 +14,7 @@ namespace Polarities.Items.Accessories
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Cosmic Cable");
-			Tooltip.SetDefault("Improves hook stats");
+			this.SetResearch(1);
 		}
 
 		public override void SetDefaults()

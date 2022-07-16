@@ -54,7 +54,7 @@ namespace Polarities.Items.Consumables.TreasureBags
 		public override void OpenBossBag(Player player)
 		{
 			IEntitySource source = player.GetSource_OpenItem(Type, "bossBag");
-
+			//TODO: Dev items
 			player.QuickSpawnItem(source, ItemType<AdaptiveGenes>());
 			if (Main.rand.NextBool(7))
 			{

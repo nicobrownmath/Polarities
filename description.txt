@@ -100,6 +100,7 @@ v0.11 Changelog
     Added hydra hide and the head splitter
     Renamed and resprited the molten spirit to the infernal arrow, and moved it to early HM
     Added the mantle o'war
+    Reworked the storm scales
 
 Things I should do:
   Make pegasus saddle draw on ridden pegasi

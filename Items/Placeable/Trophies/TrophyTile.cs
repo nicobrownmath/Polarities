@@ -72,7 +72,8 @@ namespace Polarities.Items.Placeable.Trophies
 		}
     }
 
-	public class SunPixieTrophy : TrophyBase { public override int TrophyIndex => 2; }
+    public class StormCloudfishTrophy : TrophyBase { public override int TrophyIndex => 1; }
+    public class SunPixieTrophy : TrophyBase { public override int TrophyIndex => 2; }
 	public class GigabatTrophy : TrophyBase { public override int TrophyIndex => 4; }
 	public class StarConstructTrophy : TrophyBase { public override int TrophyIndex => 5; }
 	public class EsophageTrophy : TrophyBase { public override int TrophyIndex => 6; }

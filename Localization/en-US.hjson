@@ -118,6 +118,7 @@
 			"LifeGrasper": "Life Grasper",
 			"HadeanUpwelling": "Hadean Upwelling",
 			"NebulaRay": "Nebula Ray",
+			"EyeOfTheStormfish": "Eye Of The Stormfish",
 
 			//summon weapons
 			"ZombatStaff": "Zombat Staff",
@@ -176,6 +177,7 @@
 			"SunlightEmblem": "Sunlight Emblem",
 			"SymbioticSapling": "Symbiotic Sapling",
 			"HydraHide": "Hydra Hide",
+			"StormScales": "Storm Scales",
 
 			//mounts
 			"PegasusMountItem": "Bellerophon's Saddle",
@@ -183,6 +185,7 @@
 			//books
 			"StrangeObituary": "Strange Obituary",
 			"KingSlimeBook": "The Sliming",
+			"StormCloudfishBook": "Maws",
 			"EyeOfCthulhuBook": "A Throng Of Eyes And Fliers",
 			"StarConstructBook": "The Construct Out Of Space",
 			"EaterOfWorldsBook": "The Very Hungry Worm",
@@ -313,6 +316,7 @@
 			"RocketSnekPetItem": "Rocket Snek",
 			"GoldfishExplorerPetItem": "Futuristic Bowl",
 			"SunPixiePetItem": "Winged Everlight",
+			"StormCloudfishPetItem": "StormRoe",
 
 			//boss summons
 			"StarConstructSummonItem": "Stellar Remote",
@@ -461,6 +465,7 @@
 			"LifeGrasper": "Summons a circular aura to drain life from enemies",
 			"HadeanUpwelling": "Summons a ring of fire around you, which turns into a directed fireblast",
 			"NebulaRay": "'Cast the light of distant stars upon your enemies'",
+			"EyeOfTheStormfish": "Summons a storm vortex around the cursor, which shoots a bolt of lightning at the cursor",
 
 			//summon weapons
 			"ZombatStaff": "Summons baby zombats to protect you",
@@ -520,6 +525,7 @@
 			"SunlightEmblem": "15% increased magic damage\n10% reduced mana usage\n10% increased non-magic damage while not at full mana\nHitting enemies with non-magic weapons restores your mana",
 			"SymbioticSapling": "Increases summon damage the more distinct types of minions you have",
 			"HydraHide": "Grants a significant boost to life regeneration for a short time after taking damage",
+			"StormScales": "Boosts mobility in the air",
 
 			//mounts
 			"PegasusMountItem": "Summons a rideable pegasus mount",
@@ -527,6 +533,7 @@
 			//books
 			"StrangeObituary": "Makes you die in one hit\nDoes not count as a book buff",
 			"KingSlimeBook": "Grants a double jump",
+			"StormCloudfishBook": "Makes rain fall above you",
 			"EyeOfCthulhuBook": "Summons demon eyes to protect you when hit",
 			"StarConstructBook": "Boosts defense while latched via a hook",
 			"EaterOfWorldsBook": "Boosts mining speed and tool damage",
@@ -606,6 +613,7 @@
 			"RocketSnekPetItem": "...",
 			"GoldfishExplorerPetItem": "Too small to fit on your head, but maybe...",
 			"SunPixiePetItem": "Summons a winged everlight\n'Imbued with the fury of an average lightbulb'",
+			"StormCloudfishPetItem": "Summons a storm fry\n'A tiny start for such a large creature'",
 
 			//miscellaneous
 			"SaltCrystals": "'Yum'",
@@ -763,7 +771,16 @@
 			"GraniteStomperLaser": "Refraction Ray",
 			"LernaeanOrbiter": "Lernaean Orbiter",
 			"BonyBackhandShard": "Bone Shard",
-			"SunPixieBookTrail": "Solar Trail"
+			"SunPixieBookTrail": "Solar Trail",
+			"StormCloudfishPet": "Storm Fry",
+			"CloudfishRain": "Rain",
+			"StormCloudfishLightningBall": "Lighting Sphere",
+			"StormCloudfishLightningArc": "Lighting Arc",
+			"StormCloudfishStormcloudOrb": "Cloud Orb",
+			"StormCloudfishRaincloud": "Raincloud",
+			"StormCloudfishCloudOrb": "Cloud Orb",
+			"FriendlyLightning": "LightningArc",
+			"StormEyeProjectile": "Storm Vortex"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
@@ -822,6 +839,7 @@
 			"GraniteStomper": "Granite Stomper",
 			"HydraBody": "Hydra",
 			"InfernalArrow": "Infernal Arrow",
+			"StormCloudfish": "Storm Cloudfish",
 		},
 		"Bestiary": {
 			"Rattler": "This small, venomous snake prefers dry climates. It loudly rattles to ward off any predators, but it’s just too cute to avoid!",
@@ -876,6 +894,7 @@
 			"HydraBody": "The legendary beast appears at last! Remove one head, and two more will take its place... or you could simply take out the body supporting them instead.",
 			"InfernalArrow": "Empowered by the fiery will of beings that dwell below even the underworld, this animated chunk of rock pursues any trespassers that enter its infernal abode.",
 			"MantleOWar": "This strange creature may look like a bizarre, molten jellyfish, but in fact it is a colonial organism made up of numerous smaller units called zooids.",
+			"StormCloudfish": "A rather aggressive, predatory life form composed entirely of turbulent thunder clouds. It employs rain clouds to drench its foes, and even uses lightning as a last resort."
 		},
 		"MapObject": {
 			"SaltCrystalsTile": "{$Mods.Polarities.ItemName.SaltCrystals}",
@@ -916,6 +935,7 @@
 			"RocketSnekPetBuff": "Rocket Snek",
 			"GoldfishExplorerPetBuff": "Goldfish Explorer",
 			"SunPixiePetBuff": "Winged Everlight",
+			"StormCloudfishPetBuff": "Storm Fry",
 
 			//mount buffs
 			"PegasusMountBuff": "Pegasus",
@@ -951,6 +971,7 @@
 			"RocketSnekPetBuff": "A snek is following you",
 			"GoldfishExplorerPetBuff": "To boldly go where no goldfish has gone before",
 			"SunPixiePetBuff": "Lights up the world like nobody else",
+			"StormCloudfishPetBuff": "Aww, it's so ferocious",
 
 			//mount buffs
 			"PegasusMountBuff": "Warranty void if used to summit mountains",
@@ -958,6 +979,7 @@
 			//book buffs
 			"StrangeObituaryBuff": "You will die in one hit\nDoes not count as a book buff",
 			"KingSlimeBookBuff": "You have a double jump",
+			"StormCloudfishBookBuff": "Rain is falling from above you",
 			"EyeOfCthulhuBookBuff": "Being hit summons demon eyes to protect you",
 			"StarConstructBookBuff": "Defense is boosted while latched via a hook",
 			"EaterOfWorldsBookBuff": "Mining speed is boosted and tools do more damage",
