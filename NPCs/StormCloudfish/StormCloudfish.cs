@@ -34,13 +34,14 @@ namespace Polarities.NPCs.StormCloudfish
     [AutoloadBossHead]
     public class StormCloudfish : ModNPC
     {
-        //TODO: Add the worm kite
+        //TODO: 1.4 thunderstorm integration stuff
+        //TODO: Rainglow
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 8;
             NPCID.Sets.TrailCacheLength[Type] = 3;    //The length of old position to be recorded
             NPCID.Sets.TrailingMode[Type] = 0;        //The recording mode
-
+            
             //group with other bosses
             NPCID.Sets.BossBestiaryPriority.Add(Type);
 
@@ -73,13 +74,13 @@ namespace Polarities.NPCs.StormCloudfish
         public override void SetDefaults()
         {
             NPC.aiStyle = -1;
-            NPC.width = 140;
+            NPC.width = Main.getGoodWorld ? 280 : 140;
             NPC.height = 32;
             DrawOffsetY = 2;
 
             NPC.damage = 20;
             NPC.defense = 0;
-            NPC.lifeMax = 1800;
+            NPC.lifeMax = Main.masterMode ? 3456 / 3 : Main.expertMode ? 2880 / 2 : 1800;
             NPC.knockBackResist = 0f;
             NPC.alpha = 0;
             NPC.value = Item.buyPrice(0, 0, 50, 0);
@@ -96,11 +97,6 @@ namespace Polarities.NPCs.StormCloudfish
             {
                 Music = MusicLoader.GetMusicSlot(ModLoader.GetMod("PolaritiesMusic"), "Sounds/Music/StormCloudfish");
             }
-        }
-
-        public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
-        {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * bossLifeScale);
         }
 
         public static int secondStageHeadSlot;
@@ -717,6 +713,8 @@ namespace Polarities.NPCs.StormCloudfish
 
             bool dash = NPC.ai[0] == 1 || NPC.ai[0] == 2;
 
+            Vector2 scale = new Vector2(Main.getGoodWorld ? 2 : 1, 1) * NPC.scale;
+
             if (dash)
             {
                 for (int k = 0; k < NPC.oldPos.Length; k++)
@@ -724,15 +722,15 @@ namespace Polarities.NPCs.StormCloudfish
                     drawPos = NPC.oldPos[k] - screenPos + drawOrigin + new Vector2(0f, NPC.gfxOffY);
                     color = NPC.GetAlpha(lightColor) * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
 
-                    spriteBatch.Draw(TextureAssets.Npc[Type].Value, drawPos, NPC.frame, color, NPC.rotation, drawOrigin, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
-                    spriteBatch.Draw(GlowTexture.Value, drawPos, NPC.frame, Color.White * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length), NPC.rotation, drawOrigin, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
+                    spriteBatch.Draw(TextureAssets.Npc[Type].Value, drawPos, NPC.frame, color, NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
+                    spriteBatch.Draw(GlowTexture.Value, drawPos, NPC.frame, Color.White * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length), NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
                 }
             }
             drawPos = NPC.position - screenPos + drawOrigin + new Vector2(0f, NPC.gfxOffY);
             color = NPC.GetAlpha(lightColor);
 
-            spriteBatch.Draw(TextureAssets.Npc[Type].Value, drawPos, NPC.frame, color, NPC.rotation, drawOrigin, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
-            spriteBatch.Draw(GlowTexture.Value, drawPos, NPC.frame, Color.White, NPC.rotation, drawOrigin, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
+            spriteBatch.Draw(TextureAssets.Npc[Type].Value, drawPos, NPC.frame, color, NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
+            spriteBatch.Draw(GlowTexture.Value, drawPos, NPC.frame, Color.White, NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
 
             return false;
         }

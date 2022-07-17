@@ -319,6 +319,7 @@
 			"StormCloudfishPetItem": "StormRoe",
 
 			//boss summons
+			"StormCloudfishSummonItem": "Worm On A Kite",
 			"StarConstructSummonItem": "Stellar Remote",
 			"GigabatSummonItem": "Bat Whistle",
 			"HallowInvasionSummonItem": "Holy Light",
@@ -592,6 +593,7 @@
 			"AlkalineSoup": "Minor improvements to all stats\nSlightly corrosive",
 
 			//boss summons
+			"StormCloudfishSummonItem": "Flying this kite too high may attract hungry cloud-dwellers."
 			"StarConstructSummonItem": "Summons a Dormant Construct when used at night\nNot consumable",
 			"GigabatSummonItem": "Summons Gigabat when used in the caverns\nNot consumable",
 			"HallowInvasionSummonItem": "Summons the Rapture when used in the hallow",
@@ -780,7 +782,8 @@
 			"StormCloudfishRaincloud": "Raincloud",
 			"StormCloudfishCloudOrb": "Cloud Orb",
 			"FriendlyLightning": "LightningArc",
-			"StormEyeProjectile": "Storm Vortex"
+			"StormEyeProjectile": "Storm Vortex",
+			"StormCloudfishSummonProjectile": "Worm On A Kite",
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
