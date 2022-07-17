@@ -413,18 +413,42 @@ namespace Polarities
 				progress.Set(chestIndex / 1000f);
 
 				Chest chest = Main.chest[chestIndex];
-				if (chest != null && Main.tile[chest.x, chest.y].TileType == TileID.Containers && Main.tile[chest.x, chest.y].TileFrameX == 13 * 36 && Main.rand.NextBool(2))
+				if (chest != null)
 				{
-					for (int inventoryIndex = 0; inventoryIndex < 40; inventoryIndex++)
+					if (Main.rand.NextBool(2) &&
+						((!Main.getGoodWorld && Main.tile[chest.x, chest.y].TileType == TileID.Containers && Main.tile[chest.x, chest.y].TileFrameX == 13 * 36) ||
+                        (Main.getGoodWorld && Main.tile[chest.x, chest.y].TileType == TileID.Containers && Main.tile[chest.x, chest.y].TileFrameX == 2 * 36 && chest.y < Main.worldSurface / 16)))
 					{
-						if (chest.item[inventoryIndex].type == ItemID.None)
+						for (int inventoryIndex = 0; inventoryIndex < 40; inventoryIndex++)
 						{
-							chest.item[inventoryIndex].SetDefaults(ItemType<StarConstructSummonItem>());
-							break;
+							if (chest.item[inventoryIndex].type == ItemID.None)
+							{
+								chest.item[inventoryIndex].SetDefaults(ItemType<StarConstructSummonItem>());
+								break;
+							}
+						}
+					}
+					else if (Main.rand.NextBool(4) && Main.tile[chest.x, chest.y].TileType == TileID.Containers && Main.tile[chest.x, chest.y].TileFrameX == 0 * 36)
+					{
+						for (int inventoryIndex = 0; inventoryIndex < 40; inventoryIndex++)
+						{
+							if (chest.item[inventoryIndex].type == ItemID.None)
+							{
+								switch (Main.rand.Next(2))
+								{
+									case 0:
+										chest.item[inventoryIndex].SetDefaults(ItemType<StormCloudfishSummonItem>());
+										break;
+									case 1:
+										chest.item[inventoryIndex].SetDefaults(ItemID.SlimeCrown);
+										break;
+								}
+								break;
+							}
 						}
 					}
 				}
-			}
+            }
 		}
 
 		//TODO: Make salt and limestone generate ambience that doesn't override things like heart crystals but does override generic ambience, a la the granite/marble biomes

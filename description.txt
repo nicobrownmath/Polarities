@@ -158,8 +158,8 @@ Consistency concerns for special seeds:
   For the worthy:
     Consider increasing projectile damage (make this a config option) (also probaly fix journey mode ftw damage/health (make the health fix a config option?))
     Salt and limestone caves are more common
-    Stellar remotes must generate in locked gold cloud chests instead of skyware chests
-    Lava lake generation must have ash block lava pocket speckling
+    Stellar remotes must generate in locked gold cloud chests instead of skyware chests (done!)
+    Lava lake generation must have ash block lava pocket speckling (done!)
     Sentinel caves are probably smaller
     You probably acquire fractalization more quickly
   Celebrationmk10:

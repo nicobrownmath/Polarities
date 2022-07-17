@@ -29,6 +29,12 @@ namespace Polarities
         public static SoundStyle ConvectiveFlamePillar;
         public static SoundStyle ConvectiveProjectileFire;
         public static SoundStyle ConvectiveBoom;
+        public static SoundStyle ConvectiveClap;
+        public static SoundStyle ConvectiveDrill;
+        public static SoundStyle ConvectiveMegaBoom;
+        public static SoundStyle ConvectiveOrbCharge;
+        public static SoundStyle ConvectiveHitHead;
+
         public static SoundStyle StarConstructScream;
         public static SoundStyle StarConstructRoar;
 
@@ -44,6 +50,11 @@ namespace Polarities
             ConvectiveFlamePillar = new SoundStyle("Polarities/Sounds/ConvectiveFlamePillar");
             ConvectiveProjectileFire = new SoundStyle("Polarities/Sounds/ConvectiveProjectileFire");
             ConvectiveBoom = new SoundStyle("Polarities/Sounds/ConvectiveBoom");
+            ConvectiveClap = new SoundStyle("Polarities/Sounds/ConvectiveClap");
+            ConvectiveDrill = new SoundStyle("Polarities/Sounds/ConvectiveDrill");
+            ConvectiveMegaBoom = new SoundStyle("Polarities/Sounds/ConvectiveMegaBoom");
+            ConvectiveOrbCharge = new SoundStyle("Polarities/Sounds/ConvectiveOrbCharge");
+            ConvectiveHitHead = new SoundStyle("Polarities/Sounds/ConvectiveHitHead") { MaxInstances = 1, SoundLimitBehavior = SoundLimitBehavior.IgnoreNew };
 
             StarConstructScream = new SoundStyle("Polarities/Sounds/StarConstructScream");
             StarConstructRoar = new SoundStyle("Polarities/Sounds/StarConstructRoar");

@@ -238,7 +238,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
         public static void UpdateConvectiveWandererSpawning()
         {
             PolaritiesSystem.convectiveWandererSpawnTimer++;
-            if (PolaritiesSystem.convectiveWandererSpawnTimer > 60 * 5)
+            if (PolaritiesSystem.convectiveWandererSpawnTimer > 60 * 2)
             {
                 foreach (Player player in Main.player)
                 {
@@ -443,7 +443,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 							}
 
 							player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(36, 30);
-                            SoundEngine.PlaySound(Sounds.ConvectiveBoom, NPC.Center);
+                            SoundEngine.PlaySound(Sounds.ConvectiveMegaBoom, NPC.Center);
 
                             NPC.life = 0;
 							NPC.checkDead();
@@ -783,8 +783,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
                             {
 								player.GetModPlayer<PolaritiesPlayer>().AddScreenShake(36, 30);
 
-								//TODO: Create sound on projectile firing
-								for (int i = 0; i < segmentPositions.Length - segmentsTailTendrils - 2; i++)
+                                SoundEngine.PlaySound(Sounds.ConvectiveBoom, player.Center);
+
+                                for (int i = 0; i < segmentPositions.Length - segmentsTailTendrils - 2; i++)
                                 {
 									if (TendrilIndex(i) == 0)
                                     {
@@ -1028,7 +1029,12 @@ namespace Polarities.NPCs.ConvectiveWanderer
 									NPC.velocity = new Vector2(0, (GetPillarPosition(player.Center).Y - 80 - NPC.Center.Y) / setupMidTimePart1 * 2f);
                                 }
 
-								if (NPC.ai[1] < setupStartTime + setupMidTimePart1)
+                                if (NPC.ai[1] == setupStartTime + setupMidTimePart1)
+                                {
+                                    SoundEngine.PlaySound(Sounds.ConvectiveDrill, NPC.Center);
+                                }
+
+                                if (NPC.ai[1] < setupStartTime + setupMidTimePart1)
 								{
 									NPC.velocity *= (setupStartTime + setupMidTimePart1 - 1 - NPC.ai[1]) / (setupStartTime + setupMidTimePart1 - NPC.ai[1]);
 								}
@@ -1557,7 +1563,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 									ParticleLayer.AfterLiquidsAdditive.Add(particle);
 								}
 
-                                SoundEngine.PlaySound(Sounds.ConvectiveBoom, NPC.Center);
+                                SoundEngine.PlaySound(Sounds.ConvectiveClap, NPC.Center);
                             }
 						}
 
@@ -1901,9 +1907,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			}
 			else
 			{
-				//hitting the head is great
-				npc.HitSound = SoundID.NPCHit1;
-				npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier *= 1.5f;
+                //hitting the head is great
+                npc.HitSound = Sounds.ConvectiveHitHead;
+                npc.GetGlobalNPC<PolaritiesNPC>().neutralTakenDamageMultiplier *= 1.5f;
 			}
 
 			//prevent some damage if pre-phase transition to avoid melting
@@ -2925,7 +2931,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
 			Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().AddScreenShake(48, 60);
 
-            SoundEngine.PlaySound(Sounds.ConvectiveBoom, Vector2.Lerp(Projectile.Center, Main.LocalPlayer.Center, 0.5f));
+            SoundEngine.PlaySound(Sounds.ConvectiveMegaBoom, Vector2.Lerp(Projectile.Center, Main.LocalPlayer.Center, 0.5f));
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -3288,6 +3294,11 @@ namespace Polarities.NPCs.ConvectiveWanderer
 				Projectile.Center = owner.GetGlobalNPC<MultiHitboxNPC>().preModifyDataCenter + 240 * Projectile.velocity;
 
 				Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().AddScreenShake(Projectile.scale, 10);
+
+				if (Projectile.timeLeft == 719)
+                {
+                    SoundEngine.PlaySound(Sounds.ConvectiveOrbCharge, Projectile.Center);
+                }
 
 				if (Projectile.timeLeft == 600)
 				{
