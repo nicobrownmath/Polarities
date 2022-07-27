@@ -29,6 +29,7 @@ namespace Polarities
         public static PreGeneratedRandom preGeneratedRand = new PreGeneratedRandom(358297, 4095);
 
         public static ModKeybind ArmorSetBonusHotkey;
+        public static ModKeybind ConvectiveDashHotkey;
 
         public override void Load()
         {
@@ -44,6 +45,7 @@ namespace Polarities
 
             //register hotkeys
             ArmorSetBonusHotkey = KeybindLoader.RegisterKeybind(this, "Convective Set Bonus", Keys.K);
+            ConvectiveDashHotkey = KeybindLoader.RegisterKeybind(this, "Convective Dash", Keys.I);
 
             string texture = GetModNPC(ModContent.NPCType<NPCs.StormCloudfish.StormCloudfish>()).BossHeadTexture + "_2";
             AddBossHeadTexture(texture, -1);
@@ -66,6 +68,7 @@ namespace Polarities
 
             //unload hotkeys
             ArmorSetBonusHotkey = null;
+            ConvectiveDashHotkey = null;
         }
 
         private void Polarities_IL_ResizeArrays(ILContext il)

@@ -527,6 +527,7 @@
 			"SymbioticSapling": "Increases summon damage the more distinct types of minions you have",
 			"HydraHide": "Grants a significant boost to life regeneration for a short time after taking damage",
 			"StormScales": "Boosts mobility in the air",
+			"BuildingEruption": "Press and hold {Hotkey} to dash in the direction of the cursor\nThis requires some time to fully recharge",
 
 			//mounts
 			"PegasusMountItem": "Summons a rideable pegasus mount",
@@ -593,7 +594,7 @@
 			"AlkalineSoup": "Minor improvements to all stats\nSlightly corrosive",
 
 			//boss summons
-			"StormCloudfishSummonItem": "Flying this kite too high may attract hungry cloud-dwellers."
+			"StormCloudfishSummonItem": "Flying this kite too high may attract hungry cloud-dwellers.",
 			"StarConstructSummonItem": "Summons a Dormant Construct when used at night\nNot consumable",
 			"GigabatSummonItem": "Summons Gigabat when used in the caverns\nNot consumable",
 			"HallowInvasionSummonItem": "Summons the Rapture when used in the hallow",

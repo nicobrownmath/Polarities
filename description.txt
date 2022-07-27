@@ -10,7 +10,7 @@ Spriters- ElectroManiac, niker, triangle, Scratch Lunin, Squartron, Rednbloo, Le
 Sounds- moonburn
 Bestiary- Danku (Jerry), bubbyboytoo
 Former team members- junk boy
-With sprites from- discord_account, yogu, Vega_1, Evolution, UnworthyPie, warrenmark_art, Masked Luigi, Darkpuppey, DeJuiceTD, Jimbo Animations, Le Supreme Slimelad, nalyddd, Hugekraken, Heart Plus Up!, MountainyBear49, Rocketlauncher269, TRYAGAIN211, Danmaskino, //IlluminatiJoe (drill sprites) //hondacivicmoment (Mithrix warhammer)
+With sprites from- discord_account, yogu, Vega_1, Evolution, UnworthyPie, warrenmark_art, Masked Luigi, Darkpuppey, DeJuiceTD, Jimbo Animations, Le Supreme Slimelad, nalyddd, Hugekraken, Heart Plus Up!, MountainyBear49, Rocketlauncher269, TRYAGAIN211, Danmaskino, //IlluminatiJoe (drill sprites) //Soft (shatterslash)
 
 v0.11 Changelog
     The mod is now in 1.4

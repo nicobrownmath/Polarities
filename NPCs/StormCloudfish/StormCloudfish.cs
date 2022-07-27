@@ -39,8 +39,8 @@ namespace Polarities.NPCs.StormCloudfish
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 8;
-            NPCID.Sets.TrailCacheLength[Type] = 3;    //The length of old position to be recorded
-            NPCID.Sets.TrailingMode[Type] = 0;        //The recording mode
+            NPCID.Sets.TrailCacheLength[Type] = 3;
+            NPCID.Sets.TrailingMode[Type] = 0;
             
             //group with other bosses
             NPCID.Sets.BossBestiaryPriority.Add(Type);

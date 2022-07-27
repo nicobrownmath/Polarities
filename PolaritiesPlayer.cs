@@ -37,6 +37,9 @@ using Polarities.NPCs.ConvectiveWanderer;
 using Polarities.Effects;
 using Polarities.Items.Weapons.Summon.Minions;
 using Polarities.Items.Armor.MechaMayhemArmor;
+using static Terraria.ModLoader.PlayerDrawLayer;
+using MultiHitboxNPCLibrary;
+using static tModPorter.ProgressUpdate;
 
 namespace Polarities
 {
@@ -102,8 +105,13 @@ namespace Polarities
 		public StatModifier nonMagicDamage;
 		public bool hydraHide;
 		public float hydraHideTime = 0;
+        public bool convectiveDash;
+        public int convectiveDashCharge;
+		public Vector2 convectiveDashVelocity = Vector2.Zero;
+		public bool convectiveDashing;
+		public int convectiveDashStartTime;
 
-		public bool flawlessMechArmorSet;
+        public bool flawlessMechArmorSet;
 		public int flawlessMechSetBonusTime;
 		public int flawlessMechSetBonusCooldown;
 		public bool flawlessMechMask;
@@ -168,6 +176,7 @@ namespace Polarities
 			justHit = false;
 			nonMagicDamage = StatModifier.Default;
 			hydraHide = false;
+			convectiveDash = false;
 
             if (skeletronBookCooldown > 0) skeletronBookCooldown--;
 			if (beeRingTimer > 0) beeRingTimer--;
@@ -329,6 +338,132 @@ namespace Polarities
 				flawlessMechSetBonusTime = MECH_ARMOR_SET_TIME;
 				flawlessMechSetBonusCooldown = MECH_ARMOR_SET_COOLDOWN + MECH_ARMOR_SET_TIME;
 			}
+
+			//convective dash
+			if (convectiveDash)
+            {
+				if (Polarities.ConvectiveDashHotkey.JustPressed && convectiveDashCharge > 60 && !Player.mount.Active)
+				{
+					//start dash
+					convectiveDashCharge -= convectiveDashCharge % 60; //return to last charge level
+
+                    convectiveDashing = true;
+					convectiveDashVelocity = (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero) * 24;
+					convectiveDashStartTime = PolaritiesSystem.timer;
+
+					SoundEngine.PlaySound(SoundID.NPCDeath14, Player.Center);
+
+					for (int i = 0; i < 24; i++)
+                    {
+                        Vector2 particleSpawnPos = Player.Center + new Vector2(Main.rand.NextFloat(24), 0).RotatedByRandom(MathHelper.TwoPi);
+                        Vector2 particleVelocity = new Vector2(Main.rand.NextFloat(6, 20), 0).RotatedByRandom(MathHelper.TwoPi) - convectiveDashVelocity;
+                        ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(particleSpawnPos, particleVelocity, 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: ModUtils.ConvectiveFlameColor(Main.rand.NextFloat(0.2f, 0.4f)));
+                        ParticleLayer.AfterLiquidsAdditive.Add(particle);
+                    }
+                }
+				else if (convectiveDashing && (!Polarities.ConvectiveDashHotkey.Current || Player.mount.Active))
+                {
+                    convectiveDashCharge = 0;
+                    convectiveDashing = false;
+
+					Player.velocity *= 0.25f;
+                }
+
+				if (convectiveDashing)
+				{
+					convectiveDashCharge -= 4;
+
+					if (convectiveDashCharge < 0)
+					{
+						convectiveDashCharge = 0;
+						convectiveDashing = false;
+
+						Player.velocity *= 0.25f;
+					}
+					else
+					{
+						Player.velocity = convectiveDashVelocity;
+						Player.ChangeDir(convectiveDashVelocity.X > 0 ? 1 : -1);
+
+						//prevent other movement things from interfering
+						Player.maxFallSpeed = convectiveDashVelocity.Length();
+						Player.controlDown = false;
+						Player.controlJump = false;
+						Player.controlLeft = false;
+						Player.controlRight = false;
+						Player.controlUp = false;
+
+						Vector2 particleSpawnPos = Player.Center + new Vector2(Main.rand.NextFloat(24), 0).RotatedByRandom(MathHelper.TwoPi);
+						Vector2 particleVelocity = -convectiveDashVelocity.RotatedByRandom(0.1f);
+						ConvectiveWandererVortexParticle particle = Particle.NewParticle<ConvectiveWandererVortexParticle>(particleSpawnPos, particleVelocity, 0f, 0f, Scale: Main.rand.NextFloat(0.1f, 0.2f), Color: ModUtils.ConvectiveFlameColor(Main.rand.NextFloat(0.2f, 0.4f)));
+						ParticleLayer.AfterLiquidsAdditive.Add(particle);
+
+						//ramming! (based on EoC)
+						Rectangle rectangle = new Rectangle((int)((double)Player.position.X + (double)Player.velocity.X * 0.5 - 4.0), (int)((double)Player.position.Y + (double)Player.velocity.Y * 0.5 - 4.0), Player.width + 8, Player.height + 8);
+						for (int i = 0; i < 200; i++)
+						{
+							NPC nPC = Main.npc[i];
+							if (!nPC.active || nPC.dontTakeDamage || nPC.friendly || (nPC.aiStyle == 112 && !(nPC.ai[2] <= 1f)) || !Player.CanNPCBeHitByPlayerOrPlayerProjectile(nPC))
+							{
+								continue;
+							}
+
+							if (MultiHitboxNPC.CollideWithRectangle(nPC, rectangle, needCanBeDamaged: true) && (nPC.noTileCollide || Player.CanHit(nPC)))
+							{
+								float num = Player.GetTotalDamage(DamageClass.Generic).ApplyTo(100f);
+								float num12 = Player.GetTotalKnockback(DamageClass.Generic).ApplyTo(10f);
+								bool crit = false;
+								if ((float)Main.rand.Next(100) < Player.GetTotalCritChance(DamageClass.Generic))
+								{
+									crit = true;
+								}
+								int num20 = Player.direction;
+								if (Player.velocity.X < 0f)
+								{
+									num20 = -1;
+								}
+								if (Player.velocity.X > 0f)
+								{
+									num20 = 1;
+								}
+								if (Player.whoAmI == Main.myPlayer)
+								{
+									Player.ApplyDamageToNPC(nPC, (int)num, num12, num20, crit);
+								}
+								Player.GiveImmuneTimeForCollisionAttack(10);
+								nPC.immune[Player.whoAmI] = 6;
+							}
+						}
+					}
+				}
+				else if (convectiveDashCharge < 240)
+				{
+					if (convectiveDashCharge % 60 == 0)
+					{
+						float progress = convectiveDashCharge / 240f;
+						BuildingEruptionChargingParticle particle = Particle.NewParticle<BuildingEruptionChargingParticle>(Vector2.Zero, Vector2.Zero, 0f, 0f, Scale: 1f, Color: ModUtils.ConvectiveFlameColor(progress * progress * 0.5f));
+						particle.playerOwner = Player.whoAmI;
+						ParticleLayer.BeforePlayersAdditive.Add(particle);
+					}
+
+					convectiveDashCharge++;
+
+					if (convectiveDashCharge % 60 == 0)
+					{
+						SoundEngine.PlaySound(SoundID.Item114.WithPitchOffset((convectiveDashCharge - 60) / 180f - 0.5f), Player.Center);
+					}
+				}
+            }
+            else
+            {
+                if (convectiveDashing)
+				{
+					Player.velocity *= 0.25f;
+                    convectiveDashing = false;
+                }
+
+                if (!convectiveDash) convectiveDashCharge = 0;
+            }
 		}
 
 		public override void PostUpdateEquips()
