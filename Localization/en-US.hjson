@@ -242,6 +242,9 @@
 			"FlawlessMechMask": "Laser Lens",
 			"FlawlessMechChestplate": "Arm-Ageddon",
 			"FlawlessMechTail": "Earthshaker",
+			"StormcloudArmor": "Stormcloud Armor",
+			"StormcloudGreaves": "Stormcloud Greaves",
+			"StormcloudMask": "Stormcloud Mask",
 
 			//vanity
 			"SnekHat": "Snek Hat",
@@ -595,6 +598,9 @@
 			"FlawlessMechMask": "3% increased movement speed\n3% reduced damage taken\nShoots lasers at the cursor when you attack",
 			"FlawlessMechChestplate": "6% reduced damage taken\nSwings at the cursor when you attack",
 			"FlawlessMechTail": "6% increased movement speed\nReleases probes that target the cursor when you attack",
+			"StormcloudArmor": "4% increased minion damage",
+			"StormcloudGreaves": "10% increased movement speed",
+			"StormcloudMask": "4% increased minion damage",
 
 			//hooks
 			"Starhook": "Shoots out four hooks at once",
@@ -649,7 +655,8 @@
 			"ConvectiveHelmetRanged": "17% increased ranged damage\n5% increased ranged critical strike chance\nPress {Hotkey} to fire a superheated beam, with a 10 second cooldown",
 			"ConvectiveHelmetMagic": "17% increased magic damage\nIncreases max mana by 60\nPress {Hotkey} to create an eruption from below the cursor, with a 10 second cooldown",
 			"ConvectiveHelmetSummon": "17% increased minion damage\nIncreases your max number of minions\nPress {Hotkey} to summon convective vortices to attack enemies, with a 10 second cooldown",
-			"FlawlessMechMask": "Right click to enter a temporary state of mecha mayhem, buffing your armor's attacks\nThis has a short cooldown, but the cooldown does not progress while holding a weapon"
+			"FlawlessMechMask": "Right click to enter a temporary state of mecha mayhem, buffing your armor's attacks\nThis has a short cooldown, but the cooldown does not progress while holding a weapon",
+			"StormcloudMask": "Summons clouds to drench your foes\nIncreases your max number of minions"
 		},
 		"ProjectileName": {
 			"SaltProjectile": "Salt Ball",

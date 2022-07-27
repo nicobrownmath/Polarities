@@ -40,6 +40,7 @@ using Polarities.Items.Armor.MechaMayhemArmor;
 using static Terraria.ModLoader.PlayerDrawLayer;
 using MultiHitboxNPCLibrary;
 using static tModPorter.ProgressUpdate;
+using Polarities.Items.Armor.StormcloudArmor;
 
 namespace Polarities
 {
@@ -110,6 +111,8 @@ namespace Polarities
 		public Vector2 convectiveDashVelocity = Vector2.Zero;
 		public bool convectiveDashing;
 		public int convectiveDashStartTime;
+        public bool stormcloudArmor;
+        public int stormcloudArmorCooldown;
 
         public bool flawlessMechArmorSet;
 		public int flawlessMechSetBonusTime;
@@ -177,6 +180,7 @@ namespace Polarities
 			nonMagicDamage = StatModifier.Default;
 			hydraHide = false;
 			convectiveDash = false;
+			stormcloudArmor = false;
 
             if (skeletronBookCooldown > 0) skeletronBookCooldown--;
 			if (beeRingTimer > 0) beeRingTimer--;
@@ -184,7 +188,8 @@ namespace Polarities
 			if (limestoneSetBonusHitCooldown > 0) limestoneSetBonusHitCooldown--;
 			if (moonLordLifestealCooldown > 0) moonLordLifestealCooldown--;
 			if (candyCaneAtlatlBoost > 0) candyCaneAtlatlBoost--;
-			if (hydraHideTime > 0)
+            if (stormcloudArmorCooldown > 0) stormcloudArmorCooldown--;
+            if (hydraHideTime > 0)
 			{
 				hydraHideTime--;
 				Player.lifeRegenTime = 120;
@@ -520,7 +525,7 @@ namespace Polarities
 
 			if (stormcore && 0.2f + Player.slotsMinions <= Player.maxMinions && Main.rand.NextBool(60))
 			{
-				Main.projectile[Projectile.NewProjectile(null, Player.Center.X + 500 * (2 * (float)Main.rand.NextDouble() - 1), Player.Center.Y - 500, 0, 0, ProjectileType<StormcoreMinion>(), 1, Player.GetTotalKnockback(DamageClass.Summon).ApplyTo(0.5f), Player.whoAmI, 0, 0)].originalDamage = 1;
+				Main.projectile[Projectile.NewProjectile(Player.GetSource_FromAI(), Player.Center.X + 500 * (2 * (float)Main.rand.NextDouble() - 1), Player.Center.Y - 500, 0, 0, ProjectileType<StormcoreMinion>(), 1, Player.GetTotalKnockback(DamageClass.Summon).ApplyTo(0.5f), Player.whoAmI, 0, 0)].originalDamage = 1;
 			}
 
 			if (wyvernsNestDamage > 0)
@@ -535,11 +540,40 @@ namespace Polarities
                 }
 				for (int i = Player.ownedProjectileCounts[ProjectileType<WyvernsNestMinion>()]; i < Player.maxTurrets; i++)
 				{
-					Main.projectile[Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ProjectileType<WyvernsNestMinion>(), wyvernsNestDamage, Player.GetTotalKnockback(DamageClass.Summon).ApplyTo(2f), Player.whoAmI, 0, 0)].originalDamage = 20;
+					Main.projectile[Projectile.NewProjectile(Player.GetSource_FromAI(), Player.Center, Vector2.Zero, ProjectileType<WyvernsNestMinion>(), wyvernsNestDamage, Player.GetTotalKnockback(DamageClass.Summon).ApplyTo(2f), Player.whoAmI, 0, 0)].originalDamage = 20;
 				}
 			}
 
-			if (canJumpAgain_Sail_Extra)
+            if (stormcloudArmor && stormcloudArmorCooldown <= 0 && Player.ownedProjectileCounts[ProjectileType<StormcloudArmorRaincloud>()] < 8)
+            {
+                stormcloudArmorCooldown = 240;
+
+                float distance = 750f;
+                bool isTarget = false;
+                int targetID = -1;
+                for (int k = 0; k < 200; k++)
+                {
+                    if (Main.npc[k].active && !Main.npc[k].dontTakeDamage && !Main.npc[k].friendly && Main.npc[k].lifeMax > 5 && !Main.npc[k].immortal && Main.npc[k].chaseable)
+                    {
+                        Vector2 newMove = Main.npc[k].Center - Player.Center;
+                        float distanceTo = (float)Math.Sqrt(newMove.X * newMove.X + newMove.Y * newMove.Y);
+                        if (distanceTo < distance)
+                        {
+                            targetID = k;
+                            distance = distanceTo;
+                            isTarget = true;
+                        }
+                    }
+                }
+
+                if (isTarget)
+                {
+                    NPC target = Main.npc[targetID];
+                    Projectile.NewProjectile(Player.GetSource_FromAI(), new Vector2(target.Center.X, target.position.Y - 128), Vector2.Zero, ProjectileType<StormcloudArmorRaincloud>(), (int)Player.GetTotalDamage(DamageClass.Summon).ApplyTo(8), 0, Player.whoAmI);
+                }
+            }
+
+            if (canJumpAgain_Sail_Extra)
 			{
 				if (Player.justJumped || Player.controlHook || Player.velocity.Y == 0f)
 				{
