@@ -159,7 +159,7 @@ namespace Polarities
         public override void AddRecipeGroups()
         {
             RecipeGroup.RegisterGroup(
-                "Polarities:WoodenAtlatl",
+                "WoodenAtlatl",
                 new RecipeGroup(
                     () => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ModContent.ItemType<Items.Weapons.Ranged.Atlatls.WoodenAtlatl>())}",
                     ModContent.ItemType<Items.Weapons.Ranged.Atlatls.WoodenAtlatl>(),
@@ -172,7 +172,7 @@ namespace Polarities
                 ));
 
             RecipeGroup.RegisterGroup(
-                "Polarities:SilverBar",
+                "SilverBar",
                 new RecipeGroup(
                     () => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.SilverBar)}",
                     ItemID.SilverBar,
@@ -180,7 +180,7 @@ namespace Polarities
                 ));
 
             RecipeGroup.RegisterGroup(
-                "Polarities:AdamantiteBar",
+                "AdamantiteBar",
                 new RecipeGroup(
                     () => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.AdamantiteBar)}",
                     ItemID.AdamantiteBar,
@@ -188,7 +188,7 @@ namespace Polarities
                 ));
 
             RecipeGroup.RegisterGroup(
-                "Polarities:RottenChunk",
+                "RottenChunk",
                 new RecipeGroup(
                     () => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.RottenChunk)}",
                     ItemID.RottenChunk,
@@ -196,7 +196,7 @@ namespace Polarities
                 ));
 
             RecipeGroup.RegisterGroup(
-                "Polarities:ShadowScale",
+                "ShadowScale",
                 new RecipeGroup(
                     () => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.ShadowScale)}",
                     ItemID.ShadowScale,
@@ -204,7 +204,7 @@ namespace Polarities
                 ));
 
             RecipeGroup.RegisterGroup(
-                "Polarities:Duck",
+                "Duck",
                 new RecipeGroup(
                     () => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.Duck)}",
                     ItemID.Duck,

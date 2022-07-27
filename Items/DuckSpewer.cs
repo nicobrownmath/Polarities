@@ -55,7 +55,7 @@ namespace Polarities.Items
         {
             CreateRecipe()
                 .AddIngredient(ItemType<WormSpewer>())
-                .AddRecipeGroup("Polarities:Duck", 20)
+                .AddRecipeGroup("Duck", 20)
                 .AddTile(TileID.DemonAltar)
                 .Register();
         }

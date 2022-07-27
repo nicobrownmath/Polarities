@@ -46,7 +46,7 @@ namespace Polarities.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddRecipeGroup("Polarities:RottenChunk", 10)
+                .AddRecipeGroup("RottenChunk", 10)
                 .AddIngredient(ItemID.SoulofMight, 1)
                 .AddIngredient(ItemID.SoulofSight, 1)
                 .AddIngredient(ItemID.SoulofFright, 1)

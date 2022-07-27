@@ -85,7 +85,7 @@ namespace Polarities.Items.Weapons.Magic
 		{
 			CreateRecipe()
 				.AddIngredient(ItemType<Materials.VenomGland>(), 4)
-				.AddRecipeGroup("Polarities:AdamantiteBar", 12)
+				.AddRecipeGroup("AdamantiteBar", 12)
 				.AddTile(TileID.MythrilAnvil)
 				.Register();
 		}

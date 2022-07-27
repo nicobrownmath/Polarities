@@ -91,7 +91,7 @@ namespace Polarities.Items.Weapons.Melee
 		public override void AddRecipes()
 		{
 			CreateRecipe()
-				.AddRecipeGroup("Polarities:SilverBar", 9)
+				.AddRecipeGroup("SilverBar", 9)
 				.AddTile(TileID.Anvils)
 				.Register();
 		}

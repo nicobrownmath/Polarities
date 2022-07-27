@@ -49,7 +49,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
         public override void AddRecipes()
 		{
 			CreateRecipe()
-				.AddRecipeGroup("Polarities:WoodenAtlatl")
+				.AddRecipeGroup("WoodenAtlatl")
 				.AddIngredient(ItemType<Items.Materials.Rattle>())
 				.AddTile(TileID.WorkBenches)
 				.Register();

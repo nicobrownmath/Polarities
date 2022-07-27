@@ -933,7 +933,11 @@ namespace Polarities.NPCs
                 case NPCID.EaterofWorldsBody:
                 case NPCID.EaterofWorldsHead:
                 case NPCID.EaterofWorldsTail:
-                    //TODO: npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Magic.ConsumptionCannon>())); (this can't actually be quite this simple)
+                    {
+                        LeadingConditionRule leadingConditionRule = new LeadingConditionRule(new Conditions.LegacyHack_IsABoss());
+                        leadingConditionRule.OnSuccess(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<ConsumptionCannon>()));
+                        npcLoot.Add(leadingConditionRule);
+                    }
                     break;
                 case NPCID.BrainofCthulhu:
                     //TODO: npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Melee.NeuralBasher>()));

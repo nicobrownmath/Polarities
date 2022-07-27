@@ -119,6 +119,7 @@
 			"HadeanUpwelling": "Hadean Upwelling",
 			"NebulaRay": "Nebula Ray",
 			"EyeOfTheStormfish": "Eye Of The Stormfish",
+			"ConsumptionCannon": "Consumption Cannon",
 			"WormSpewer": "Worm Spewer",
 
 			//summon weapons
@@ -470,6 +471,7 @@
 			"HadeanUpwelling": "Summons a ring of fire around you, which turns into a directed fireblast",
 			"NebulaRay": "'Cast the light of distant stars upon your enemies'",
 			"EyeOfTheStormfish": "Summons a storm vortex around the cursor, which shoots a bolt of lightning at the cursor",
+			"ConsumptionCannon": "Spews worms",
 			"WormSpewer": "Spews worms",
 
 			//summon weapons
@@ -790,7 +792,8 @@
 			"FriendlyLightning": "LightningArc",
 			"StormEyeProjectile": "Storm Vortex",
 			"StormCloudfishSummonProjectile": "Worm On A Kite",
-			"WormSpewerProjectile": "Molten Worm"
+			"WormSpewerProjectile": "Molten Worm",
+			"ConsumptionCannonProjectile": "Worm",
 		},
 		"NPCName": {
 			"Rattler": "Rattler",

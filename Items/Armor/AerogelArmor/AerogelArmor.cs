@@ -47,7 +47,7 @@ namespace Polarities.Items.Armor.AerogelArmor
 			CreateRecipe()
 				.AddIngredient(ItemID.Cloud, 40)
 				.AddIngredient(ItemID.Gel, 20)
-				.AddRecipeGroup("Polarities:ShadowScale", 15)
+				.AddRecipeGroup("ShadowScale", 15)
 				.AddTile(TileID.Solidifier)
 				.Register();
 		}
@@ -91,7 +91,7 @@ namespace Polarities.Items.Armor.AerogelArmor
 			CreateRecipe()
 				.AddIngredient(ItemID.Cloud, 20)
 				.AddIngredient(ItemID.Gel, 15)
-				.AddRecipeGroup("Polarities:ShadowScale", 10)
+				.AddRecipeGroup("ShadowScale", 10)
 				.AddTile(TileID.Solidifier)
 				.Register();
 		}

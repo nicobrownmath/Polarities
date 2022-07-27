@@ -273,7 +273,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 					{
 						viable = true;
 
-						for (int x = (int)((tryGoalPoint.X) / 16 + NPC.width / 4); x <= (int)((tryGoalPoint.X + NPC.width * 3 / 4) / 16); x++)
+						for (int x = (int)((tryGoalPoint.X) / 16); x <= (int)((tryGoalPoint.X + NPC.width) / 16); x++)
 						{
 							if (!Main.tile[x, y].HasUnactuatedTile || !(Main.tileSolid[Main.tile[x, y].TileType] || Main.tileSolid[Main.tile[x, y].TileType]))
 							{

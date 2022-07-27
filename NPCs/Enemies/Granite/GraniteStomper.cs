@@ -68,7 +68,7 @@ namespace Polarities.NPCs.Enemies.Granite
             NPC.DeathSound = SoundID.NPCDeath6;
 
             Banner = Type;
-            //TODO: BannerItem = ItemType<GraniteStomperBanner>();
+            BannerItem = ItemType<GraniteStomperBanner>();
         }
 
         public override void OnSpawn(IEntitySource source)
