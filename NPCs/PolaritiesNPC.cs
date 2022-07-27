@@ -35,6 +35,7 @@ using Polarities.Items.Weapons.Ranged.Atlatls;
 using Polarities.Items.Armor.MechaMayhemArmor;
 using Polarities.Items.Materials;
 using Terraria.Utilities;
+using Polarities.Items.Weapons.Melee.Warhammers;
 
 namespace Polarities.NPCs
 {
@@ -940,13 +941,13 @@ namespace Polarities.NPCs
                     }
                     break;
                 case NPCID.BrainofCthulhu:
-                    //TODO: npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Melee.NeuralBasher>()));
+                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<NeuralBasher>()));
                     break;
                 case NPCID.QueenBee:
                     npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<RoyalOrb>()));
                     break;
                 case NPCID.SkeletronHead:
-                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<Items.Weapons.Melee.Warhammers.BonyBackhand>()));
+                    npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<BonyBackhand>()));
                     break;
                 case NPCID.WallofFlesh:
                     npcLoot.Add(ItemDropRule.ByCondition(new FlawlessDropCondition(), ItemType<MawOfFlesh>()));

@@ -22,6 +22,7 @@
 			"ChainLacerator": "Chain Lacerator",
 			"Asthenos": "Asthenos",
 			"Lernaean": "Lernaean",
+			"NeuralBasher": "Neural Basher",
 
 			//warhammers
 			"WoodenWarhammer": "Wooden Warhammer",
@@ -388,6 +389,7 @@
 			"TwistedTendril": "Stacks up to 3",
 			"Asthenos": "Charge and release to incinerate your enemies",
 			"Lernaean": "Summons smaller yoyos to orbit the main yoyo on striking enemies",
+			"NeuralBasher": "Shoots a giant neuron\nShoots additional giant neurons on enemy hits",
 
 			//warhammers
 			"WoodenWarhammer": "{$Mods.Polarities.ItemTooltip.WarhammerBase}",
@@ -794,6 +796,7 @@
 			"StormCloudfishSummonProjectile": "Worm On A Kite",
 			"WormSpewerProjectile": "Molten Worm",
 			"ConsumptionCannonProjectile": "Worm",
+			"NeuralBasherProjectile": "Giant Neuron"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
