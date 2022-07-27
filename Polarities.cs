@@ -202,6 +202,14 @@ namespace Polarities
                     ItemID.ShadowScale,
                     ItemID.TissueSample
                 ));
+
+            RecipeGroup.RegisterGroup(
+                "Polarities:Duck",
+                new RecipeGroup(
+                    () => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.Duck)}",
+                    ItemID.Duck,
+                    ItemID.MallardDuck
+                ));
         }
 
         //TODO: Do more compatiblity options

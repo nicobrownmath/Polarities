@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using Terraria.GameContent;
 using Terraria.Audio;
 using Polarities.Projectiles;
+using Polarities.Items.Materials;
 
 namespace Polarities.Items.Armor.ConvectiveArmor
 {
@@ -53,7 +54,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 		{
 			CreateRecipe()
 				.AddIngredient(ItemType<MantellarBar>(), 16)
-				//TODO: .AddIngredient(ItemType<ConvectivePlating>(), 20)
+				.AddIngredient(ItemType<WandererPlating>(), 3)
 				.AddIngredient(ItemID.MoltenBreastplate)
 				.AddTile(TileID.MythrilAnvil)
 				.Register();
@@ -111,7 +112,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 		{
 			CreateRecipe()
 				.AddIngredient(ItemType<MantellarBar>(), 12)
-				//TODO: .AddIngredient(ItemType<ConvectivePlating>(), 16)
+				.AddIngredient(ItemType<WandererPlating>(), 2)
 				.AddIngredient(ItemID.MoltenGreaves)
 				.AddTile(TileID.MythrilAnvil)
 				.Register();
@@ -230,7 +231,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 		{
 			CreateRecipe()
 				.AddIngredient(ItemType<MantellarBar>(), 14)
-				//TODO: .AddIngredient(ItemType<ConvectivePlating>(), 18)
+				.AddIngredient(ItemType<WandererPlating>(), 2)
 				.AddIngredient(ItemID.MoltenHelmet)
 				.AddTile(TileID.MythrilAnvil)
 				.Register();
@@ -403,7 +404,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 		{
 			CreateRecipe()
 				.AddIngredient(ItemType<MantellarBar>(), 14)
-				//TODO: .AddIngredient(ItemType<ConvectivePlating>(), 18)
+				.AddIngredient(ItemType<WandererPlating>(), 2)
 				.AddIngredient(ItemID.MoltenHelmet)
 				.AddTile(TileID.MythrilAnvil)
 				.Register();
@@ -586,7 +587,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 		{
 			CreateRecipe()
 				.AddIngredient(ItemType<MantellarBar>(), 14)
-				//TODO: .AddIngredient(ItemType<ConvectivePlating>(), 18)
+				.AddIngredient(ItemType<WandererPlating>(), 2)
 				.AddIngredient(ItemID.MoltenHelmet)
 				.AddTile(TileID.MythrilAnvil)
 				.Register();
@@ -794,7 +795,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 		{
 			CreateRecipe()
 				.AddIngredient(ItemType<MantellarBar>(), 14)
-				//TODO: .AddIngredient(ItemType<ConvectivePlating>(), 18)
+				.AddIngredient(ItemType<WandererPlating>(), 2)
 				.AddIngredient(ItemID.MoltenHelmet)
 				.AddTile(TileID.MythrilAnvil)
 				.Register();

@@ -37,6 +37,13 @@ using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
 using Terraria.Utilities;
 using Polarities.Items.Placeable.Relics;
+using Polarities.Items.Armor.Vanity;
+using Polarities.Items.Consumables.TreasureBags;
+using Polarities.Items.Hooks;
+using Polarities.Items.Placeable.Trophies;
+using Polarities.Items.Weapons.Ranged;
+using Polarities.Items.Weapons.Summon.Minions;
+using Polarities.Items.Weapons.Magic;
 
 namespace Polarities.NPCs.ConvectiveWanderer
 {
@@ -1989,9 +1996,18 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
 		{
-			//TODO: Finish this
-			npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ItemType<ConvectiveWandererRelic>()));
-		}
+            //TODO: npcLoot.Add(new FlawlessOrRandomDropRule(ItemType<ConvectiveWandererTrophy>(), 10));
+            //TODO: npcLoot.Add(ItemDropRule.BossBag(ItemType<ConvectiveWandererBag>()));
+            npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ItemType<ConvectiveWandererRelic>()));
+            //TODO: npcLoot.Add(ModUtils.MasterModeDropOnAllPlayersOrFlawless(ItemType<ConvectiveWandererPetItem>(), 4));
+
+            //normal mode loot
+            LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
+            //TODO: notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<ConvectiveWandererMask>(), 7));
+            notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<WandererPlating>(), 1, 5, 8));
+            notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<WormSpewer>(), 10));
+            npcLoot.Add(notExpertRule);
+        }
         #endregion
 
         #region Drawcode

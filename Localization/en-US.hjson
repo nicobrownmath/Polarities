@@ -119,6 +119,7 @@
 			"HadeanUpwelling": "Hadean Upwelling",
 			"NebulaRay": "Nebula Ray",
 			"EyeOfTheStormfish": "Eye Of The Stormfish",
+			"WormSpewer": "Worm Spewer",
 
 			//summon weapons
 			"ZombatStaff": "Zombat Staff",
@@ -359,7 +360,9 @@
 			"Tentacle": "Tentacle",
 			"EvilDNA": "Evil DNA",
 			"MantellarOre": "Mantellar Ore",
-			"MantellarBar": "Mantellar Bar"
+			"MantellarBar": "Mantellar Bar",
+			"WandererPlating": "Wanderer Plating",
+			"DuckSpewer": "Duck Spewer"
 		},
 		"ItemTooltip": {
 			"WarhammerBase": "Reduces enemy defense by {DefenseLoss} for {DebuffTime} seconds",
@@ -467,6 +470,7 @@
 			"HadeanUpwelling": "Summons a ring of fire around you, which turns into a directed fireblast",
 			"NebulaRay": "'Cast the light of distant stars upon your enemies'",
 			"EyeOfTheStormfish": "Summons a storm vortex around the cursor, which shoots a bolt of lightning at the cursor",
+			"WormSpewer": "Spews worms",
 
 			//summon weapons
 			"ZombatStaff": "Summons baby zombats to protect you",
@@ -622,7 +626,8 @@
 			"SaltCrystals": "'Yum'",
 			"Rattle": "Makes a noise when you shake it",
 			"VenomGland": "'Gross'",
-			"MantellarBar": "'Do not touch'"
+			"MantellarBar": "'Do not touch'",
+			"DuckSpewer": "Spews ducks"
 		},
 		"ArmorSetBonus": {
 			"SunplateMask": "Allows the ability to dash",
@@ -785,6 +790,7 @@
 			"FriendlyLightning": "LightningArc",
 			"StormEyeProjectile": "Storm Vortex",
 			"StormCloudfishSummonProjectile": "Worm On A Kite",
+			"WormSpewerProjectile": "Molten Worm"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",

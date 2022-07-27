@@ -101,6 +101,7 @@ v0.11 Changelog
     Renamed and resprited the molten spirit to the infernal arrow, and moved it to early HM
     Added the mantle o'war
     Reworked the storm scales
+    Renamed convective plating to wanderer plating, and adjusted some of its associated values
 
 Things I should do:
   Make pegasus saddle draw on ridden pegasi
