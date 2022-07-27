@@ -23,6 +23,7 @@
 			"Asthenos": "Asthenos",
 			"Lernaean": "Lernaean",
 			"NeuralBasher": "Neural Basher",
+			"Flywheel": "Flywheel",
 
 			//warhammers
 			"WoodenWarhammer": "Wooden Warhammer",
@@ -72,6 +73,7 @@
 			"Hemiola": "Hemiola",
 			"Draconian": "Draconian",
 			"PyroclasticOnslaught": "Pyroclastic Onslaught",
+			"CloudflareBow": "Cloudflare Bow",
 
 			//atlatls
 			"WoodenAtlatl": "Wooden Atlatl",
@@ -122,6 +124,7 @@
 			"EyeOfTheStormfish": "Eye Of The Stormfish",
 			"ConsumptionCannon": "Consumption Cannon",
 			"WormSpewer": "Worm Spewer",
+			"Flopper": "Flopper",
 
 			//summon weapons
 			"ZombatStaff": "Zombat Staff",
@@ -390,6 +393,7 @@
 			"Asthenos": "Charge and release to incinerate your enemies",
 			"Lernaean": "Summons smaller yoyos to orbit the main yoyo on striking enemies",
 			"NeuralBasher": "Shoots a giant neuron\nShoots additional giant neurons on enemy hits",
+			"Flywheel": "Releases a small shockwave on hitting enemies",
 
 			//warhammers
 			"WoodenWarhammer": "{$Mods.Polarities.ItemTooltip.WarhammerBase}",
@@ -438,6 +442,7 @@
 			"Hemiola": "Shoots both rapid and powerful darts\nConverts wooden darts into cursed and ichor darts",
 			"Draconian": "Shoots fireballs that explode into bullets",
 			"PyroclasticOnslaught": "Shoots infernal arrows into the sky to rain upon your enemies",
+			"CloudflareBow": "Fires arrows from around the player",
 
 			//atlatls
 			"Axolatl": "Sometimes spits bubbles instead of shooting a dart",
@@ -475,6 +480,7 @@
 			"EyeOfTheStormfish": "Summons a storm vortex around the cursor, which shoots a bolt of lightning at the cursor",
 			"ConsumptionCannon": "Spews worms",
 			"WormSpewer": "Spews worms",
+			"Flopper": "Shoots fish",
 
 			//summon weapons
 			"ZombatStaff": "Summons baby zombats to protect you",
@@ -796,7 +802,9 @@
 			"StormCloudfishSummonProjectile": "Worm On A Kite",
 			"WormSpewerProjectile": "Molten Worm",
 			"ConsumptionCannonProjectile": "Worm",
-			"NeuralBasherProjectile": "Giant Neuron"
+			"NeuralBasherProjectile": "Giant Neuron",
+			"FlywheelWave": "Flywheel Shockwave",
+			"FlopperProjectile": "Cloudfish"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",
