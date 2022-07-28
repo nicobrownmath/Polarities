@@ -12,6 +12,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Audio;
 using Polarities.NPCs;
+using MultiHitboxNPCLibrary;
 
 namespace Polarities.Items.Weapons.Ranged
 {
@@ -260,7 +261,10 @@ namespace Polarities.Items.Weapons.Ranged
 
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = int.MaxValue;
-		}
+
+            Projectile.GetGlobalProjectile<MultiHitboxNPCLibraryProjectile>().badCollision = true;
+            Projectile.GetGlobalProjectile<MultiHitboxNPCLibraryProjectile>().javelinSticking = true;
+        }
 
         public override void OnSpawn(IEntitySource source)
         {

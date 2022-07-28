@@ -37,7 +37,6 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 
         public const int WarhammerUseStyle = 1728;
 
-        //TODO: Sound effect on hammering enemies (very small chance to be replaced with the funny bonk sound)
         //TODO: Adjust anim's rotation so it doesn't snap back when autoswinging
 
         public override void SetStaticDefaults()
@@ -277,6 +276,12 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
             else
             {
                 target.GetGlobalNPC<PolaritiesNPC>().hammerTimes.Add(boostedDefLoss, boostedDefTime);
+            }
+
+            //TODO: Normal sound effect maybe?
+            if (Main.rand.NextBool(1000))
+            {
+                SoundEngine.PlaySound(Sounds.Bonk, player.Center);
             }
         }
 

@@ -38,6 +38,8 @@ namespace Polarities
         public static SoundStyle StarConstructScream;
         public static SoundStyle StarConstructRoar;
 
+        public static SoundStyle Bonk;
+
         public static LoopedSound ConvectiveWandererFlamethrowerLoop;
 
         public void Load(Mod mod)
@@ -58,6 +60,8 @@ namespace Polarities
 
             StarConstructScream = new SoundStyle("Polarities/Sounds/StarConstructScream");
             StarConstructRoar = new SoundStyle("Polarities/Sounds/StarConstructRoar");
+
+            Bonk = new SoundStyle("Polarities/Sounds/Bonk");
 
             //sound loops
             ConvectiveWandererFlamethrowerLoop = new LoopedSound(new SoundStyle("Polarities/Sounds/ConvectiveWandererFlamethrowerLoop"));

@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.Audio;
+using MultiHitboxNPCLibrary;
 
 namespace Polarities.Items.Weapons.Melee.Warhammers
 {
@@ -70,6 +71,9 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
             Projectile.penetrate = 1;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = false;
+
+            Projectile.GetGlobalProjectile<MultiHitboxNPCLibraryProjectile>().badCollision = true;
+            Projectile.GetGlobalProjectile<MultiHitboxNPCLibraryProjectile>().javelinSticking = true;
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

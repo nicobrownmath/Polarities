@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Terraria.Audio;
 using Polarities.NPCs;
 using Terraria.DataStructures;
+using MultiHitboxNPCLibrary;
 
 namespace Polarities.Items.Weapons.Ranged.Ammo
 {
@@ -69,7 +70,10 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
 			Projectile.penetrate = 3;
 			Projectile.tileCollide = true;
 			Projectile.ignoreWater = false;
-		}
+
+            Projectile.GetGlobalProjectile<MultiHitboxNPCLibraryProjectile>().badCollision = true;
+            Projectile.GetGlobalProjectile<MultiHitboxNPCLibraryProjectile>().javelinSticking = true;
+        }
 
 		public override void OnSpawn(IEntitySource source)
 		{

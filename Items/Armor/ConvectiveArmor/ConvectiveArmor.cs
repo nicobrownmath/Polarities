@@ -36,7 +36,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 			Item.defense = 18;
 
 			Item.width = 30;
-			Item.height = 22;
+			Item.height = 24;
 
 			Item.value = Item.sellPrice(gold: 6);
 			Item.rare = ItemRarityID.Yellow;
@@ -94,7 +94,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 			Item.defense = 12;
 
 			Item.width = 22;
-			Item.height = 18;
+			Item.height = 16;
 
 			Item.value = Item.sellPrice(gold: 4);
 			Item.rare = ItemRarityID.Yellow;

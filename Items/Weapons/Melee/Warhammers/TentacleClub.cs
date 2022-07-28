@@ -12,6 +12,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Polarities.Items.Materials;
 using Terraria.Audio;
+using MultiHitboxNPCLibrary;
 
 namespace Polarities.Items.Weapons.Melee.Warhammers
 {
@@ -108,7 +109,10 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 			Projectile.penetrate = 3;
 			Projectile.hide = true;
 			Projectile.ignoreWater = true;
-		}
+
+			Projectile.GetGlobalProjectile<MultiHitboxNPCLibraryProjectile>().badCollision = true;
+            Projectile.GetGlobalProjectile<MultiHitboxNPCLibraryProjectile>().javelinSticking = true;
+        }
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
