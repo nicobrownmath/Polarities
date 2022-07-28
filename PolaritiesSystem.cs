@@ -27,6 +27,7 @@ using System.Reflection;
 using Mono.Cecil.Cil;
 using Terraria.Localization;
 using Polarities.NPCs.ConvectiveWanderer;
+using Polarities.Items.Placeable.Furniture.Salt;
 
 namespace Polarities
 {
@@ -324,7 +325,13 @@ namespace Polarities
 				tasks.Insert(graniteAndMarbleIndex + 2, new PassLegacy("Salt Caves", GenSaltCaves));
 			}
 
-			int settleLiquidsIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Settle Liquids"));
+            int potsIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Pots"));
+            if (potsIndex != -1)
+            {
+                tasks.Insert(potsIndex + 1, new PassLegacy("More Pots", PolaritiesPots));
+            }
+
+            int settleLiquidsIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Settle Liquids"));
 			if (settleLiquidsIndex != -1)
 			{
 				tasks.Insert(settleLiquidsIndex + 1, new PassLegacy("Salt Cave Obsidian Removal", SaltCavesRemoveObsidian));
@@ -1427,10 +1434,34 @@ namespace Polarities
 				}
 			}
 
-			//TODO: progress.Message = "Generating subworlds (this can take a while!)";
-		}
+            //TODO: progress.Message = "Generating subworlds (this can take a while!)";
+        }
 
-		public static void GenerateMantellarOre()
+        private void PolaritiesPots(GenerationProgress progress, GameConfiguration configuration)
+        {
+            progress.Message = "Generating additional pots";
+
+            for (int i = 1; i < Main.maxTilesX - 2; i++)
+            {
+                for (int j = 1; j < Main.maxTilesY - 2; j++)
+                {
+                    progress.Set(i * j / (float)(Main.maxTilesX * Main.maxTilesY));
+                    if (Main.tile[i, j].TileType == TileID.Pots && Main.tile[i, j + 1].TileType == TileID.Pots && Main.tile[i + 1, j].TileType == TileID.Pots && Main.tile[i + 1, j + 1].TileType == TileID.Pots)
+                    {
+                        if (Main.tile[i, j + 2].TileType == (ushort)TileType<SaltTile>() || Main.tile[i, j + 2].TileType == (ushort)TileType<RockSaltTile>())
+                        {
+                            WorldGen.KillTile(i, j);
+                            WorldGen.KillTile(i, j + 1);
+                            WorldGen.KillTile(i + 1, j);
+                            WorldGen.KillTile(i + 1, j + 1);
+                            WorldGen.PlacePot(i, j + 1, (ushort)TileType<SaltPotTile>(), 0);
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void GenerateMantellarOre()
 		{
 			/*TODO: if (SLWorld.subworld)
 				return;*/

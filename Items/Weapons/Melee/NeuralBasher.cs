@@ -12,6 +12,7 @@ using ReLogic.Content;
 using Microsoft.CodeAnalysis;
 using static Terraria.ModLoader.PlayerDrawLayer;
 using Terraria.Audio;
+using static Humanizer.In;
 
 namespace Polarities.Items.Weapons.Melee
 {

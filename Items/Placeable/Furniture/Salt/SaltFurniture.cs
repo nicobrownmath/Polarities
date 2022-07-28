@@ -302,6 +302,17 @@ namespace Polarities.Items.Placeable.Furniture.Salt
         public override int DropItem => ItemType<SaltPiano>();
     }
 
+    public class SaltPotTile : PotBase
+    {
+        public override int MyDustType => DustType<SaltDust>();
+
+        public override bool DoSpecialBiomeTorch(ref int itemID)
+        {
+            itemID = ItemType<SaltTorch>();
+            return true;
+        }
+    }
+
     public class SaltSink : SinkBase
     {
         public override int PlaceTile => TileType<SaltSinkTile>();
