@@ -824,7 +824,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 		}
 	}
 
-	//TODO: Give the convective minion's explosion on hit effect, rework that minion
+	//TODO: Give this the convective minion's explosion on hit effect, rework that minion
 	public class ConvectiveArmorSummonVortex : ModProjectile
 	{
 		public override string Texture => "Polarities/NPCs/ConvectiveWanderer/ConvectiveWandererHeatVortex";

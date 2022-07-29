@@ -359,7 +359,8 @@ namespace Polarities
 
         private void AddBiomeChests(GenerationProgress progress, GameConfiguration configuration)
         {
-            progress.Message = "Generating more loot";
+            progress.Message = Language.GetTextValue("Mods.Polarities.WorldGenPass.AddBiomeChests");
+
             bool flag6 = false;
 			if (WorldGen.drunkWorldGen)
 			{
@@ -412,10 +413,10 @@ namespace Polarities
 
 		void AddSkyIslandLoot(GenerationProgress progress, GameConfiguration configuration)
 		{
-			progress.Message = "Calling stars";
+            progress.Message = Language.GetTextValue("Mods.Polarities.WorldGenPass.AddSkyIslandLoot");
 
-			//add stellar remotes to sky island chests
-			for (int chestIndex = 0; chestIndex < 1000; chestIndex++)
+            //add stellar remotes to sky island chests
+            for (int chestIndex = 0; chestIndex < 1000; chestIndex++)
 			{
 				progress.Set(chestIndex / 1000f);
 
@@ -459,14 +460,12 @@ namespace Polarities
 		}
 
 		//TODO: Make salt and limestone generate ambience that doesn't override things like heart crystals but does override generic ambience, a la the granite/marble biomes
-		//TODO: Salt pots
 		//TODO: Maybe do submerged salt crates to incentivize a bit more diving and to hint at salt fishing
-		//TODO: Localization for worldgen pass messages
 		private void GenSaltCaves(GenerationProgress progress, GameConfiguration configuration)
 		{
-			progress.Message = "Precipitating salt";
+            progress.Message = Language.GetTextValue("Mods.Polarities.WorldGenPass.GenSaltCaves");
 
-			int saltTile = Main.drunkWorld ? TileType<LimestoneTile>() : TileType<SaltTile>();
+            int saltTile = Main.drunkWorld ? TileType<LimestoneTile>() : TileType<SaltTile>();
 			int rockSaltTile = Main.drunkWorld ? TileType<LimestoneTile>() : TileType<RockSaltTile>();
 			int rockSaltWall = Main.drunkWorld ? WallType<LimestoneWallNatural>() : WallType<RockSaltWallNatural>();
 
@@ -667,9 +666,9 @@ namespace Polarities
 
 		private void SaltCavesRemoveObsidian(GenerationProgress progress, GameConfiguration configuration)
 		{
-			progress.Message = "Decluttering salt caves";
+            progress.Message = Language.GetTextValue("Mods.Polarities.WorldGenPass.SaltCavesRemoveObsidian");
 
-			for (int x = 0; x < Main.maxTilesX; x++)
+            for (int x = 0; x < Main.maxTilesX; x++)
 			{
 				for (int y = 0; y < Main.maxTilesY; y++)
 				{
@@ -684,9 +683,9 @@ namespace Polarities
 
 		private void SaltCavesLavaReplace(GenerationProgress progress, GameConfiguration configuration)
         {
-			progress.Message = "Hydrating salt caves";
+            progress.Message = Language.GetTextValue("Mods.Polarities.WorldGenPass.SaltCavesLavaReplace");
 
-			for (int x = 0; x < Main.maxTilesX; x++)
+            for (int x = 0; x < Main.maxTilesX; x++)
             {
 				for (int y = 0; y < Main.maxTilesY; y++)
                 {
@@ -702,9 +701,9 @@ namespace Polarities
 
 		private void GenLimestoneCaves(GenerationProgress progress, GameConfiguration configuration)
 		{
-			progress.Message = "Eroding limestone";
+            progress.Message = Language.GetTextValue("Mods.Polarities.WorldGenPass.GenLimestoneCaves");
 
-			int limestoneTile = Main.drunkWorld ? TileType<SaltTile>() : TileType<LimestoneTile>();
+            int limestoneTile = Main.drunkWorld ? TileType<SaltTile>() : TileType<LimestoneTile>();
 			int limestoneWall = Main.drunkWorld ? WallType<RockSaltWallNatural>() : WallType<LimestoneWallNatural>();
 
 			int ambient1 = Main.drunkWorld ? TileType<Tiles.AmbientTiles.SaltAmbientTile1>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile1>();
@@ -1093,9 +1092,9 @@ namespace Polarities
 
 		private void CustomHellGeneration(GenerationProgress progress, GameConfiguration configuration)
 		{
-			progress.Message = "Making hell more hellish";
+            progress.Message = Language.GetTextValue("Mods.Polarities.WorldGenPass.CustomHellGeneration");
 
-			int x;
+            int x;
 			int y;
 
 			int direction = WorldGen.dungeonX < Main.maxTilesX / 2 ? 1 : -1;
@@ -1368,9 +1367,9 @@ namespace Polarities
 
 		private void FinalFinalCleanup(GenerationProgress progress, GameConfiguration configuration)
 		{
-			progress.Message = "Final final cleanup";
+            progress.Message = Language.GetTextValue("Mods.Polarities.WorldGenPass.FinalFinalCleanup");
 
-			for (int k = 0; k < Main.maxTilesX; k++)
+            for (int k = 0; k < Main.maxTilesX; k++)
 			{
 				for (int l = 0; l < Main.maxTilesY; l++)
 				{
@@ -1439,7 +1438,7 @@ namespace Polarities
 
         private void PolaritiesPots(GenerationProgress progress, GameConfiguration configuration)
         {
-            progress.Message = "Generating additional pots";
+            progress.Message = Language.GetTextValue("Mods.Polarities.WorldGenPass.PolaritiesPots");
 
             for (int i = 1; i < Main.maxTilesX - 2; i++)
             {

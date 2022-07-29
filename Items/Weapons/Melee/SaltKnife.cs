@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
+using Microsoft.CodeAnalysis;
 
 namespace Polarities.Items.Weapons.Melee
 {
@@ -39,7 +40,6 @@ namespace Polarities.Items.Weapons.Melee
 			Item.useTime = 40;
 			Item.useAnimation = 40;
 
-			//TODO: See if I can make this use the shortsword-esque arm system
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.UseSound = SoundID.Item1;
 
@@ -99,7 +99,9 @@ namespace Polarities.Items.Weapons.Melee
 
 		public override void AI()
 		{
-			if (Main.player[Projectile.owner].dead || !Main.player[Projectile.owner].active)
+			Player player = Main.player[Projectile.owner];
+
+            if (player.dead || !player.active)
 			{
 				Projectile.active = false;
 			}
@@ -108,12 +110,15 @@ namespace Polarities.Items.Weapons.Melee
 			atkCooldown--;
 			Projectile.friendly = atkCooldown < 0;
 
-			rotationOffset = -Main.player[Projectile.owner].direction * 0.5f * (float)Math.Cos(Projectile.ai[0] + timer * 2 * Math.PI / Projectile.ai[1]);
-			Projectile.rotation = rotationOffset + (Main.MouseWorld - Main.player[Projectile.owner].Center).ToRotation() + MathHelper.Pi / 4;
-			Projectile.position = -(new Vector2(Projectile.width / 2, Projectile.height / 2)) + Main.player[Projectile.owner].Center + (new Vector2(1, -1)).RotatedBy(Projectile.rotation) * Projectile.width * 0.5f * (1 + 0.2f * (1 + (float)Math.Sin(Projectile.ai[0] + timer * 2 * Math.PI / Projectile.ai[1])));
+			rotationOffset = -player.direction * 0.5f * (float)Math.Cos(Projectile.ai[0] + timer * 2 * Math.PI / Projectile.ai[1]);
+			Projectile.rotation = rotationOffset + (Main.MouseWorld - player.MountedCenter).ToRotation() + MathHelper.Pi / 4;
+			Projectile.position = -(new Vector2(Projectile.width / 2, Projectile.height / 2)) + player.MountedCenter + (new Vector2(1, -1)).RotatedBy(Projectile.rotation) * Projectile.width * 0.5f * (1 + 0.2f * (1 + (float)Math.Sin(Projectile.ai[0] + timer * 2 * Math.PI / Projectile.ai[1])));
 
 			Projectile.velocity = Vector2.Zero;
-		}
+
+			player.itemLocation = player.MountedCenter + (Main.MouseWorld - player.MountedCenter).SafeNormalize(Vector2.Zero) * 10f;
+			player.itemRotation = (float)Math.IEEERemainder((Main.MouseWorld - player.MountedCenter).ToRotation() + (player.direction == 1 ? 0 : MathHelper.Pi), MathHelper.TwoPi);
+        }
 
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{

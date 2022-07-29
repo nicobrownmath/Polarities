@@ -24,6 +24,28 @@ namespace Polarities.Items
         {
             //custom biome mimic summons
             On.Terraria.NPC.BigMimicSummonCheck += NPC_BigMimicSummonCheck;
+
+            On.Terraria.UI.ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += ItemSlot_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color;
+        }
+
+        private void ItemSlot_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color(On.Terraria.UI.ItemSlot.orig_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color orig, SpriteBatch spriteBatch, Item[] inv, int context, int slot, Vector2 position, Color lightColor)
+        {
+            bool doDraw = true;
+            IInventoryDrawItem inventoryDrawItem = null;
+            if (inv[slot] != null && inv[slot].ModItem != null && inv[slot].ModItem is IInventoryDrawItem)
+            {
+                inventoryDrawItem = inv[slot].ModItem as IInventoryDrawItem;
+                doDraw = inventoryDrawItem.PreInventoryDraw(spriteBatch, inv, context, slot, position, lightColor);
+            }
+            if (doDraw)
+            {
+                orig(spriteBatch, inv, context, slot, position, lightColor);
+
+                if (inventoryDrawItem != null)
+                {
+                    inventoryDrawItem.PostInventoryDraw(spriteBatch, inv, context, slot, position, lightColor);
+                }
+            }
         }
 
         private bool NPC_BigMimicSummonCheck(On.Terraria.NPC.orig_BigMimicSummonCheck orig, int x, int y, Player user)

@@ -586,7 +586,7 @@
 			"LimestoneGreaves": "3% increased critical strike chance",
 			"LimestoneHelmet": "3% increased critical strike chance",
 			"SnakescaleArmor": "5% increased damage",
-			"SnakescaleGreaves": "10% increased movement speed",
+			"SnakescaleGreaves": "10% increased movement speed\nGrants the ability to swim",
 			"SnakescaleMask": "8% increased critical strike chance",
 			"ConvectiveArmor": "6% increased damage and critical strike chance",
 			"ConvectiveLeggings": "10% increased movement speed",
@@ -1091,16 +1091,43 @@
 				"Graveyard": "*spooky noises*",
 				"Rain": "I hope I didn't leave any of my books outside.",
 				"WindyDay": "This weather we're having is quite incredible, you could even say it's blowing me away!"
+			},
+			"Guide": {
+				"RiftDenizen": "That strange rift that showed up... Yeah I got nothing."
+			},
+			"Dryad": {
+				"RiftDenizen": "That fractal stuff doesn't seem to be spreading, at least.",
+				"WorldEvilInvasion": "I sense something, a presence I've not felt since...",
+				"CrimsonInvasion": "The crimson is particulary hostile today.",
+				"CorruptInvasion": "The corruption is particulary eerie today.",
+				"HallowInvasion": "The hallow is particularly luminous today."
+			},
+			"DD2Bartender": {
+				"RiftDenizen": "Visitors from other worlds, huh? You don't say."
+			},
+			"Clothier": {
+				"Ghostwriter": "I can't help but feel like I recognize {NPCName} from somewhere."
+			},
+			"Mechanic": {
+				"PrePolarities": "I've had a terribly irresponsible idea for a contraption!",
+				"Polarities": "Those spinny magnet things do not obey the laws of physics at all."
+			},
+			"Angler": {
+				"Rain": "You know, the little cloudfish outside are just small fry!",
+				"Generic": "I once hooked a massive cloudfish while flying a kite, you know! Biggest one I ever saw. Carried me for miles.",
+				"Hardmode": "I heard there are these rare mushroom worms that live underground, and fish love them! You should use one as bait and see what bites!",
+				"Ghostwriter": "I tried to stick a fish in {NPCName}'s hair, but it just fell through. Disappointing.",
+				"RainQuest": "All those flying fish remind me of something... oh right, I need you to go get a fish for me!"
 			}
 		},
 		"GuideHelpText": {
 			"Ghostwriter": "Defeating a powerful foe might attract someone interested in recording your adventures.",
-			"StormCloudfishSummonItem": "Tying some bait to those clouds would be a good way to attract flying animals.", //TODO: Adjust when non-consumable summon is added
+			"StormCloudfishSummonItem": "Tying some bait to a kite would be a good way to attract flying animals.",
 			"StarConstructSummonItem": "Combining fallen stars with a suitable metal at a demon altar will allow you to send out signals into the cosmos.",
 			"GigabatSummonItem": "Affixing gems to a firefly would be the perfect lure for cave-dwelling bats.",
 			"SaltCave": "Salt biomes may look fun to swim in, but the pools of brine within can dry you to a husk in under a minute. Only specialist life can survive there.",
 			"LimestoneCave": "Limestone caves are full of unstable stalactites and crumbling rocks, and if that's not enough, they're also crawling with caustic animated gloop.",
-			"StormCloudfish": "When you're ready for a fight, slap together a worm on a balloon and throw it into the air.", //TODO: Adjust when non-consumable summon is added
+			"StormCloudfish": "When you're ready for a fight, attach a worm to a kite made of silk, and let it fly into the upper atmosphere.",
 			"StarConstruct": "Using a stellar remote will summon a powerful foe to fight, but fair warning, you may want to ball up some cotton in your ears.",
 			"Gigabat": "Sparkly gemflies naturally spend most of their time hidden inside gem trees. Catching one and relocating it could attract attention from underground hunters.",
 			"RiftDenizen": "Strange flickers have appeared in the upper atmosphere. I don't know what they are, but they're definitely not of this world.",
@@ -1112,7 +1139,7 @@
 			"ConvectiveWanderer": "There is a massive lava ocean in the underworld, filled with unique, molten life. Perhaps you could check it out?",
 			"Eclipxie": "That hallowed star you picked up from the Rapture displays interesting properties when exposed to the strange unlight of a solar eclipse.",
 			"Hemorrphage": "That fleshy capsid you picked up from the Pestilence displays interesting properties when exposed to the menacing aura of a blood moon.",
-			"Polarities": "You've defeated some powerful enemies, and acquired a lot of resources from them, both here, and, apparently, in the fractal world. Combining materials from the two could yield interesting, if volatile, results."
+			"Polarities": "You've defeated some powerful enemies, and acquired a lot of resources from them, both here, and, apparently, in the fractal world. Combining materials from the two dimensions could yield interesting, if volatile, results."
 		}
 		"StatusMessage": {
 			"StartWind": "The wind begins to pick up...",
@@ -1163,6 +1190,17 @@
 		},
 		"Misc": {
 			"UnboundHotkey": "an unbound hotkey"
+		},
+		"WorldGenPass": {
+			"AddBiomeChests": "Generating more loot",
+			"AddSkyIslandLoot": "Calling stars",
+			"GenSaltCaves": "Precipitating salt",
+			"SaltCavesRemoveObsidian": "Decluttering salt caves",
+			"SaltCavesLavaReplace": "Hydrating salt caves",
+			"GenLimestoneCaves": "Eroding limestone",
+			"CustomHellGeneration": "Making hell more hellish",
+			"FinalFinalCleanup": "Final final cleanup",
+			"PolaritiesPots": "Generating additional pots"
 		}
 	}
 }

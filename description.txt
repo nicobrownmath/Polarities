@@ -102,6 +102,7 @@ v0.11 Changelog
     Added the mantle o'war
     Reworked the storm scales
     Renamed convective plating to wanderer plating, and adjusted some of its associated values
+    Snakescale greaves now grant the effect of flippers
 
 Things I should do:
   Make pegasus saddle draw on ridden pegasi

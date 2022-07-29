@@ -5,11 +5,12 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System;
 using Terraria.DataStructures;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
 
 namespace Polarities.Items.Consumables
 {
-    //TODO: Draw with an x over it in the hotbar if on cooldown
-    public class TolerancePotion : ModItem
+    public class TolerancePotion : ModItem, IInventoryDrawItem
     {
         public override void SetStaticDefaults()
         {
@@ -55,6 +56,41 @@ namespace Polarities.Items.Consumables
                 .AddTile(TileID.Bottles)
                 .Register();
         }
+
+        void IInventoryDrawItem.PostInventoryDraw(SpriteBatch spriteBatch, Item[] inv, int context, int slot, Vector2 position, Color lightColor)
+        {
+            if (context == 13) //I don't think we can use the tml hook if we want to replicate vanilla behavior
+            {
+                Player player = Main.player[Main.myPlayer];
+
+                if (!player.HasBuff(BuffType<TolerancePotionCooldownBuff>())) return;
+
+                Item item = inv[slot];
+                float inventoryScale = Main.inventoryScale;
+
+                Color color = Color.White;
+                if (lightColor != Color.Transparent)
+                {
+                    color = lightColor;
+                }
+
+                Texture2D value = TextureAssets.InventoryBack.Value;
+
+                Texture2D value6 = TextureAssets.Item[item.type].Value;
+                Rectangle rectangle2 = ((Main.itemAnimations[item.type] == null) ? value6.Frame() : Main.itemAnimations[item.type].GetFrame(value6));
+
+                float num10 = 1f;
+                if (rectangle2.Width > 32 || rectangle2.Height > 32)
+                {
+                    num10 = ((rectangle2.Width <= rectangle2.Height) ? (32f / (float)rectangle2.Height) : (32f / (float)rectangle2.Width));
+                }
+                num10 *= inventoryScale;
+
+                Vector2 position3 = position + value.Size() * inventoryScale / 2f - TextureAssets.Cd.Value.Size() * inventoryScale / 2f;
+                Color color3 = item.GetAlpha(color) * ((float)player.buffTime[player.FindBuffIndex(BuffType<TolerancePotionCooldownBuff>())] / (float)player.GetModPlayer<PolaritiesPlayer>().tolerancePotionDelayTime);
+                spriteBatch.Draw(TextureAssets.Cd.Value, position3, (Rectangle?)null, color3, 0f, default(Vector2), num10, (SpriteEffects)0, 0f);
+            }
+        }
     }
 
     public class TolerancePotionCooldownBuff : ModBuff
@@ -63,6 +99,12 @@ namespace Polarities.Items.Consumables
         {
             Main.debuff[Type] = true;
             Main.pvpBuff[Type] = true;
+        }
+
+        public override bool ReApply(Player player, int time, int buffIndex)
+        {
+            player.GetModPlayer<PolaritiesPlayer>().tolerancePotionDelayTime = time;
+            return true;
         }
     }
 }

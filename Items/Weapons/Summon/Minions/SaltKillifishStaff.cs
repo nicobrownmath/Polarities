@@ -79,7 +79,6 @@ namespace Polarities.Items.Weapons.Summon.Minions
 		}
 	}
 
-	//TODO: Probably make able to go through tiles/platforms
 	public class SaltKillifishMinion : ModProjectile
     {
 		public override void SetStaticDefaults()
@@ -100,7 +99,7 @@ namespace Polarities.Items.Weapons.Summon.Minions
 			Projectile.minion = true;
 			Projectile.minionSlots = 1f;
 			Projectile.friendly = true;
-			Projectile.tileCollide = true;
+			Projectile.tileCollide = false;
 			Projectile.DamageType = DamageClass.Summon;
 
 			Projectile.localNPCHitCooldown = 10;

@@ -113,6 +113,7 @@ namespace Polarities
 		public int convectiveDashStartTime;
         public bool stormcloudArmor;
         public int stormcloudArmorCooldown;
+		public int tolerancePotionDelayTime = 3600;
 
         public bool flawlessMechArmorSet;
 		public int flawlessMechSetBonusTime;

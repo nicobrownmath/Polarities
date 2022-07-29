@@ -30,10 +30,10 @@ namespace Polarities.Items.Weapons.Melee
 			Item.width = 54;
 			Item.height = 54;
 
-			Item.useTime = 0;
-			Item.useAnimation = 0;
+			Item.useTime = 10;
+			Item.useAnimation = 10;
 			Item.channel = true;
-			Item.useStyle = 1;
+			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.noUseGraphic = true;
 			Item.autoReuse = true;
 			Item.noMelee = true;
@@ -52,20 +52,26 @@ namespace Polarities.Items.Weapons.Melee
 		{
 			if (player.channel)
 			{
-				player.direction = (Main.MouseWorld.X - player.Center.X > 0) ? 1 : -1;
+				player.direction = (Main.MouseWorld.X - player.MountedCenter.X > 0) ? 1 : -1;
 				time++;
-				player.itemTime++;
-				player.itemAnimation++;
-				if (time % 20 == 0 && Item.UseSound != null)
+
+                if (!player.ItemTimeIsZero) player.itemTime = player.itemTimeMax;
+                player.itemAnimation = player.itemAnimationMax;
+
+                if (time % 20 == 0 && Item.UseSound != null)
 				{
 					SoundEngine.PlaySound((SoundStyle)Item.UseSound, player.position);
 				}
-			}
-		}
+            }
+            else
+            {
+                time = 0;
+            }
+        }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			Projectile.NewProjectile(source, position, Vector2.Zero, type, damage, knockback, player.whoAmI, ai1: (Main.MouseWorld.X > player.Center.X) ? 1 : -1);
+			Projectile.NewProjectile(source, position, Vector2.Zero, type, damage, knockback, player.whoAmI, ai1: (Main.MouseWorld.X > player.MountedCenter.X) ? 1 : -1);
 			return false;
 		}
 	}
@@ -106,7 +112,7 @@ namespace Polarities.Items.Weapons.Melee
 
 			if (!player.dead && player.active && player.channel)
 			{
-				Projectile.Center = player.Center;
+				Projectile.Center = player.MountedCenter;
 				Projectile.timeLeft = 2;
 			}
 			else
@@ -119,7 +125,7 @@ namespace Polarities.Items.Weapons.Melee
 			{
 				player.heldProj = Projectile.whoAmI;
 
-				Projectile.localAI[0] = 1;
+                Projectile.localAI[0] = 1;
 
 				Projectile.scale = 0f;
 
@@ -139,7 +145,10 @@ namespace Polarities.Items.Weapons.Melee
 
 			Projectile.scale = Projectile.scale * 0.98f + 0.02f;
 			Projectile.rotation += 4 * Projectile.scale * Projectile.spriteDirection * MathHelper.TwoPi / 120f;
-		}
+
+			player.itemLocation = player.MountedCenter + new Vector2(10, 0).RotatedBy(Projectile.rotation);
+			player.itemRotation = (float)Math.IEEERemainder(Projectile.rotation + (player.direction == 1 ? 0 : MathHelper.Pi), MathHelper.TwoPi);
+        }
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{

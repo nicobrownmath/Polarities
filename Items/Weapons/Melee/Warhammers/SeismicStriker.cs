@@ -14,6 +14,7 @@ using Polarities.Buffs;
 using Polarities.Items.Placeable.Bars;
 using Terraria.GameContent;
 using Polarities.Effects;
+using Terraria.Audio;
 
 namespace Polarities.Items.Weapons.Melee.Warhammers
 {
@@ -310,8 +311,12 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
         {
 			Projectile.rotation = 0f;
 
-			//TODO: Sounds
-		}
+			if (Projectile.ai[0] % 20 == 0)
+            {
+				SoundEngine.PlaySound(SoundID.Item34, Projectile.Center);
+            }
+            Projectile.ai[0]++;
+        }
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{

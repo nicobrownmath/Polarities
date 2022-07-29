@@ -100,55 +100,56 @@ namespace Polarities.NPCs
 		{
 			if (!Main.rand.NextBool(10)) return;
 
-			WeightedRandom<string> chatPool = new WeightedRandom<string>();
+            WeightedRandom<(string, object)> chatPool = new WeightedRandom<(string, object)>();
 
-			switch (npc.type)
+            string baseDialogueString = "Mods.Polarities.TownNPCDialogue." + npc.TypeName + ".";
+
+            switch (npc.type)
 			{
-				//TODO: LOCALIZE THIS (can use Language.GetTextValueWith)
 				case NPCID.Guide:
 					if (PolaritiesSystem.downedRiftDenizen)
 					{
-						chatPool.Add("That strange rift that showed up... Yeah I got nothing.");
+						chatPool.Add((baseDialogueString + "RiftDenizen", null));
 					}
 					break;
 				case NPCID.Dryad:
 					if (PolaritiesSystem.downedRiftDenizen)
 					{
-						chatPool.Add("That fractal stuff doesn't seem to be spreading, at least.");
+						chatPool.Add((baseDialogueString + "RiftDenizen", null));
 					}
 					if (PolaritiesSystem.worldEvilInvasion)
 					{
-						chatPool.Add("I sense something, a presence I've not felt since...");
+						chatPool.Add((baseDialogueString + "WorldEvilInvasion", null));
 						if (WorldGen.crimson)
-							chatPool.Add("The crimson is particulary hostile today.");
+							chatPool.Add((baseDialogueString + "CrimsonInvasion", null));
 						else
-							chatPool.Add("The corruption is particulary eerie today.");
+							chatPool.Add((baseDialogueString + "CorruptInvasion", null));
 					}
 					if (PolaritiesSystem.hallowInvasion)
 					{
-						chatPool.Add("The hallow is particularly luminous today.");
+						chatPool.Add((baseDialogueString + "HallowInvasion", null));
 					}
 					break;
 				case NPCID.DD2Bartender:
 					if (PolaritiesSystem.downedRiftDenizen)
 					{
-						chatPool.Add("Visitors from other worlds, huh? You don't say.");
+						chatPool.Add((baseDialogueString + "RiftDenizen", null));
 					}
 					break;
 				case NPCID.Clothier:
 					if (NPC.FindFirstNPC(NPCType<NPCs.TownNPCs.Ghostwriter>()) >= 0)
 					{
-						chatPool.Add("I can't help but feel like I recognize " + Main.npc[NPC.FindFirstNPC(NPCType<NPCs.TownNPCs.Ghostwriter>())].GivenName + " from somewhere.");
+						chatPool.Add((baseDialogueString + "Ghostwriter", new { NPCName = Main.npc[NPC.FindFirstNPC(NPCType<NPCs.TownNPCs.Ghostwriter>())].GivenName }));
 					}
 					break;
 				case NPCID.Mechanic:
-					if (NPC.downedGolemBoss && !PolaritiesSystem.downedPolarities)
+					if (PolaritiesSystem.downedConvectiveWanderer && PolaritiesSystem.downedSelfsimilarSentinel && !PolaritiesSystem.downedPolarities)
 					{
-						chatPool.Add("I've had a terribly irresponsible idea for a contraption!");
+						chatPool.Add((baseDialogueString + "PrePolarities", null));
 					}
 					if (PolaritiesSystem.downedPolarities)
 					{
-						chatPool.Add("Those spinny magnet things do not obey the laws of physics at all.");
+						chatPool.Add((baseDialogueString + "Polarities", null));
 					}
 					break;
 				case NPCID.Angler:
@@ -156,31 +157,32 @@ namespace Polarities.NPCs
 					{
 						if (Main.raining)
 						{
-							chatPool.Add("You know, the little cloudfish outside are just small fry!");
+							chatPool.Add((baseDialogueString + "Rain", null));
 						}
-						chatPool.Add("I once hooked a massive cloudfish while fishing with a balloon, you know! Biggest one I ever saw. Carried me for miles.");
+						chatPool.Add((baseDialogueString + "Generic", null));
 						if (Main.hardMode)
 						{
-							chatPool.Add("I heard there are these rare mushroom worms that live underground, and fish love them! You should use one as bait and see what bites!");
+							chatPool.Add((baseDialogueString + "Hardmode", null));
 						}
 						if (NPC.FindFirstNPC(NPCType<NPCs.TownNPCs.Ghostwriter>()) >= 0)
 						{
-							chatPool.Add("I tried to stick a fish in " + Main.npc[NPC.FindFirstNPC(NPCType<NPCs.TownNPCs.Ghostwriter>())].GivenName + "'s hair, but it just fell through. Disappointing.");
+							chatPool.Add((baseDialogueString + "Ghostwriter", new { NPCName = Main.npc[NPC.FindFirstNPC(NPCType<NPCs.TownNPCs.Ghostwriter>())].GivenName }));
 						}
 					}
 					else
 					{
 						if (Main.raining)
 						{
-							chatPool.Add("All those flying fish remind me of something... oh right, I need you to go get a fish for me!");
+							chatPool.Add((baseDialogueString + "RainQuest", null));
 						}
 					}
 					break;
 			}
 
-			if (chatPool.elements.Count == 0) return;
-			chat = chatPool;
-		}
+            if (chatPool.elements.Count == 0) return;
+            (string, object) output = chatPool;
+            chat = Language.GetTextValueWith(output.Item1, output.Item2);
+        }
 
 		static bool isThereAGhostwriter; //for guide help dialogue efficiency
 		static bool inventoryCloud; //for guide help dialogue efficiency

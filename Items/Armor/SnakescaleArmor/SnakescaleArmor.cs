@@ -41,7 +41,6 @@ namespace Polarities.Items.Armor.SnakescaleArmor
 	}
 
 	[AutoloadEquip(EquipType.Legs)]
-	//TODO: Add flippers, provide flipper effect
 	public class SnakescaleGreaves : ModItem
 	{
 		public override void SetStaticDefaults()
@@ -62,7 +61,8 @@ namespace Polarities.Items.Armor.SnakescaleArmor
 		{
 			player.moveSpeed += 0.1f;
 			player.GetModPlayer<PolaritiesPlayer>().runSpeedBoost += 0.1f;
-		}
+            player.accFlipper = true;
+        }
 
 		public override void AddRecipes()
 		{

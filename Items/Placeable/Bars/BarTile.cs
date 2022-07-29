@@ -85,7 +85,7 @@ namespace Polarities.Items.Placeable.Bars
 	public class SunplateBar : BarBase
     {
         public override int BarIndex => 2;
-		//TODO: Dust
+		public override int? DustIndex => DustType<SunplateBarDust>();
 
         public override void SetDefaults()
         {
