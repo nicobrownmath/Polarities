@@ -138,10 +138,8 @@ namespace Polarities.NPCs.Esophage
 
             legs = new int[12];
 
-            if (Main.getGoodWorld)
-            {
-                NPC.scale = 0.5f;
-            }
+            if (Main.tenthAnniversaryWorld) NPC.scale *= 0.5f;
+            if (Main.getGoodWorld) NPC.scale *= 0.5f;
 
             SpawnModBiomes = new int[1] { GetInstance<WorldEvilInvasion>().Type };
         }

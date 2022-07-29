@@ -28,6 +28,8 @@ using Mono.Cecil.Cil;
 using Terraria.Localization;
 using Polarities.NPCs.ConvectiveWanderer;
 using Polarities.Items.Placeable.Furniture.Salt;
+using Terraria.GameContent.Events;
+using Polarities.NPCs.TownNPCs;
 
 namespace Polarities
 {
@@ -310,6 +312,7 @@ namespace Polarities
 			disabledEvilSpread = tag.ContainsKey("disabledEvilSpread");
 		}
 
+		//TODO: Localize worldgen pass names
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
 		{
 			int skyChestIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Floating Island Houses"));
@@ -354,6 +357,27 @@ namespace Polarities
 			{
 				tasks.Insert(dungeonIndex + 1, new PassLegacy("More Biome Chests", AddBiomeChests));
 				tasks.Insert(dungeonIndex + 2, new PassLegacy("Making Hell More Hellish", CustomHellGeneration));
+            }
+
+            int guideIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Guide"));
+            if (guideIndex != -1)
+            {
+                tasks.Insert(guideIndex + 1, new PassLegacy("More Friends", AddExtraNPCs));
+            }
+        }
+
+		//spawn ghostwriter in celebrationmk10 worlds
+		private void AddExtraNPCs(GenerationProgress progress, GameConfiguration configuration)
+		{
+			if (Main.tenthAnniversaryWorld)
+			{
+                Point adjustedFloorPosition = (Point)typeof(WorldGen).GetMethod("GetAdjustedFloorPosition", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { Main.spawnTileX + 6, Main.spawnTileY });
+				int num241 = NPC.NewNPC(new EntitySource_WorldGen(), adjustedFloorPosition.X * 16, adjustedFloorPosition.Y * 16, NPCType<Ghostwriter>());
+				Main.npc[num241].homeTileX = adjustedFloorPosition.X;
+				Main.npc[num241].homeTileY = adjustedFloorPosition.Y;
+				Main.npc[num241].direction = -1;
+				Main.npc[num241].homeless = true;
+				BirthdayParty.CelebratingNPCs.Add(num241);
 			}
         }
 
@@ -465,17 +489,17 @@ namespace Polarities
 		{
             progress.Message = Language.GetTextValue("Mods.Polarities.WorldGenPass.GenSaltCaves");
 
-            int saltTile = Main.drunkWorld ? TileType<LimestoneTile>() : TileType<SaltTile>();
-			int rockSaltTile = Main.drunkWorld ? TileType<LimestoneTile>() : TileType<RockSaltTile>();
-			int rockSaltWall = Main.drunkWorld ? WallType<LimestoneWallNatural>() : WallType<RockSaltWallNatural>();
+            int saltTile = WorldGen.drunkWorldGen ? TileType<LimestoneTile>() : TileType<SaltTile>();
+			int rockSaltTile = WorldGen.drunkWorldGen ? TileType<LimestoneTile>() : TileType<RockSaltTile>();
+			int rockSaltWall = WorldGen.drunkWorldGen ? WallType<LimestoneWallNatural>() : WallType<RockSaltWallNatural>();
 
-			int ambient1 = !Main.drunkWorld ? TileType<Tiles.AmbientTiles.SaltAmbientTile1>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile1>();
-			int ambient2 = !Main.drunkWorld ? TileType<Tiles.AmbientTiles.SaltAmbientTile2>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile2>();
-			int ambient3 = !Main.drunkWorld ? TileType<Tiles.AmbientTiles.SaltAmbientTile3>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile3>();
-			int ambient4 = !Main.drunkWorld ? TileType<Tiles.AmbientTiles.SaltAmbientTile4>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile4>();
-			int ambient5 = !Main.drunkWorld ? TileType<Tiles.AmbientTiles.SaltAmbientTile5>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile5>();
+			int ambient1 = !WorldGen.drunkWorldGen ? TileType<Tiles.AmbientTiles.SaltAmbientTile1>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile1>();
+			int ambient2 = !WorldGen.drunkWorldGen ? TileType<Tiles.AmbientTiles.SaltAmbientTile2>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile2>();
+			int ambient3 = !WorldGen.drunkWorldGen ? TileType<Tiles.AmbientTiles.SaltAmbientTile3>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile3>();
+			int ambient4 = !WorldGen.drunkWorldGen ? TileType<Tiles.AmbientTiles.SaltAmbientTile4>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile4>();
+			int ambient5 = !WorldGen.drunkWorldGen ? TileType<Tiles.AmbientTiles.SaltAmbientTile5>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile5>();
 
-			float totalCaves = 2 * Main.maxTilesY / 600;
+			float totalCaves = (WorldGen.getGoodWorldGen ? 3 : 2) * Main.maxTilesY / 600;
 
 			int numCavesGenerated = 0;
 			for (int tries = 0; tries < 10000; tries++)
@@ -699,20 +723,21 @@ namespace Polarities
             }
         }
 
+		//TODO: Shelves
 		private void GenLimestoneCaves(GenerationProgress progress, GameConfiguration configuration)
 		{
             progress.Message = Language.GetTextValue("Mods.Polarities.WorldGenPass.GenLimestoneCaves");
 
-            int limestoneTile = Main.drunkWorld ? TileType<SaltTile>() : TileType<LimestoneTile>();
-			int limestoneWall = Main.drunkWorld ? WallType<RockSaltWallNatural>() : WallType<LimestoneWallNatural>();
+            int limestoneTile = WorldGen.drunkWorldGen ? TileType<SaltTile>() : TileType<LimestoneTile>();
+			int limestoneWall = WorldGen.drunkWorldGen ? WallType<RockSaltWallNatural>() : WallType<LimestoneWallNatural>();
 
-			int ambient1 = Main.drunkWorld ? TileType<Tiles.AmbientTiles.SaltAmbientTile1>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile1>();
-			int ambient2 = Main.drunkWorld ? TileType<Tiles.AmbientTiles.SaltAmbientTile2>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile2>();
-			int ambient3 = Main.drunkWorld ? TileType<Tiles.AmbientTiles.SaltAmbientTile3>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile3>();
-			int ambient4 = Main.drunkWorld ? TileType<Tiles.AmbientTiles.SaltAmbientTile4>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile4>();
-			int ambient5 = Main.drunkWorld ? TileType<Tiles.AmbientTiles.SaltAmbientTile5>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile5>();
+			int ambient1 = WorldGen.drunkWorldGen ? TileType<Tiles.AmbientTiles.SaltAmbientTile1>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile1>();
+			int ambient2 = WorldGen.drunkWorldGen ? TileType<Tiles.AmbientTiles.SaltAmbientTile2>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile2>();
+			int ambient3 = WorldGen.drunkWorldGen ? TileType<Tiles.AmbientTiles.SaltAmbientTile3>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile3>();
+			int ambient4 = WorldGen.drunkWorldGen ? TileType<Tiles.AmbientTiles.SaltAmbientTile4>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile4>();
+			int ambient5 = WorldGen.drunkWorldGen ? TileType<Tiles.AmbientTiles.SaltAmbientTile5>() : TileType<Tiles.AmbientTiles.LimestoneAmbientTile5>();
 
-			float totalCaves = 2 * Main.maxTilesY / 600;
+			float totalCaves = (WorldGen.getGoodWorldGen ? 3 : 2) * Main.maxTilesY / 600;
 
 			WorldGen.genRand.NextBool();
 			int numCavesGenerated = 0;

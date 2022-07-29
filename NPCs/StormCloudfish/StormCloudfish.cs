@@ -97,6 +97,8 @@ namespace Polarities.NPCs.StormCloudfish
             {
                 Music = MusicLoader.GetMusicSlot(ModLoader.GetMod("PolaritiesMusic"), "Sounds/Music/StormCloudfish");
             }
+
+            if (Main.tenthAnniversaryWorld) NPC.scale *= 0.5f;
         }
 
         public static int secondStageHeadSlot;

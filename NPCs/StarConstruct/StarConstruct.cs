@@ -161,7 +161,7 @@ namespace Polarities.NPCs.StarConstruct
 			NPC.hide = true;
 
 			arm = new int[16];
-		}
+        }
 
 		//public static SoundStyle Scream;
 

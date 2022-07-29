@@ -27,6 +27,7 @@ using System.Collections.Generic;
 namespace Polarities.NPCs.TownNPCs
 {
 	[AutoloadHead]
+	//TODO: Better party drawing
 	public class Ghostwriter : ModNPC
 	{
         public override void Load()

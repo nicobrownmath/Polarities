@@ -115,7 +115,8 @@ namespace Polarities.NPCs.Gigabat
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
 
-            if (Main.getGoodWorld) NPC.scale = 0.8f;
+            if (Main.tenthAnniversaryWorld) NPC.scale *= 0.5f;
+            if (Main.getGoodWorld) NPC.scale *= 0.8f;
 
             Music = MusicID.Boss1;
 			if (ModLoader.HasMod("PolaritiesMusic"))

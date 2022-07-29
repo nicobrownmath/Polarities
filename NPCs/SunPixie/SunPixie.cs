@@ -108,10 +108,9 @@ namespace Polarities.NPCs.SunPixie
 				Music = MusicLoader.GetMusicSlot(ModLoader.GetMod("PolaritiesMusic"), "Sounds/Music/SunPixie");
 			}
 
-			if (Main.getGoodWorld)
-            {
-				NPC.scale = 1.5f;
-			}
+
+            if (Main.tenthAnniversaryWorld) NPC.scale *= 0.5f;
+			if (Main.getGoodWorld) NPC.scale *= 1.5f;
 
 			SpawnModBiomes = new int[1] { GetInstance<HallowInvasion>().Type };
 		}

@@ -141,7 +141,6 @@ Things I should do:
   Get rid of isolated blocks in the fractal dimension (possibly add fractal floating islands to compensate)
 
 Planned FTW changes:
-  Long cloudfish
   Giant rift denizen? Maybe w/ less attack delay? Possibly inflicts more fractalization?
   Sentinel w/ smaller arena
   Total eclipxie (eye is bigger)?
@@ -159,16 +158,16 @@ Consistency concerns for special seeds:
     Fractal dimension is painted yellow
   For the worthy:
     Consider increasing projectile damage (make this a config option) (also probaly fix journey mode ftw damage/health (make the health fix a config option?))
-    Salt and limestone caves are more common
+    Salt and limestone caves are more common (done!)
     Stellar remotes must generate in locked gold cloud chests instead of skyware chests (done!)
     Lava lake generation must have ash block lava pocket speckling (done!)
     Sentinel caves are probably smaller
     You probably acquire fractalization more quickly
   Celebrationmk10:
-    Ghostwriter spawns immediately on world start
+    Ghostwriter spawns immediately on world start (done!)
     Fractal dimension is probably painted with rainbow fractals
     Fractus are more common
-    Most bosses are smaller than normal
+    Most bosses are smaller than normal (done! so far)
   The Constant:
     Fractus will hurt you
   Fractal Seed:
@@ -177,9 +176,9 @@ Consistency concerns for special seeds:
     Fractal altar and twisted mirror/recall potions shouldn't take you to a subworld
 
 Possible BG objects
-  Generic background objects: Falling star constructs (possibly more common during meteor showers (this could maybe apply to actual dormant constructs and both stellated slimes)), cloudfish
-  Rapture BG objects: Glowing sunbeams (even at night)
-  Pestilence BG objects: Red and purple spores floating up from the terrain (more red in corruption, more purple in crimson)
+  Generic background objects: Falling star constructs (possibly more common during meteor showers (this could maybe apply to actual dormant constructs and both stellated slimes)), cloudfish schools
+  Rapture BG objects: Glowing sunbeams (even at night) (done!)
+  Pestilence BG objects: Red and purple spores floating up from the terrain (more red in corruption, more purple in crimson) (done!)
   Hell BG objects: Flocks of lavafowl (killing polarities should remove these)
     Lava ocean BG should remove most of the lava BG stuff
   Killing the polarities should remove migratory bird BG objects
