@@ -89,7 +89,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             NPC.hide = true;
 
             Banner = Type;
-            //TODO: BannerItem = ItemType<MantleOWarBanner>();
+            BannerItem = ItemType<MantleOWarBanner>();
 
             SpawnModBiomes = new int[1] { GetInstance<Biomes.LavaOcean>().Type };
 
@@ -361,8 +361,8 @@ namespace Polarities.NPCs.Enemies.LavaOcean
 
         public override bool CheckDead()
         {
-            //TODO: Gores
-
+            for (int i = 1; i <= 3; i++)
+                Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>("MantleOWarGore" + i).Type);
             return true;
         }
 

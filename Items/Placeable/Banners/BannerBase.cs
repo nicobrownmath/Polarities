@@ -204,4 +204,5 @@ namespace Polarities.Items.Placeable.Banners
 	public class BrineDwellerBanner : BannerBase { public override int BannerIndex => 50; public override int NPCType => NPCType<BrineDweller>(); }
     public class GraniteCrawlerBanner : BannerBase { public override int BannerIndex => 51; public override int NPCType => NPCType<GraniteCrawler>(); }
     public class SlimeyBanner : BannerBase { public override int BannerIndex => 52; public override int NPCType => NPCType<Slimey>(); }
+    public class MantleOWarBanner : BannerBase { public override int BannerIndex => 53; public override int NPCType => NPCType<MantleOWar>(); }
 }

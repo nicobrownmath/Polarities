@@ -74,6 +74,7 @@
 			"Draconian": "Draconian",
 			"PyroclasticOnslaught": "Pyroclastic Onslaught",
 			"CloudflareBow": "Cloudflare Bow",
+			"VariableWispon": "Variable Wispon",
 
 			//atlatls
 			"WoodenAtlatl": "Wooden Atlatl",
@@ -185,6 +186,10 @@
 			"HydraHide": "Hydra Hide",
 			"StormScales": "Storm Scales",
 
+			//wings
+			"TuringWings": "Turing's Sonic Escape Device",
+			"BubbyWings": "Bubby's Back-Mounted Hover Wispon",
+
 			//mounts
 			"PegasusMountItem": "Bellerophon's Saddle",
 
@@ -253,6 +258,15 @@
 			"GigabatMask": "Gigabat Mask",
 			"SunPixieMask": "Sun Pixie Mask",
 			"EsophageMask": "Esophage Mask",
+			"TuringHead": "Turing's Hermetic Mask",
+			"TuringBody": "Turing's Weighted Armor",
+			"TuringLegs": "Turing's Contact Repulsor",
+			"ElectroManiacHead": "ElectroManiac's Hood",
+			"ElectroManiacBody": "ElectroManiac's Jacket",
+			"ElectroManiacLegs": "ElectroManiac's Jeans",
+			"BubbyHead": "Bubby's Sniper Mask",
+			"BubbyBody": "Bubby's Cloak of Solitude",
+			"BubbyLegs": "Bubby's Diamond Cutter Cuffs",
 
 			//hooks
 			"Starhook": "Starhook",
@@ -446,6 +460,7 @@
 			"Draconian": "Shoots fireballs that explode into bullets",
 			"PyroclasticOnslaught": "Shoots infernal arrows into the sky to rain upon your enemies",
 			"CloudflareBow": "Fires arrows from around the player",
+			"VariableWispon": "Right click to switch between three modes\nCyan converts bullets into bouncing lasers\nPink converts darts into spinning saws that stick to tiles\nOrange converts rockets into homing energy rockets",
 
 			//atlatls
 			"Axolatl": "Sometimes spits bubbles instead of shooting a dart",
@@ -546,6 +561,9 @@
 			"StormScales": "Boosts mobility in the air",
 			"BuildingEruption": "Press and hold {Hotkey} to dash in the direction of the cursor\nThis requires some time to fully recharge",
 
+			//wings
+			"TuringWings": "Allows the user to escape from loud situations",
+
 			//mounts
 			"PegasusMountItem": "Summons a rideable pegasus mount",
 
@@ -601,6 +619,11 @@
 			"StormcloudArmor": "4% increased minion damage",
 			"StormcloudGreaves": "10% increased movement speed",
 			"StormcloudMask": "4% increased minion damage",
+
+			//vanity
+			"ElectroManiacHead": "Can you master, the Maniac?",
+			"ElectroManiacBody": "Can you master, the Maniac?",
+			"ElectroManiacLegs": "Can you master, the Maniac?",
 
 			//hooks
 			"Starhook": "Shoots out four hooks at once",
@@ -811,7 +834,10 @@
 			"ConsumptionCannonProjectile": "Worm",
 			"NeuralBasherProjectile": "Giant Neuron",
 			"FlywheelWave": "Flywheel Shockwave",
-			"FlopperProjectile": "Cloudfish"
+			"FlopperProjectile": "Cloudfish",
+			"VariableWisponRocket": "Variable Wispon Rocket",
+			"VariableWisponSawblade": "Variable Wispon Saw",
+			"VariableWisponLaser": "Variable Wispon Laser"
 		},
 		"NPCName": {
 			"Rattler": "Rattler",

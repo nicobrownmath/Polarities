@@ -312,7 +312,6 @@ namespace Polarities
 			disabledEvilSpread = tag.ContainsKey("disabledEvilSpread");
 		}
 
-		//TODO: Localize worldgen pass names
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
 		{
 			int skyChestIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Floating Island Houses"));

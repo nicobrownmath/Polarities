@@ -22,7 +22,7 @@ namespace Polarities.Items
     {
         void DrawHeldItem(ref PlayerDrawSet drawInfo);
 
-        bool DoVanillaDraw();
+        virtual bool DoVanillaDraw() => true;
     }
 
     public class HeldItemDrawLayer : PlayerDrawLayer

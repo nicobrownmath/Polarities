@@ -41,6 +41,12 @@ using static Terraria.ModLoader.PlayerDrawLayer;
 using MultiHitboxNPCLibrary;
 using static tModPorter.ProgressUpdate;
 using Polarities.Items.Armor.StormcloudArmor;
+using Polarities.Items.Armor.Vanity.TuringSet;
+using Polarities.Items.Accessories.Wings;
+using Polarities.Items.Armor.Vanity.ElectroManiacSet;
+using Polarities.Items.Armor.Vanity.BubbySet;
+using Polarities.Items.Weapons;
+using Polarities.Items.Weapons.Ranged;
 
 namespace Polarities
 {
@@ -144,10 +150,31 @@ namespace Polarities
 
 		public int itemHitCooldown = 0;
 
-		public override void ResetEffects()
-		{
-			//reset a bunch of values
-			warhammerDefenseBoost = 0;
+		//trail info
+        const int trailCacheLength = 20;
+        public Vector2[] oldCenters = new Vector2[trailCacheLength];
+        public Vector2[] oldVelocities = new Vector2[trailCacheLength];
+        public int[] oldDirections = new int[trailCacheLength];
+
+        public int bubbyWingFrameCounter;
+        public int bubbyWingFrame;
+
+
+        public override void ResetEffects()
+        {
+            //update old positions, velocities, etc.
+            for (int i = trailCacheLength - 1; i > 0; i--)
+            {
+                oldCenters[i] = oldCenters[i - 1];
+                oldVelocities[i] = oldVelocities[i - 1];
+                oldDirections[i] = oldDirections[i - 1];
+            }
+            oldCenters[0] = Player.Center;
+            oldVelocities[0] = Player.velocity;
+            oldDirections[0] = Player.direction;
+
+            //reset a bunch of values
+            warhammerDefenseBoost = 0;
 			warhammerTimeBoost = 0;
 			hookSpeedMult = 1f;
 			manaStarMultiplier = 1f;
@@ -659,7 +686,31 @@ namespace Polarities
 				Player.statDefense = 0;
 			}
 
-			Lighting.AddLight(Player.Center, light);
+            //update bubby vanity wing frames
+            if (Player.velocity.Y == 0)
+            {
+                bubbyWingFrame = 0;
+                bubbyWingFrameCounter = 1;
+            }
+            else
+            {
+                bubbyWingFrameCounter++;
+                if (bubbyWingFrameCounter == 2)
+                {
+                    bubbyWingFrameCounter = 0;
+                    bubbyWingFrame++;
+                    if (bubbyWingFrame >= 7 && Player.velocity.Y < 0)
+                    {
+                        bubbyWingFrame = 1;
+                    }
+                    if ((bubbyWingFrame < 7 || bubbyWingFrame >= 15) && Player.velocity.Y > 0)
+                    {
+                        bubbyWingFrame = 7;
+                    }
+                }
+            }
+
+            Lighting.AddLight(Player.Center, light);
 		}
 
         public void AddScreenShake(float magnitude, float timeLeft)
@@ -724,8 +775,15 @@ namespace Polarities
 				{
 					PlayerDrawLayers.Leggings.Hide();
 				}
-			}
-		}
+            }
+            if (ArmorMasks.wingIndexToArmorDraw.ContainsKey(drawInfo.drawPlayer.wings))
+            {
+                if (!ArmorMasks.wingIndexToArmorDraw[drawInfo.drawPlayer.wings].DoVanillaDraw())
+                {
+                    PlayerDrawLayers.Wings.Hide();
+                }
+            }
+        }
 
         public override void CatchFish(FishingAttempt attempt, ref int itemDrop, ref int npcSpawn, ref AdvancedPopupRequest sonar, ref Vector2 sonarPosition)
         {
@@ -1271,6 +1329,35 @@ namespace Polarities
 			c.Emit(OpCodes.Brtrue, label);
 			c.Emit(OpCodes.Ret);
 		}
-	}
+
+		//modded dev armor
+		public void TryGettingPolaritiesDevArmor(IEntitySource source)
+		{
+			if (Main.rand.NextBool(Main.tenthAnniversaryWorld ? 10 : 20))
+			{
+                switch (Main.rand.Next(3))
+                {
+                    case 0:
+                        Player.QuickSpawnItem(source, ModContent.ItemType<TuringHead>());
+                        Player.QuickSpawnItem(source, ModContent.ItemType<TuringBody>());
+                        Player.QuickSpawnItem(source, ModContent.ItemType<TuringLegs>());
+                        Player.QuickSpawnItem(source, ModContent.ItemType<TuringWings>());
+                        break;
+                    case 1:
+                        Player.QuickSpawnItem(source, ModContent.ItemType<ElectroManiacHead>());
+                        Player.QuickSpawnItem(source, ModContent.ItemType<ElectroManiacBody>());
+                        Player.QuickSpawnItem(source, ModContent.ItemType<ElectroManiacLegs>());
+                        break;
+                    case 2:
+                        Player.QuickSpawnItem(source, ModContent.ItemType<BubbyHead>());
+                        Player.QuickSpawnItem(source, ModContent.ItemType<BubbyBody>());
+                        Player.QuickSpawnItem(source, ModContent.ItemType<BubbyLegs>());
+                        Player.QuickSpawnItem(source, ModContent.ItemType<BubbyWings>());
+                        Player.QuickSpawnItem(source, ModContent.ItemType<VariableWispon>());
+                        break;
+                }
+            }
+		}
+    }
 }
 

@@ -60,10 +60,26 @@ namespace Polarities.Items.Armor
         }
     }
 
+    public class WingMaskDrawLayer : PlayerDrawLayer
+    {
+        public override Position GetDefaultPosition() => new Between(PlayerDrawLayers.Wings, PlayerDrawLayers.BackAcc);
+
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
+        {
+            return ArmorMasks.wingIndexToArmorDraw.ContainsKey(drawInfo.drawPlayer.wings);
+        }
+
+        protected override void Draw(ref PlayerDrawSet drawInfo)
+        {
+            ArmorMasks.wingIndexToArmorDraw[drawInfo.drawPlayer.wings].DrawArmor(ref drawInfo);
+        }
+    }
+
     public class ArmorMasks : ILoadable
     {
         public static Dictionary<int, IDrawArmor> headIndexToArmorDraw;
         public static Dictionary<int, IDrawArmor> legIndexToArmorDraw;
+        public static Dictionary<int, IDrawArmor> wingIndexToArmorDraw;
 
         public static Dictionary<int, IGetBodyMaskColor> bodyIndexToBodyMaskColor;
 
@@ -71,6 +87,7 @@ namespace Polarities.Items.Armor
         {
             headIndexToArmorDraw = new Dictionary<int, IDrawArmor>();
             legIndexToArmorDraw = new Dictionary<int, IDrawArmor>();
+            wingIndexToArmorDraw = new Dictionary<int, IDrawArmor>();
             bodyIndexToBodyMaskColor = new Dictionary<int, IGetBodyMaskColor>();
         }
 
@@ -78,6 +95,7 @@ namespace Polarities.Items.Armor
         {
             headIndexToArmorDraw = null;
             legIndexToArmorDraw = null;
+            wingIndexToArmorDraw = null;
             bodyIndexToBodyMaskColor = null;
         }
     }

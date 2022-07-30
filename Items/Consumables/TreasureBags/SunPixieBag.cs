@@ -54,7 +54,9 @@ namespace Polarities.Items.Consumables.TreasureBags
 		{
 			IEntitySource source = player.GetSource_OpenItem(Type, "bossBag");
 
-			player.QuickSpawnItem(source, ItemType<Everlight>());
+            player.GetModPlayer<PolaritiesPlayer>().TryGettingPolaritiesDevArmor(source);
+
+            player.QuickSpawnItem(source, ItemType<Everlight>());
 			if (Main.rand.NextBool(7))
 			{
 				player.QuickSpawnItem(source, ItemType<SunPixieMask>());
