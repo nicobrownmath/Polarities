@@ -722,7 +722,6 @@ namespace Polarities
             }
         }
 
-		//TODO: Shelves
 		private void GenLimestoneCaves(GenerationProgress progress, GameConfiguration configuration)
 		{
             progress.Message = Language.GetTextValue("Mods.Polarities.WorldGenPass.GenLimestoneCaves");
@@ -783,6 +782,7 @@ namespace Polarities
 
 				if (areaClear)
 				{
+					//generates a set of weighted points that control the value function
 					for (int pointIndex = 0; pointIndex < maxPointsWithBranches; pointIndex++)
 					{
 						for (int branchIndex = 0; branchIndex < WorldGen.genRand.Next(2, 4); branchIndex++)
@@ -800,32 +800,55 @@ namespace Polarities
 					float[,] values = new float[maxSize, maxSize];
 					List<Point> edgePoints = new List<Point>();
 
-					for (int x = 0; x < maxSize; x++)
+					float[] noise1D = WorldGen.genRand.FractalNoise1D(maxSize, startFactor: 1); //noise for shelf variation
+
+                    for (int y = 0; y < maxSize; y++)
 					{
-						for (int y = 0; y < maxSize; y++)
+						//variation in value multiplier with height for shelf gen
+						float rowValue = 0;
+                        for (int index = 0; index <= whereAreWeInList; index++)
+                        {
+                            rowValue += weights[index] / weights[0] * (float)Math.Exp(-Math.Pow(weights[index], -2) * (y + (int)points[0].Y - maxSize / 2 - points[index].Y) * (y + (int)points[0].Y - maxSize / 2 - points[index].Y));
+                        }
+
+						float yVariation = (float)Math.Sin(y * 0.25f + noise1D[y] * 20f); //varying value between -1 and 1;
+                        float valueMultiplier = (1 + 3 / rowValue + yVariation) / (2 + 3 / rowValue);
+
+                        for (int x = 0; x < maxSize; x++)
 						{
 							values[x, y] = 0;
 
+							//computes the value function at each point
 							for (int index = 0; index <= whereAreWeInList; index++)
 							{
 								values[x, y] += weights[index] * (float)Math.Exp(-Math.Pow(weights[index], -2) * ((x + (int)points[0].X - maxSize / 2 - points[index].X) * (x + (int)points[0].X - maxSize / 2 - points[index].X) + (y + (int)points[0].Y - maxSize / 2 - points[index].Y) * (y + (int)points[0].Y - maxSize / 2 - points[index].Y)));
 							}
 
-							if (x + (int)points[0].X - maxSize / 2 >= 0 && x + (int)points[0].X - maxSize / 2 < Main.maxTilesX &&
+							float valueWithoutModification = values[x, y];
+
+							//modification to the value for shelf gen
+							values[x, y] -= weights[0] / 5;
+                            values[x, y] *= valueMultiplier;
+                            values[x, y] += weights[0] / 5;
+
+                            //adjusts the tile at this point based on the value function
+                            if (x + (int)points[0].X - maxSize / 2 >= 0 && x + (int)points[0].X - maxSize / 2 < Main.maxTilesX &&
 								y + (int)points[0].Y - maxSize / 2 >= 0 && y + (int)points[0].Y - maxSize / 2 < Main.maxTilesY)
 							{
 								Tile tile = Framing.GetTileSafely(x + (int)points[0].X - maxSize / 2, y + (int)points[0].Y - maxSize / 2);
 
-								if (values[x, y] > 1.3f * weights[0] / 5)
+								if (valueWithoutModification > 1.3f * weights[0] / 5)
 								{
+									//make walls
 									tile.WallType = (ushort)limestoneWall;
-									if (values[x, y] < 1.4f * weights[0] / 5 && WorldGen.genRand.NextBool(3))
-									{
-										edgePoints.Add(new Point(x + (int)points[0].X - maxSize / 2, y + (int)points[0].Y - maxSize / 2));
-									}
 									tile.Clear(TileDataType.Liquid);
-								}
-								if (values[x, y] > 2.5f * weights[0] / 5)
+                                }
+                                if (values[x, y] > 1.3f * weights[0] / 5 && values[x, y] < 1.4f * weights[0] / 5 && WorldGen.genRand.NextBool(3))
+                                {
+                                    //add an edge point for hole/spike generation
+                                    edgePoints.Add(new Point(x + (int)points[0].X - maxSize / 2, y + (int)points[0].Y - maxSize / 2));
+                                }
+                                if (values[x, y] > 2.5f * weights[0] / 5)
 								{
 									//make air
 									tile.HasTile = false;
@@ -848,8 +871,8 @@ namespace Polarities
 						}
 					}
 
-					//generate holes in the walls
-					foreach (Point point in edgePoints)
+                    //generate holes in the walls
+                    foreach (Point point in edgePoints)
 					{
 						if (Main.rand.NextBool(3))
 						{
@@ -892,12 +915,12 @@ namespace Polarities
 						}
 					}
 
-					//generate spikes from the walls
+					//generate downwards spikes
 					foreach (Point point in edgePoints)
 					{
 						if (Framing.GetTileSafely(point).HasTile)
 						{
-							int spikeSize = WorldGen.genRand.Next(60, 100);
+							int spikeSize = WorldGen.genRand.Next(30, 60);
 							float spikeShapeIndex = WorldGen.genRand.NextFloat(0.05f, 0.15f);
 							float spikeHorizontalSlant = WorldGen.genRand.NextFloat(0.45f, 0.55f);
 
@@ -960,6 +983,7 @@ namespace Polarities
 						}
 					}
 
+					//generates upwards spikes
 					foreach (Point point in edgePoints)
 					{
 						if (Framing.GetTileSafely(point).HasTile && Main.rand.NextBool())

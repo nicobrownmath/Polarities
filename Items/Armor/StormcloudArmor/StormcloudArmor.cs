@@ -140,6 +140,7 @@ namespace Polarities.Items.Armor.StormcloudArmor
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
             Projectile.minion = true;
+            Projectile.DamageType = DamageClass.Summon;
             Projectile.timeLeft = 480;
         }
 
@@ -185,7 +186,7 @@ namespace Polarities.Items.Armor.StormcloudArmor
         public override void SetDefaults()
         {
             Projectile.CloneDefaults(ProjectileID.RainFriendly);
-            Projectile.DamageType = DamageClass.Generic;
+            Projectile.DamageType = DamageClass.Summon;
         }
     }
 }

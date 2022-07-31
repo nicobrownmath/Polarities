@@ -721,14 +721,14 @@ namespace Polarities.NPCs.StormCloudfish
             {
                 for (int k = 0; k < NPC.oldPos.Length; k++)
                 {
-                    drawPos = NPC.oldPos[k] - screenPos + drawOrigin + new Vector2(0f, NPC.gfxOffY);
+                    drawPos = NPC.Center - NPC.position + NPC.oldPos[k] - screenPos + new Vector2(0f, NPC.gfxOffY);
                     color = NPC.GetAlpha(lightColor) * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
 
                     spriteBatch.Draw(TextureAssets.Npc[Type].Value, drawPos, NPC.frame, color, NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
                     spriteBatch.Draw(GlowTexture.Value, drawPos, NPC.frame, Color.White * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length), NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
                 }
             }
-            drawPos = NPC.position - screenPos + drawOrigin + new Vector2(0f, NPC.gfxOffY);
+            drawPos = NPC.Center - screenPos + new Vector2(0f, NPC.gfxOffY);
             color = NPC.GetAlpha(lightColor);
 
             spriteBatch.Draw(TextureAssets.Npc[Type].Value, drawPos, NPC.frame, color, NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);

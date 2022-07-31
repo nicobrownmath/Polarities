@@ -58,7 +58,7 @@ namespace Polarities
             IL.Terraria.Player.Update_NPCCollision += Player_Update_NPCCollision;
             //modify color of damage text for crits from enemies
             IL.Terraria.Player.Hurt += Player_Hurt;
-            //modify damage numbers for negative life regen
+            //modify damage numbers for negative life regen effects
             IL.Terraria.Player.UpdateLifeRegen += Player_UpdateLifeRegen;
         }
 
@@ -1330,7 +1330,7 @@ namespace Polarities
 			c.Emit(OpCodes.Ret);
 		}
 
-		//modded dev armor
+		//modded dev items
 		public void TryGettingPolaritiesDevArmor(IEntitySource source)
 		{
 			if (Main.rand.NextBool(Main.tenthAnniversaryWorld ? 10 : 20))
