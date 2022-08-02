@@ -19,17 +19,17 @@ using Polarities.Items.Weapons.Magic;
 using Polarities.Items.Weapons.Summon.Minions;
 using Polarities.Items.Materials;
 using Polarities.Items.Pets;
+using Polarities.Items.Placeable.Bars;
+using Terraria.GameContent.ItemDropRules;
+using Polarities.NPCs.StormCloudfish;
 
 namespace Polarities.Items.Consumables.TreasureBags
 {
     public class StormCloudfishBag : ModItem
     {
-        public override int BossBagNPC => NPCType<NPCs.StormCloudfish.StormCloudfish>();
-
         public override void SetStaticDefaults()
         {
-            string npcKey = "{$Mods.Polarities.NPCName." + NPCLoader.GetNPC(BossBagNPC).Name + "}";
-            DisplayName.SetDefault("{$Mods.Polarities.ItemName.TreasureBag} (" + npcKey + ")");
+            DisplayName.SetDefault("{$Mods.Polarities.ItemName.TreasureBag} ({$Mods.Polarities.NPCName.StormCloudfish})");
             Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
 
             ItemID.Sets.BossBag[Type] = true;
@@ -53,44 +53,15 @@ namespace Polarities.Items.Consumables.TreasureBags
             return true;
         }
 
-        public override void OpenBossBag(Player player)
+        public override void ModifyItemLoot(ItemLoot itemLoot)
         {
-            IEntitySource source = player.GetSource_OpenItem(Type, "bossBag");
-
-            player.QuickSpawnItem(source, ItemType<StormScales>());
-            if (Main.rand.NextBool(7))
-            {
-                player.QuickSpawnItem(source, ItemType<StormCloudfishMask>());
-            }
-            player.QuickSpawnItem(source, ItemID.Cloud, Main.rand.Next(15, 31) + Main.rand.Next(15, 31));
-            player.QuickSpawnItem(source, ItemType<StormChunk>(), Main.rand.Next(10, 21));
-
-            int[] loots = new int[3];
-            loots[0] = Main.rand.Next(3);
-            loots[1] = (Main.rand.Next(2) + loots[0] + 1) % 3;
-            for (int i = 0; i < 2; i++)
-            {
-                if (Main.rand.NextBool(i + 1))
-                {
-                    switch (loots[i])
-                    {
-                        case 0:
-                            player.QuickSpawnItem(source, ItemType<Stormcore>());
-                            break;
-                        case 1:
-                            player.QuickSpawnItem(source, ItemType<Skyhook>());
-                            break;
-                        case 2:
-                            player.QuickSpawnItem(source, ItemType<StrangeBarometer>());
-                            break;
-                    }
-                }
-            }
-
-            if (Main.rand.NextBool(20))
-            {
-                player.QuickSpawnItem(source, ItemType<GoldfishExplorerPetItem>());
-            }
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<StormScales>(), 1));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<StormCloudfishMask>(), 7));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemID.Cloud, 1, 30, 60));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<StormChunk>(), 1, 10, 20));
+            itemLoot.Add(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemType<Stormcore>(), ItemType<Skyhook>(), ItemType<StrangeBarometer>()));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<GoldfishExplorerPetItem>(), 20));
+            itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(NPCType<StormCloudfish>()));
         }
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)

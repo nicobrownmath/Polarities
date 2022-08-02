@@ -18,7 +18,10 @@ namespace Polarities.Items.Books
 
         public override void Update(Player player, ref int buffIndex)
         {
+            player.GetModPlayer<PolaritiesPlayer>().incinerationResistanceTime = 600;
             player.lavaImmune = true;
+            player.fireWalk = true;
+            player.buffImmune[BuffID.OnFire] = true;
 
             base.Update(player, ref buffIndex);
         }

@@ -18,22 +18,22 @@ using Polarities.Items.Weapons.Melee;
 using Polarities.Items.Weapons.Magic;
 using Polarities.Items.Weapons.Summon.Minions;
 using Polarities.Items.Materials;
+using Terraria.GameContent.ItemDropRules;
+using Polarities.NPCs.Esophage;
+using Polarities.NPCs;
 
 namespace Polarities.Items.Consumables.TreasureBags
 {
 	public class EsophageBag : ModItem
 	{
-		public override int BossBagNPC => NPCType<NPCs.Esophage.Esophage>();
-
 		public override void SetStaticDefaults()
 		{
-			string npcKey = "{$Mods.Polarities.NPCName." + NPCLoader.GetNPC(BossBagNPC).Name + "}";
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.TreasureBag} (" + npcKey + ")");
+			DisplayName.SetDefault("{$Mods.Polarities.ItemName.TreasureBag} ({$Mods.Polarities.NPCName.Esophage})");
 			Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
 
 			ItemID.Sets.BossBag[Type] = true;
 
-			this.SetResearch(3);
+            this.SetResearch(3);
 		}
 
 		public override void SetDefaults()
@@ -51,43 +51,19 @@ namespace Polarities.Items.Consumables.TreasureBags
 			return true;
 		}
 
-		public override void OpenBossBag(Player player)
-		{
-			IEntitySource source = player.GetSource_OpenItem(Type, "bossBag");
-
-			player.GetModPlayer<PolaritiesPlayer>().TryGettingPolaritiesDevArmor(source);
-
-			player.QuickSpawnItem(source, ItemType<AdaptiveGenes>());
-			if (Main.rand.NextBool(7))
-			{
-				player.QuickSpawnItem(source, ItemType<EsophageMask>());
-			}
-			player.QuickSpawnItem(source, ItemID.SoulofNight, Main.rand.Next(14, 22));
-			player.QuickSpawnItem(source, ItemType<EvilDNA>(), Main.rand.Next(3, 6));
-			if (Main.rand.NextBool(2))
-			{
-				player.QuickSpawnItem(source, ItemType<StrangeSamples>());
-			}
-
-			int[] loots = new int[2];
-			loots[0] = Main.rand.Next(2);
-			loots[1] = (Main.rand.Next(1) + loots[0] + 1) % 2;
-			for (int i = 0; i < 2; i++)
-			{
-				if (Main.rand.NextBool(i + 1))
-				{
-					switch (loots[i])
-					{
-						case 0:
-							player.QuickSpawnItem(source, ItemType<EsophageousStaff>());
-							break;
-						case 1:
-							player.QuickSpawnItem(source, ItemType<PhagefootHook>());
-							break;
-					}
-				}
-			}
-		}
+        public override void ModifyItemLoot(ItemLoot itemLoot)
+        {
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<AdaptiveGenes>(), 1));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<EsophageMask>(), 7));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemID.SoulofNight, 1, 14, 21));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<EvilDNA>(), 1, 3, 5));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<StrangeSamples>(), 2));
+			itemLoot.Add(new OneFromOptionsWithCountsNotScaledWithLuckDropRule(1, 1,
+				(ItemID.Ichor, 20, 40),
+				(ItemID.CursedFlame, 20, 40)));
+			itemLoot.Add(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemType<EsophageousStaff>(), ItemType<PhagefootHook>()));
+            itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(NPCType<Esophage>()));
+        }
 
 		public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
 		{

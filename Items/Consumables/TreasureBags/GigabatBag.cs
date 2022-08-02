@@ -12,17 +12,20 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
 using System;
+using Polarities.Items.Armor.Vanity;
+using Polarities.Items.Materials;
+using Polarities.Items.Weapons.Summon.Minions;
+using Polarities.NPCs;
+using Terraria.GameContent.ItemDropRules;
+using Polarities.NPCs.Gigabat;
 
 namespace Polarities.Items.Consumables.TreasureBags
 {
 	public class GigabatBag : ModItem
 	{
-		public override int BossBagNPC => NPCType<NPCs.Gigabat.Gigabat>();
-
 		public override void SetStaticDefaults()
 		{
-			string npcKey = "{$Mods.Polarities.NPCName." + NPCLoader.GetNPC(BossBagNPC).Name + "}";
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.TreasureBag} (" + npcKey + ")");
+			DisplayName.SetDefault("{$Mods.Polarities.ItemName.TreasureBag} ({$Mods.Polarities.NPCName.Gigabat})");
 			Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
 
 			ItemID.Sets.BossBag[Type] = true;
@@ -46,31 +49,17 @@ namespace Polarities.Items.Consumables.TreasureBags
 			return true;
 		}
 
-		public override void OpenBossBag(Player player)
-		{
-			IEntitySource source = player.GetSource_OpenItem(Type, "bossBag");
-
-			player.QuickSpawnItem(source, ItemType<Accessories.FeralFang>());
-			if (Main.rand.NextBool(7))
-			{
-				player.QuickSpawnItem(source, ItemType<Armor.Vanity.GigabatMask>());
-			}
-			switch (Main.rand.Next(4))
-			{
-				case 0:
-					player.QuickSpawnItem(source, ItemType<Accessories.BatSigil>());
-					break;
-				case 1:
-					player.QuickSpawnItem(source, ItemType<Weapons.Ranged.Ammo.BatArrow>(), Main.rand.Next(750, 1000));
-					break;
-				case 2:
-					player.QuickSpawnItem(source, ItemType<Weapons.Magic.EchoStaff>());
-					break;
-				case 3:
-					player.QuickSpawnItem(source, ItemType<Weapons.Melee.ChainSaw>());
-					break;
-			}
-		}
+        public override void ModifyItemLoot(ItemLoot itemLoot)
+        {
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<FeralFang>(), 1));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<GigabatMask>(), 7));
+            itemLoot.Add(new OneFromOptionsWithCountsNotScaledWithLuckDropRule(1, 1,
+                (ItemType<Items.Accessories.BatSigil>(), 1, 1),
+                (ItemType<Items.Weapons.Magic.EchoStaff>(), 1, 1),
+                (ItemType<Items.Weapons.Melee.ChainSaw>(), 1, 1),
+                (ItemType<Items.Weapons.Ranged.Ammo.BatArrow>(), 500, 999)));
+            itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(NPCType<Gigabat>()));
+        }
 
 		public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
 		{

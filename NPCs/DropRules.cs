@@ -59,7 +59,7 @@ namespace Polarities.NPCs
             ItemDropAttemptResult result;
             if (info.npc.GetGlobalNPC<PolaritiesNPC>().flawless || info.player.RollLuck(chanceDenominator) < chanceNumerator)
             {
-                CommonCode.DropItemFromNPC(info.npc, itemId, info.rng.Next(amountDroppedMinimum, amountDroppedMaximum + 1));
+                CommonCode.DropItem(info, itemId, info.rng.Next(amountDroppedMinimum, amountDroppedMaximum + 1));
                 result = default(ItemDropAttemptResult);
                 result.State = ItemDropAttemptResultState.Success;
                 return result;
@@ -110,7 +110,7 @@ namespace Polarities.NPCs
             if (info.rng.Next(chanceDenominator) < chanceNumerator)
             {
                 int i = info.rng.Next(itemData.Length);
-                CommonCode.DropItemFromNPC(info.npc, itemData[i].itemID, Main.rand.Next(itemData[i].minAmount, itemData[i].maxAmount + 1));
+                CommonCode.DropItem(info, itemData[i].itemID, Main.rand.Next(itemData[i].minAmount, itemData[i].maxAmount + 1));
                 result = default(ItemDropAttemptResult);
                 result.State = ItemDropAttemptResultState.Success;
                 return result;

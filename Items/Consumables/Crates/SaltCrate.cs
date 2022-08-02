@@ -16,6 +16,7 @@ using Polarities.Items.Placeable;
 using Polarities.Items.Weapons.Melee;
 using Polarities.Items.Weapons.Summon.Sentries;
 using Polarities.Items.Accessories;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Polarities.Items.Consumables.Crates
 {
@@ -23,152 +24,73 @@ namespace Polarities.Items.Consumables.Crates
 	{
         public override int CrateIndex => 0;
 
-		public override void RightClick(Player player)
-		{
-			IEntitySource source = player.GetSource_OpenItem(Type, "crate");
+        public override void ModifyItemLoot(ItemLoot itemLoot)
+        {
+            // Drop pre-hm ores
+            IItemDropRule[] saltGear = new IItemDropRule[] {
+                ItemDropRule.Common(ItemType<HopperCrystal>(), 1),
+                ItemDropRule.Common(ItemType<MolluscStaff>(), 1),
+                ItemDropRule.Common(ItemType<SaltKnife>(), 1, 1, 3),
+                ItemDropRule.Common(ItemType<TolerancePotion>(), 1, 5, 10),
+            };
+            itemLoot.Add(new OneFromRulesRule(1, saltGear));
 
-			switch (Main.rand.Next(4))
-			{
-				case 0:
-					player.QuickSpawnItem(source, ItemType<HopperCrystal>());
-					break;
-				case 1:
-					player.QuickSpawnItem(source, ItemType<MolluscStaff>());
-					break;
-				case 2:
-					player.QuickSpawnItem(source, ItemType<SaltKnife>(), Main.rand.Next(1, 4));
-					break;
-				case 3:
-					player.QuickSpawnItem(source, ItemType<TolerancePotion>(), Main.rand.Next(5, 11));
-					break;
-			}
-			if (Main.rand.NextBool())
-			{
-				player.QuickSpawnItem(source, ItemType<SaltCrystals>(), Main.rand.Next(6, 11));
-			}
-			if (Main.rand.NextBool())
-			{
-				player.QuickSpawnItem(source, ItemType<Salt>(), Main.rand.Next(30, 40));
-			}
+			//salt and crystals
+            itemLoot.Add(ItemDropRule.Common(ItemType<SaltCrystals>(), 2, 6, 10));
+            itemLoot.Add(ItemDropRule.Common(ItemType<SaltCrystals>(), 2, 30, 40));
 
-			//standard prehardmode biome crate loot
-			if (Main.rand.NextBool(7))
-			{
-				int itemType = 0;
-				switch (Main.rand.Next(8))
-				{
-					case 0:
-						itemType = ItemID.CopperOre;
-						break;
-					case 1:
-						itemType = ItemID.TinOre;
-						break;
-					case 2:
-						itemType = ItemID.IronOre;
-						break;
-					case 3:
-						itemType = ItemID.LeadOre;
-						break;
-					case 4:
-						itemType = ItemID.SilverOre;
-						break;
-					case 5:
-						itemType = ItemID.TungstenOre;
-						break;
-					case 6:
-						itemType = ItemID.GoldOre;
-						break;
-					case 7:
-						itemType = ItemID.PlatinumOre;
-						break;
-				}
-				player.QuickSpawnItem(source, itemType, Main.rand.Next(30, 50));
-			}
-			if (Main.rand.NextBool(4))
-			{
-				int itemType = 0;
-				switch (Main.rand.Next(6))
-				{
-					case 0:
-						itemType = ItemID.IronBar;
-						break;
-					case 1:
-						itemType = ItemID.LeadBar;
-						break;
-					case 2:
-						itemType = ItemID.SilverBar;
-						break;
-					case 3:
-						itemType = ItemID.TungstenBar;
-						break;
-					case 4:
-						itemType = ItemID.GoldBar;
-						break;
-					case 5:
-						itemType = ItemID.PlatinumBar;
-						break;
-				}
-				player.QuickSpawnItem(source, itemType, Main.rand.Next(10, 21));
-			}
-			if (Main.rand.NextBool(4))
-			{
-				int itemType = 0;
-				switch (Main.rand.Next(6))
-				{
-					case 0:
-						itemType = ItemID.ObsidianSkinPotion;
-						break;
-					case 1:
-						itemType = ItemID.SpelunkerPotion;
-						break;
-					case 2:
-						itemType = ItemID.HunterPotion;
-						break;
-					case 3:
-						itemType = ItemID.GravitationPotion;
-						break;
-					case 4:
-						itemType = ItemID.MiningPotion;
-						break;
-					case 5:
-						itemType = ItemID.HeartreachPotion;
-						break;
-				}
-				player.QuickSpawnItem(source, itemType, Main.rand.Next(2, 5));
-			}
-			if (Main.rand.NextBool(2))
-			{
-				int itemType = 0;
-				switch (Main.rand.Next(2))
-				{
-					case 0:
-						itemType = ItemID.HealingPotion;
-						break;
-					case 1:
-						itemType = ItemID.ManaPotion;
-						break;
-				}
-				player.QuickSpawnItem(source, itemType, Main.rand.Next(5, 18));
-			}
-			if (Main.rand.NextBool(2))
-			{
-				int itemType = 0;
-				switch (Main.rand.Next(2))
-				{
-					case 0:
-						itemType = ItemID.JourneymanBait;
-						break;
-					case 1:
-						itemType = ItemID.MasterBait;
-						break;
-				}
-				player.QuickSpawnItem(source, itemType, Main.rand.Next(2, 7));
-			}
-			if (Main.rand.NextBool(4))
-			{
-				player.QuickSpawnItem(source, ItemID.GoldCoin, Main.rand.Next(5, 13));
-			}
-		}
+            // Drop coins
+            itemLoot.Add(ItemDropRule.Common(ItemID.GoldCoin, 4, 5, 13));
+
+            // Drop pre-hm ores
+            IItemDropRule[] oreTypes = new IItemDropRule[] {
+                ItemDropRule.Common(ItemID.CopperOre, 1, 30, 50),
+                ItemDropRule.Common(ItemID.TinOre, 1, 30, 50),
+                ItemDropRule.Common(ItemID.IronOre, 1, 30, 50),
+                ItemDropRule.Common(ItemID.LeadOre, 1, 30, 50),
+                ItemDropRule.Common(ItemID.SilverOre, 1, 30, 50),
+                ItemDropRule.Common(ItemID.TungstenOre, 1, 30, 50),
+                ItemDropRule.Common(ItemID.GoldOre, 1, 30, 50),
+                ItemDropRule.Common(ItemID.PlatinumOre, 1, 30, 50),
+            };
+            itemLoot.Add(new OneFromRulesRule(7, oreTypes));
+
+            // Drop pre-hm bars (except copper/tin)
+            IItemDropRule[] oreBars = new IItemDropRule[] {
+                ItemDropRule.Common(ItemID.IronBar, 1, 10, 21),
+                ItemDropRule.Common(ItemID.LeadBar, 1, 10, 21),
+                ItemDropRule.Common(ItemID.SilverBar, 1, 10, 21),
+                ItemDropRule.Common(ItemID.TungstenBar, 1, 10, 21),
+                ItemDropRule.Common(ItemID.GoldBar, 1, 10, 21),
+                ItemDropRule.Common(ItemID.PlatinumBar, 1, 10, 21),
+            };
+            itemLoot.Add(new OneFromRulesRule(4, oreBars));
+
+            // Drop an "exploration utility" potion
+            IItemDropRule[] explorationPotions = new IItemDropRule[] {
+                ItemDropRule.Common(ItemID.ObsidianSkinPotion, 1, 2, 5),
+                ItemDropRule.Common(ItemID.SpelunkerPotion, 1, 2, 5),
+                ItemDropRule.Common(ItemID.HunterPotion, 1, 2, 5),
+                ItemDropRule.Common(ItemID.GravitationPotion, 1, 2, 5),
+                ItemDropRule.Common(ItemID.MiningPotion, 1, 2, 5),
+                ItemDropRule.Common(ItemID.HeartreachPotion, 1, 2, 5),
+            };
+            itemLoot.Add(new OneFromRulesRule(4, explorationPotions));
+
+            // Drop (pre-hm) resource potion
+            IItemDropRule[] resourcePotions = new IItemDropRule[] {
+                ItemDropRule.Common(ItemID.HealingPotion, 1, 5, 18),
+                ItemDropRule.Common(ItemID.ManaPotion, 1, 5, 18),
+            };
+            itemLoot.Add(new OneFromRulesRule(2, resourcePotions));
+
+            // Drop (high-end) bait
+            IItemDropRule[] highendBait = new IItemDropRule[] {
+                ItemDropRule.Common(ItemID.JourneymanBait, 1, 2, 7),
+                ItemDropRule.Common(ItemID.MasterBait, 1, 2, 7),
+            };
+            itemLoot.Add(new OneFromRulesRule(2, highendBait));
+        }
 	}
 }
 

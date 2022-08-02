@@ -47,7 +47,7 @@ v0.11 Changelog
     All orbs which target enemies now at least partially target the cursor
     Salt caves now only apply desiccation while in front of their walls
     The limestone caves' stalactites are now expert-mode exclusive
-    Salt and limestone caves are now significantly larger, and salt caves can have waterfalls from the ceiling
+    Salt and limestone caves are now significantly larger, salt caves now have waterfalls from the ceiling, and limestone caves now generate with platform-like shelves
     Brood staff sentries now take up half a slot again
     Brine dwellers now no longer show their healthbars while hidden and cannot pick up coins
     Glow worms can no longer spawn too close to the player
@@ -93,7 +93,7 @@ v0.11 Changelog
     Adjusted the trajectory of darts to match vanilla darts
     Removed hallowed bars from the sunlight emblem's recipe
     Adjusted the lava ocean's worldgen
-    Reworked convective wanderer into a boss
+    Reworked convective wanderer into a boss, and added associated items
     Changed the mod's icon
     Added the granite stomper
     Brine shrimp can now be cooked
@@ -103,13 +103,14 @@ v0.11 Changelog
     Reworked the storm scales
     Renamed convective plating to wanderer plating, and adjusted some of its associated values
     Snakescale greaves now grant the effect of flippers
+    Removed the wanderer's trinket and wanderer boots
 
 Things I should do:
   Make pegasus saddle draw on ridden pegasi
   Replace using AIType to control platform falling with CanFallThroughPlatforms
   Move more boss drops to being craftable
     Bat slimes should be an alt source for gigabat's material
-  Disable mod in MP
+  Disable mod in MP (or tbh just remove the MP button)
   Make bestiary entries for (most) normal enemies face left
   Ensure non-buff critters can be hit by enemies
   Give worms and other drawcode-intensive enemies custom bestiary portraits
@@ -123,7 +124,7 @@ Things I should do:
     Possibly other unlockable menu styles obtained from beating things
   Nonconsumable boss summons (including making torch god's favor summon torch god if already used and conditions are valid)
     For the less conventional summons: Gemfly/lacewing statues?
-  Make stylist? and mechanic? like ghostwriter and dryad not, give happiness dialogue, fix princess' happiness dialogue for ghostwriter
+  Make stylist? and mechanic? like ghostwriter and dryad not, give happiness dialogue
   Polarities-related emotes for NPCs to use:
     Boss emotes: Used after the defeat of their respective boss
       Additionally, sun pixie/esophage emotes should show up during their respective events
@@ -132,7 +133,9 @@ Things I should do:
     Blood moon and eclipse emotes should be more common in between the defeats of their respective proto-bosses and bosses
     Cichlid emote in rain
     Uncommon snek emote
+    Nerd emoji emote
   Ghostwriter should use the gravestone emote and mechanic emote, and boss emotes (when available) more often
+  Regulator should use the nerd emote more often
   Furniture smart interaction
   Make the right click effects of autoswing warhammers also autoswing
   Make stellated/great stellated slimes spawn (at all? more frequently?) during meteor showers

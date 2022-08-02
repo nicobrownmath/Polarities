@@ -12,17 +12,21 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
 using System;
+using Polarities.Items.Armor.Vanity;
+using Polarities.Items.Materials;
+using Polarities.Items.Weapons.Summon.Minions;
+using Polarities.NPCs;
+using Terraria.GameContent.ItemDropRules;
+using Polarities.NPCs.StarConstruct;
+using Polarities.Items.Placeable.Bars;
 
 namespace Polarities.Items.Consumables.TreasureBags
 {
 	public class StarConstructBag : ModItem
 	{
-		public override int BossBagNPC => NPCType<NPCs.StarConstruct.StarConstruct>();
-
 		public override void SetStaticDefaults()
 		{
-			string npcKey = "{$Mods.Polarities.NPCName." + NPCLoader.GetNPC(BossBagNPC).Name + "}";
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.TreasureBag} (" + npcKey + ")");
+			DisplayName.SetDefault("{$Mods.Polarities.ItemName.TreasureBag} ({$Mods.Polarities.NPCName.StarConstruct})");
 			Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
 
 			ItemID.Sets.BossBag[Type] = true;
@@ -46,54 +50,15 @@ namespace Polarities.Items.Consumables.TreasureBags
 			return true;
 		}
 
-		public override void OpenBossBag(Player player)
-		{
-			IEntitySource source = player.GetSource_OpenItem(Type, "bossBag");
-
-			player.QuickSpawnItem(source, ItemType<Items.Accessories.CosmicCable>());
-			player.QuickSpawnItem(source, ItemType<Items.Placeable.Bars.SunplateBar>(), Main.rand.Next(15, 25));
-			player.QuickSpawnItem(source, ItemID.SkyMill);
-			if (Main.rand.NextBool(7))
-			{
-				player.QuickSpawnItem(source, ItemType<Items.Armor.Vanity.StarConstructMask>());
-			}
-			switch (Main.rand.Next(3))
-			{
-				case 0:
-					player.QuickSpawnItem(source, ItemType<Starhook>());
-					if (Main.rand.NextBool(4))
-					{
-						player.QuickSpawnItem(source, ItemType<StarBadge>());
-					}
-					if (Main.rand.NextBool(4))
-					{
-						player.QuickSpawnItem(source, ItemType<StrangeClock>());
-					}
-					break;
-				case 1:
-					player.QuickSpawnItem(source, ItemType<StarBadge>());
-					if (Main.rand.NextBool(4))
-					{
-						player.QuickSpawnItem(source, ItemType<Starhook>());
-					}
-					if (Main.rand.NextBool(4))
-					{
-						player.QuickSpawnItem(source, ItemType<StrangeClock>());
-					}
-					break;
-				case 2:
-					player.QuickSpawnItem(source, ItemType<StrangeClock>());
-					if (Main.rand.NextBool(4))
-					{
-						player.QuickSpawnItem(source, ItemType<StarBadge>());
-					}
-					if (Main.rand.NextBool(4))
-					{
-						player.QuickSpawnItem(source, ItemType<Starhook>());
-					}
-					break;
-			}
-		}
+        public override void ModifyItemLoot(ItemLoot itemLoot)
+        {
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<CosmicCable>(), 1));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<StarConstructMask>(), 7));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<SunplateBar>(), 1, 15, 24));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemID.SkyMill, 1));
+            itemLoot.Add(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemType<Starhook>(), ItemType<StarBadge>(), ItemType<StrangeClock>()));
+            itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(NPCType<StarConstruct>()));
+        }
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {

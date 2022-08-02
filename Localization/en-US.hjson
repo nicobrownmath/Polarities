@@ -311,6 +311,7 @@
 			"SaltSofa": "Salt Sofa",
 			"SaltTable": "Salt Table",
 			"SaltTorch": "Salt Torch",
+			"SaltCrate": "Salt Crate",
 			"SaltWorkBench": "Salt WorkBench",
 			"LimestoneBathtub": "Limestone Bathtub",
 			"LimestoneBed": "Limestone Bed",
@@ -587,7 +588,7 @@
 			"SunPixieBook": "Causes you to leave behind a solar trail",
 			"EsophageBook": "Increases speed and defense while on the ground",
 			"PlanteraBook": "Gives you and your hooks plant tentacles",
-			"ConvectiveWandererBook": "Grants lava immunity",
+			"ConvectiveWandererBook": "Grants immunity to fire, lava, and up to 10 seconds of incineration",
 			"GolemBook": "Grants fall damage immunity, a substantial boost to jump speed, and a slight defense boost if the player is not wearing wings",
 			"DukeFishronBook": "Grants a 20% damage boost while near the ocean",
 			"BetsyBook": "Grants 2 extra sentry slots, and your sentries set enemies on fire",
@@ -1053,7 +1054,7 @@
 			"SunPixieBookBuff": "You leave behind a solar trail",
 			"EsophageBookBuff": "Speed and defense increased while on the ground",
 			"PlanteraBookBuff": "You and your hooks have hooks",
-			"ConvectiveWandererBookBuff": "You are immune to lava",
+			"ConvectiveWandererBookBuff": "You are immune to fire, lava, and up to 10 seconds of incineration",
 			"GolemBookBuff": "You are immune to fall damage and jump speed and defense are boosted if not wearing wings",
 			"DukeFishronBookBuff": "Damage is boosted while near the ocean",
 			"BetsyBookBuff": "You have extra sentry slots, and your sentries set enemies alight",
@@ -1229,4 +1230,7 @@
 			"PolaritiesPots": "Generating additional pots"
 		}
 	}
+},
+TownNPCMood_Princess: {
+	"LoveNPC_Polarities/Ghostwriter": "{NPCName} tells such interesting stories!"
 }

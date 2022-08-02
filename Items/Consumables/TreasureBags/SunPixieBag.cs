@@ -17,17 +17,19 @@ using Polarities.Items.Weapons.Ranged;
 using Polarities.Items.Weapons.Melee;
 using Polarities.Items.Weapons.Magic;
 using Polarities.Items.Weapons.Summon.Minions;
+using Polarities.Items.Materials;
+using Polarities.Items.Pets;
+using Terraria.GameContent.ItemDropRules;
+using Polarities.NPCs.SunPixie;
+using Polarities.NPCs;
 
 namespace Polarities.Items.Consumables.TreasureBags
 {
 	public class SunPixieBag : ModItem
 	{
-		public override int BossBagNPC => NPCType<NPCs.SunPixie.SunPixie>();
-
 		public override void SetStaticDefaults()
 		{
-			string npcKey = "{$Mods.Polarities.NPCName." + NPCLoader.GetNPC(BossBagNPC).Name + "}";
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.TreasureBag} (" + npcKey + ")");
+			DisplayName.SetDefault("{$Mods.Polarities.ItemName.TreasureBag} ({$Mods.Polarities.NPCName.SunPixie})");
 			Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
 
 			ItemID.Sets.BossBag[Type] = true;
@@ -50,52 +52,20 @@ namespace Polarities.Items.Consumables.TreasureBags
 			return true;
 		}
 
-		public override void OpenBossBag(Player player)
-		{
-			IEntitySource source = player.GetSource_OpenItem(Type, "bossBag");
-
-            player.GetModPlayer<PolaritiesPlayer>().TryGettingPolaritiesDevArmor(source);
-
-            player.QuickSpawnItem(source, ItemType<Everlight>());
-			if (Main.rand.NextBool(7))
-			{
-				player.QuickSpawnItem(source, ItemType<SunPixieMask>());
-			}
-			player.QuickSpawnItem(source, ItemID.SoulofLight, Main.rand.Next(12, 19));
-			if (Main.rand.NextBool(2))
-			{
-				player.QuickSpawnItem(source, ItemType<StrangeJewelry>());
-			}
-			if (Main.rand.NextBool(5))
-			{
-				player.QuickSpawnItem(source, ItemType<SolarEnergizer>());
-			}
-
-			int[] loots = new int[2];
-			loots[0] = Main.rand.Next(4);
-			loots[1] = (Main.rand.Next(3) + loots[0] + 1) % 4;
-			for (int i = 0; i < 2; i++)
-			{
-				if (Main.rand.NextBool(i + 1))
-				{
-					switch (loots[i])
-					{
-						case 0:
-							player.QuickSpawnItem(source, ItemType<LaserCutter>());
-							break;
-						case 1:
-							player.QuickSpawnItem(source, ItemType<Flarecaller>(), Main.rand.Next(700, 1000));
-							break;
-						case 2:
-							player.QuickSpawnItem(source, ItemType<SolarScarabStaff>());
-							break;
-						case 3:
-							player.QuickSpawnItem(source, ItemType<BlazingIre>());
-							break;
-					}
-				}
-			}
-		}
+        public override void ModifyItemLoot(ItemLoot itemLoot)
+        {
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Everlight>(), 1));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<SunPixieMask>(), 7));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemID.SoulofLight, 1, 12, 18));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<StrangeJewelry>(), 2));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<SolarEnergizer>(), 5));
+            itemLoot.Add(new OneFromOptionsWithCountsNotScaledWithLuckDropRule(1, 1,
+                (ItemType<LaserCutter>(), 1, 1),
+                (ItemType<Flarecaller>(), 700, 999),
+                (ItemType<SolarScarabStaff>(), 1, 1),
+                (ItemType<BlazingIre>(), 1, 1)));
+            itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(NPCType<SunPixie>()));
+        }
 
 		public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
 		{

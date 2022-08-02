@@ -60,6 +60,8 @@ namespace Polarities
             IL.Terraria.Player.Hurt += Player_Hurt;
             //modify damage numbers for negative life regen effects
             IL.Terraria.Player.UpdateLifeRegen += Player_UpdateLifeRegen;
+            //dev armor
+            On.Terraria.Player.TryGettingDevArmor += Player_TryGettingDevArmor;
         }
 
         public int warhammerDefenseBoost = 0;
@@ -1328,36 +1330,44 @@ namespace Polarities
 			});
 			c.Emit(OpCodes.Brtrue, label);
 			c.Emit(OpCodes.Ret);
-		}
+        }
 
 		//modded dev items
-		public void TryGettingPolaritiesDevArmor(IEntitySource source)
-		{
-			if (Main.rand.NextBool(Main.tenthAnniversaryWorld ? 10 : 20))
-			{
-                switch (Main.rand.Next(3))
+        private void Player_TryGettingDevArmor(On.Terraria.Player.orig_TryGettingDevArmor orig, Player self, IEntitySource source)
+        {
+            orig(self, source);
+
+			if (source is EntitySource_ItemOpen itemSource && GetModItem(itemSource.ItemType).Mod == Mod)
+            {
+                if (ItemID.Sets.BossBag[itemSource.ItemType] && (!ItemID.Sets.PreHardmodeLikeBossBag[itemSource.ItemType] || Main.tenthAnniversaryWorld))
                 {
-                    case 0:
-                        Player.QuickSpawnItem(source, ModContent.ItemType<TuringHead>());
-                        Player.QuickSpawnItem(source, ModContent.ItemType<TuringBody>());
-                        Player.QuickSpawnItem(source, ModContent.ItemType<TuringLegs>());
-                        Player.QuickSpawnItem(source, ModContent.ItemType<TuringWings>());
-                        break;
-                    case 1:
-                        Player.QuickSpawnItem(source, ModContent.ItemType<ElectroManiacHead>());
-                        Player.QuickSpawnItem(source, ModContent.ItemType<ElectroManiacBody>());
-                        Player.QuickSpawnItem(source, ModContent.ItemType<ElectroManiacLegs>());
-                        break;
-                    case 2:
-                        Player.QuickSpawnItem(source, ModContent.ItemType<BubbyHead>());
-                        Player.QuickSpawnItem(source, ModContent.ItemType<BubbyBody>());
-                        Player.QuickSpawnItem(source, ModContent.ItemType<BubbyLegs>());
-                        Player.QuickSpawnItem(source, ModContent.ItemType<BubbyWings>());
-                        Player.QuickSpawnItem(source, ModContent.ItemType<VariableWispon>());
-                        break;
+                    if (Main.rand.NextBool(Main.tenthAnniversaryWorld ? 10 : 20))
+                    {
+                        switch (Main.rand.Next(3))
+                        {
+                            case 0:
+                                self.QuickSpawnItem(source, ModContent.ItemType<TuringHead>());
+                                self.QuickSpawnItem(source, ModContent.ItemType<TuringBody>());
+                                self.QuickSpawnItem(source, ModContent.ItemType<TuringLegs>());
+                                self.QuickSpawnItem(source, ModContent.ItemType<TuringWings>());
+                                break;
+                            case 1:
+                                self.QuickSpawnItem(source, ModContent.ItemType<ElectroManiacHead>());
+                                self.QuickSpawnItem(source, ModContent.ItemType<ElectroManiacBody>());
+                                self.QuickSpawnItem(source, ModContent.ItemType<ElectroManiacLegs>());
+                                break;
+                            case 2:
+                                self.QuickSpawnItem(source, ModContent.ItemType<BubbyHead>());
+                                self.QuickSpawnItem(source, ModContent.ItemType<BubbyBody>());
+                                self.QuickSpawnItem(source, ModContent.ItemType<BubbyLegs>());
+                                self.QuickSpawnItem(source, ModContent.ItemType<BubbyWings>());
+                                self.QuickSpawnItem(source, ModContent.ItemType<VariableWispon>());
+                                break;
+                        }
+                    }
                 }
             }
-		}
+        }
     }
 }
 

@@ -46,8 +46,9 @@ namespace Polarities.Items.Consumables.Crates
 	public abstract class CrateBase : ModItem
 	{
 		public abstract int CrateIndex { get; }
+		public virtual bool HardmodeCrate => false;
 
-		public static Dictionary<int, int> crateIndexToItemType = new Dictionary<int, int>();
+        public static Dictionary<int, int> crateIndexToItemType = new Dictionary<int, int>();
 
 		public override void Unload()
 		{
@@ -58,8 +59,13 @@ namespace Polarities.Items.Consumables.Crates
 		{
 			crateIndexToItemType.Add(CrateIndex, Type);
 
-			this.SetResearch(1);
-		}
+            Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
+
+            this.SetResearch(1);
+
+			ItemID.Sets.IsFishingCrate[Type] = true;
+			ItemID.Sets.IsFishingCrate[Type] = HardmodeCrate;
+        }
 
 		public override void SetDefaults()
 		{
@@ -71,6 +77,11 @@ namespace Polarities.Items.Consumables.Crates
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Green;
 		}
+
+        public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+        {
+            itemGroup = ContentSamples.CreativeHelper.ItemGroup.Crates;
+        }
 
         public override bool CanRightClick()
         {
