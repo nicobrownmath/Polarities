@@ -22,20 +22,7 @@ namespace Polarities.Biomes
     {
         public override SceneEffectPriority Priority => SceneEffectPriority.Event;
 
-        public override int Music
-        {
-            get
-            {
-                if (ModLoader.HasMod("PolaritiesMusic"))
-                {
-                    return MusicLoader.GetMusicSlot(ModLoader.GetMod("PolaritiesMusic"), "Sounds/Music/WorldEvilInvasion");
-                }
-                else
-                {
-                    return MusicID.GoblinInvasion;
-                }
-            }
-        }
+        public override int Music => MusicLoader.GetMusicSlot(Mod, "Sounds/Music/Pestilence");
 
         public override string BestiaryIcon => (GetType().Namespace + "." + Name).Replace('.', '/') + "_BestiaryIcon";
         public override string BackgroundPath => (GetType().Namespace + "." + Name).Replace('.', '/') + "_MapBG";

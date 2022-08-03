@@ -130,11 +130,7 @@ namespace Polarities.NPCs.Esophage
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
 
-            Music = MusicID.Boss2;
-            if (ModLoader.HasMod("PolaritiesMusic"))
-            {
-                Music = MusicLoader.GetMusicSlot(ModLoader.GetMod("PolaritiesMusic"), "Sounds/Music/Esophage");
-            }
+            Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/Esophage");
 
             legs = new int[12];
 

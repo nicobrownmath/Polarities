@@ -104,8 +104,11 @@ v0.11 Changelog
     Renamed convective plating to wanderer plating, and adjusted some of its associated values
     Snakescale greaves now grant the effect of flippers
     Removed the wanderer's trinket and wanderer boots
+    Moved the music boxes into the main mod
 
 Things I should do:
+  MUSIC RE-ADD THE MUSIC
+  Decide whether to re-add the burning altar or not
   Make pegasus saddle draw on ridden pegasi
   Replace using AIType to control platform falling with CanFallThroughPlatforms
   Move more boss drops to being craftable

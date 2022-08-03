@@ -102,12 +102,7 @@ namespace Polarities.NPCs.SunPixie
 			NPC.HitSound = SoundID.NPCHit5;
 			NPC.DeathSound = SoundID.NPCDeath7;
 
-			Music = MusicID.Boss5;
-			if (ModLoader.HasMod("PolaritiesMusic"))
-			{
-				Music = MusicLoader.GetMusicSlot(ModLoader.GetMod("PolaritiesMusic"), "Sounds/Music/SunPixie");
-			}
-
+			Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/SunPixie");
 
             if (Main.tenthAnniversaryWorld) NPC.scale *= 0.5f;
 			if (Main.getGoodWorld) NPC.scale *= 1.5f;

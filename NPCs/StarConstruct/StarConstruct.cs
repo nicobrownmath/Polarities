@@ -151,14 +151,10 @@ namespace Polarities.NPCs.StarConstruct
 			NPC.HitSound = SoundID.NPCHit4;
 			NPC.DeathSound = SoundID.NPCDeath14;
 
-			Music = MusicID.Boss1;
-			if (ModLoader.HasMod("PolaritiesMusic"))
-			{
-				Music = MusicLoader.GetMusicSlot(ModLoader.GetMod("PolaritiesMusic"), "Sounds/Music/StarConstruct");
-			}
+            Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/StarConstruct");
 
-			//for drawBehind
-			NPC.hide = true;
+            //for drawBehind
+            NPC.hide = true;
 
 			arm = new int[16];
         }

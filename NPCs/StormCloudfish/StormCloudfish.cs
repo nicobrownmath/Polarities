@@ -92,11 +92,7 @@ namespace Polarities.NPCs.StormCloudfish
             NPC.HitSound = SoundID.NPCHit30;
             NPC.DeathSound = SoundID.NPCDeath33;
 
-            Music = MusicID.Boss1;
-            if (ModLoader.HasMod("PolaritiesMusic"))
-            {
-                Music = MusicLoader.GetMusicSlot(ModLoader.GetMod("PolaritiesMusic"), "Sounds/Music/StormCloudfish");
-            }
+            Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/StormCloudfish");
 
             if (Main.tenthAnniversaryWorld) NPC.scale *= 0.5f;
         }

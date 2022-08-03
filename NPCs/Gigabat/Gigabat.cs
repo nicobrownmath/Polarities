@@ -118,11 +118,7 @@ namespace Polarities.NPCs.Gigabat
             if (Main.tenthAnniversaryWorld) NPC.scale *= 0.5f;
             if (Main.getGoodWorld) NPC.scale *= 0.8f;
 
-            Music = MusicID.Boss1;
-			if (ModLoader.HasMod("PolaritiesMusic"))
-			{
-				Music = MusicLoader.GetMusicSlot(ModLoader.GetMod("PolaritiesMusic"), "Sounds/Music/Gigabat");
-			}
+            Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/Gigabat");
         }
 
         public override void AI()

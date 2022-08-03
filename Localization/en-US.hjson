@@ -334,13 +334,21 @@
 			"LimestoneTorch": "Limestone Torch",
 			"LimestoneWorkBench": "Limestone WorkBench",
 
+			//music boxes
+			"StormCloudfishMusicBox": "Music Box (Storm Cloudfish)",
+			"StarConstructMusicBox": "Music Box (Star Construct)",
+			"GigabatMusicBox": "Music Box (Gigabat)",
+			"SunPixieMusicBox": "Music Box (Sun Pixie)",
+			"PestilenceMusicBox": "Music Box (Pestilence)",
+			"EsophageMusicBox": "Music Box (Esophage)",
+
 			//pets
 			"StarConstructPetItem": "Cosmic Communicator",
 			"GigabatPetItem": "Batty Pen Drive",
 			"RocketSnekPetItem": "Rocket Snek",
 			"GoldfishExplorerPetItem": "Futuristic Bowl",
 			"SunPixiePetItem": "Winged Everlight",
-			"StormCloudfishPetItem": "StormRoe",
+			"StormCloudfishPetItem": "Storm Roe",
 
 			//boss summons
 			"StormCloudfishSummonItem": "Worm On A Kite",
