@@ -703,6 +703,7 @@ namespace Polarities.NPCs.StormCloudfish
             GlowTexture = null;
         }
 
+        //TODO: Ichoring
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color lightColor)
         {
             Vector2 drawOrigin = NPC.frame.Size() / 2;
