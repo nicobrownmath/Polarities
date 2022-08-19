@@ -36,7 +36,7 @@ namespace Polarities.Items.Placeable.Furniture
 		{
 			Item.DefaultToTorch(0, !WaterDeath);
 			Item.createTile = PlaceTile;
-			Item.value = Item.sellPrice(silver: 12);
+			Item.value = Item.sellPrice(copper: 12);
 
 			Item.flame = Flame;
 		}

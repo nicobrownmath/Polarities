@@ -315,7 +315,7 @@ namespace Polarities.NPCs.Enemies
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (PolaritiesSystem.downedStarConstruct)
+            if (PolaritiesSystem.downedStarConstruct && Main.hardMode)
             {
                 return Terraria.ModLoader.Utilities.SpawnCondition.OverworldNightMonster.Chance * 0.01f;
             }

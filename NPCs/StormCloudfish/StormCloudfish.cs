@@ -703,7 +703,6 @@ namespace Polarities.NPCs.StormCloudfish
             GlowTexture = null;
         }
 
-        //TODO: Ichoring
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color lightColor)
         {
             Vector2 drawOrigin = NPC.frame.Size() / 2;
@@ -719,14 +718,14 @@ namespace Polarities.NPCs.StormCloudfish
                 for (int k = 0; k < NPC.oldPos.Length; k++)
                 {
                     drawPos = NPC.Center - NPC.position + NPC.oldPos[k] - screenPos + new Vector2(0f, NPC.gfxOffY);
-                    color = NPC.GetAlpha(lightColor) * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
+                    color = NPC.GetAlpha(NPC.GetNPCColorTintedByBuffs(lightColor)) * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
 
                     spriteBatch.Draw(TextureAssets.Npc[Type].Value, drawPos, NPC.frame, color, NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
                     spriteBatch.Draw(GlowTexture.Value, drawPos, NPC.frame, Color.White * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length), NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
                 }
             }
             drawPos = NPC.Center - screenPos + new Vector2(0f, NPC.gfxOffY);
-            color = NPC.GetAlpha(lightColor);
+            color = NPC.GetAlpha(NPC.GetNPCColorTintedByBuffs(lightColor));
 
             spriteBatch.Draw(TextureAssets.Npc[Type].Value, drawPos, NPC.frame, color, NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
             spriteBatch.Draw(GlowTexture.Value, drawPos, NPC.frame, Color.White, NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
@@ -752,11 +751,7 @@ namespace Polarities.NPCs.StormCloudfish
 
             if (!PolaritiesSystem.downedStormCloudfish)
             {
-                PolaritiesSystem.downedStormCloudfish = true;
-                if (Main.netMode == NetmodeID.Server)
-                {
-                    NetMessage.SendData(MessageID.WorldData); // Immediately inform clients of new world state.
-                }
+                NPC.SetEventFlagCleared(ref PolaritiesSystem.downedStormCloudfish, -1);
             }
             return true;
         }
