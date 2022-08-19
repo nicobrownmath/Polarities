@@ -115,14 +115,14 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 				legFrame3.Height += 2;
 				Vector2 legsOffset = drawInfo.legsOffset;
 				Vector2 position = legsOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.legFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.legFrame.Height + 4f)) + drawInfo.drawPlayer.legPosition + drawInfo.legVect;
-				Color color = drawInfo.colorArmorLegs * drawPlayer.stealth;
+				Color color = drawInfo.colorArmorLegs * drawPlayer.stealth * drawInfo.shadow;
 
 				DrawData data = new DrawData(texture, position, legFrame3, color, drawInfo.drawPlayer.legRotation, legVect2, 1f, drawInfo.playerEffect, 0);
 				data.shader = drawInfo.cLegs;
 				drawInfo.DrawDataCache.Add(data);
 
 				texture = GlowTexture.Value;
-				color = Color.White * drawPlayer.stealth;
+				color = Color.White * drawPlayer.stealth * drawInfo.shadow;
 
 				data = new DrawData(texture, position, legFrame3, color, drawInfo.drawPlayer.legRotation, legVect2, 1f, drawInfo.playerEffect, 0);
 				data.shader = drawInfo.cLegs;
@@ -203,7 +203,7 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 					bodyFrame3.Height -= 4;
 				}
 				Vector2 helmetOffset = drawInfo.helmetOffset;
-				DrawData data = new DrawData(GlowTexture.Value, helmetOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect, bodyFrame3, Color.White, drawInfo.drawPlayer.headRotation, headVect2, 1f, drawInfo.playerEffect, 0);
+				DrawData data = new DrawData(GlowTexture.Value, helmetOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect, bodyFrame3, Color.White * drawInfo.shadow, drawInfo.drawPlayer.headRotation, headVect2, 1f, drawInfo.playerEffect, 0);
 				data.shader = drawInfo.cHead;
 				drawInfo.DrawDataCache.Add(data);
 			}

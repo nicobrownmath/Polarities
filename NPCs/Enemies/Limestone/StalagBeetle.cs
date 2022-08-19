@@ -47,7 +47,7 @@ namespace Polarities.NPCs.Enemies.Limestone
             NPC.width = 58;
             NPC.height = 32;
             NPC.damage = 40;
-            NPC.lifeMax = 120;
+            NPC.lifeMax = 90;
             NPC.knockBackResist = 0.1f;
             NPC.npcSlots = 1f;
             AIType = 508;

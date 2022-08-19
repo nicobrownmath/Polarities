@@ -62,7 +62,7 @@ namespace Polarities.NPCs.Enemies.Limestone
 			NPC.defense = 0;
 			NPC.damage = 24;
 			NPC.knockBackResist = 0f;
-			NPC.lifeMax = 90;
+			NPC.lifeMax = 70;
 			NPC.noTileCollide = true;
 			NPC.noGravity = true;
 			NPC.lavaImmune = true;

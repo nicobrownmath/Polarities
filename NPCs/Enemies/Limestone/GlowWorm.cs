@@ -52,7 +52,7 @@ namespace Polarities.NPCs.Enemies.Limestone
             DrawOffsetY = -4;
 
             NPC.damage = 30;
-            NPC.lifeMax = 100;
+            NPC.lifeMax = 80;
             NPC.defense = 4;
 
             NPC.knockBackResist = 0f;

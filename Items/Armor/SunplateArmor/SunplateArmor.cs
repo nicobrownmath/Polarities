@@ -50,7 +50,7 @@ namespace Polarities.Items.Armor.SunplateArmor
 
         public Color BodyColor(ref PlayerDrawSet drawInfo)
         {
-            return Color.White;
+            return Color.White * drawInfo.shadow;
         }
     }
 

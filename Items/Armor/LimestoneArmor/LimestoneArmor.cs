@@ -49,7 +49,7 @@ namespace Polarities.Items.Armor.LimestoneArmor
 
 		public Color BodyColor(ref PlayerDrawSet drawInfo)
 		{
-			return Color.White;
+			return Color.White * drawInfo.shadow;
 		}
 	}
 
@@ -115,7 +115,7 @@ namespace Polarities.Items.Armor.LimestoneArmor
 					legFrame3.Height -= 4;
 				}
 				Vector2 legsOffset = drawInfo.legsOffset;
-				DrawData data = new DrawData(GlowTexture.Value, legsOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.legFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.legFrame.Height + 4f)) + drawInfo.drawPlayer.legPosition + drawInfo.legVect, legFrame3, Color.White, drawInfo.drawPlayer.legRotation, legVect2, 1f, drawInfo.playerEffect, 0);
+				DrawData data = new DrawData(GlowTexture.Value, legsOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.legFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.legFrame.Height + 4f)) + drawInfo.drawPlayer.legPosition + drawInfo.legVect, legFrame3, Color.White * drawInfo.shadow, drawInfo.drawPlayer.legRotation, legVect2, 1f, drawInfo.playerEffect, 0);
 				data.shader = drawInfo.cLegs;
 				drawInfo.DrawDataCache.Add(data);
 			}
@@ -200,7 +200,7 @@ namespace Polarities.Items.Armor.LimestoneArmor
 					bodyFrame3.Height -= 4;
 				}
 				Vector2 helmetOffset = drawInfo.helmetOffset;
-				DrawData data = new DrawData(GlowTexture.Value, helmetOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect, bodyFrame3, Color.White, drawInfo.drawPlayer.headRotation, headVect2, 1f, drawInfo.playerEffect, 0);
+				DrawData data = new DrawData(GlowTexture.Value, helmetOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect, bodyFrame3, Color.White * drawInfo.shadow, drawInfo.drawPlayer.headRotation, headVect2, 1f, drawInfo.playerEffect, 0);
 				data.shader = drawInfo.cHead;
 				drawInfo.DrawDataCache.Add(data);
 			}

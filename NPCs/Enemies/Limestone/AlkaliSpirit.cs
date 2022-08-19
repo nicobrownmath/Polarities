@@ -57,7 +57,7 @@ namespace Polarities.NPCs.Enemies.Limestone
             NPC.lifeMax = 50;
             NPC.knockBackResist = 1f;
             NPC.npcSlots = 1f;
-            NPC.value = 100;
+            NPC.value = 80;
             NPC.HitSound = SoundID.NPCHit54;
             NPC.DeathSound = SoundID.NPCDeath52;
             NPC.lavaImmune = true;

@@ -59,7 +59,7 @@ namespace Polarities.NPCs.Enemies.Granite
             NPC.lifeMax = 400;
 
             NPC.knockBackResist = 0f;
-            NPC.value = Item.sellPrice(gold: 1);
+            NPC.value = Item.buyPrice(gold: 1);
             NPC.npcSlots = 2f;
             NPC.behindTiles = true;
             NPC.noGravity = false;

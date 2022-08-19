@@ -24,6 +24,7 @@ namespace Polarities.NPCs.Critters
 
 		public abstract int Index { get; }
 		public abstract int CatchItem { get; }
+		public virtual int ExpectedTime => 60 * 30 * (Index + 1);
 
         public override void Load()
         {
@@ -155,13 +156,47 @@ namespace Polarities.NPCs.Critters
 					case TileID.TreeDiamond:
 						itemID = ItemID.Diamond;
 						break;
+					case TileID.TreeAmber:
+						itemID = ItemID.Amber;
+						break;
 					default:
 						return;
 				}
-
 				Item.NewItem(new EntitySource_ShakeTree(x, y), x * 16, y * 16, 16, 16, itemID);
 			}
-			else if (WorldGen.genRand.NextBool(2))
+			else if (WorldGen.genRand.NextBool(3))
+			{
+				flag = true;
+				int itemID;
+				switch (Main.tile[x, y].TileType)
+				{
+					case TileID.TreeAmethyst:
+						itemID = ItemID.GemTreeAmethystSeed;
+						break;
+					case TileID.TreeTopaz:
+						itemID = ItemID.GemTreeTopazSeed;
+						break;
+					case TileID.TreeSapphire:
+						itemID = ItemID.GemTreeSapphireSeed;
+						break;
+					case TileID.TreeEmerald:
+						itemID = ItemID.GemTreeEmeraldSeed;
+						break;
+					case TileID.TreeRuby:
+						itemID = ItemID.GemTreeRubySeed;
+						break;
+					case TileID.TreeDiamond:
+						itemID = ItemID.GemTreeDiamondSeed;
+						break;
+					case TileID.TreeAmber:
+						itemID = ItemID.GemTreeAmberSeed;
+						break;
+					default:
+						return;
+				}
+				Item.NewItem(new EntitySource_ShakeTree(x, y), x * 16, y * 16, 16, 16, itemID);
+			}
+			else if (WorldGen.genRand.NextBool())
             {
 				flag = true;
 				int npcID;
@@ -185,6 +220,9 @@ namespace Polarities.NPCs.Critters
 					case TileID.TreeDiamond:
 						npcID = NPCType<DiamondGemfly>();
 						break;
+					case TileID.TreeAmber:
+						npcID = NPCType<AmberGemfly>();
+						break;
 					default:
 						return;
                 }
@@ -196,7 +234,7 @@ namespace Polarities.NPCs.Critters
 					NPC.NewNPC(new EntitySource_ShakeTree(x, y), x * 16, y * 16, npcID, ai2: -1f);
 				}
 			}
-			else if (WorldGen.genRand.NextBool(2))
+			else if (WorldGen.genRand.NextBool())
 			{
 				flag = true;
 				int npcID;
@@ -219,6 +257,9 @@ namespace Polarities.NPCs.Critters
 						break;
 					case TileID.TreeDiamond:
 						npcID = NPCID.GemSquirrelDiamond;
+						break;
+					case TileID.TreeAmber:
+						npcID = NPCID.GemSquirrelAmber;
 						break;
 					default:
 						return;
@@ -296,7 +337,7 @@ namespace Polarities.NPCs.Critters
 				if ((Main.LocalPlayer.ZoneRockLayerHeight || Main.LocalPlayer.ZoneDirtLayerHeight) && Main.LocalPlayer.Distance(NPC.Center) < 1000 && !NPC.AnyNPCs(NPCType<NPCs.Gigabat.Gigabat>()))
 				{
 					canWeSpawnGigabat = true;
-					if (Main.rand.NextBool(60 * 30 * (Index + 1)) && Main.netMode != 1)
+					if (Main.rand.NextBool(ExpectedTime) && Main.netMode != 1)
 					{
 						NPC.SpawnOnPlayer(Main.myPlayer, NPCType<NPCs.Gigabat.Gigabat>());
 						SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Killed_4")
@@ -412,6 +453,9 @@ namespace Polarities.NPCs.Critters
 	public class TopazGemflyItem : GemflyItem { public override int Bait => 28; public override int GemItem => ItemID.Topaz; public override int MakeNPC => NPCType<TopazGemfly>(); }
 
 	public class AmethystGemfly : Gemfly { public override int Index => 5; public override int CatchItem => ItemType<AmethystGemflyItem>(); }
-	public class AmethystGemflyItem : GemflyItem { public override int Bait => 24; public override int GemItem => ItemID.Emerald; public override int MakeNPC => NPCType<AmethystGemfly>(); }
+	public class AmethystGemflyItem : GemflyItem { public override int Bait => 24; public override int GemItem => ItemID.Amethyst; public override int MakeNPC => NPCType<AmethystGemfly>(); }
+	
+	public class AmberGemfly : Gemfly { public override int Index => 6; public override int ExpectedTime => 3600; public override int CatchItem => ItemType<AmberGemflyItem>(); }
+	public class AmberGemflyItem : GemflyItem { public override int Bait => 40; public override int GemItem => ItemID.Amber; public override int MakeNPC => NPCType<AmberGemfly>(); }
 }
 

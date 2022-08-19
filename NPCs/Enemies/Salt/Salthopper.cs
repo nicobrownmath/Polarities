@@ -47,9 +47,9 @@ namespace Polarities.NPCs.Enemies.Salt
             NPC.aiStyle = 1;
             NPC.width = 36;
             NPC.height = 28;
-            NPC.defense = 15;
+            NPC.defense = 8;
             NPC.damage = 16;
-            NPC.lifeMax = 100;
+            NPC.lifeMax = 80;
             NPC.knockBackResist = 0.3f;
             NPC.npcSlots = 1f;
             NPC.noGravity = false;

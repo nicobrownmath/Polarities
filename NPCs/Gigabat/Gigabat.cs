@@ -534,7 +534,7 @@ namespace Polarities.NPCs.Gigabat
                                 NPC.SetEventFlagCleared(ref PolaritiesSystem.downedGigabat, -1);
                             }
 
-                            Music = -1;
+                            Music = 0;
 
                             SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/NPC_Killed_4")
                             {

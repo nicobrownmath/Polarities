@@ -200,8 +200,8 @@ namespace Polarities.NPCs.Enemies.Salt
             Tile playerTile = Main.tile[(int)(spawnInfo.Player.Center.X / 16), (int)((spawnInfo.Player.Center.Y + 1 + spawnInfo.Player.height / 2) / 16)];
             if (spawnInfo.Player.InModBiome(GetInstance<SaltCave>()) && (spawnInfo.SpawnTileType == TileType<SaltTile>() || spawnInfo.SpawnTileType == TileType<RockSaltTile>() || playerTile.TileType == TileType<SaltTile>() || playerTile.TileType == TileType<RockSaltTile>()))
             {
-                if (Main.hardMode) return 0.5f;
-                return 0.75f;
+                if (Main.hardMode) return 0.25f;
+                return 0.375f;
             }
             return 0f;
         }
