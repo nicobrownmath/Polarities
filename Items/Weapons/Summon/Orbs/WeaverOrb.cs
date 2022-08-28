@@ -110,7 +110,9 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 			Projectile.friendly = true;
 			Projectile.tileCollide = false;
 			Projectile.timeLeft = 3600;
-		}
+
+            Projectile.GetGlobalProjectile<PolaritiesProjectile>().ForceDraw = true;
+        }
 
 		private float goalRotation;
 

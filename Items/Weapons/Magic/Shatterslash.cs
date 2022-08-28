@@ -20,7 +20,7 @@ namespace Polarities.Items.Weapons.Magic
 
 		public override void SetDefaults()
 		{
-			Item.SetWeaponValues(50, 5f, 0);
+			Item.SetWeaponValues(40, 5f, 0);
 			Item.DamageType = DamageClass.Magic;
 			Item.mana = 12;
 
@@ -83,7 +83,7 @@ namespace Polarities.Items.Weapons.Magic
         {
             if (Main.rand.NextBool(2))
             {
-                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 135, Scale: 2f);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, Scale: 2f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= 0.5f;
             }

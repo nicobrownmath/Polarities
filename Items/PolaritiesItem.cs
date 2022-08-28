@@ -167,7 +167,7 @@ namespace Polarities.Items
 
             if (!item.social && item.prefix > 0)
             {
-                if (item.autoReuse ^ Main.tooltipPrefixComparisonItem.autoReuse)
+                if (item.autoReuse ^ Main.tooltipPrefixComparisonItem.autoReuse) //TODO: This doesn't seem to work?
                 {
                     if (item.autoReuse)
                     {
@@ -203,8 +203,11 @@ namespace Polarities.Items
             if (item.type == ItemID.Star || item.type == ItemID.SoulCake || item.type == ItemID.SugarPlum && player.GetModPlayer<PolaritiesPlayer>().manaStarMultiplier > 1f)
             {
                 int manaVal = (int)(100 * (player.GetModPlayer<PolaritiesPlayer>().manaStarMultiplier - 1f));
-                player.statMana += manaVal;
-                player.ManaEffect(manaVal);
+                if (manaVal > 0)
+                {
+                    player.statMana += manaVal;
+                    player.ManaEffect(manaVal);
+                }
             }
             return true;
         }

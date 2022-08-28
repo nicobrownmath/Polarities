@@ -20,6 +20,9 @@ namespace Polarities
 {
 	public class Polarities : Mod
 	{
+        public static bool AprilFools => (DateTime.Now.Day == 1) && (DateTime.Now.Month == 4);
+        public static bool SnakeDay => (DateTime.Now.Day == 16) && (DateTime.Now.Month == 7);
+
         public static Dictionary<int, int> customNPCBestiaryStars = new Dictionary<int, int>();
         public static Dictionary<int, Asset<Texture2D>> customTileGlowMasks = new Dictionary<int, Asset<Texture2D>>();
         public static Dictionary<int, Asset<Texture2D>> customNPCGlowMasks = new Dictionary<int, Asset<Texture2D>>();

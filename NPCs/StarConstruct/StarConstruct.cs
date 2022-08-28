@@ -32,15 +32,15 @@ namespace Polarities.NPCs.StarConstruct
 		public static Asset<Texture2D> ClawTexture;
 		public static Asset<Texture2D> DashTexture;
 
+        SoundStyle Roar => Polarities.AprilFools ? (new SoundStyle("Terraria/Sounds/Roar_2") { Volume = 1f, Pitch = 0.7f }) : Sounds.StarConstructRoar; 
+		SoundStyle Scream => Polarities.AprilFools ? (new SoundStyle("Terraria/Sounds/Roar_2") { Volume = 1f, Pitch = 0.7f }) : Sounds.StarConstructScream;
+
 		public override void Load()
 		{
 			LegTexture = Mod.GetAsset<Texture2D>("NPCs/StarConstruct/StarConstructLeg");
 			ChainTexture = Mod.GetAsset<Texture2D>("NPCs/StarConstruct/StarConstructChain");
 			ClawTexture = Mod.GetAsset<Texture2D>("NPCs/StarConstruct/StarConstructClaw");
 			DashTexture = Mod.GetAsset<Texture2D>("NPCs/StarConstruct/StarConstructDash");
-
-			//TODO: Use the old scream style on like april fools or something
-			//Scream = new SoundStyle("Terraria/Sounds/Roar_2") { Volume = 1f, Pitch = 0.7f };
 
 			/*IL.Terraria.Main.UpdateMenu += Main_UpdateMenu;
 		}
@@ -191,7 +191,7 @@ namespace Polarities.NPCs.StarConstruct
 			if (NPC.localAI[0] == 0)
 			{
 				//scream
-				SoundEngine.PlaySound(Sounds.StarConstructRoar, NPC.Center);
+				SoundEngine.PlaySound(Roar, NPC.Center);
 				Main.NewText("Star Construct has awoken!", 171, 64, 255);
 
 				NPC.localAI[0] = 1;
@@ -235,7 +235,7 @@ namespace Polarities.NPCs.StarConstruct
 					{
 						NPC.ai[3] = Main.rand.NextFloat(MathHelper.TwoPi);
 
-						SoundEngine.PlaySound(Sounds.StarConstructScream, NPC.Center);
+						SoundEngine.PlaySound(Scream, NPC.Center);
 					}
 					else if (NPC.ai[1] % 120 == 30)
 					{
@@ -256,7 +256,7 @@ namespace Polarities.NPCs.StarConstruct
 					{
 						NPC.ai[3] = player.Center.X > NPC.Center.X ? 1 : -1;
 
-						SoundEngine.PlaySound(Sounds.StarConstructScream, NPC.Center);
+						SoundEngine.PlaySound(Scream, NPC.Center);
 					}
 
 					if (NPC.ai[1] >= 450)
@@ -315,7 +315,7 @@ namespace Polarities.NPCs.StarConstruct
 
 						if (NPC.ai[1] == 30)
 						{
-							SoundEngine.PlaySound(Sounds.StarConstructScream, NPC.Center);
+							SoundEngine.PlaySound(Scream, NPC.Center);
 						}
 					}
 					else if (NPC.ai[1] < 540)
@@ -398,7 +398,7 @@ namespace Polarities.NPCs.StarConstruct
 									NPC.velocity.Y = VelocityMultiplier / 2;
 								}
 
-								SoundEngine.PlaySound(Sounds.StarConstructScream, NPC.Center);
+								SoundEngine.PlaySound(Scream, NPC.Center);
 
 								NPC.frame.Y = NPC.frame.Height;
 
@@ -495,7 +495,7 @@ namespace Polarities.NPCs.StarConstruct
 								NPC.velocity = new Vector2(-VelocityMultiplier * 0.5f, 0).RotatedBy(NPC.localAI[1]);
 
 								//sound as telegraph
-								SoundEngine.PlaySound(Sounds.StarConstructScream, NPC.Center);
+								SoundEngine.PlaySound(Scream, NPC.Center);
 							}
 
 							NPC.noGravity = true;
@@ -585,7 +585,7 @@ namespace Polarities.NPCs.StarConstruct
 
 						if (NPC.ai[1] == 170)
 						{
-							SoundEngine.PlaySound(Sounds.StarConstructScream, NPC.Center);
+							SoundEngine.PlaySound(Scream, NPC.Center);
 
 							NPC.ai[3] = player.Center.X > NPC.Center.X ? 1 : -1;
 
@@ -656,7 +656,7 @@ namespace Polarities.NPCs.StarConstruct
 						{
 							NPC.velocity.X = 0;
 
-							SoundEngine.PlaySound(Sounds.StarConstructScream, NPC.Center);
+							SoundEngine.PlaySound(Scream, NPC.Center);
 						}
 
 						NPC.velocity.Y -= 0.1f * (float)Math.Sin((NPC.ai[1] - 180) / (1500f / VelocityMultiplier) * MathHelper.PiOver2);
@@ -710,7 +710,7 @@ namespace Polarities.NPCs.StarConstruct
 
 						if (NPC.ai[1] == 150)
 						{
-							SoundEngine.PlaySound(Sounds.StarConstructScream, NPC.Center);
+							SoundEngine.PlaySound(Scream, NPC.Center);
 						}
 
 						if (NPC.ai[1] == 180)
@@ -1236,7 +1236,7 @@ namespace Polarities.NPCs.StarConstruct
 				NPC.SetEventFlagCleared(ref PolaritiesSystem.downedStarConstruct, -1);
 			}
 
-			SoundEngine.PlaySound(Sounds.StarConstructRoar, NPC.Center);
+			SoundEngine.PlaySound(Roar, NPC.Center);
 
 			for (int i = 1; i <= 6; i++)
 			{

@@ -92,7 +92,9 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 			Projectile.friendly = false;
 			Projectile.tileCollide = false;
 			Projectile.timeLeft = 3600;
-		}
+
+            Projectile.GetGlobalProjectile<PolaritiesProjectile>().ForceDraw = true;
+        }
 
 		public override void AI()
 		{

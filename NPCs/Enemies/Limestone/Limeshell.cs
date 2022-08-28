@@ -243,7 +243,7 @@ namespace Polarities.NPCs.Enemies.Limestone
         {
             npcLoot.Add(ItemDropRule.Common(ItemType<Items.Placeable.Blocks.Limestone>(), 1, 5, 10));
             npcLoot.Add(ItemDropRule.Common(ItemType<LimestoneCarapace>(), 1, 1, 2));
-            npcLoot.Add(ItemDropRule.Common(ItemType<LimestoneShield>(), 20));
+            npcLoot.Add(ItemDropRule.Common(ItemType<LimestoneShield>(), 10));
             npcLoot.Add(ItemDropRule.Common(ItemType<KeyLimePie>(), 50));
         }
 

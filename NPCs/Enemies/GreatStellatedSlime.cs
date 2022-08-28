@@ -104,7 +104,7 @@ namespace Polarities.NPCs.Enemies
                         shotTimer++;
                         if (shotTimer == 5)
                         {
-                            if (!player.npcTypeNoAggro[Type]) Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, (player.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 16, ProjectileType<GreatStellatedSlimeProjectile>(), 25, 0f, Main.myPlayer);
+                            if (!player.npcTypeNoAggro[Type]) Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, (player.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 16, ProjectileType<GreatStellatedSlimeProjectile>(), 18, 0f, Main.myPlayer);
                             shotTimer = 0;
                         }
                     }
@@ -116,7 +116,7 @@ namespace Polarities.NPCs.Enemies
                         for (int i = 0; i < 3; i++)
                         {
                             Vector2 value34 = new Vector2((float)Main.screenWidth, (float)Main.screenHeight);
-                            if (NPC.Hitbox.Intersects(Utils.CenteredRectangle(Main.screenPosition + value34 / 2f, value34 + new Vector2(400f))) && Main.rand.Next(6) == 0)
+                            if (NPC.Hitbox.Intersects(Utils.CenteredRectangle(Main.screenPosition + value34 / 2f, value34 + new Vector2(400f))) && Main.rand.NextBool(6))
                             {
                                 int[] array6 = new int[4] { 16, 17, 17, 17 };
                                 int num855 = Utils.SelectRandom(Main.rand, array6);
@@ -127,7 +127,7 @@ namespace Polarities.NPCs.Enemies
                                 }
                                 Gore.NewGore(NPC.GetSource_FromAI(), NPC.position, NPC.velocity * 0.2f, num855);
                             }
-                            if (Main.rand.Next(20) == 0 || (Main.tenthAnniversaryWorld && Main.rand.Next(15) == 0))
+                            if (Main.rand.NextBool(20)|| (Main.tenthAnniversaryWorld && Main.rand.NextBool(15)))
                             {
                                 Dust.NewDust(NPC.position, NPC.width, NPC.height, 58, NPC.velocity.X * 0.5f, NPC.velocity.Y * 0.5f, 150, default(Color), 1.2f);
                             }
@@ -142,7 +142,7 @@ namespace Polarities.NPCs.Enemies
                             {
                                 for (int i = 0; i < 8; i++)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, (player.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.25f) * Main.rand.NextFloat(12f, 20f), ProjectileType<GreatStellatedSlimeProjectile>(), 25, 0f, Main.myPlayer);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, (player.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.25f) * Main.rand.NextFloat(12f, 20f), ProjectileType<GreatStellatedSlimeProjectile>(), 18, 0f, Main.myPlayer);
                                 }
                             }
                         }

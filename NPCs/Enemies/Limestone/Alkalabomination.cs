@@ -186,7 +186,7 @@ namespace Polarities.NPCs.Enemies.Limestone
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.Common(ItemType<AlkalineFluid>(), 1, 2, 5));
-            npcLoot.Add(ItemDropRule.Common(ItemType<AlkalineOrb>(), 20));
+            npcLoot.Add(ItemDropRule.Common(ItemType<AlkalineOrb>(), 10));
             npcLoot.Add(ItemDropRule.Common(ItemType<KeyLimePie>(), 50));
         }
     }

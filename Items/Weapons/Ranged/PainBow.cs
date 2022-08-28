@@ -23,7 +23,7 @@ namespace Polarities.Items.Weapons.Ranged
 
         public override void SetDefaults()
         {
-            Item.SetWeaponValues(12, 3.5f, 0);
+            Item.SetWeaponValues(14, 3.5f, 0);
             Item.DamageType = DamageClass.Ranged;
             Item.useAmmo = AmmoID.Arrow;
             Item.noMelee = true;

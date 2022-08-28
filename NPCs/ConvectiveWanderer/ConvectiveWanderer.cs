@@ -1996,15 +1996,16 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
 		{
-            //TODO: npcLoot.Add(new FlawlessOrRandomDropRule(ItemType<ConvectiveWandererTrophy>(), 10));
-            //TODO: npcLoot.Add(ItemDropRule.BossBag(ItemType<ConvectiveWandererBag>()));
+            npcLoot.Add(new FlawlessOrRandomDropRule(ItemType<ConvectiveWandererTrophy>(), 10));
+            npcLoot.Add(ItemDropRule.BossBag(ItemType<ConvectiveWandererBag>()));
             npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ItemType<ConvectiveWandererRelic>()));
             //TODO: npcLoot.Add(ModUtils.MasterModeDropOnAllPlayersOrFlawless(ItemType<ConvectiveWandererPetItem>(), 4));
 
             //normal mode loot
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
-            //TODO: notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<ConvectiveWandererMask>(), 7));
+            notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<ConvectiveWandererMask>(), 7));
             notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<WandererPlating>(), 1, 5, 8));
+            notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<MantellarOre>(), 1, 40, 60));
             notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<WormSpewer>(), 10));
             npcLoot.Add(notExpertRule);
         }

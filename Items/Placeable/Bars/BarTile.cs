@@ -9,6 +9,7 @@ using Terraria.DataStructures;
 using System.Collections.Generic;
 using Terraria.ID;
 using Polarities.Dusts;
+using Polarities.Items.Placeable.Blocks;
 
 namespace Polarities.Items.Placeable.Bars
 {
@@ -113,6 +114,14 @@ namespace Polarities.Items.Placeable.Bars
 
 			Item.rare = ItemRarityID.Yellow;
 			Item.value = 10000;
+		}
+
+		public override void AddRecipes()
+		{
+			CreateRecipe()
+				.AddIngredient(ItemType<MantellarOre>(), 4)
+				.AddTile(TileID.AdamantiteForge)
+				.Register();
 		}
 	}
 }

@@ -77,5 +77,6 @@ namespace Polarities.Items.Placeable.Trophies
 	public class GigabatTrophy : TrophyBase { public override int TrophyIndex => 4; }
 	public class StarConstructTrophy : TrophyBase { public override int TrophyIndex => 5; }
 	public class EsophageTrophy : TrophyBase { public override int TrophyIndex => 6; }
+    public class ConvectiveWandererTrophy : TrophyBase { public override int TrophyIndex => 10; }
 }
 

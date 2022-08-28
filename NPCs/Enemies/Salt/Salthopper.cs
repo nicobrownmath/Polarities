@@ -219,7 +219,7 @@ namespace Polarities.NPCs.Enemies.Salt
         {
             npcLoot.Add(ItemDropRule.Common(ItemType<Items.Placeable.Blocks.Salt>(), 1, 5, 10));
             npcLoot.Add(ItemDropRule.Common(ItemType<SaltCrystals>(), 1, 2, 4));
-            npcLoot.Add(ItemDropRule.Common(ItemType<HopperCrystal>(), 20));
+            npcLoot.Add(ItemDropRule.Common(ItemType<HopperCrystal>(), 10));
             npcLoot.Add(ItemDropRule.Common(ItemType<Pretzel>(), 50));
         }
     }

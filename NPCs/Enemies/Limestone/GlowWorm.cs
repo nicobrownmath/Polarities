@@ -342,7 +342,7 @@ namespace Polarities.NPCs.Enemies.Limestone
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ItemType<CorrosivePolish>(), 20));
+            npcLoot.Add(ItemDropRule.Common(ItemType<CorrosivePolish>(), 10));
             npcLoot.Add(ItemDropRule.Common(ItemType<Items.Placeable.Blocks.Limestone>(), 1, 2, 4));
             npcLoot.Add(ItemDropRule.Common(ItemType<KeyLimePie>(), 50));
         }

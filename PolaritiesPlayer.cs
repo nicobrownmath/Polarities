@@ -1337,7 +1337,7 @@ namespace Polarities
         {
             orig(self, source);
 
-			if (source is EntitySource_ItemOpen itemSource && GetModItem(itemSource.ItemType).Mod == Mod)
+			if (source != null && source is EntitySource_ItemOpen itemSource && GetModItem(itemSource.ItemType)?.Mod == Mod)
             {
                 if (ItemID.Sets.BossBag[itemSource.ItemType] && (!ItemID.Sets.PreHardmodeLikeBossBag[itemSource.ItemType] || Main.tenthAnniversaryWorld))
                 {
