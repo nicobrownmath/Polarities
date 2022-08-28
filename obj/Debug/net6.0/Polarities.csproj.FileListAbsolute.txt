@@ -1,0 +1,5 @@
+C:\Users\nicob\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.csproj.AssemblyReference.cache
+C:\Users\nicob\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\nicob\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.AssemblyInfoInputs.cache
+C:\Users\nicob\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.AssemblyInfo.cs
+C:\Users\nicob\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.csproj.CoreCompileInputs.cache
