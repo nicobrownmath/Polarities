@@ -48,7 +48,6 @@ using Polarities.Items.Weapons.Magic;
 namespace Polarities.NPCs.ConvectiveWanderer
 {
 	[AutoloadBossHead]
-	//TODO: Bestiary entry image
 	public class ConvectiveWanderer : ModNPC, IMultiHitboxSegmentUpdate
 	{
 		public override void Load()
