@@ -166,8 +166,15 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			};
 			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
 
-			//trails for head swing
-			NPCID.Sets.TrailCacheLength[Type] = 30;
+			NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+			{
+				CustomTexturePath = "Polarities/NPCs/ConvectiveWanderer/ConvectiveWanderer_Bestiary",
+				Position = new Vector2(64f, -64f)
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifiers);
+
+            //trails for head swing
+            NPCID.Sets.TrailCacheLength[Type] = 30;
 		}
 
 		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -651,6 +658,12 @@ namespace Polarities.NPCs.ConvectiveWanderer
                                 }
 
 								headSwingAlpha = Math.Min(1f, 4f * (attackProgress - (attackSetupTime + attackFreezeTime)) * ((attackSetupTime + attackFreezeTime + attackSwingTime) - attackProgress) / (attackSwingTime * attackSwingTime));
+
+								if (attackProgress == attackSetupTime + attackFreezeTime)
+								{
+									//sound
+									SoundEngine.PlaySound(SoundID.DD2_MonkStaffSwing, NPC.Center);
+								}
 							}
 						}
 

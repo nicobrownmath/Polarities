@@ -23,6 +23,10 @@ using Terraria.GameContent.Bestiary;
 using Polarities.Items.Weapons.Melee;
 using Polarities.Items.Accessories;
 using Polarities.Items.Weapons.Summon.Whips;
+using Polarities.NPCs.Esophage;
+using Terraria.GameContent;
+using static Humanizer.In;
+using System.Reflection;
 
 namespace Polarities.NPCs.Enemies.Marble
 {
@@ -35,6 +39,8 @@ namespace Polarities.NPCs.Enemies.Marble
             {
                 SpriteDirection = 1
             };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifiers);
+
             Main.npcFrameCount[Type] = 1;
         }
 
@@ -102,6 +108,22 @@ namespace Polarities.NPCs.Enemies.Marble
         {
             Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>("HydraGore").Type);
 
+            return true;
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            if (NPC.IsABestiaryIconDummy)
+            {
+                HydraHead headDummy = GetModNPC(NPCType<HydraHead>()) as HydraHead;
+                for (int i = 0; i < 2; i++)
+                {
+                    Vector2 rootPosition = NPC.Center + new Vector2(24 * NPC.direction, -6);
+                    float rotationAmount = ((float)i + 1) / 3 * 2 - 1;
+                    Vector2 goalPosition = rootPosition + new Vector2(0, -52 - 12).RotatedBy(rotationAmount);
+                    headDummy.DrawAt(NPC, goalPosition, spriteBatch, screenPos, drawColor, true);
+                }
+            }
             return true;
         }
 
@@ -516,17 +538,25 @@ namespace Polarities.NPCs.Enemies.Marble
             drawColor = NPC.GetNPCColorTintedByBuffs(drawColor);
 
             NPC owner = Main.npc[(int)NPC.ai[0]];
+            DrawAt(owner, NPC.Center, spriteBatch, screenPos, drawColor);
+            return true;
+        }
+
+        public void DrawAt(NPC owner, Vector2 center, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor, bool bestiaryDummy = false)
+        {
+            int direction = bestiaryDummy ? -1 : NPC.direction;
+
             Vector2 rootPosition = owner.Center + new Vector2(20 * owner.direction, 4);
-            Vector2 endPosition = NPC.Center + new Vector2(-14 * NPC.direction, 0).RotatedBy(NPC.rotation);
+            Vector2 endPosition = center + new Vector2(-14 * direction, 0).RotatedBy(NPC.rotation);
 
             float distMult = (rootPosition - endPosition).Length();
 
-            Vector2[] bezierPoints = { rootPosition, rootPosition + new Vector2(0, -distMult / 3f), NPC.Center + new Vector2(-(14 + distMult / 4f) * NPC.direction, 0).RotatedBy(NPC.rotation), endPosition };
+            Vector2[] bezierPoints = { rootPosition, rootPosition + new Vector2(0, -distMult / 3f), center + new Vector2(-(14 + distMult / 4f) * direction, 0).RotatedBy(NPC.rotation), endPosition };
             float bezierProgress = 0;
             float bezierIncrement = 2;
 
             Texture2D texture = ChainTexture.Value;
-            Vector2 textureCenter = NPC.spriteDirection == -1 ? new Vector2(1, 17) : new Vector2(1, 15);
+            Vector2 textureCenter = direction == 1 ? new Vector2(1, 17) : new Vector2(1, 15);
 
             float rotation;
 
@@ -547,12 +577,20 @@ namespace Polarities.NPCs.Enemies.Marble
 
                 Rectangle frame = new Rectangle(index * 6 % 7 * 2, 0, 4, texture.Height);
 
-                spriteBatch.Draw(texture, (oldPos + newPos) / 2 - screenPos, frame, drawColor, rotation, textureCenter, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
+                spriteBatch.Draw(texture, (oldPos + newPos) / 2 - screenPos, frame, drawColor, rotation, textureCenter, NPC.scale, direction == 1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
 
                 index++;
             }
 
-            return true;
+            if (bestiaryDummy)
+            {
+                float num246 = Main.NPCAddHeight(NPC);
+                SpriteEffects spriteEffects = (SpriteEffects)1;
+                Vector2 halfSize = new Vector2((float)(TextureAssets.Npc[Type].Width() / 2), (float)(TextureAssets.Npc[Type].Height() / Main.npcFrameCount[Type] / 2));
+                Rectangle frame = new Rectangle(0, 0, (int)halfSize.X * 2, (int)halfSize.Y * 2);
+
+                spriteBatch.Draw(TextureAssets.Npc[Type].Value, center + new Vector2(0, 17) - screenPos + new Vector2((float)(-TextureAssets.Npc[Type].Width()) * NPC.scale / 2f + halfSize.X * NPC.scale, (float)(-TextureAssets.Npc[Type].Height()) * NPC.scale / (float)Main.npcFrameCount[Type] + 4f + halfSize.Y * NPC.scale + num246 + NPC.gfxOffY), frame, drawColor, NPC.rotation, halfSize, NPC.scale, spriteEffects, 0f);
+            }
         }
     }
 
