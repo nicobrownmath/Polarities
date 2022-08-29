@@ -24,8 +24,8 @@ namespace Polarities.Items.Weapons.Magic
 			Item.DamageType = DamageClass.Magic;
 			Item.mana = 12;
 
-			Item.width = 28;
-			Item.height = 30;
+			Item.width = 32;
+			Item.height = 40;
 
 			Item.useTime = 60;
 			Item.useAnimation = 60;
@@ -67,8 +67,8 @@ namespace Polarities.Items.Weapons.Magic
     {
         public override void SetDefaults()
         {
-            Projectile.width = 32;
-            Projectile.height = 32;
+            Projectile.width = 22;
+            Projectile.height = 22;
             Projectile.aiStyle = -1;
             Projectile.friendly = true;
             Projectile.penetrate = 1;

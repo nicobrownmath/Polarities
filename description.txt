@@ -1,6 +1,6 @@
-A content mod which aims to add mechanically interesting bosses, enemies, items, and more! Currently adds ten new bosses, several new enemies, a variety of weapons and accessories, some tiles and armor sets, two new mini-biomes, a new subworld, and a new town NPC.
+The 1.4 version of Polarities is currently in beta: Not all of the content from 1.3 has been ported yet!
 
-Note that the music is contained in a separate music mod.
+A content mod which aims to add mechanically interesting bosses, enemies, items, and more! (Not all of this has been ported yet) Currently adds ten new bosses, several new enemies, a variety of weapons and accessories, some tiles and armor sets, two new mini-biomes, a new subworld, and a new town NPC.
 
 IMPORTANT NOTE: THE MOD DOES NOT WORK IN MULTIPLAYER.
 
@@ -10,9 +10,9 @@ Spriters- ElectroManiac, niker, triangle, Scratch Lunin, Squartron, Rednbloo, Le
 Sounds- moonburn
 Bestiary- Danku (Jerry), bubbyboytoo
 Former team members- junk boy
-With sprites from- discord_account, yogu, Vega_1, Evolution, UnworthyPie, warrenmark_art, Masked Luigi, Darkpuppey, DeJuiceTD, Jimbo Animations, Le Supreme Slimelad, nalyddd, Hugekraken, Heart Plus Up!, MountainyBear49, Rocketlauncher269, TRYAGAIN211, Danmaskino, //IlluminatiJoe (drill sprites) //Soft (shatterslash)
+With sprites from- discord_account, yogu, Vega_1, Evolution, UnworthyPie, warrenmark_art, Masked Luigi, Darkpuppey, DeJuiceTD, Jimbo Animations, Le Supreme Slimelad, nalyddd, Hugekraken, Heart Plus Up!, MountainyBear49, Rocketlauncher269, TRYAGAIN211, Danmaskino, Soft
 
-v0.11 Changelog
+v0.11 Beta Changelog
     The mod is now in 1.4
     Warhammers now have a new swing animation and cause enemies to turn grey while affected by them
     Warhammer tooltips now take into account bonuses to warhammer stats
@@ -104,93 +104,9 @@ v0.11 Changelog
     Reworked the storm scales
     Renamed convective plating to wanderer plating, and adjusted some of its associated values
     Snakescale greaves now grant the effect of flippers
-    Removed the wanderer's trinket and wanderer boots
+    Removed the wanderer's trinket and wanderer boots, and the burning altar
     Moved the music boxes into the main mod
     Reduced the health and defense of most of the pre-hardmode salt and limestone enemies
     Reduced the spawn rates of brine flies
     Increased the drop rates of uncommon loot from most salt and limestone enemies
     Nerfed great stellated slime's stars
-
-Things I should do:
-  MUSIC RE-ADD THE MUSIC
-  Decide whether to re-add the burning altar or not
-  Make pegasus saddle draw on ridden pegasi
-  Replace using AIType to control platform falling with CanFallThroughPlatforms
-  Move more boss drops to being craftable
-    Bat slimes should be an alt source for gigabat's material
-  Disable mod in MP (or tbh just remove the MP button)
-  Make bestiary entries for (most) normal enemies face left
-  Ensure non-buff critters can be hit by enemies
-  Give worms and other drawcode-intensive enemies custom bestiary portraits
-  Make salt, limestone, and fractal torches work with the torch god's favor
-  Make salt suffocate the player
-  Salt fishing outposts, limestone fortresses?
-  Trapped versions of chests
-  I should make weapons generally not go through walls as much
-  Make warhammers able to hit multiple enemies per swing
-  Fractal and nilmanifold menu styles (unlockable? it should notify you they're unlocked if that's the case (also change the transition screen to be based on nil geometry because it's cool))
-    Possibly other unlockable menu styles obtained from beating things
-  Nonconsumable boss summons (including making torch god's favor summon torch god if already used and conditions are valid)
-    For the less conventional summons: Gemfly/lacewing statues?
-  Make stylist? and mechanic? like ghostwriter and dryad not, give happiness dialogue
-  Polarities-related emotes for NPCs to use:
-    Boss emotes: Used after the defeat of their respective boss
-      Additionally, sun pixie/esophage emotes should show up during their respective events
-    Ghostwriter emote
-    Fractal dimension emote: If the player is in the fractal dimension, probably mostly used by the regular NPC
-    Blood moon and eclipse emotes should be more common in between the defeats of their respective proto-bosses and bosses
-    Cichlid emote in rain
-    Uncommon snek emote
-    Nerd emoji emote
-  Ghostwriter should use the gravestone emote and mechanic emote, and boss emotes (when available) more often
-  Regulator should use the nerd emote more often
-  Furniture smart interaction
-  Make the right click effects of autoswing warhammers also autoswing
-  Make stellated/great stellated slimes spawn (at all? more frequently?) during meteor showers
-  Boss titles maybe? (Would be a config option able to be turned off)
-  Maybe make prismatic lacewings spawn after sun pixie instead of plant?
-  Get rid of isolated blocks in the fractal dimension (possibly add fractal floating islands to compensate)
-
-Planned FTW changes:
-  Giant rift denizen? Maybe w/ less attack delay? Possibly inflicts more fractalization?
-  Sentinel w/ smaller arena
-  Total eclipxie (eye is bigger)?
-  Hemorrphage?
-  Closer polarities? (Polarities but both do both types of attacks?)
-
-Consistency concerns for special seeds:
-  Drunk world:
-    Salt and limestone swap generation styles (done!)
-    Lava ocean generates in the middle of the underworld (this actually probably makes it easier to deal with than vanilla), convective spawns and mantellar gen also occur here (done!)
-    Fractus are much more common and can grow larger
-    We don't need to add an extra biome chest because it already exists (done!)
-  Not the bees:
-    Salt and limestone are replaced with honey above lava layer and crispy honey below lava layer (done!)
-    Fractal dimension is painted yellow
-  For the worthy:
-    Consider increasing projectile damage (make this a config option) (also probaly fix journey mode ftw damage/health (make the health fix a config option?))
-    Salt and limestone caves are more common (done!)
-    Stellar remotes must generate in locked gold cloud chests instead of skyware chests (done!)
-    Lava lake generation must have ash block lava pocket speckling (done!)
-    Sentinel caves are probably smaller
-    You probably acquire fractalization more quickly
-  Celebrationmk10:
-    Ghostwriter spawns immediately on world start (done!)
-    Fractal dimension is probably painted with rainbow fractals
-    Fractus are more common
-    Most bosses are smaller than normal (done! so far)
-  The Constant:
-    Fractus will hurt you
-  Fractal Seed:
-    You start with regulator instead of guide
-    Ghostwriter spawns in this seed even though it's the fractal dimension
-    Fractal altar and twisted mirror/recall potions shouldn't take you to a subworld
-
-Possible BG objects
-  Generic background objects: Falling star constructs (possibly more common during meteor showers (this could maybe apply to actual dormant constructs and both stellated slimes)), cloudfish schools
-  Rapture BG objects: Glowing sunbeams (even at night) (done!)
-  Pestilence BG objects: Red and purple spores floating up from the terrain (more red in corruption, more purple in crimson) (done!)
-  Hell BG objects: Flocks of lavafowl (killing polarities should remove these)
-    Lava ocean BG should remove most of the lava BG stuff
-  Killing the polarities should remove migratory bird BG objects
-  Fractal background objects: Various fractal creatures? Rifts? I need to make the dimension feel more alive so it should probably feel like there's as much depth in random systems that don't do that much as there is in the overworld

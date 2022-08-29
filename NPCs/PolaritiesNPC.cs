@@ -921,7 +921,7 @@ namespace Polarities.NPCs
             {
                 case NPCID.GraniteFlyer:
                 case NPCID.GraniteGolem:
-                    npcLoot.Add(ItemDropRule.Common(ItemType<BlueQuartz>(), 2, 1, 2));
+                    //TODO: npcLoot.Add(ItemDropRule.Common(ItemType<BlueQuartz>(), 2, 1, 2));
                     break;
 
                 //bosses (mostly flawless stuff)

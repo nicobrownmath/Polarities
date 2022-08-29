@@ -333,7 +333,7 @@ namespace Polarities.NPCs.Enemies.Granite
             npcLoot.Add(ItemDropRule.Common(ItemID.Granite, 1, 5, 10));
             npcLoot.Add(ItemDropRule.Common(ItemID.NightVisionHelmet, 30));
             npcLoot.Add(ItemDropRule.Common(ItemID.Geode, 20));
-            npcLoot.Add(ItemDropRule.Common(ItemType<BlueQuartz>(), 2, 1, 2));
+            //TODO: npcLoot.Add(ItemDropRule.Common(ItemType<BlueQuartz>(), 2, 1, 2));
         }
 
         public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)

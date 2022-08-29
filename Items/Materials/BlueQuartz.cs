@@ -11,7 +11,7 @@ using System.IO;
 namespace Polarities.Items.Materials
 {
     //TODO: Make this useful for literally anything
-    public class BlueQuartz : ModItem
+    /*public class BlueQuartz : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -26,5 +26,5 @@ namespace Polarities.Items.Materials
             Item.value = 10;
             Item.rare = ItemRarityID.White;
         }
-    }
+    }*/
 }
