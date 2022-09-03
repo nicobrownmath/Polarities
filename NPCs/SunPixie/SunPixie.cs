@@ -1356,7 +1356,7 @@ namespace Polarities.NPCs.SunPixie
 		{
 			float radius = (128 + (20 * Math.Min(15, (30 - Projectile.timeLeft)))) * Projectile.scale;
 
-			return Collision.CheckAABBvLineCollision(targetHitbox.TopRight(), targetHitbox.Size(), Projectile.Center + new Vector2(radius, 0).RotatedBy(Projectile.rotation), Projectile.Center - new Vector2(radius, 0).RotatedBy(Projectile.rotation));
+			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center + new Vector2(radius, 0).RotatedBy(Projectile.rotation), Projectile.Center - new Vector2(radius, 0).RotatedBy(Projectile.rotation));
 		}
 
 		public override bool PreDraw(ref Color lightColor)
@@ -1470,7 +1470,7 @@ namespace Polarities.NPCs.SunPixie
 		{
 			float radius = 2000;
 
-			return Collision.CheckAABBvLineCollision(targetHitbox.TopRight(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(radius, 0).RotatedBy(Projectile.rotation));
+			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(radius, 0).RotatedBy(Projectile.rotation));
 		}
 
 		public override bool PreDraw(ref Color lightColor)

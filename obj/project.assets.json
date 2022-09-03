@@ -37,7 +37,7 @@
     "version": "1.0.0",
     "restore": {
       "projectUniqueName": "C:\\Users\\nicob\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\Polarities\\Polarities.csproj",
-      "projectName": "test",
+      "projectName": "Polarities",
       "projectPath": "C:\\Users\\nicob\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\Polarities\\Polarities.csproj",
       "packagesPath": "C:\\Users\\nicob\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\nicob\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\Polarities\\obj\\",

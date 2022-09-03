@@ -10,6 +10,7 @@ using System.IO;
 using Polarities.NPCs.SunPixie;
 using Terraria.GameContent;
 using Terraria.Localization;
+using Polarities.NPCs.Eclipxie;
 
 namespace Polarities.Items
 {
@@ -37,7 +38,7 @@ namespace Polarities.Items
 
 		public override bool CanUseItem(Player player)
 		{
-			return !NPC.AnyNPCs(NPCType<SunPixie>()) && PolaritiesSystem.sunPixieSpawnTimer == 0 /*&& !NPC.AnyNPCs(NPCType<Eclipxie>())*/;
+			return !NPC.AnyNPCs(NPCType<SunPixie>()) && PolaritiesSystem.sunPixieSpawnTimer == 0 && !NPC.AnyNPCs(NPCType<Eclipxie>());
 		}
 
         public override void UseAnimation(Player player)
@@ -47,22 +48,11 @@ namespace Polarities.Items
 
         public override bool? UseItem(Player player)
 		{
-			/*if (!NPC.AnyNPCs(NPCType<EclipsePixie>()) && Main.eclipse)
-			{
-				Main.PlaySound(SoundID.Item, player.position, 4);
-
-				if (Main.netMode != 1)
-				{
-					int pixie = NPC.NewNPC((int)player.Center.X, (int)player.Center.Y - 240, NPCType<EclipsePixie>());
-
-					Main.npc[pixie].netUpdate = true;
-
-					Main.NewText("Eclipxie has awoken!", 171, 64, 255);
-				}
-
-				Main.PlaySound(SoundID.Item, (int)player.position.X, (int)player.position.Y, 29, volumeScale: 1.2f, pitchOffset: -0.5f);
-			}
-			else*/
+			if (!NPC.AnyNPCs(NPCType<Eclipxie>()) && Main.eclipse)
+            {
+                Eclipxie.SpawnOn(player);
+            }
+			else
 			{
 				SunPixie.SpawnOn(player);
 			}

@@ -16,7 +16,6 @@ using Terraria.Audio;
 
 namespace Polarities.Items
 {
-	//TODO: Make this obtainable
 	public class ConvectiveWandererSummonItem : ModItem
 	{
 		public override void SetStaticDefaults()

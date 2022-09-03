@@ -518,7 +518,7 @@ namespace Polarities.NPCs.Enemies.Granite
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             if (Projectile.timeLeft <= 60)
-                return Collision.CheckAABBvLineCollision(targetHitbox.TopRight(), targetHitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity);
+                return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity);
             return false;
         }
 

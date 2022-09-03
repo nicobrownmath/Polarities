@@ -925,7 +925,7 @@ namespace Polarities
 			}
 		}
 
-        public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit)
+        public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
 		{
 			//TODO: (MAYBE) Replace with source propagation system once supported/if it doesn't end up being trivially supported, also move terraprisma to be obtained on any flawless run if/when this system is added
 			for (int i = 0; i < Main.maxNPCs; i++)
@@ -1131,7 +1131,7 @@ namespace Polarities
 			if (Player.HasBuff(BuffType<Pinpointed>()) && Main.rand.NextBool()) crit = true;
 		}
 
-        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
+        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
         {
             if (crit && !pvp)
             {

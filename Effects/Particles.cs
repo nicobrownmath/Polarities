@@ -16,15 +16,17 @@ namespace Polarities.Effects
 		public static ParticleLayer BeforeNPCsAdditive;
 		public static ParticleLayer BeforePlayersAdditive;
 		public static ParticleLayer AfterLiquidsAdditive;
+        public static ParticleLayer WarpParticles;
 
-		public void Load(Mod mod)
+        public void Load(Mod mod)
 		{
 			//load our particle layers
 			BeforeNPCsAdditive = new ParticleLayer();
 			BeforePlayersAdditive = new ParticleLayer();
 			AfterLiquidsAdditive = new ParticleLayer();
+			WarpParticles = new ParticleLayer();
 
-			On.Terraria.Main.UpdateParticleSystems += Main_UpdateParticleSystems;
+            On.Terraria.Main.UpdateParticleSystems += Main_UpdateParticleSystems;
 
             On.Terraria.Main.DrawPlayers_AfterProjectiles += Main_DrawPlayers_AfterProjectiles;
 		}
@@ -36,6 +38,7 @@ namespace Polarities.Effects
 			BeforeNPCsAdditive.Update();
 			BeforePlayersAdditive.Update();
 			AfterLiquidsAdditive.Update();
+			WarpParticles.Update();
         }
 
         private void Main_DrawPlayers_AfterProjectiles(On.Terraria.Main.orig_DrawPlayers_AfterProjectiles orig, Main self)
@@ -52,7 +55,8 @@ namespace Polarities.Effects
 			BeforeNPCsAdditive = null;
 			BeforePlayersAdditive = null;
 			AfterLiquidsAdditive = null;
-		}
+			WarpParticles = null;
+        }
 
 		HashSet<Particle> particles = new HashSet<Particle>();
 

@@ -202,8 +202,8 @@ namespace Polarities.NPCs.Critters
 
         public override void AddRecipes()
         {
-            Recipe.Create(ItemType<ConvectiveWandererSummonItem>(), 5)
-                .AddIngredient(Type)
+            Recipe.Create(ItemType<ConvectiveWandererSummonItem>())
+                .AddIngredient(Type, 5)
                 .Register();
         }
     }

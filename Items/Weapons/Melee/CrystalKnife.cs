@@ -63,7 +63,8 @@ namespace Polarities.Items.Weapons.Melee
 				.AddIngredient(ItemType<SaltKnife>())
 				.AddIngredient(ItemID.CrystalShard, 10)
 				.AddIngredient(ItemID.SoulofLight, 3)
-				.AddTile(TileID.MythrilAnvil);
+				.AddTile(TileID.MythrilAnvil)
+                .Register();
 		}
 	}
 

@@ -438,7 +438,7 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 		{
 			float radius = 1280 * (float)Math.Sin(Projectile.timeLeft / 30f * MathHelper.Pi);
 
-			return Collision.CheckAABBvLineCollision(targetHitbox.TopRight(), targetHitbox.Size(), Projectile.Center + new Vector2(radius, 0).RotatedBy(Projectile.rotation), Projectile.Center - new Vector2(radius, 0).RotatedBy(Projectile.rotation));
+			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center + new Vector2(radius, 0).RotatedBy(Projectile.rotation), Projectile.Center - new Vector2(radius, 0).RotatedBy(Projectile.rotation));
 		}
 
 		public override bool ShouldUpdatePosition()

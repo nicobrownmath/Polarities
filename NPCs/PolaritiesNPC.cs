@@ -112,6 +112,7 @@ namespace Polarities.NPCs
             IL.Terraria.Main.DrawInfoAccs += Main_DrawInfoAccs;
 
             //allows npcs to spawn in lava
+            //moves prismatic lacewings to post-sun-pixie
             IL.Terraria.NPC.SpawnNPC += NPC_SpawnNPC;
         }
 
@@ -238,6 +239,21 @@ namespace Polarities.NPCs
             c.EmitDelegate<Action>(() => { lavaSpawnFlag = true; });
             //go to label
             c.Emit(OpCodes.Br, label);
+
+            //change lacewing spawn criterion
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.MatchLdloc(27),
+                i => i.MatchLdcI4(164),
+                i => i.MatchBneUn(out _),
+                i => i.MatchLdsfld(typeof(NPC).GetField("downedPlantBoss", BindingFlags.Public | BindingFlags.Static))
+                ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location 3");
+                return;
+            }
+
+            c.Emit(OpCodes.Pop);
+            c.Emit(OpCodes.Ldsfld, typeof(PolaritiesSystem).GetField("downedSunPixie", BindingFlags.Public | BindingFlags.Static));
         }
 
         private void PolaritiesNPC_IL_ChooseSpawn(ILContext il)

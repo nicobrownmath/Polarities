@@ -31,6 +31,8 @@ using System.Collections.Generic;
 using Terraria.Graphics.Effects;
 using Polarities.NPCs.ConvectiveWanderer;
 using Terraria.Graphics.Shaders;
+using System.Net;
+using IL.Terraria.GameContent.NetModules;
 
 namespace Polarities.Effects
 {
@@ -52,7 +54,7 @@ namespace Polarities.Effects
 			renderTargetLayers[this.GetType()] = this;
 			ResetCaches();
 
-			if (!patchesLoaded)
+            if (!patchesLoaded)
             {
 				patchesLoaded = true;
 
@@ -68,8 +70,19 @@ namespace Polarities.Effects
 			{
 				layer.Request();
 				layer.PrepareRenderTarget(Main.graphics.GraphicsDevice, Main.spriteBatch);
-			}
-		}
+            }
+
+            //screen warp
+            if (GetRenderTargetLayer<ScreenWarpTarget>().HasContent())
+            {
+                if (!Terraria.Graphics.Effects.Filters.Scene["Polarities:ScreenWarp"].Active)
+                    Terraria.Graphics.Effects.Filters.Scene.Activate("Polarities:ScreenWarp");
+
+                Terraria.Graphics.Effects.Filters.Scene["Polarities:ScreenWarp"].GetShader().UseImage(GetRenderTargetLayer<ScreenWarpTarget>().GetTarget(), 0, SamplerState.PointWrap);
+            }
+            else if (Terraria.Graphics.Effects.Filters.Scene["Polarities:ScreenWarp"].Active)
+				Terraria.Graphics.Effects.Filters.Scene.Deactivate("Polarities:ScreenWarp");
+        }
 
 		public virtual void Unload()
 		{
@@ -96,9 +109,9 @@ namespace Polarities.Effects
 			return _target != null && layerHasContent;
         }
 
-		public void Draw(SpriteBatch spriteBatch, Vector2 offset, Color color)
+		public void Draw(SpriteBatch spriteBatch, Vector2 offset, Color color, Vector2? center = null)
         {
-			spriteBatch.Draw(_target, Main.GameViewMatrix.Translation + offset, null, color, 0f, Vector2.Zero, 1 / targetScale, SpriteEffects.None, 0f);
+			spriteBatch.Draw(_target, (useIdentityMatrix ? Vector2.Zero : Main.GameViewMatrix.Translation) + offset, null, color, 0f, center ?? Vector2.Zero, 1 / targetScale, SpriteEffects.None, 0f);
 		}
 
 		private List<int> projCache;
@@ -111,7 +124,14 @@ namespace Polarities.Effects
 		public bool doWeResetSpritebatch = false;
 		public float targetScale = 1f;
 
-		public void ResetCaches()
+		public virtual int Width => Main.screenWidth;
+        public virtual int Height => Main.screenHeight;
+		public Vector2 Center => new Vector2(Width / 2, Height / 2);
+
+		public virtual Color resetColor => Color.Transparent;
+		public virtual bool useIdentityMatrix => false;
+
+        public void ResetCaches()
 		{
 			projCache = new List<int>();
 			npcCache = new List<int>();
@@ -124,11 +144,12 @@ namespace Polarities.Effects
 			{
 				layerHasContent = true;
 
-				PrepareARenderTarget_AndListenToEvents(ref _target, device, Main.screenWidth, Main.screenHeight, RenderTargetUsage.PreserveContents);
+				PrepareARenderTarget_AndListenToEvents(ref _target, device, Width, Height, RenderTargetUsage.PreserveContents);
 				device.SetRenderTarget(_target);
-				device.Clear(Color.Transparent);
+				device.Clear(resetColor);
 
-				Main.spriteBatch.Begin((SpriteSortMode)0, blendState, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.CreateTranslation(0f - Main.GameViewMatrix.Translation.X, 0f - Main.GameViewMatrix.Translation.Y, 0f) * Matrix.CreateScale(targetScale, targetScale, 1f));
+				Matrix drawMatrix = useIdentityMatrix ? Matrix.Identity : Matrix.CreateTranslation(0f - Main.GameViewMatrix.Translation.X, 0f - Main.GameViewMatrix.Translation.Y, 0f) * Matrix.CreateScale(targetScale, targetScale, 1f);
+                Main.spriteBatch.Begin((SpriteSortMode)0, blendState, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, drawMatrix);
 
 				DoDraw();
 
@@ -173,7 +194,6 @@ namespace Polarities.Effects
 		}
 	}
 
-	//TODO: Fix issue where layers don't show up on the first load (actually this looks to be a tmod issue with ON edits)
 	public class ConvectiveWandererTarget : RenderTargetLayer
 	{
 		public override void Load(Mod mod)
@@ -254,15 +274,26 @@ namespace Polarities.Effects
 			}
 
 			spriteBatch.End();
-			spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
-
+            DrawLayer.GetDrawLayer<DrawLayerBeforeScreenObstruction>().Draw();
+            spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
 			orig(spriteBatch);
 		}
 	}
 
 	public class ConvectiveEnemyTarget : RenderTargetLayer { }
 
-	public class BehindTilesWithLightingTarget : RenderTargetLayer
+    public class ScreenWarpTarget : RenderTargetLayer {
+		public override Color resetColor => new Color(128, 128, 128);
+
+		public override void DoDraw()
+		{
+			base.DoDraw();
+
+			ParticleLayer.WarpParticles.Draw(Main.spriteBatch);
+		}
+	}
+
+    public class BehindTilesWithLightingTarget : RenderTargetLayer
 	{
 		public override void Load(Mod mod)
 		{

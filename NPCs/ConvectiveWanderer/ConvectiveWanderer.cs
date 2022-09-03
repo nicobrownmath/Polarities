@@ -301,8 +301,8 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			InitializeAIStates();
 		}
 
-		float tentacleAttacksHealthThreshold => Main.getGoodWorld ? 1f : Main.expertMode ? 0.75f : 0.66f;
-		float phase2HealthThreshold => Main.expertMode ? 0.5f : 0.33f; //we start in phase 2 in ftw
+		float tentacleAttacksHealthThreshold => Main.getGoodWorld ? 1f : Main.expertMode ? 0.8f : 0.75f;
+		float phase2HealthThreshold => Main.expertMode ? 0.6f : 0.5f; //we start in phase 2 in ftw //TODO: Shift health thresholds earlier
 
         public override void AI()
 		{
@@ -2690,7 +2690,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			Projectile.Center = oldCenter;
 		}
 
-        public override bool? CanDamage()
+		public override bool? CanDamage()
         {
             return Projectile.timeLeft < 30 ? false : null;
         }

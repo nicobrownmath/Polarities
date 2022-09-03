@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Polarities", "Polarities.csproj", "{09CB25C7-D333-4E3E-9C5E-8E2D9B57446B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Polarities", "Polarities.csproj", "{801DE739-664E-4AE4-A0A9-DA8207F57CEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{09CB25C7-D333-4E3E-9C5E-8E2D9B57446B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09CB25C7-D333-4E3E-9C5E-8E2D9B57446B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09CB25C7-D333-4E3E-9C5E-8E2D9B57446B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09CB25C7-D333-4E3E-9C5E-8E2D9B57446B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{801DE739-664E-4AE4-A0A9-DA8207F57CEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{801DE739-664E-4AE4-A0A9-DA8207F57CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{801DE739-664E-4AE4-A0A9-DA8207F57CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{801DE739-664E-4AE4-A0A9-DA8207F57CEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B1891FBC-3401-4086-B9EB-F9B130B0AAFF}
+		SolutionGuid = {D68781E5-D025-46A5-804F-4B471A008D61}
 	EndGlobalSection
 EndGlobal

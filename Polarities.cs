@@ -35,6 +35,8 @@ using Polarities.NPCs.Enemies.HallowInvasion;
 using Polarities.NPCs.Enemies.WorldEvilInvasion;
 using Polarities.Items.Placeable.Furniture.MusicBoxes;
 using Microsoft.Xna.Framework;
+using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
 
 namespace Polarities
 {
@@ -73,6 +75,11 @@ namespace Polarities
             string texture = GetModNPC(ModContent.NPCType<NPCs.StormCloudfish.StormCloudfish>()).BossHeadTexture + "_2";
             AddBossHeadTexture(texture, -1);
             NPCs.StormCloudfish.StormCloudfish.secondStageHeadSlot = ModContent.GetModBossHeadSlot(texture);
+
+            //shaders
+            Ref<Effect> filtersRef = new Ref<Effect>(Assets.Request<Effect>("Effects/Filters", AssetRequestMode.ImmediateLoad).Value);
+            Filters.Scene["Polarities:ScreenWarp"] = new Filter(new ScreenShaderData(filtersRef, "ScreenWarpPass"), EffectPriority.VeryHigh);
+            Filters.Scene["Polarities:ScreenWarp"].Load();
         }
 
         public override void Unload()
@@ -264,7 +271,7 @@ namespace Polarities
             }
         }
 
-        public override void AddRecipeGroups()
+        public override void AddRecipeGroups()/* tModPorter Note: Removed. Use ModSystem.AddRecipeGroups */
         {
             RecipeGroup.RegisterGroup(
                 "WoodenAtlatl",
