@@ -73,7 +73,7 @@ namespace Polarities.Effects
             }
 
             //screen warp
-            if (GetRenderTargetLayer<ScreenWarpTarget>().HasContent())
+            if (GetRenderTargetLayer<ScreenWarpTarget>().HasContent() || ParticleLayer.WarpParticles.particles.Count > 0)
             {
                 if (!Terraria.Graphics.Effects.Filters.Scene["Polarities:ScreenWarp"].Active)
                     Terraria.Graphics.Effects.Filters.Scene.Activate("Polarities:ScreenWarp");
@@ -140,7 +140,7 @@ namespace Polarities.Effects
 		protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
 		{
 			layerHasContent = false;
-			if (projCache.Count > 0 || npcCache.Count > 0)
+			if (DoesTargetDraw() ?? (projCache.Count > 0 || npcCache.Count > 0))
 			{
 				layerHasContent = true;
 
@@ -159,6 +159,8 @@ namespace Polarities.Effects
 				_wasPrepared = true;
 			}
 		}
+
+		public virtual bool? DoesTargetDraw() => null;
 
 		public virtual void DoDraw()
 		{
@@ -275,6 +277,8 @@ namespace Polarities.Effects
 
 			spriteBatch.End();
             DrawLayer.GetDrawLayer<DrawLayerBeforeScreenObstruction>().Draw();
+            DrawLayer.GetDrawLayer<DrawLayerAdditiveBeforeScreenObstruction>().Draw();
+            DrawLayer.GetDrawLayer<DrawLayerAfterAdditiveBeforeScreenObstruction>().Draw();
             spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
 			orig(spriteBatch);
 		}
@@ -284,6 +288,11 @@ namespace Polarities.Effects
 
     public class ScreenWarpTarget : RenderTargetLayer {
 		public override Color resetColor => new Color(128, 128, 128);
+
+		public override bool? DoesTargetDraw()
+		{
+			return ParticleLayer.WarpParticles.particles.Count > 0 ? true : null;
+		}
 
 		public override void DoDraw()
 		{

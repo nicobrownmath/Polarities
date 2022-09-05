@@ -143,7 +143,7 @@ namespace Polarities.Items.Weapons.Melee
 
         public override bool? CanHitNPC(NPC target)
         {
-            return Projectile.timeLeft < (3600 - 60);
+            return Projectile.timeLeft < (3600 - 60) ? null : false;
         }
 
         public override bool CanHitPvp(Player target)

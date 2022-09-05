@@ -77,9 +77,15 @@ namespace Polarities
             NPCs.StormCloudfish.StormCloudfish.secondStageHeadSlot = ModContent.GetModBossHeadSlot(texture);
 
             //shaders
+            Ref<Effect> miscEffectsRef = new Ref<Effect>(Assets.Request<Effect>("Effects/MiscEffects", AssetRequestMode.ImmediateLoad).Value);
             Ref<Effect> filtersRef = new Ref<Effect>(Assets.Request<Effect>("Effects/Filters", AssetRequestMode.ImmediateLoad).Value);
+
             Filters.Scene["Polarities:ScreenWarp"] = new Filter(new ScreenShaderData(filtersRef, "ScreenWarpPass"), EffectPriority.VeryHigh);
             Filters.Scene["Polarities:ScreenWarp"].Load();
+
+            GameShaders.Misc["Polarities:TriangleFade"] = new MiscShaderData(miscEffectsRef, "TriangleFadePass"); //currently unused
+            GameShaders.Misc["Polarities:WarpZoomRipple"] = new MiscShaderData(miscEffectsRef, "WarpZoomRipplePass");
+            GameShaders.Misc["Polarities:EclipxieSun"] = new MiscShaderData(miscEffectsRef, "EclipxieSunPass");
         }
 
         public override void Unload()

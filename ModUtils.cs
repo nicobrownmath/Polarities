@@ -18,6 +18,7 @@ using Polarities.NPCs;
 using Terraria.ID;
 using Terraria.GameContent;
 using static Terraria.ModLoader.ModContent;
+using Terraria.Graphics.Shaders;
 
 namespace Polarities
 {
@@ -37,7 +38,12 @@ namespace Polarities
 				_AI_007_TownEntities_TeleportToHome = typeof(NPC).GetMethod("AI_007_TownEntities_TeleportToHome", BindingFlags.NonPublic | BindingFlags.Instance);
 				_AI_007_TownEntities_GetWalkPrediction = typeof(NPC).GetMethod("AI_007_TownEntities_GetWalkPrediction", BindingFlags.NonPublic | BindingFlags.Instance);
 				_AI_007_TryForcingSitting = typeof(NPC).GetMethod("AI_007_TryForcingSitting", BindingFlags.NonPublic | BindingFlags.Instance);
-			}
+
+				_miscShaderDataImage0 = typeof(MiscShaderData).GetField("_uImage0", BindingFlags.NonPublic | BindingFlags.Instance);
+                _miscShaderDataImage1 = typeof(MiscShaderData).GetField("_uImage1", BindingFlags.NonPublic | BindingFlags.Instance);
+                _miscShaderDataImage2 = typeof(MiscShaderData).GetField("_uImage2", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            }
 			catch (Exception e)
 			{
 				Logging.PublicLogger.Debug(e);
@@ -58,7 +64,12 @@ namespace Polarities
 			_AI_007_TownEntities_TeleportToHome = null;
 			_AI_007_TownEntities_GetWalkPrediction = null;
 			_AI_007_TryForcingSitting = null;
-		}
+
+			_miscShaderDataImage0 = null;
+			_miscShaderDataImage1 = null;
+			_miscShaderDataImage2 = null;
+
+        }
 
 		private static void TileDrawing_DrawMultiTileVines(ILContext il)
 		{
@@ -112,9 +123,29 @@ namespace Polarities
 					_specialPositions[type][_specialsCount[type]++] = new Point(x, y);
 				}
 			}
-		}
+        }
 
-		public static Color ColorLerpCycle(float time, float cycleTime, params Color[] colors)
+		private static FieldInfo _miscShaderDataImage0;
+        private static FieldInfo _miscShaderDataImage1;
+        private static FieldInfo _miscShaderDataImage2;
+
+		public static MiscShaderData UseImage0(this MiscShaderData shaderData, Asset<Texture2D> image)
+		{
+			_miscShaderDataImage0.SetValue(shaderData, image);
+			return shaderData;
+        }
+        public static MiscShaderData UseImage1(this MiscShaderData shaderData, Asset<Texture2D> image)
+        {
+            _miscShaderDataImage1.SetValue(shaderData, image);
+            return shaderData;
+        }
+        public static MiscShaderData UseImage2(this MiscShaderData shaderData, Asset<Texture2D> image)
+        {
+            _miscShaderDataImage2.SetValue(shaderData, image);
+            return shaderData;
+        }
+
+        public static Color ColorLerpCycle(float time, float cycleTime, params Color[] colors)
 		{
 			if (colors.Length == 0) return default(Color);
 

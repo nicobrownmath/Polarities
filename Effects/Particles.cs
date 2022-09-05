@@ -58,7 +58,7 @@ namespace Polarities.Effects
 			WarpParticles = null;
         }
 
-		HashSet<Particle> particles = new HashSet<Particle>();
+		public HashSet<Particle> particles = new HashSet<Particle>();
 
 		public void Add(Particle particle)
         {

@@ -3174,7 +3174,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			Vector2 flamePos = Projectile.Center - Main.screenPosition + new Vector2(0, -64 * flameScale.X).RotatedBy(Projectile.rotation);
 
             AsthenosProjectile.asthenosRandomValues.SetIndex((int)Projectile.localAI[0]);
-			AsthenosProjectile.DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation, flameScale, 0.5f + Projectile.ai[1], PolaritiesSystem.timer * 3, 2, alpha: 1f, goalAngle: Projectile.rotation);
+			AsthenosProjectile.DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation, flameScale, 0.5f + Projectile.ai[1], PolaritiesSystem.timer * 3, 1, alpha: 2f, goalAngle: Projectile.rotation);
 
 			return false;
 		}
@@ -3270,7 +3270,7 @@ namespace Polarities.NPCs.ConvectiveWanderer
 			Vector2 flamePos = Projectile.Center - Main.screenPosition + new Vector2(0, -64 * flameScale.X).RotatedBy(Projectile.rotation);
 
 			AsthenosProjectile.asthenosRandomValues.SetIndex((int)Projectile.localAI[0]);
-			AsthenosProjectile.DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation, flameScale, 0.5f + Projectile.ai[1], PolaritiesSystem.timer * 3, 2, alpha: 1f, goalAngle: Projectile.rotation);
+			AsthenosProjectile.DrawFlame(Main.spriteBatch, flamePos, Projectile.rotation, flameScale, 0.5f + Projectile.ai[1], PolaritiesSystem.timer * 3, 1, alpha: 2f, goalAngle: Projectile.rotation);
 
 			return false;
 		}

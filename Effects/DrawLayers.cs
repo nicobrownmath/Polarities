@@ -215,4 +215,25 @@ namespace Polarities.Effects
             doWeResetSpritebatch = false;
         }
     }
+    public class DrawLayerAdditiveBeforeScreenObstruction : DrawLayer
+    {
+        public override void Load(Mod mod)
+        {
+            base.Load(mod);
+
+            blendState = BlendState.Additive;
+            doWeResetSpritebatch = false;
+        }
+    }
+
+    public class DrawLayerAfterAdditiveBeforeScreenObstruction : DrawLayer
+    {
+        public override void Load(Mod mod)
+        {
+            base.Load(mod);
+
+            blendState = BlendState.AlphaBlend;
+            doWeResetSpritebatch = false;
+        }
+    }
 }

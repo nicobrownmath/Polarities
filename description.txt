@@ -18,6 +18,11 @@ v0.11 Beta 2 Changelog
   Convective Wanderer now enters phase 2 slightly earlier
   Fixed some laser collison bugs
   Fixed the crystal knives not having their recipe
+  Improved the efficiency of convective wanderer's flame drawing
+  Fixed the Lernaean's orbiters damaging friendly NPCs
+
+Fixes to do:
+  Worm guns break with manual
 
 Things I should do:
   MUSIC RE-ADD THE MUSIC
