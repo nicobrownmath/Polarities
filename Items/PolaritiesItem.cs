@@ -167,7 +167,7 @@ namespace Polarities.Items
 
             if (!item.social && item.prefix > 0)
             {
-                if (item.autoReuse ^ Main.tooltipPrefixComparisonItem.autoReuse) //TODO: This doesn't seem to work?
+                if (Main.tooltipPrefixComparisonItem != null && item.autoReuse ^ Main.tooltipPrefixComparisonItem.autoReuse) //TODO: This doesn't seem to work?
                 {
                     if (item.autoReuse)
                     {
