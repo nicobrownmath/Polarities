@@ -63,6 +63,8 @@ namespace Polarities.NPCs.Critters
             NPC.DeathSound = Sounds.ConvectiveBabyDeath;
             NPC.npcSlots = 0.1f;
 
+            NPC.rarity = 4;
+
             NPC.catchItem = (short)ItemType<BabyWandererItem>();
 
             SpawnModBiomes = new int[1] { GetInstance<LavaOcean>().Type };
