@@ -12,7 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MultiHitboxNPCLibrary">
-      <HintPath>..\..\..\tModLoader-preview\ModReader\MultiHitboxNPCLibrary\MultiHitboxNPCLibrary.dll</HintPath>
+      <HintPath>..\..\ModReader\MultiHitboxNPCLibrary\MultiHitboxNPCLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

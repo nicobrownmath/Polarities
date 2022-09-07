@@ -31,7 +31,9 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
 
 			PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.WorldEvilInvasionWorm;
-		}
+
+            MultiHitboxNPC.MultiHitboxNPCTypes.Add(Type);
+        }
 
 		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
 		{

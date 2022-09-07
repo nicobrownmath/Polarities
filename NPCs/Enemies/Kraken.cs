@@ -52,6 +52,8 @@ namespace Polarities.NPCs.Enemies
                 }
             };
             NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+
+            MultiHitboxNPC.MultiHitboxNPCTypes.Add(Type);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

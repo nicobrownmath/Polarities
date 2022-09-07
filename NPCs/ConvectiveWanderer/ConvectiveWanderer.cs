@@ -174,7 +174,9 @@ namespace Polarities.NPCs.ConvectiveWanderer
 
             //trails for head swing
             NPCID.Sets.TrailCacheLength[Type] = 30;
-		}
+
+			MultiHitboxNPC.MultiHitboxNPCTypes.Add(Type);
+        }
 
 		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
 		{

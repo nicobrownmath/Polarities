@@ -97,6 +97,8 @@ namespace Polarities.NPCs.Esophage
             Main.npcFrameCount[NPC.type] = 6;
             NPCID.Sets.TrailCacheLength[NPC.type] = 5;
             NPCID.Sets.TrailingMode[NPC.type] = 0;
+
+            MultiHitboxNPC.MultiHitboxNPCTypes.Add(Type);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

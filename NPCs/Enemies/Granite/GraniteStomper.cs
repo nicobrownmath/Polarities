@@ -37,6 +37,8 @@ namespace Polarities.NPCs.Enemies.Granite
                 }
             };
             NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+
+            MultiHitboxNPC.MultiHitboxNPCTypes.Add(Type);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

@@ -564,7 +564,12 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region ?
+                #region Deathray Sweep
+                case 8:
+                    {
+
+                        break;
+                    }
                 #endregion
             }
         }
@@ -625,7 +630,7 @@ namespace Polarities.NPCs.Eclipxie
                 //draw an extra moon over stuff sometimes
                 if (NPC.ai[0] == 3 && NPC.ai[1] >= 60)
                 {
-                    spriteBatch.Draw(MoonTexture.Value, NPC.Center - screenPos, MoonTexture.Frame(), Color.White, 0f, MoonTexture.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(MoonTexture.Value, NPC.Center - screenPos, MoonTexture.Frame(), Color.Black, 0f, MoonTexture.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
                 }
 
                 return false;
@@ -1301,6 +1306,7 @@ namespace Polarities.NPCs.Eclipxie
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             RenderTargetLayer.AddProjectile<ScreenWarpTarget>(index);
+            DrawLayer.AddProjectile<DrawLayerAfterAdditiveBeforeScreenObstruction>(index);
             DrawLayer.AddProjectile<DrawLayerAdditiveBeforeScreenObstruction>(index);
         }
 
@@ -1335,7 +1341,7 @@ namespace Polarities.NPCs.Eclipxie
                 //anti-distortion
                 Main.spriteBatch.Draw(Textures.Glow256.Value, Projectile.Center - Main.screenPosition, Textures.Glow256.Frame(), new Color(128, 128, 128), 0f, Textures.Glow256.Size() / 2, 1.8f, SpriteEffects.None, 0f);
             }
-            else
+            else if (DrawLayer.IsActive<DrawLayerAdditiveBeforeScreenObstruction>())
             {
                 //draw lasers
                 for (int laserIndex = 0; laserIndex < numRays; laserIndex++)
@@ -1358,6 +1364,14 @@ namespace Polarities.NPCs.Eclipxie
                     Rectangle startFrame = new Rectangle(texture.Width - (int)extra, 0, (int)extra, texture.Height);
                     Vector2 startOrigin = new Vector2((int)extra - extra, texture.Height / 2);
                     Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, startFrame, color, Projectile.rotation + laserIndex * MathHelper.TwoPi / numRays, startOrigin, scale, SpriteEffects.None, 0);
+                }
+            }
+            else
+            {
+                float heightMultiplier = Math.Min(1, Math.Min(Projectile.timeLeft / 20f, (360 - Projectile.timeLeft) / 20f));
+                for (int laserIndex = 0; laserIndex < numRays; laserIndex++)
+                {
+                    Main.spriteBatch.Draw(Textures.PixelTexture.Value, Projectile.Center - Main.screenPosition, Textures.PixelTexture.Frame(), Color.Black, Projectile.rotation + laserIndex * MathHelper.TwoPi / numRays, new Vector2(0, 0.5f), new Vector2(radius, 0.3f * heightMultiplier * Projectile.height), SpriteEffects.None, 0);
                 }
             }
             return false;
