@@ -30,6 +30,9 @@ using Polarities.NPCs.ConvectiveWanderer;
 using Polarities.Items.Placeable.Furniture.Salt;
 using Terraria.GameContent.Events;
 using Polarities.NPCs.TownNPCs;
+using Polarities.NPCs.Eclipxie;
+using Terraria.Graphics.Effects;
+using Humanizer;
 
 namespace Polarities
 {
@@ -312,7 +315,7 @@ namespace Polarities
 			disabledEvilSpread = tag.ContainsKey("disabledEvilSpread");
 		}
 
-        public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
+		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
 		{
 			int skyChestIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Floating Island Houses"));
 			if (skyChestIndex != -1)
@@ -1633,7 +1636,7 @@ namespace Polarities
         public override void PreUpdateWorld()
 		{
 			LoopedSound.UpdateLoopedSounds();
-		}
+        }
 
         public static bool ranGemflyAmbience;
 		public override void PreUpdateNPCs()
@@ -1650,7 +1653,14 @@ namespace Polarities
 			limestoneBlockCount = tileCounts[TileType<LimestoneTile>()];
 		}
 
-        public override void PostUpdateEverything()
+		public static Color modifyBackgroundColor = Color.Transparent;
+        public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor)
+		{
+			backgroundColor = new Color(backgroundColor.ToVector3() * (1 - modifyBackgroundColor.A / 255f) + modifyBackgroundColor.ToVector3());
+			modifyBackgroundColor = Color.Transparent;
+        }
+
+		public override void PostUpdateEverything()
 		{
 			if (NPC.downedMechBossAny && !downedHallowInvasion && Main.invasionType == 0 /*TODO: && !SLWorld.subworld*/ && Main.rand.NextBool(2 * 24 * 60 * 60))
 			{
@@ -1694,7 +1704,7 @@ namespace Polarities
 				sunPixieSpawnTimer++;
 			}
 
-			timer++;
+            timer++;
 		}
 
 		public override void PostDrawInterface(SpriteBatch spriteBatch)

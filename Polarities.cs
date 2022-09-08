@@ -37,6 +37,7 @@ using Polarities.Items.Placeable.Furniture.MusicBoxes;
 using Microsoft.Xna.Framework;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
+using Polarities.NPCs.Eclipxie;
 
 namespace Polarities
 {
@@ -282,14 +283,14 @@ namespace Polarities
             RecipeGroup.RegisterGroup(
                 "WoodenAtlatl",
                 new RecipeGroup(
-                    () => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ModContent.ItemType<Items.Weapons.Ranged.Atlatls.WoodenAtlatl>())}",
-                    ModContent.ItemType<Items.Weapons.Ranged.Atlatls.WoodenAtlatl>(),
-                    ModContent.ItemType<Items.Weapons.Ranged.Atlatls.BorealWoodAtlatl>(),
-                    ModContent.ItemType<Items.Weapons.Ranged.Atlatls.PalmWoodAtlatl>(),
-                    ModContent.ItemType<Items.Weapons.Ranged.Atlatls.MahoganyAtlatl>(),
-                    ModContent.ItemType<Items.Weapons.Ranged.Atlatls.EbonwoodAtlatl>(),
-                    ModContent.ItemType<Items.Weapons.Ranged.Atlatls.ShadewoodAtlatl>(),
-                    ModContent.ItemType<Items.Weapons.Ranged.Atlatls.PearlwoodAtlatl>()
+                    () => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemType<Items.Weapons.Ranged.Atlatls.WoodenAtlatl>())}",
+                    ItemType<Items.Weapons.Ranged.Atlatls.WoodenAtlatl>(),
+                    ItemType<Items.Weapons.Ranged.Atlatls.BorealWoodAtlatl>(),
+                    ItemType<Items.Weapons.Ranged.Atlatls.PalmWoodAtlatl>(),
+                    ItemType<Items.Weapons.Ranged.Atlatls.MahoganyAtlatl>(),
+                    ItemType<Items.Weapons.Ranged.Atlatls.EbonwoodAtlatl>(),
+                    ItemType<Items.Weapons.Ranged.Atlatls.ShadewoodAtlatl>(),
+                    ItemType<Items.Weapons.Ranged.Atlatls.PearlwoodAtlatl>()
                 ));
 
             RecipeGroup.RegisterGroup(

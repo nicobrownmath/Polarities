@@ -47,6 +47,7 @@ using Polarities.Items.Armor.Vanity.ElectroManiacSet;
 using Polarities.Items.Armor.Vanity.BubbySet;
 using Polarities.Items.Weapons;
 using Polarities.Items.Weapons.Ranged;
+using Polarities.NPCs.Eclipxie;
 
 namespace Polarities
 {
@@ -62,9 +63,11 @@ namespace Polarities
             IL.Terraria.Player.UpdateLifeRegen += Player_UpdateLifeRegen;
             //dev armor
             On.Terraria.Player.TryGettingDevArmor += Player_TryGettingDevArmor;
+			//customskies
+			IL.Terraria.Player.UpdateBiomes += Player_UpdateBiomes;
         }
 
-        public int warhammerDefenseBoost = 0;
+		public int warhammerDefenseBoost = 0;
 		public int warhammerTimeBoost = 0;
 
 		public Dictionary<float, float> screenShakes = new Dictionary<float, float>(); //key is time at which the screenshake ends, value is magnitude
@@ -1190,7 +1193,32 @@ namespace Polarities
 				return (Crit && !pvp) ? DamagedFriendlyCritFromEnemyColor : defaultColor;
 			});
 			c.Emit(OpCodes.Stloc, 8);
-		}
+        }
+
+        private void Player_UpdateBiomes(ILContext il)
+        {
+            ILCursor c = new ILCursor(il);
+
+			if (!c.TryGotoNext(MoveType.After,
+				i => i.MatchLdarg(0),
+				i => i.MatchLdstr("MoonLord"),
+				i => i.MatchLdcI4(398),
+				i => i.MatchCall(typeof(NPC).GetMethod("AnyNPCs", BindingFlags.Public | BindingFlags.Static)),
+				i => i.MatchLdloca(17),
+				i => i.MatchInitobj<Vector2>(),
+				i => i.MatchLdloc(17)
+                ))
+            {
+                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
+                return;
+            }
+
+			c.Emit(OpCodes.Ldarg, 0);
+			c.EmitDelegate<Action<Player>>((Player player) =>
+            {
+                player.ManageSpecialBiomeVisuals("Polarities:EclipxieSky", NPC.AnyNPCs(NPCType<Eclipxie>()));
+            });
+        }
 
         public override void UpdateLifeRegen()
         {

@@ -27,6 +27,13 @@ using static tModPorter.ProgressUpdate;
 using IL.Terraria.GameContent.NetModules;
 using Polarities.Items.Weapons.Ranged;
 using Terraria.Graphics.Shaders;
+using Polarities.Biomes;
+using Terraria.Graphics.Effects;
+using Filters = Terraria.Graphics.Effects.Filters;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
+using IL.Terraria.Social.Base;
+using Microsoft.CodeAnalysis.FlowAnalysis;
 
 namespace Polarities.NPCs.Eclipxie
 {
@@ -611,7 +618,7 @@ namespace Polarities.NPCs.Eclipxie
                         if (NPC.ai[1] == setupTime + hoverTime + attackTime + windDownTime)
                         {
                             NPC.ai[1] = 0;
-                            NPC.ai[0] = 8;
+                            NPC.ai[0] = 1;
                         }
                         break;
                     }
@@ -724,6 +731,193 @@ namespace Polarities.NPCs.Eclipxie
     }
 
     //TODO: Cool cosmic background
+    public class EclipxieSky : CustomSky, ILoadable
+    {
+        bool isActive;
+        float fadeOpacity;
+
+        public void Load(Mod mod)
+        {
+            Filters.Scene["Polarities:EclipxieSky"] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(1f, 1f, 1f).UseOpacity(0f), EffectPriority.VeryLow);
+            SkyManager.Instance["Polarities:EclipxieSky"] = new EclipxieSky();
+        }
+
+        public void Unload()
+        {
+            skyTarget.Dispose();
+            skyTarget = null;
+        }
+
+        static RenderTarget2D skyTarget;
+        static int numStars = 0;
+        static float textureGenProgress = 0f;
+
+        //TODO: This approach to star drawing is almost certainly horribly inefficient
+        //Generates stars gradually over the course of the spawn anim to avoid freezing up
+        public static void UpdateSky(float progress)
+        {
+            int targetSize = (int)Math.Ceiling(2 * Math.Sqrt(Main.screenWidth * Main.screenWidth / 4f + Main.screenHeight * Main.screenHeight));
+            int maxStars = (int)((targetSize * targetSize) / 10 * progress);
+            if (skyTarget == null || skyTarget.Width != targetSize || numStars < maxStars || progress < textureGenProgress)
+            {
+                bool resetTarget = skyTarget == null || skyTarget.Width != targetSize || progress < textureGenProgress;
+
+                if (resetTarget)
+                {
+                    skyTarget = new RenderTarget2D(Main.spriteBatch.GraphicsDevice, targetSize, targetSize, false, Main.spriteBatch.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+                    numStars = 0;
+                    textureGenProgress = progress;
+                }
+
+                RenderTarget2D skyTargetBackup = new RenderTarget2D(Main.spriteBatch.GraphicsDevice, targetSize, targetSize, false, Main.spriteBatch.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+
+                Main.spriteBatch.GraphicsDevice.SetRenderTarget(skyTargetBackup);
+                Main.spriteBatch.GraphicsDevice.Clear(new Color(0, 0, 2));
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+
+                Main.spriteBatch.Draw(skyTarget, skyTarget.Frame(), Color.White);
+
+                Main.spriteBatch.End();
+
+                Main.spriteBatch.GraphicsDevice.SetRenderTarget(skyTarget);
+                Main.spriteBatch.GraphicsDevice.Clear(new Color(0, 0, 2));
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+
+                if (skyTargetBackup != null) Main.spriteBatch.Draw(skyTargetBackup, skyTarget.Frame(), Color.White);
+
+                if (resetTarget)
+                {
+                    //TODO: Milky way could use some sort of core
+
+                    //milky way
+                    const int numDraws = 60;
+                    for (int i = 0; i < numDraws; i++)
+                    {
+                        Texture2D texture = Textures.Glow256.Value;
+                        Texture2D fuzzTexture = TextureAssets.Projectile[ProjectileType<ContagunProjectile>()].Value;
+                        Vector2 drawPos = new Vector2(i * targetSize / (float)numDraws, targetSize / 4f);
+                        float scaleMult = 512 * (float)(Math.Pow(i * (numDraws - i) / (float)(numDraws * numDraws) * 4, 2) + 2) / 3 * Main.rand.NextFloat(0.25f, 1f);
+                        Color drawColor = Color.Lerp(new Color(192, 224, 255), new Color(255, 224, 192), i * (numDraws - i) / (float)(numDraws * numDraws) * 4 + Main.rand.NextFloat(-0.2f, 0.2f)) * 0.25f;
+                        Main.spriteBatch.Draw(texture, drawPos, texture.Frame(), drawColor, Main.rand.NextFloat(MathHelper.TwoPi), texture.Size() / 2, scaleMult / texture.Width, (SpriteEffects)Main.rand.Next(2), 0f);
+                        Main.spriteBatch.Draw(fuzzTexture, drawPos, fuzzTexture.Frame(), drawColor, Main.rand.NextFloat(MathHelper.TwoPi), fuzzTexture.Size() / 2, scaleMult / fuzzTexture.Width * 1.2f, (SpriteEffects)Main.rand.Next(2), 0f);
+                    }
+                    for (int i = 0; i < numDraws; i++)
+                    {
+                        Texture2D texture = TextureAssets.Projectile[ProjectileType<ContagunProjectile>()].Value;
+                        Vector2 drawPos = new Vector2(i * targetSize / (float)numDraws, targetSize / 4f);
+                        float scaleMult = 512 * (float)(Math.Pow(i * (numDraws - i) / (float)(numDraws * numDraws) * 4, 2) + 2) / 3 * Main.rand.NextFloat(0.25f, 1f);
+                        Main.spriteBatch.Draw(texture, drawPos, texture.Frame(), new Color(16, 8, 0), Main.rand.NextFloat(MathHelper.TwoPi), texture.Size() / 2, scaleMult / texture.Width * 0.9f, (SpriteEffects)Main.rand.Next(2), 0f);
+                        Main.spriteBatch.Draw(texture, drawPos, texture.Frame(), new Color(16, 8, 0), Main.rand.NextFloat(MathHelper.TwoPi), texture.Size() / 2, scaleMult / texture.Width * 1.1f, (SpriteEffects)Main.rand.Next(2), 0f);
+                    }
+
+                    //TODO: A few other galaxies/clusters
+                }
+
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+
+                for (int i = numStars; i < maxStars; i++)
+                {
+                    Vector2 starPosition = new Vector2((float)Math.Sqrt(Main.rand.NextFloat(1)) * targetSize / 2f, 0).RotatedByRandom(MathHelper.TwoPi);
+                    const float minDistance = 0.015f;
+                    float starDistance = (float)Math.Pow(Main.rand.NextFloat(minDistance, 1f), 1 / 3f);
+                    float starBrightness = Main.rand.NextFloat(1);
+                    Color starColor = ModUtils.ConvectiveFlameColor(Main.rand.NextFloat(1));
+
+                    Main.spriteBatch.Draw(Textures.Glow58.Value, new Vector2(targetSize / 2f) + starPosition, Textures.Glow58.Frame(), starColor * (0.25f / starDistance), 0f, Vector2.Zero, 0.03f / starDistance * starBrightness, SpriteEffects.None, 0f);
+                }
+                numStars = maxStars;
+
+                Main.spriteBatch.End();
+                Main.spriteBatch.GraphicsDevice.SetRenderTarget(null);
+
+                skyTargetBackup.Dispose();
+
+                /*if (progress == 1f)
+                {
+                    var stream = File.Create(Main.SavePath + Path.DirectorySeparatorChar + "ModSources/Polarities/NPCs/Eclipxie/EclipxieSky_Background.png");
+                    skyTarget.SaveAsPng(stream, skyTarget.Width, skyTarget.Height);
+                    stream.Dispose();
+                }*/
+            }
+        }
+
+        public override void Activate(Vector2 position, params object[] args)
+        {
+            isActive = true;
+            fadeOpacity = 0.002f;
+        }
+
+        public override void Deactivate(params object[] args)
+        {
+            isActive = false;
+        }
+
+        public override bool IsActive()
+        {
+            if (!isActive)
+            {
+                if (fadeOpacity <= 0.001f)
+                {
+                    if (skyTarget != null)
+                    {
+                        skyTarget.Dispose();
+                        skyTarget = null;
+                    }
+                    numStars = 0;
+                    textureGenProgress = 0f;
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public override void Reset()
+        {
+            isActive = false;
+            if (skyTarget != null)
+            {
+                skyTarget.Dispose();
+                skyTarget = null;
+            }
+            numStars = 0;
+            textureGenProgress = 0f;
+        }
+
+        //TODO: CustomSkies freeze when time is frozen thanks to Main.desiredWorldEventsUpdateRate, I should fix this
+        public override void Update(GameTime gameTime)
+        {
+            if (isActive)
+            {
+                fadeOpacity = Math.Min(1f, 0.01f + fadeOpacity);
+            }
+            else
+            {
+                fadeOpacity = Math.Max(0f, fadeOpacity - 0.01f);
+            }
+
+            textureGenProgress = Math.Min(1f, textureGenProgress + 1 / 120f);
+            UpdateSky(textureGenProgress);
+        }
+
+        public override Color OnTileColor(Color inColor)
+        {
+            PolaritiesSystem.modifyBackgroundColor = Color.Lerp(PolaritiesSystem.modifyBackgroundColor, Color.Black, fadeOpacity);
+            return Color.Lerp(inColor, new Color(8, 8, 8), fadeOpacity);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
+        {
+            Main.ColorOfTheSkies = Color.Black; //clouds are black
+
+            const float depth = 10f;
+            if (minDepth <= depth && maxDepth > depth)
+            {
+                //TODO: Maybe base on Eclipxie's health? Or at least choose values s.t. the milky way is always visible
+                if (skyTarget != null) Main.spriteBatch.Draw(skyTarget, new Vector2(Main.screenWidth / 2f, Main.screenHeight), skyTarget.Frame(), Color.White * fadeOpacity, PolaritiesSystem.timer * MathHelper.TwoPi / 86400, skyTarget.Size() / 2, 1f, SpriteEffects.None, 0f);
+            }
+        }
+    }
 
     //TODO: Remove any pixelation from this and maybe lasers
     public class WarpZoomPulseParticle : Particle
@@ -1426,7 +1620,7 @@ namespace Polarities.NPCs.Eclipxie
                 case 1:
                     if (Projectile.timeLeft < Projectile.localAI[1] - 30)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2((float)Math.Pow(Main.rand.NextFloat(), 2) * 2000, 0).RotatedBy(Projectile.rotation), owner.velocity, ProjectileType<EclipxieMeteor>(), Eclipxie.ProjectileDamage, 0f, Projectile.owner, ai0: 2, ai1: Main.rand.Next(2));
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2((float)Math.Pow(Main.rand.NextFloat(), 2) * 2000, 0).RotatedBy(Projectile.rotation), owner.velocity + new Vector2(4, 0).RotatedBy(Projectile.rotation), ProjectileType<EclipxieMeteor>(), Eclipxie.ProjectileDamage, 0f, Projectile.owner, ai0: 2, ai1: Main.rand.Next(2));
                     }
                     break;
             }
@@ -1437,6 +1631,12 @@ namespace Polarities.NPCs.Eclipxie
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             float widthMultiplier = Math.Min(1, Math.Min(Projectile.timeLeft / 20f, (Projectile.localAI[1] - Projectile.timeLeft) / 20f));
+            switch ((int)Projectile.ai[1] / 2)
+            {
+                case 1:
+                    widthMultiplier *= 1.5f;
+                    break;
+            }
             float collisionPoint = 0f;
             for (int i = 0; i < (int)Projectile.localAI[0]; i++)
                 if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(radius, 0).RotatedBy(Projectile.rotation + i * MathHelper.TwoPi / (int)Projectile.localAI[0]), widthMultiplier * 16f, ref collisionPoint)) return true;

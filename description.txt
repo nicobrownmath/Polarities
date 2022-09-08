@@ -21,6 +21,8 @@ v0.11 Beta 2 Changelog
   Improved the efficiency of convective wanderer's flame drawing
   Fixed the Lernaean's orbiters damaging friendly NPCs
   Baby wanderers can now be detected by the lifeform analyzer
+  Fixed the stardance not being researchable
+  Fixed the lava ocean biome extending up out of the underworld
 
 Fixes to do:
   Worm guns break with manual
