@@ -173,7 +173,8 @@ namespace Polarities.NPCs.TownNPCs
 			chat.Add((baseDialogueString + "Generic0", null));
 			chat.Add((baseDialogueString + "Generic1", null));
 			chat.Add((baseDialogueString + "Generic2", null));
-			if (NPC.FindFirstNPC(NPCID.Angler) >= 0)
+            chat.Add((baseDialogueString + "Generic3", null));
+            if (NPC.FindFirstNPC(NPCID.Angler) >= 0)
 			{
 				chat.Add((baseDialogueString + "Angler", new { NPCName = Main.npc[NPC.FindFirstNPC(NPCID.Angler)].GivenName }));
 			}

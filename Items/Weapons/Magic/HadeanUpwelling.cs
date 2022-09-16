@@ -123,7 +123,7 @@ namespace Polarities.Items.Weapons.Magic
 
 		public override bool? CanHitNPC(NPC target)
 		{
-			return Projectile.timeLeft >= FADE_TIME;
+			return Projectile.timeLeft >= FADE_TIME ? null : false;
 		}
 
 		public override bool PreDraw(ref Color lightColor)

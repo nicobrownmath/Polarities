@@ -6,6 +6,7 @@ using Polarities.Buffs;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.DataStructures;
 
 namespace Polarities.Items.Books
 {
@@ -161,14 +162,13 @@ namespace Polarities.Items.Books
 			Projectile.localNPCHitCooldown = 10;
 		}
 
+		public override void OnSpawn(IEntitySource source)
+        {
+            hook = Main.projectile[(int)Projectile.ai[1]];
+        }
+
 		public override void AI()
 		{
-			if (Projectile.localAI[0] == 0)
-			{
-				hook = Main.projectile[(int)Projectile.ai[1]];
-				Projectile.localAI[0] = 1;
-			}
-
 			Player player = Main.player[Projectile.owner];
 
 			if (player.HasBuff(BuffType<PlanteraBookBuff>()))

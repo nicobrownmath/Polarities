@@ -25,7 +25,7 @@ namespace Polarities.Items.Weapons.Summon.Sentries
 		public override void SetDefaults()
 		{
 			Item.SetWeaponValues(29, 2, 0);
-			Item.DamageType = DamageClass.Melee;
+			Item.DamageType = DamageClass.Summon;
 			Item.sentry = true;
 			Item.mana = 5;
 

@@ -37,6 +37,7 @@ using IL.Terraria.GameContent.NetModules;
 namespace Polarities.Effects
 {
 	//TODO: Fix zoom jittering
+	//TODO: Priority value
 	public abstract class RenderTargetLayer : ARenderTargetContentByRequest, ILoadable
 	{
 		private static Dictionary<Type, RenderTargetLayer> renderTargetLayers = new Dictionary<Type, RenderTargetLayer>();

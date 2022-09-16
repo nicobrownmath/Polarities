@@ -23,6 +23,9 @@ v0.11 Beta 2 Changelog
   Baby wanderers can now be detected by the lifeform analyzer
   Fixed the stardance not being researchable
   Fixed the lava ocean biome extending up out of the underworld
+  Fixed the grapes' wrath hook tentacles not appearing
+  Fixed the pincer staff doing melee damage
+  Added a new ghostwriter dialogue
 
 Fixes to do:
   Worm guns break with manual
