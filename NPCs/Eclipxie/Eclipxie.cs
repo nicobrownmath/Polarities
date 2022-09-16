@@ -710,7 +710,7 @@ namespace Polarities.NPCs.Eclipxie
             if (gotoNextAttack)
             {
                 //TODO: p1 should alternate (solar or lunar), (lunar or solar), both
-                NPC.ai[0] = Main.rand.Next(1, 8);
+                NPC.ai[0] = Main.rand.Next(1, 10);
                 NPC.ai[1] = 0;
             }
         }
