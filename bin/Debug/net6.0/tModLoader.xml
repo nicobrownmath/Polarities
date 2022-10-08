@@ -3125,6 +3125,16 @@
             - FairyQueenRangedItem<br/>
             </summary>
         </member>
+        <member name="P:Terraria.Item.InterruptChannelOnHurt">
+            <summary>
+            When enabled and the player is hurt, <see cref="F:Terraria.Player.channel"/> will be set to false
+            </summary>
+        </member>
+        <member name="P:Terraria.Item.StopAnimationOnHurt">
+            <summary>
+            When enabled and the player is hurt, <see cref="F:Terraria.Player.channel"/> will be set to false, and the item animation will stop immediately
+            </summary>
+        </member>
         <member name="P:Terraria.Item.IsCandidateForReforge">
             <summary>
             Used to make stackable items reforgeable
@@ -4202,6 +4212,696 @@
         <member name="T:Terraria.ModLoader.EquipType">
             <summary>
             This is an enum of all the types of equipment that exist. An equipment type is defined as a type or layer of texture that is drawn on the player (for example, body and shield and wings).
+            </summary>
+        </member>
+        <member name="T:Terraria.ModLoader.GameTipData">
+            <summary>
+            Wrapper class for a LocalizedText and visibility field that has intended use with modification
+            of Game Tips.
+            </summary>
+        </member>
+        <member name="P:Terraria.ModLoader.GameTipData.Mod">
+            <summary>
+            The mod instance this tip belongs to. This value is null
+            for vanilla tips.
+            </summary>
+        </member>
+        <member name="P:Terraria.ModLoader.GameTipData.Name">
+            <summary>
+            Retrieves the "name" of this GameTip, which is the Key excluding the beginning Mods.ModName.GameTips portion.
+            For example, if the key was "Mods.ExampleMod.GameTips.ExampleTip", this would return "ExampleTip".
+            </summary>
+        </member>
+        <member name="P:Terraria.ModLoader.GameTipData.FullName">
+            <summary>
+            Retrieves the FULL "name" of this GameTip, which includes the Mod and this tip's Name.
+            For example, if this tip was from ExampleMod and was named "ExampleTip", this would
+            return "ExampleMod/ExampleTip"
+            </summary>
+        </member>
+        <member name="M:Terraria.ModLoader.GameTipData.Hide">
+            <summary>
+            Until reload, prevents this tip from ever appearing during loading screens.
+            </summary>
+        </member>
+        <member name="T:Terraria.ModLoader.GameTipID">
+            <summary>
+            This class contains a more human-readable name for every single Game Tip created by Vanilla.
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.UseSafeOrPiggyBank">
+            <summary>
+            "Other players can loot your chests! If you don't trust them, use a Safe or Piggy Bank; those items have storage that is exclusive to each player."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.InfoAccessoriesInInventory">
+            <summary>
+            "Info accessories don't need to be equipped to provide you and nearby friends with useful information; you can just leave them in your Inventory."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.RopeAndRopeCoils">
+            <summary>
+            "Rope can really help you get around while exploring caves. You can even craft it into a Rope Coil which can be thrown and automatically unfolds!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GlowingMushroomBiomeAndTruffles">
+            <summary>
+            "Mushroom Biomes can be grown above ground as well as below. Friendly Truffles will sometimes make themselves at home in Surface Mushroom Biomes."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.SpawnPointSettingWithBed">
+            <summary>
+            "You can change your spawn point by placing and using a bed."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.MagicMirror">
+            <summary>
+            "If you find a Magic Mirror, you can use it to teleport back to your spawn point."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.FloatingIslandsInSky">
+            <summary>
+            "There are Floating Islands in the sky."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.BoundNPCsInWorld">
+            <summary>
+            "Sometimes you can find NPCs hidden around the World."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.BloodMoonZombieDoorOpening">
+            <summary>
+            "During a Blood Moon, Zombies can open doors."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.WaterBreaksFall">
+            <summary>
+            "Water will break your fall."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GlowsticksAndTorches">
+            <summary>
+            "Torches and Glowsticks can be a light for you in dark places when all other lights go out. Torches won't work underwater, but Glowsticks will."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.LavaAndObsidianSkinPotion">
+            <summary>
+            "Don't fall into lava without drinking an Obsidian Skin Potion first!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.LuckyHorseshoeFallDamage">
+            <summary>
+            "You won't take falling damage if you have a Lucky Horseshoe. Look for them in chests underground."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.ObsidianSkullWithHellstoneOrMeteorite">
+            <summary>
+            "Walking on Hellstone and Meteorite can burn you! Protect yourself by equipping an Obsidian Skull or similar accessory."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.LifeCrystalsForLifeIncrease">
+            <summary>
+            "Life Crystals are hidden around the World. Use them to increase your health."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.TorchesCrafting">
+            <summary>
+            "Torches require Wood and Gel to craft. Gel can be obtained by defeating slimes."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.OrePickaxePowerRequirements">
+            <summary>
+            "Some ores require better pickaxes to mine."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.BossesBetterWithFriends">
+            <summary>
+            "Bosses are easier to defeat with friends."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.BowsAndGunsNeedAmmo">
+            <summary>
+            "Bows and guns require the proper ammo in your Ammo Slots."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.OldManWithCurseIsClothier">
+            <summary>
+            "The Old Man at the Dungeon is a Clothier. If only someone could lift his curse..."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.MerchantsNeedMoneyToMoveIn">
+            <summary>
+            "Merchants love money. If you save up enough, one might move in!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.DemolitionistNeedsExplosivesToMoveIn">
+            <summary>
+            "Keep an explosive in your inventory or a storage container to attract a Demolitionist to your house."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.NeedHousingForTownNPCs">
+            <summary>
+            "Make sure you have valid housing with empty rooms, and you may attract new inhabitants to your World."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.PlatformsWhileExploring">
+            <summary>
+            "When exploring, it helps to keep some Platforms on hand. They can be crafted from numerous materials such as Wood, Glass, or even Bones."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.DryadNeedsBossToMoveIn">
+            <summary>
+            "Slay a boss to attract a Dryad to your house. She can tell you the state of Corruption, Crimson, and Hallow in your World."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.ButtonRemappingInControlsMenu">
+            <summary>
+            "Advanced players may wish to remap their buttons; you can do this from the Controls Menu in Settings."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.MiningHelmet">
+            <summary>
+            "Wear a Mining Helmet if you don't want to use Torches."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.CanWearBucketsOnHead">
+            <summary>
+            "You can wear Buckets on your head!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GuideVoodooDollToSummonWOF">
+            <summary>
+            "Defeat the boss in The Underworld to change the World forever. Find a Guide Voodoo Doll and hurl it into the infernal lava to summon him."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.PwnHammerForAltars">
+            <summary>
+            "Demon Altars and Crimson Altars can't be destroyed with a normal hammer. You have to pwn them."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.BunnyKillingIsCruel">
+            <summary>
+            "Killing Bunnies is cruel. Period."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.ManaCrystalCrafting">
+            <summary>
+            "Falling Stars sometimes appear at night. Collect 5 of them to craft a Mana Crystal you can use to increase your Mana."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.WatchOutForMeteorites">
+            <summary>
+            "Watch out for Meteorites!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.PetsAreBestFriends">
+            <summary>
+            "A pet can be your best friend."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.DigDeeperForUnderworld">
+            <summary>
+            "If you dig deep enough, you'll end up in The Underworld!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.SantaClausDuringChristmasSeason">
+            <summary>
+            "Santa Claus is real. He comes to town after the Frost Legion is defeated (and 'tis the season)."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.SnowGlobalSummonsFrostLegion">
+            <summary>
+            "Don't shake a Snow Globe unless you want to summon the Frost Legion."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.SpredHallowWithSeedsOrWater">
+            <summary>
+            "You can use Hallowed Seeds, Holy Water, or Pearlstone to make Hallow spread."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.CorruptionCantSpreadInHallow">
+            <summary>
+            "The Hallow is the only place where Corruption and Crimson cannot spread."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.CorruptionHasChasms">
+            <summary>
+            "The Corruption is full of chasms. Mind the gaps."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.TimeHealsWounds">
+            <summary>
+            "Time heals all wounds."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.AcornsGrowTrees">
+            <summary>
+            "You can plant Acorns to grow new trees."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.RocketScienceAndBoots">
+            <summary>
+            "Rocket science gave us Rocket Boots."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.CloudInABalloonCrafting">
+            <summary>
+            "The Cloud in a Bottle and Shiny Red Balloon accessories both improve your ability to jump. Combine them to make a Cloud in a Balloon."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.StoreMoneyInBank">
+            <summary>
+            "If you store your Coins in a Chest or Piggy Bank, you will be less likely to lose them."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.PotionCraftingWithBottle">
+            <summary>
+            "To craft potions, place a Bottle on a Table to make an Alchemy Station. Double, double, toil and trouble!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.MonstersSpawnWithoutWalls">
+            <summary>
+            "If your house doesn't have background walls, monsters will be able to spawn inside."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.ArmorSetBonus">
+            <summary>
+            "Wearing a full set of armor crafted from the same material gives you an extra bonus."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.CreateMetalBarWithFurnace">
+            <summary>
+            "Build a Furnace to craft metal bars out of ore."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.SilkCrafting">
+            <summary>
+            "You can harvest Cobwebs and turn them into Silk. You can use Silk to craft beds, sofas, and more!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.WiresFromMechanic">
+            <summary>
+            "You can buy Wires from the Mechanic and use them to create traps, pumping systems, or other elaborate devices."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.HousingUIInEquipmentMenu">
+            <summary>
+            "The Housing section of the Equipment Menu allows you to decide what rooms you want your NPCs to live in."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.CobaltShieldKnockback">
+            <summary>
+            "If you're sick of getting knocked around, try equipping a Cobalt Shield. You can find one in the Dungeon."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GrapplingHooksForExploration">
+            <summary>
+            "Grappling Hooks are invaluable tools for exploration. Try crafting them with Hooks or gems."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.HousesCanHavePlatformFloors">
+            <summary>
+            "A room in a house can have Wood Platforms as a floor or ceiling, but NPCs need at least one solid block to stand on."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.ShadowOrbsDestruction">
+            <summary>
+            "You can destroy Shadow Orbs and Crimson Hearts with a hammer or explosives, but prepare yourself for the forces they unleash."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GoblinArmyCrowdControl">
+            <summary>
+            "When dealing with a Goblin Army, crowd control is key."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.WizardsUseManaFlowers">
+            <summary>
+            "The best wizards around use Mana Flowers."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.SuspiciousItemWarning">
+            <summary>
+            "Use 'suspicious looking items' at your own risk!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.OverpoweredSand">
+            <summary>
+            "Sand is overpowered."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GoblinTinkererLocation">
+            <summary>
+            "The Goblin Tinkerer found in Underground Caverns will sell you many useful items, including a Tinkerer's Workshop."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.ValidHousingCheckInHousingUI">
+            <summary>
+            "You can check if a room is valid housing from the Housing section of the Inventory Menu."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.SeedsForPotionIngredients">
+            <summary>
+            "Seeds can be used to grow a variety of useful ingredients for crafting potions."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.UseMapWhenLost">
+            <summary>
+            "If you get lost or need to find another player, open the World Map."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.CraftHammerToDestroyWalls">
+            <summary>
+            "If you need to remove background walls, craft a hammer!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.ExtraPlatformOrWallConversion">
+            <summary>
+            "Got some extra walls or platforms? You can turn them back into their original materials!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.FishingIsLucrative">
+            <summary>
+            "Fishing is a fantastic source of crafting ingredients, accessories, and loot crates!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.WingsAllowFlight">
+            <summary>
+            "Nothing improves your mobility like Wings. Who wouldn't want to fly?"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.MinecartCraftingAndLocation">
+            <summary>
+            "Riding Minecarts is one of the best ways of getting around. You can build your own tracks, or find them Underground."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.LifeFruitLocation">
+            <summary>
+            "Life Crystals not enough for you? Eventually, Life Fruit will grow in the Jungle, and can give you an extra boost to your health."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.UseSylistForNewHair">
+            <summary>
+            "Change your clothes in game at a Dresser or talk to the Stylist for a new hairdo."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.MountMobilityAndUniqueness">
+            <summary>
+            "Mounts grant the player increased mobility and a variety of useful abilities. Each one is unique!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.ExpertModeChallenge">
+            <summary>
+            "Looking for a challenge? Try Expert mode!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.MartianProbesSpawnInvasion">
+            <summary>
+            "Be careful around Martian Probes. If they scan you, they'll summon a Martian Invasion!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.SolarEclipseCreepyMonsters">
+            <summary>
+            "During a Solar Eclipse, be on the lookout for tons of strange and creepy monsters."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.OldOnesArmyInvasion">
+            <summary>
+            "Sometimes, enemies may even invade from other dimensions . . ."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.PumpkingMoonStarting">
+            <summary>
+            "A Pumpkin Medallion can be used to summon the Pumpkin Moon. Spooky!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.FrostMoonStarting">
+            <summary>
+            "Feeling up for the chill of winter? Use a Naughty Present to summon the Frost Moon!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.SandstormWarning">
+            <summary>
+            "When a Sandstorm hits, deserts can be very dangerous. New enemies, reduced visibility, and it can even be hard to move!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.ArmsDealerNeedsGunToMoveIn">
+            <summary>
+            "The Arms Dealer knows more about guns than anyone. If you find one, he might move in."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.MechanicLocation">
+            <summary>
+            "The Mechanic got lost in the Dungeon. You'll have to help her out if you want her to move in."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.NurseNeedsLifeCrystalToMoveIn">
+            <summary>
+            "Once you use a Life Crystal, a Nurse might move in! Speak to her for healing at any time . . . for a price, of course."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.DyesFromDyeTrader">
+            <summary>
+            "If you ever want to get stylish, try dyes! The Dye Trader can help you turn some materials into new dye colors."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.TavernkeepOrigins">
+            <summary>
+            "The Tavernkeep is a guest from a faraway land called Etheria."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.StylistLocation">
+            <summary>
+            "If you need a new haircut, go check out a nearby Spider Biome. Stylists always end up lost in them!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.PainterNeedsOtherNPCsToMoveIn">
+            <summary>
+            "Regular Wood and Stone not vibrant enough for you? A Painter will move in and sell paints if enough townsfolk move in."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.ExploreTheOceans">
+            <summary>
+            "It's worth it to explore your Oceans. You can find treasure, dyes, and even sleeping fishermen."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.WitchDoctorNeedsQueenBeeToMoveIn">
+            <summary>
+            "You could get a Witch Doctor to come to your World if you defeat the Queen Bee."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.PartyGirlNeedsOtherNPCsToMoveIn">
+            <summary>
+            "The Party Girl won't move in unless your World is full of other townsfolk. Afterall, what's a party without lots of guests?"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.WizardLocation">
+            <summary>
+            "The Wizard sells some useful magic artifacts, but he has a tendency to wander off Underground."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.TaxCollectorNeedsToBePurified">
+            <summary>
+            "The Tax Collector spends his days wandering the Underworld as a Tortured Soul. If only there were a way to purify him . . ."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.PirateInvasionAndTownNPC">
+            <summary>
+            "Pirates are so unpredictable. First they invade your world, and then they move into your houses!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.SteampunkerNeedsMechDeadToMoveIn">
+            <summary>
+            "If you ever defeat any giant robots, a Steampunker might move in to your World."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.CyborgSellsRockets">
+            <summary>
+            "If you like rockets, the Cyborg may have some for sale."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.TravellingMerchantStaysTemporarily">
+            <summary>
+            "The Traveling Merchant never stays in one place for long, but he always brings different wares when he visits!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.BoneMerchantLocation">
+            <summary>
+            "Not all Skeletons are evil. Some are even known to sell unique items to those that can find them."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.UseAchievementGuideForHelp">
+            <summary>
+            "Not sure what to do next? Take a look at the Achievement Guide for a clue!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.MoneyStealingInExpertMode">
+            <summary>
+            "If an enemy steals your money after you die in Expert Mode, hunt it down! If you defeat it, you can get your money back."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.BlockSwapUsage">
+            <summary>
+            "With the Block Swap mechanic enabled, you can replace one block with another directly, rather than having to mine it first."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GoodieBagsDuringHalloween">
+            <summary>
+            "Keep an eye out for Goodie Bags around Halloween. If you open them, you can find all sorts of spooky items.  Trick or Treat!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.CloudsPreventFallDamage">
+            <summary>
+            "Clouds are nice and soft, and you won't get hurt falling on them no matter how far you fall."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.SummonerTargeting">
+            <summary>
+            "Did you know you can order your Summons to attack a specific target? While holding a Summoning Weapon, Right Click an enemy!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.CameraZoomFunctionality">
+            <summary>
+            "Press the + and - keys to zoom in &amp; out! Focus on what matters!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.MapPinging">
+            <summary>
+            "Have something on the Map to show a friend? Double click on the Map to ping a location for everyone to see!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.VoidBagUsage">
+            <summary>
+            "The Void Bag is a magical artifact that will store items for you when your inventory is full."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.TrapWarning">
+            <summary>
+            "Enemies aren't the only danger when exploring Underground. Watch out for traps too!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.AskGuideForCraftingRecipes">
+            <summary>
+            "Find a cool new Material?  Want to know what you can make?  Check with your friendly neighborhood Guide!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.NPCsWillRespawn">
+            <summary>
+            "Have some NPCs perished?  Don't worry, they'll be back in the morning."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.ExplosivesAreDangerous">
+            <summary>
+            "Explosives are dangerous!\n...and effective..."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.KeyboardAutoReuse">
+            <summary>
+            "You can continuously use some items by holding down the {InputTrigger_UseOrAttack} button."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.KeyboardCursorMode">
+            <summary>
+            "Press {InputTrigger_SmartCursor} to switch between Cursor Modes."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.KeyboardTrash">
+            <summary>
+            "If your Inventory is full, you can press {InputTriggerUI_Trash} and {InputTrigger_UseOrAttack} to send items to the Trash."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.KeyboardQuickSelling">
+            <summary>
+            "When speaking to a vendor, you can sell items in your Inventory by pressing {InputTriggerUI_Trash} and {InputTrigger_UseOrAttack}."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.KeyboardTorchRemoval">
+            <summary>
+            "You can remove Torches with {InputTrigger_InteractWithTile} or with a pickaxe."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.KeyboardQuickEquip">
+            <summary>
+            "In your Inventory, you can press {InputTrigger_InteractWithTile} to equip items such as armor or accessories directly to a usable slot."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.KeyboardAutoSelect">
+            <summary>
+            "Hold {InputTrigger_SmartSelect} to use Auto Select, a versatile feature that adapts to your environment. It will allow you to automatically hold your Torches in dark caves, Glowsticks when underwater, or even select the right tool for breaking something."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.KeyboardFavoriting">
+            <summary>
+            "Press {InputTriggerUI_FavoriteItem} and {InputTrigger_UseOrAttack} to Favorite an item. Favorited items can no longer be sold, thrown away, or dropped. No more accidentally losing your favorite items!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadDPadFavoriting">
+            <summary>
+            "You can assign your favorite items to the DPad for rapid use by enabling DPad Hotbar in Gamepad Settings!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadAutoReuse">
+            <summary>
+            "You can continuously use some items by holding down the {InputTrigger_UseOrAttack} button."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadCursorMode">
+            <summary>
+            "Press {InputTrigger_SmartCursor} to switch between Cursor Modes."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadTrash">
+            <summary>
+            "If your Inventory is full, you can press {InputTriggerUI_Trash} to send items to the Trash."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadQuickSelling">
+            <summary>
+            "When speaking to a vendor, you can sell items in your Inventory by pressing {InputTriggerUI_SellItem}."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadTorchRemoval">
+            <summary>
+            "You can remove Torches with {InputTrigger_InteractWithTile} or with a pickaxe."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadQuickEquip">
+            <summary>
+            "In your Inventory, you can press {InputTrigger_QuickEquip} to equip items such as armor or accessories directly to a usable slot."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadAutoSelect">
+            <summary>
+            "Hold {InputTrigger_SmartSelect} to use Auto Select, a versatile feature that adapts to your environment. It will allow you to automatically hold your Torches in dark caves, Glowsticks when underwater, or even select the right tool for breaking something."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadFavoriting">
+            <summary>
+            "Press {InputTriggerUI_FavoriteItem} to Favorite an item. Favorited items can no longer be sold, thrown away, or dropped. No more accidentally losing your favorite items!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadInventoryBuilding">
+            <summary>
+            "While navigating your Inventory, press {InputTriggerUI_BuildFromInventory} while highlighting a tool or block to build directly from your Inventory."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadRadialHotbar">
+            <summary>
+            "Hold {InputTrigger_RadialQuickbar} and {InputTrigger_RadialHotbar} to bring up the Radial Quickbar and Radial Hotbar menus. These will allow you to quickly access potions, mounts, and the items in your hotbar."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadControlLayouts">
+            <summary>
+            "There are multiple Gamepad control layouts available in the menu. Choose from Redigit's Pick, Yoraiz0r's Pick, Xbox, Playstation, or even make your own Custom settings!"
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadCursorSnap">
+            <summary>
+            "If you select DPad Cursor Snap in the Gamepad settings, you can use the DPad for improved precision when mining or building."
+            </summary>
+        </member>
+        <member name="F:Terraria.ModLoader.GameTipID.GamePadEnemyLockOn">
+            <summary>
+            "When using Gamepad, you can lock on to enemies by pressing {InputTrigger_LockOn}. Locked on targets will be marked by a spinning reticle, and long range weapons will automatically aim at your target!"
             </summary>
         </member>
         <member name="T:Terraria.ModLoader.GlobalBlockType">
@@ -5298,6 +5998,27 @@
             Allows you to determine how any NPC behaves. This will be called regardless of what PreAI returns.
             </summary>
             <param name="npc"></param>
+        </member>
+        <member name="M:Terraria.ModLoader.GlobalNPC.SendExtraAI(Terraria.NPC,Terraria.ModLoader.IO.BitWriter,System.IO.BinaryWriter)">
+            <summary>
+            Use this judiciously to avoid straining the network.
+            <br/>Checks and methods such as <see cref="!:AppliesToEntity"/> can reduce how much data must be sent for how many projectiles.
+            <br/>Called whenever <see cref="!:MessageID.SyncNPC"/> is successfully sent, for example on projectile creation, or whenever Projectile.netUpdate is set to true in the update loop for that tick.
+            <br/>Can be called on both server and client, depending on who owns the projectile.
+            </summary>
+            <param name="npc">The NPC.</param>
+            <param name="bitWriter">The compressible bit writer. Booleans written via this are compressed across all mods to improve multiplayer performance.</param>
+            <param name="binaryWriter">The writer.</param>
+        </member>
+        <member name="M:Terraria.ModLoader.GlobalNPC.ReceiveExtraAI(Terraria.NPC,Terraria.ModLoader.IO.BitReader,System.IO.BinaryReader)">
+            <summary>
+            Use this to receive information that was sent in <see cref="M:Terraria.ModLoader.GlobalNPC.SendExtraAI(Terraria.NPC,Terraria.ModLoader.IO.BitWriter,System.IO.BinaryWriter)"/>.
+            <br/>Called whenever <see cref="!:MessageID.SyncNPC"/> is successfully received.
+            <br/>Can be called on both server and client, depending on who owns the projectile.
+            </summary>
+            <param name="npc">The NPC.</param>
+            <param name="bitReader">The compressible bit reader.</param>
+            <param name="binaryReader">The reader.</param>
         </member>
         <member name="M:Terraria.ModLoader.GlobalNPC.FindFrame(Terraria.NPC,System.Int32)">
             <summary>
@@ -8085,7 +8806,7 @@
         </member>
         <member name="P:Terraria.ModLoader.ModItem.Tooltip">
             <summary>
-            The translations for the display name of this tooltip.
+            The translations for the tooltip of this item.
             </summary>
         </member>
         <member name="P:Terraria.ModLoader.ModItem.Texture">
@@ -11675,6 +12396,13 @@
             Allows you to modify the elements of the in-game interface that get drawn. GameInterfaceLayer can be found in the Terraria.UI namespace. Check https://github.com/tModLoader/tModLoader/wiki/Vanilla-Interface-layers-values for vanilla interface layer names
             </summary>
             <param name="layers">The layers.</param>
+        </member>
+        <member name="M:Terraria.ModLoader.ModSystem.ModifyGameTipVisibility(System.Collections.Generic.IReadOnlyList{Terraria.ModLoader.GameTipData})">
+            <summary>
+            Allows you to set the visibility of any added vanilla or modded GameTips. In order to add your OWN tips, add them in
+            your localization file, with the key prefix of "Mods.ModName.GameTips".
+            </summary>
+            <param name="gameTips"> The current list of all added game tips. </param>
         </member>
         <member name="M:Terraria.ModLoader.ModSystem.PostDrawInterface(Microsoft.Xna.Framework.Graphics.SpriteBatch)">
              <summary>

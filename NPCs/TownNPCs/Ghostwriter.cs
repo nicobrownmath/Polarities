@@ -260,7 +260,8 @@ namespace Polarities.NPCs.TownNPCs
 			}
 			if (Main.LocalPlayer.ZoneGraveyard)
 			{
-				chat.Add((baseDialogueString + "Graveyard", null));
+				if (Main.LocalPlayer.difficulty == 2) chat.Add((baseDialogueString + "GraveyardHardcore", null));
+                else chat.Add((baseDialogueString + "Graveyard", null));
             }
             if (Main.LocalPlayer.ZoneRain)
             {

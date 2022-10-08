@@ -27,6 +27,7 @@ using Polarities.Items.Weapons.Ranged;
 using Terraria.Graphics.Shaders;
 using Terraria.Graphics.Effects;
 using Filters = Terraria.Graphics.Effects.Filters;
+using static tModPorter.ProgressUpdate;
 
 namespace Polarities.NPCs.Eclipxie
 {
@@ -266,6 +267,7 @@ namespace Polarities.NPCs.Eclipxie
                         const int attackPeriod = 60;
 
                         //TODO: visual indicator (either silver or gold) corresponding to direction of rotation
+                        //TODO: Needs short wind-down
                         if (NPC.ai[1] < setupTime)
                         {
                             if (NPC.ai[1] == 0) NPC.ai[3] = Main.rand.NextBool() ? -1 : 1;
@@ -331,8 +333,6 @@ namespace Polarities.NPCs.Eclipxie
                                 for (int i = 0; i < 300; i++)
                                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ProjectileType<EclipxieOrbiter>(), ProjectileDamage, 0, Main.myPlayer, ai0: NPC.whoAmI, ai1: i);
                                 //produce deathrays
-                                //for (int i = 0; i < 6; i++)
-                                //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, (player.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(i * MathHelper.TwoPi / 6 + MathHelper.Pi / 6), ProjectileType<EclipxieRay2>(), ProjectileDamage, 0f, Main.myPlayer, ai0: NPC.whoAmI, ai1: i);
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, (player.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.Pi / 6), ProjectileType<EclipxieRaysBig>(), ProjectileDamage, 0f, Main.myPlayer, ai0: NPC.whoAmI, ai1: 0);
 
                                 ParticleLayer.WarpParticles.Add(Particle.NewParticle<WarpZoomPulseParticle>(NPC.Center, Vector2.Zero, MathHelper.Pi, 0, Scale: 0f));
@@ -349,14 +349,14 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Circle player while bombarding with projectiles (650, either lunar or solar)
+                #region Circle player while bombarding with projectiles (390, either lunar or solar)
                 case 4:
                     {
                         const float distanceFromPlayer = 600f;
                         const int setupTime = 60;
-                        const int attackTime = 480;
+                        const int attackTime = 240;
                         const int windDownTime = 90;
-                        const float totalAngle = 2 * MathHelper.TwoPi;
+                        const float totalAngle = MathHelper.TwoPi;
                         
                         if (NPC.ai[1] < setupTime)
                         {
@@ -517,14 +517,14 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Star Pursuit (540, both? and also bad)
+                #region Star Pursuit (480, both?)
                 case 7:
                     {
                         const int setupTime = 60;
-                        const int attackTime = 480;
+                        const int attackPart1Time = 240;
+                        const int attackPart2Time = 180;
                         const float distanceFromPlayer = 600f;
 
-                        //TODO: This attack feels boring
                         if (NPC.ai[1] < setupTime)
                         {
                             Vector2 goalPosition = (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * distanceFromPlayer + player.Center;
@@ -533,9 +533,9 @@ namespace Polarities.NPCs.Eclipxie
 
                             NPC.ai[2] = 0;
                         }
-                        else
+                        else if (NPC.ai[1] < setupTime + attackPart1Time)
                         {
-                            NPC.velocity += (player.Center - NPC.Center) / 900f;
+                            NPC.velocity += (player.Center - NPC.Center) / 1000f;
                             if (Vector2.Dot(NPC.velocity, player.Center - NPC.Center) < 0) NPC.velocity *= 0.9f;
                             else if (Vector2.Dot(NPC.velocity - player.velocity, player.Center - NPC.Center) < 0) NPC.velocity = (NPC.velocity - player.velocity) * 0.95f + player.velocity;
 
@@ -554,24 +554,30 @@ namespace Polarities.NPCs.Eclipxie
                                 NPC.ai[2]--;
                                 for (int i = 0; i < 2; i++)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(Main.rand.NextFloat(10), 0).RotatedByRandom(MathHelper.TwoPi), ProjectileType<EclipxieMeteor>(), ProjectileDamage, 0f, Main.myPlayer, ai0: 1, ai1: i);
+                                    int projIndex = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(Main.rand.NextFloat(10), 0).RotatedByRandom(MathHelper.TwoPi), ProjectileType<EclipxieMeteor>(), ProjectileDamage, 0f, Main.myPlayer, ai0: 1, ai1: i);
+                                    Main.projectile[projIndex].timeLeft = attackPart2Time + (attackPart1Time + setupTime - (int)NPC.ai[1]) * 5 / 6;
                                 }
                             }
                         }
+                        else
+                        {
+                            NPC.velocity += (player.Center - NPC.Center) * 0.001f;
+                            NPC.velocity *= 0.95f;
+                        }
 
                         NPC.ai[1]++;
-                        if (NPC.ai[1] == setupTime + attackTime)
+                        if (NPC.ai[1] == setupTime + attackPart1Time + attackPart2Time)
                         {
                             gotoNextAttack = true;
                         }
                         break;
                     }
                 #endregion
-                #region Deathray Sweep (270, both)
+                #region Deathray Sweep (285, both)
                 case 8:
                     {
                         const int setupTime = 60;
-                        const int hoverTime = 30;
+                        const int hoverTime = 45;
                         const int attackTime = 120;
                         const int windDownTime = 60;
 
@@ -593,7 +599,7 @@ namespace Polarities.NPCs.Eclipxie
                             }
 
                             Vector2 goalPosition = player.Center + new Vector2(NPC.ai[2] * 600, -400);
-                            NPC.velocity = (goalPosition - NPC.Center) / 30f;
+                            NPC.velocity = (goalPosition - NPC.Center) / 20f;
                         }
                         else if (NPC.ai[1] < setupTime + hoverTime + attackTime)
                         {
@@ -619,7 +625,7 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Converging star rays (285, solar?)
+                #region Converging star rays (300, solar?)
                 case 9:
                     {
                         //Ideas for star ray type attacks:
@@ -629,7 +635,7 @@ namespace Polarities.NPCs.Eclipxie
                         //    This could also work as a followup to the planet blender?
 
                         const int setupTime = 60;
-                        const int telegraphTime = 45;
+                        const int telegraphTime = 60;
                         const int attackTime = 180;
                         const float distanceFromPlayer = 600f;
 
@@ -646,8 +652,8 @@ namespace Polarities.NPCs.Eclipxie
                             //TODO: Maybe do something when the stars converge?
                             if (NPC.ai[1] == setupTime)
                             {
-                                int sweepDirection = Main.rand.NextBool() ? -1 : 1;
-                                NPC.ai[2] = (player.Center - NPC.Center).ToRotation() - sweepDirection * MathHelper.TwoPi / 3;
+                                int sweepDirection = Main.rand.Next(-2, 3);
+                                NPC.ai[2] = sweepDirection * MathHelper.Pi / 3;
                                 for (int i = -3; i < 3; i++)
                                 {
                                     float rotation = (player.Center - NPC.Center).ToRotation() + (i + sweepDirection + 0.5f) * MathHelper.TwoPi / 6;
@@ -661,8 +667,10 @@ namespace Polarities.NPCs.Eclipxie
                             }
                             else
                             {
+                                if (NPC.ai[1] == setupTime + telegraphTime) NPC.ai[2] += (NPC.Center - player.Center).ToRotation();
+
                                 float progress = (NPC.ai[1] - setupTime - telegraphTime) / (attackTime - telegraphTime);
-                                NPC.velocity = new Vector2(progress * (1 - progress) * 16f, 0).RotatedBy(NPC.ai[2]);
+                                NPC.velocity = new Vector2(progress * (1 - progress) * 20f, 0).RotatedBy(NPC.ai[2]);
                             }
                         }
 
@@ -674,7 +682,7 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Wave(s?) and rays (solar)
+                #region Random rays (300, both)
                 case 10:
                     {
                         const int setupTime = 60;
@@ -689,11 +697,13 @@ namespace Polarities.NPCs.Eclipxie
                         }
                         else
                         {
-                            NPC.velocity = Vector2.Zero;
+                            NPC.velocity = (player.Center - NPC.Center) / 120;
 
-                            if ((NPC.ai[1] - setupTime) % 60 == 0)
+                            //TODO: Maybe start off slow and speed up?
+                            if ((NPC.ai[1] - setupTime) % 20 == 0 && NPC.ai[1] + 60 < setupTime + attackTime)
                             {
-                                //TODO: Produce projectiles
+                                int typeModifier = (int)(NPC.ai[1] - setupTime) % 40 / 20; //could also maybe alternate
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(1, 0).RotatedByRandom(MathHelper.TwoPi), ProjectileType<EclipxieRaysBig>(), ProjectileDamage, 0f, Main.myPlayer, ai0: NPC.whoAmI, ai1: 4 + typeModifier);
                             }
                         }
 
@@ -709,8 +719,8 @@ namespace Polarities.NPCs.Eclipxie
 
             if (gotoNextAttack)
             {
-                //TODO: p1 should alternate (solar or lunar), (lunar or solar), both
-                NPC.ai[0] = Main.rand.Next(1, 10);
+                //TODO: p1 should alternate (solar or lunar), (lunar or solar), both?
+                NPC.ai[0] = Main.rand.Next(1, 11);
                 NPC.ai[1] = 0;
             }
         }
@@ -769,9 +779,11 @@ namespace Polarities.NPCs.Eclipxie
             if (DrawLayer.IsActive<DrawLayerAfterAdditiveBeforeScreenObstruction>())
             {
                 //draw an extra moon over stuff sometimes
-                if (NPC.ai[0] == 3 && NPC.ai[1] >= 60 || NPC.ai[0] == 8 && NPC.ai[1] >= 60)
+                //TODO: The positioning isn't the same as normal and the darkness can be weird
+                if (NPC.ai[0] == 3 && NPC.ai[1] >= 60 || NPC.ai[0] == 8 && NPC.ai[1] >= 60 || NPC.ai[0] == 10 && NPC.ai[1] >= 60)
                 {
-                    spriteBatch.Draw(MoonTexture.Value, NPC.Center - screenPos, MoonTexture.Frame(), Color.Black, 0f, MoonTexture.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
+                    Vector2 moonOffset = (Main.LocalPlayer.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 1.5f; //TODO: Move eye nontrivially
+                    spriteBatch.Draw(MoonTexture.Value, NPC.Center + moonOffset - screenPos, MoonTexture.Frame(), Color.Black, 0f, MoonTexture.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
                 }
 
                 return false;
@@ -813,7 +825,6 @@ namespace Polarities.NPCs.Eclipxie
             return false;
         }
     }
-
     public class EclipxieTarget : RenderTargetLayer
     {
         public override int Width => 600;
@@ -1430,7 +1441,7 @@ namespace Polarities.NPCs.Eclipxie
                 case 2:
                     telegraphTime = 30;
                     rayTime = 120;
-                    Projectile.timeLeft = (int)(15 + telegraphTime + rayTime);
+                    Projectile.timeLeft = (int)(30 + telegraphTime + rayTime);
                     projectileRays = 1;
                     Projectile.localAI[1] = Projectile.ai[1];
                     Projectile.ai[1] = 0;
@@ -1441,8 +1452,9 @@ namespace Polarities.NPCs.Eclipxie
                         return;
                     }
                     Projectile.rotation = (Projectile.Center - owner.Center).ToRotation();
+                    float expectedRotation = (Main.LocalPlayer.Center - owner.Center).ToRotation() - Projectile.velocity.X;
                     starRotation = Projectile.rotation + MathHelper.PiOver4;
-                    extraAI = new float[] { Projectile.rotation, (Projectile.Center - owner.Center).Length() };
+                    extraAI = new float[] { Projectile.rotation, (Projectile.Center - owner.Center).Length(), Projectile.rotation - expectedRotation };
                     break;
             }
 
@@ -1475,8 +1487,16 @@ namespace Polarities.NPCs.Eclipxie
                         Projectile.Kill();
                         return;
                     }
-                    float progress = Math.Max(0, (rayTime - Projectile.timeLeft) / rayTime);
-                    Projectile.Center = new Vector2(extraAI[1], 0).RotatedBy(extraAI[0] + Projectile.velocity.X * progress * progress * (3 - 2 * progress) * 0.975f) + owner.Center;
+                    if (Projectile.timeLeft >= rayTime)
+                    {
+                        extraAI[0] = (Main.LocalPlayer.Center - owner.Center).ToRotation() - Projectile.velocity.X + extraAI[2];
+                        Projectile.Center = new Vector2(extraAI[1], 0).RotatedBy(extraAI[0]) + owner.Center;
+                    }
+                    else
+                    {
+                        float progress = Math.Max(0, (rayTime - Projectile.timeLeft) / rayTime);
+                        Projectile.Center = new Vector2(extraAI[1], 0).RotatedBy(extraAI[0] + Projectile.velocity.X * progress * progress * (3 - 2 * progress) * 0.975f) + owner.Center;
+                    }
                     Projectile.rotation = (Projectile.Center - owner.Center).ToRotation();
                     starRotation = Projectile.rotation + MathHelper.PiOver4;
                     break;
@@ -1735,6 +1755,9 @@ namespace Polarities.NPCs.Eclipxie
             Projectile.GetGlobalProjectile<PolaritiesProjectile>().canLeaveWorld = true;
         }
 
+        float rayTime = 360;
+        float expansionTime = 20f;
+
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.rotation = Projectile.velocity.ToRotation();
@@ -1745,8 +1768,15 @@ namespace Polarities.NPCs.Eclipxie
                     Projectile.localAI[0] = 6;
                     break;
                 case 1:
-                    Projectile.timeLeft = 150;
+                    Projectile.timeLeft = 165;
+                    rayTime = 165;
                     Projectile.localAI[0] = 1;
+                    break;
+                case 2:
+                    Projectile.timeLeft = 60;
+                    rayTime = 20;
+                    expansionTime = 5f;
+                    Projectile.localAI[0] = 10;
                     break;
             }
             Projectile.localAI[1] = Projectile.timeLeft;
@@ -1773,9 +1803,18 @@ namespace Polarities.NPCs.Eclipxie
                     Projectile.rotation += direction * attackProgress / 30000f;
                     break;
                 case 1:
-                    if (Projectile.timeLeft < Projectile.localAI[1] - 30)
+                    if (Projectile.timeLeft < Projectile.localAI[1] - 45)
                     {
                         Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2((float)Math.Pow(Main.rand.NextFloat(), 2) * 2000, 0).RotatedBy(Projectile.rotation), owner.velocity + new Vector2(4, 0).RotatedBy(Projectile.rotation), ProjectileType<EclipxieMeteor>(), Eclipxie.ProjectileDamage, 0f, Projectile.owner, ai0: 2, ai1: Main.rand.Next(2));
+                    }
+                    break;
+                case 2:
+                    if (Projectile.timeLeft > rayTime)
+                        Projectile.rotation += (Projectile.ai[1] % 2 * 2 - 1) * 0.0002f * (Projectile.timeLeft - rayTime);
+                    else if (Projectile.timeLeft == rayTime)
+                    {
+                        WarpZoomWaveParticle particle = Particle.NewParticle<WarpZoomWaveParticle>(Projectile.Center, Vector2.Zero, MathHelper.Pi, 0, Scale: 0f, TimeLeft: 180);
+                        ParticleLayer.WarpParticles.Add(particle);
                     }
                     break;
             }
@@ -1785,7 +1824,7 @@ namespace Polarities.NPCs.Eclipxie
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            float widthMultiplier = Math.Min(1, Math.Min(Projectile.timeLeft / 20f, (Projectile.localAI[1] - Projectile.timeLeft) / 20f));
+            float widthMultiplier = Math.Min(1, Math.Min(Projectile.timeLeft / expansionTime, (Projectile.localAI[1] - Projectile.timeLeft) / expansionTime));
             switch ((int)Projectile.ai[1] / 2)
             {
                 case 1:
@@ -1800,7 +1839,7 @@ namespace Polarities.NPCs.Eclipxie
 
         public override bool? CanDamage()
         {
-            return (Projectile.timeLeft > 10 && Projectile.timeLeft < 350) ? null : false;
+            return (Projectile.timeLeft > expansionTime / 2 && Projectile.timeLeft < rayTime - expansionTime / 2) ? null : false;
         }
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -1812,51 +1851,58 @@ namespace Polarities.NPCs.Eclipxie
 
         public override bool PreDraw(ref Color lightColor)
         {
-            float baseHeightMultiplier = Math.Min(1, Math.Min(Projectile.timeLeft / 20f, (Projectile.localAI[1] - Projectile.timeLeft) / 20f));
+            float baseHeightMultiplier = Math.Min(1, Math.Min(Projectile.timeLeft / expansionTime, (rayTime - Projectile.timeLeft) / expansionTime));
             bool drawCap = false;
+            bool drawObstruction = true;
             switch ((int)Projectile.ai[1] / 2)
             {
                 case 1:
                     drawCap = true;
                     baseHeightMultiplier *= 1.5f;
                     break;
+                case 2:
+                    drawObstruction = false;
+                    break;
             }
 
             if (RenderTargetLayer.IsActive<ScreenWarpTarget>())
             {
-                for (int laserIndex = 0; laserIndex < (int)Projectile.localAI[0]; laserIndex++)
+                if (Projectile.timeLeft < rayTime)
                 {
-                    Texture2D distortion = EclipxieRay.Distortion.Value;
-                    const int numDraws = 18;
-                    float segmentWidth = radius / numDraws;
-                    float heightMultiplier = 2 * baseHeightMultiplier;
-
-                    Color offsetColor = new Color(-(float)Math.Cos(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]) * 0.5f * heightMultiplier / 2 + 0.5f, -(float)Math.Sin(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]) * heightMultiplier / 2 * 0.5f + 0.5f, 0.5f) * (heightMultiplier / 4);
-
-                    Vector2 scale = new Vector2(segmentWidth / (float)TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / (float)TextureAssets.Projectile[Type].Height());
-                    Vector2 drawOffset = new Vector2(((360 - Projectile.timeLeft) * 36) % segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]);
-                    Vector2 drawOffsetPer = new Vector2(segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]);
-                    Vector2 center = new Vector2(0, distortion.Height / 2);
-                    for (int i = 0; i <= numDraws; i++)
+                    for (int laserIndex = 0; laserIndex < (int)Projectile.localAI[0]; laserIndex++)
                     {
-                        Main.spriteBatch.Draw(distortion, Projectile.Center - Main.screenPosition + drawOffset + drawOffsetPer * i, TextureAssets.Projectile[Type].Frame(), offsetColor, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], center, scale, SpriteEffects.None, 0);
-                    }
-                    //extra starting draw
-                    float extra = ((360 - Projectile.timeLeft) * 36) % segmentWidth / scale.X;
-                    Rectangle startFrame = new Rectangle(distortion.Width - (int)extra, 0, (int)extra, distortion.Height);
-                    Vector2 startOrigin = new Vector2((int)extra - extra, distortion.Height / 2);
-                    Main.spriteBatch.Draw(distortion, Projectile.Center - Main.screenPosition, startFrame, offsetColor, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], startOrigin, scale, SpriteEffects.None, 0);
+                        Texture2D distortion = EclipxieRay.Distortion.Value;
+                        const int numDraws = 18;
+                        float segmentWidth = radius / numDraws;
+                        float heightMultiplier = 2 * baseHeightMultiplier;
 
-                    if (drawCap)
-                    {
-                        Texture2D capTexture = CapDistortion.Value;
-                        Vector2 extraOffset = new Vector2(extra - (int)extra, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]) * scale.X;
-                        Main.spriteBatch.Draw(capTexture, Projectile.Center + extraOffset - Main.screenPosition, capTexture.Frame(), offsetColor, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], new Vector2(capTexture.Width, capTexture.Height / 2), scale.Y, SpriteEffects.None, 0);
+                        Color offsetColor = new Color(-(float)Math.Cos(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]) * 0.5f * heightMultiplier / 2 + 0.5f, -(float)Math.Sin(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]) * heightMultiplier / 2 * 0.5f + 0.5f, 0.5f) * (heightMultiplier / 4);
+
+                        Vector2 scale = new Vector2(segmentWidth / (float)TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / (float)TextureAssets.Projectile[Type].Height());
+                        Vector2 drawOffset = new Vector2(((360 - Projectile.timeLeft) * 36) % segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]);
+                        Vector2 drawOffsetPer = new Vector2(segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]);
+                        Vector2 center = new Vector2(0, distortion.Height / 2);
+                        for (int i = 0; i <= numDraws; i++)
+                        {
+                            Main.spriteBatch.Draw(distortion, Projectile.Center - Main.screenPosition + drawOffset + drawOffsetPer * i, TextureAssets.Projectile[Type].Frame(), offsetColor, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], center, scale, SpriteEffects.None, 0);
+                        }
+                        //extra starting draw
+                        float extra = ((360 - Projectile.timeLeft) * 36) % segmentWidth / scale.X;
+                        Rectangle startFrame = new Rectangle(distortion.Width - (int)extra, 0, (int)extra, distortion.Height);
+                        Vector2 startOrigin = new Vector2((int)extra - extra, distortion.Height / 2);
+                        Main.spriteBatch.Draw(distortion, Projectile.Center - Main.screenPosition, startFrame, offsetColor, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], startOrigin, scale, SpriteEffects.None, 0);
+
+                        if (drawCap)
+                        {
+                            Texture2D capTexture = CapDistortion.Value;
+                            Vector2 extraOffset = new Vector2(extra - (int)extra, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]) * scale.X;
+                            Main.spriteBatch.Draw(capTexture, Projectile.Center + extraOffset - Main.screenPosition, capTexture.Frame(), offsetColor, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], new Vector2(capTexture.Width, capTexture.Height / 2), scale.Y, SpriteEffects.None, 0);
+                        }
                     }
+
+                    //anti-distortion
+                    Main.spriteBatch.Draw(Textures.Glow256.Value, Projectile.Center - Main.screenPosition, Textures.Glow256.Frame(), new Color(128, 128, 128), 0f, Textures.Glow256.Size() / 2, 1.8f * baseHeightMultiplier, SpriteEffects.None, 0f);
                 }
-
-                //anti-distortion
-                Main.spriteBatch.Draw(Textures.Glow256.Value, Projectile.Center - Main.screenPosition, Textures.Glow256.Frame(), new Color(128, 128, 128), 0f, Textures.Glow256.Size() / 2, 1.8f * baseHeightMultiplier, SpriteEffects.None, 0f);
             }
             else if (DrawLayer.IsActive<DrawLayerAdditiveBeforeScreenObstruction>())
             {
@@ -1865,37 +1911,50 @@ namespace Polarities.NPCs.Eclipxie
                 {
                     Color color = Color.White;
                     Texture2D texture = (Projectile.ai[1] % 2 == 0) ? EclipxieRay.Solar.Value : TextureAssets.Projectile[ProjectileType<EclipxieRay>()].Value;
-                    const int numDraws = 18;
-                    float segmentWidth = radius / numDraws;
-                    float heightMultiplier = baseHeightMultiplier;
-                    Vector2 scale = new Vector2(segmentWidth / (float)TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / (float)TextureAssets.Projectile[Type].Height());
-                    Vector2 drawOffset = new Vector2(((360 - Projectile.timeLeft) * 18) % segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]);
-                    Vector2 drawOffsetPer = new Vector2(segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]);
-                    Vector2 center = new Vector2(0, texture.Height / 2);
-                    for (int i = 0; i <= numDraws; i++)
+                    if (Projectile.timeLeft < rayTime)
                     {
-                        Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + drawOffset + drawOffsetPer * i, TextureAssets.Projectile[Type].Frame(), color, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], center, scale, SpriteEffects.None, 0);
-                    }
-                    //extra starting draw
-                    float extra = ((360 - Projectile.timeLeft) * 18) % segmentWidth / scale.X;
-                    Rectangle startFrame = new Rectangle(texture.Width - (int)extra, 0, (int)extra, texture.Height);
-                    Vector2 startOrigin = new Vector2((int)extra - extra, texture.Height / 2);
-                    Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, startFrame, color, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], startOrigin, scale, SpriteEffects.None, 0);
+                        const int numDraws = 18;
+                        float segmentWidth = radius / numDraws;
+                        float heightMultiplier = baseHeightMultiplier;
+                        Vector2 scale = new Vector2(segmentWidth / (float)TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / (float)TextureAssets.Projectile[Type].Height());
+                        Vector2 drawOffset = new Vector2(((360 - Projectile.timeLeft) * 18) % segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]);
+                        Vector2 drawOffsetPer = new Vector2(segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]);
+                        Vector2 center = new Vector2(0, texture.Height / 2);
+                        for (int i = 0; i <= numDraws; i++)
+                        {
+                            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + drawOffset + drawOffsetPer * i, TextureAssets.Projectile[Type].Frame(), color, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], center, scale, SpriteEffects.None, 0);
+                        }
+                        //extra starting draw
+                        float extra = ((360 - Projectile.timeLeft) * 18) % segmentWidth / scale.X;
+                        Rectangle startFrame = new Rectangle(texture.Width - (int)extra, 0, (int)extra, texture.Height);
+                        Vector2 startOrigin = new Vector2((int)extra - extra, texture.Height / 2);
+                        Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, startFrame, color, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], startOrigin, scale, SpriteEffects.None, 0);
 
-                    if (drawCap)
+                        if (drawCap)
+                        {
+                            Texture2D capTexture = CapSolar.Value;
+                            Vector2 extraOffset = new Vector2(extra - (int)extra, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]) * scale.X;
+                            Main.spriteBatch.Draw(capTexture, Projectile.Center + extraOffset - Main.screenPosition, capTexture.Frame(), color, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], new Vector2(capTexture.Width, capTexture.Height / 2), scale.Y, SpriteEffects.None, 0);
+                        }
+                    }
+                    else
                     {
-                        Texture2D capTexture = CapSolar.Value;
-                        Vector2 extraOffset = new Vector2(extra - (int)extra, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]) * scale.X;
-                        Main.spriteBatch.Draw(capTexture, Projectile.Center + extraOffset - Main.screenPosition, capTexture.Frame(), color, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], new Vector2(capTexture.Width, capTexture.Height / 2), scale.Y, SpriteEffects.None, 0);
+                        //telegraphing
+                        Vector2 scale = new Vector2(radius / (float)TextureAssets.Projectile[Type].Width(), 4 / (float)TextureAssets.Projectile[Type].Height());
+                        color *= (Projectile.timeLeft - rayTime) * (Projectile.localAI[1] - Projectile.timeLeft) * 4f / ((Projectile.localAI[1] - rayTime) * (Projectile.localAI[1] - rayTime));
+                        Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), color, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], new Vector2(0, TextureAssets.Projectile[Type].Height() / 2), scale, SpriteEffects.None, 0);
                     }
                 }
             }
             else
             {
-                float heightMultiplier = baseHeightMultiplier;
-                for (int laserIndex = 0; laserIndex < (int)Projectile.localAI[0]; laserIndex++)
+                if (drawObstruction)
                 {
-                    Main.spriteBatch.Draw(Textures.PixelTexture.Value, Projectile.Center - Main.screenPosition, Textures.PixelTexture.Frame(), Color.Black, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], new Vector2(0, 0.5f), new Vector2(radius, 0.3f * heightMultiplier * Projectile.height), SpriteEffects.None, 0);
+                    float heightMultiplier = baseHeightMultiplier;
+                    for (int laserIndex = 0; laserIndex < (int)Projectile.localAI[0]; laserIndex++)
+                    {
+                        Main.spriteBatch.Draw(Textures.PixelTexture.Value, Projectile.Center - Main.screenPosition, Textures.PixelTexture.Frame(), Color.Black, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], new Vector2(0, 0.5f), new Vector2(radius, 0.3f * heightMultiplier * Projectile.height), SpriteEffects.None, 0);
+                    }
                 }
             }
             return false;
@@ -1957,9 +2016,15 @@ namespace Polarities.NPCs.Eclipxie
             switch (Projectile.ai[0])
             {
                 case 1:
-                    if (Projectile.timeLeft >= 180)
+                    if (Projectile.localAI[1] == 0) Projectile.localAI[1] = Projectile.timeLeft - 60;
+                    if (Projectile.timeLeft >= Projectile.localAI[1])
                     {
-                        Projectile.velocity *= (Projectile.timeLeft - 180) / (Projectile.timeLeft - 179f);
+                        Projectile.velocity *= (Projectile.timeLeft - Projectile.localAI[1]) / (Projectile.timeLeft - Projectile.localAI[1] + 1f);
+                    }
+                    else if (Projectile.timeLeft < 120)
+                    {
+                        Projectile.velocity += (Main.LocalPlayer.Center - Projectile.Center) / 80000f * Projectile.timeLeft;
+                        Projectile.velocity *= (Projectile.timeLeft) / (Projectile.timeLeft + 1f);
                     }
                     break;
                 case 2:

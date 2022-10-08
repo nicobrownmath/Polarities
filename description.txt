@@ -25,7 +25,8 @@ v0.11 Beta 2 Changelog
   Fixed the lava ocean biome extending up out of the underworld
   Fixed the grapes' wrath hook tentacles not appearing
   Fixed the pincer staff doing melee damage
-  Added a new ghostwriter dialogue
+  Added and adjusted some ghostwriter dialogue
+  Re-added stalactites to the limestone caves in normal mode in order to make the speleothem obtainable
 
 Fixes to do:
   Worm guns break with manual

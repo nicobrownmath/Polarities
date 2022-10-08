@@ -1003,7 +1003,7 @@ namespace Polarities
 				Player.AddBuff(BuffType<Desiccating>(), 2);
 			}
 
-			if (Main.expertMode && Framing.GetTileSafely(Player.Center.ToTileCoordinates()).WallType == WallType<LimestoneWallNatural>())
+			if (Framing.GetTileSafely(Player.Center.ToTileCoordinates()).WallType == WallType<LimestoneWallNatural>())
 			{
 				if (Main.rand.NextBool(60) && Main.netMode != 1)
 				{
