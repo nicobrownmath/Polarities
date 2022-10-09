@@ -55,6 +55,21 @@ float4 WarpZoomRipple(float2 coords : TEXCOORD0) : COLOR0
     }
 }
 
+float4 RadialOverlay(float2 coords : TEXCOORD0) : COLOR0
+{
+    float2 normalizedCoords = coords * 2 - 1;
+    float theta = atan2(normalizedCoords.y, normalizedCoords.x);
+    float r = length(normalizedCoords);
+    if (r <= 1) {
+        float4 baseColor = tex2D(uImage0, coords);
+        float4 overlayColor = tex2D(uImage1, float2(log(r) / uShaderSpecificData.x + uShaderSpecificData.y, theta / 6.28313853071)) * (1 - uShaderSpecificData.z) + float4(uShaderSpecificData.zzzz);
+        return baseColor * overlayColor * uOpacity;
+    }
+    else {
+        return float4(0, 0, 0, 0);
+    }
+}
+
 technique Technique1
 {
     pass TriangleFadePass
@@ -68,5 +83,9 @@ technique Technique1
     pass WarpZoomRipplePass
     {
         PixelShader = compile ps_2_0 WarpZoomRipple();
+    }
+    pass RadialOverlayPass
+    {
+        PixelShader = compile ps_2_0 RadialOverlay();
     }
 }

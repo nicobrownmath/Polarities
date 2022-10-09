@@ -685,6 +685,8 @@ namespace Polarities.NPCs.Eclipxie
                 #region Random rays (300, both)
                 case 10:
                     {
+                        //TODO: This attack feels a bit too aggressive and unpredictable, and needs to be predictable in advance to let the player reposition
+                        //I may want to increase the telegraph length
                         const int setupTime = 60;
                         const int attackTime = 240;
                         const float distanceFromPlayer = 400f;
@@ -700,8 +702,9 @@ namespace Polarities.NPCs.Eclipxie
                             NPC.velocity = (player.Center - NPC.Center) / 120;
 
                             //TODO: Maybe start off slow and speed up?
-                            if ((NPC.ai[1] - setupTime) % 20 == 0 && NPC.ai[1] + 60 < setupTime + attackTime)
+                            if ((NPC.ai[1] - setupTime) % 20 == 0 && NPC.ai[1] + 60 <= setupTime + attackTime)
                             {
+                                //TODO: It might be cool to briefly tint the entire screen based on the ray color (could also be weird but I should try it)
                                 int typeModifier = (int)(NPC.ai[1] - setupTime) % 40 / 20; //could also maybe alternate
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(1, 0).RotatedByRandom(MathHelper.TwoPi), ProjectileType<EclipxieRaysBig>(), ProjectileDamage, 0f, Main.myPlayer, ai0: NPC.whoAmI, ai1: 4 + typeModifier);
                             }
@@ -719,6 +722,8 @@ namespace Polarities.NPCs.Eclipxie
 
             if (gotoNextAttack)
             {
+                //TODO: I should do the fairly standard 'force attack diversity'
+
                 //TODO: p1 should alternate (solar or lunar), (lunar or solar), both?
                 NPC.ai[0] = Main.rand.Next(1, 11);
                 NPC.ai[1] = 0;
@@ -795,17 +800,28 @@ namespace Polarities.NPCs.Eclipxie
                 float progress = NPC.ai[1] / spawnAnimTime;
 
                 //spawn animation
-                float glowAlpha = 8f * (1 - progress);
-                float glowScale = (float)Math.Exp(progress * 16f) - 1;
-                //TODO: Radiating lines moving outwards rapidly
-                //TODO: Possibly also warp space and screenshake
+                float glowAlpha = 1 + progress;
+                float progressInOut = progress * (1 - progress);
+                float glowScale = (progressInOut + progressInOut * progressInOut * 16f) * 32f;
+                //TODO: Darkened area around the edges of screen to ensure focus on center
+
+                //TODO: Maybe go for more of an inverse starry/hyperspace look?
+                spriteBatch.End();
+                spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+
+                GameShaders.Misc["Polarities:RadialOverlay"].UseImage1(Textures.Perlin256).UseShaderSpecificData(new Vector4(MathHelper.TwoPi * 8f, progress, Math.Clamp(1.5f - 3 * progress, 0, 1), 0)).UseOpacity(glowAlpha).Apply();
+
                 spriteBatch.Draw(Textures.Glow256.Value, NPC.Center - screenPos, Textures.Glow256.Frame(), Color.White * glowAlpha, 0f, Textures.Glow256.Size() / 2, glowScale, SpriteEffects.None, 0f);
 
-                Color modifiedColor = new Color(new Vector3(1 - 8f * (1 - progress))) * ((progress - 0.1f) / 0.9f);
+                spriteBatch.End();
+                spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
 
-                //TODO: maybe show up in a more interesting way
+                Color modifiedColor = new Color(new Vector3(1 - 12f * (1 - progress))) * ((progress - 0.1f) / 0.4f);
+
                 if (RenderTargetLayer.GetRenderTargetLayer<EclipxieTarget>().HasContent())
+                {
                     RenderTargetLayer.GetRenderTargetLayer<EclipxieTarget>().Draw(spriteBatch, NPC.Center - screenPos, modifiedColor, halfRenderTargetSize);
+                }
             }
             else
             {
