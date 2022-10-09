@@ -198,6 +198,7 @@ namespace Polarities.NPCs.Eclipxie
                 #region Phase 1 Dash (360, both?)
                 case 1:
                     {
+                        //TODO: This attack still feels a bit dull?
                         //TODO: Dashes need telegraphing and visuals and also it looks a bit weird with how the wings work as is and also it should have a trail or something
                         //Telegraph/trail should be silver for predictive and gold for standard
                         const float dashSpeed = 24f;
@@ -310,8 +311,8 @@ namespace Polarities.NPCs.Eclipxie
                 #region Planet Blender (450, both)
                 case 3:
                     {
-                        //TODO: This attack needs a longer/clearer telegraph to allow the player to slow down and reposition
                         const int setupTime = 60;
+                        const int telegraphTime = 60;
                         const int attackTime = 390;
                         const int distanceFromPlayer = 400;
 
@@ -323,11 +324,16 @@ namespace Polarities.NPCs.Eclipxie
                             Vector2 goalVelocity = (goalPosition - NPC.Center) / Math.Max(setupTime / 2 - NPC.ai[1], NPC.ai[1] - setupTime / 2 + 1);
                             NPC.velocity += (goalVelocity - NPC.velocity) / Math.Max(setupTime / 4 - NPC.ai[1], 1);
                         }
+                        else if (NPC.ai[1] < telegraphTime)
+                        {
+                            Vector2 goalPosition = (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * distanceFromPlayer + player.Center;
+                            NPC.velocity = goalPosition - NPC.Center;
+                        }
                         else
                         {
                             NPC.velocity = Vector2.Zero;
 
-                            if (NPC.ai[1] == setupTime)
+                            if (NPC.ai[1] == setupTime + telegraphTime)
                             {
                                 //produce planets
                                 for (int i = 0; i < 300; i++)
@@ -342,7 +348,7 @@ namespace Polarities.NPCs.Eclipxie
                         }
 
                         NPC.ai[1]++;
-                        if (NPC.ai[1] == setupTime + attackTime)
+                        if (NPC.ai[1] == setupTime + telegraphTime + attackTime)
                         {
                             gotoNextAttack = true;
                         }
@@ -657,7 +663,7 @@ namespace Polarities.NPCs.Eclipxie
                                 for (int i = -3; i < 3; i++)
                                 {
                                     float rotation = (player.Center - NPC.Center).ToRotation() + (i + sweepDirection + 0.5f) * MathHelper.TwoPi / 6;
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(240, 0).RotatedBy(rotation), new Vector2(-(i + 0.5f) * MathHelper.TwoPi / 6, 0), ProjectileType<EclipxieRayStar>(), ProjectileDamage, 0f, Main.myPlayer, ai0: 2, ai1: NPC.whoAmI);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(255, 0).RotatedBy(rotation), new Vector2(-(i + 0.5f) * MathHelper.TwoPi / 6, 0), ProjectileType<EclipxieRayStar>(), ProjectileDamage, 0f, Main.myPlayer, ai0: 2, ai1: NPC.whoAmI);
                                 }
                             }
                             if (NPC.ai[1] < setupTime + telegraphTime)
@@ -828,10 +834,21 @@ namespace Polarities.NPCs.Eclipxie
                 if (NPC.ai[0] == 1 && NPC.ai[1] % 90 < 45)
                 {
                     //phase 1 dash telegraph
-                    //TODO: This currently feels a bit dull
+                    //TODO: This currently feels a bit dull, should use a radial overlay maybe?
                     float telegraphProgress = (NPC.ai[1] % 90) / 45f;
                     Color telegraphColor = ((int)NPC.ai[1] % 180) / 90 == 0 ? new Color(255, 224, 192) : new Color(192, 224, 255);
                     spriteBatch.Draw(Textures.Glow256.Value, NPC.Center - screenPos, Textures.Glow256.Frame(), telegraphColor * telegraphProgress, 0f, Textures.Glow256.Size() / 2, (float)Math.Sqrt(1 - telegraphProgress) * 2f + 0.25f, SpriteEffects.None, 0f);
+                }
+                else if (NPC.ai[0] == 3 && NPC.ai[1] >= 60 && NPC.ai[1] < 120)
+                {
+                    //planet blender rays telegraph
+                    //TODO: This currently feels a. too smooth and b. disconnected from the boss
+                    float rayAngle = (Main.player[NPC.target].Center - NPC.Center).ToRotation() + MathHelper.Pi / 6;
+                    float raysProgress = (NPC.ai[1] - 60) / 60;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        spriteBatch.Draw(Textures.Glow256.Value, NPC.Center - screenPos, Textures.Glow256.Frame(2, 1, 0, 0), ModUtils.ConvectiveFlameColor(raysProgress * raysProgress * 0.5f), rayAngle + i * MathHelper.TwoPi / 6, Textures.Glow256.Size() / 2, new Vector2(raysProgress / (1 - raysProgress), 0.33f * (1 - raysProgress)), SpriteEffects.None, 0f);
+                    }
                 }
 
                 if (RenderTargetLayer.GetRenderTargetLayer<EclipxieTarget>().HasContent())
@@ -1041,7 +1058,26 @@ namespace Polarities.NPCs.Eclipxie
             if (minDepth <= depth && maxDepth > depth)
             {
                 //TODO: Maybe base on Eclipxie's health? Or at least choose values s.t. the milky way is always visible
-                if (skyTarget != null) Main.spriteBatch.Draw(skyTarget, new Vector2(Main.screenWidth / 2f, Main.screenHeight), skyTarget.Frame(), Color.White * fadeOpacity, PolaritiesSystem.timer * MathHelper.TwoPi / 86400, skyTarget.Size() / 2, 1f, SpriteEffects.None, 0f);
+                if (skyTarget != null)
+                {
+                    spriteBatch.Draw(skyTarget, new Vector2(Main.screenWidth / 2f, Main.screenHeight), skyTarget.Frame(), new Color(192, 192, 192) * fadeOpacity, PolaritiesSystem.timer * MathHelper.TwoPi / 86400, skyTarget.Size() / 2, 1f, SpriteEffects.None, 0f);
+
+                    spriteBatch.End();
+                    spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+
+                    for (int i = 0; i < 6; i++)
+                    {
+                        for (int j = 1; j < 8; j++)
+                        {
+                            Vector2 twinkleOffset = new Vector2(j, 0).RotatedBy(i * MathHelper.TwoPi / 6);
+                            float twinkleFade = (1 - (j / 8f)) / 3f;
+                            spriteBatch.Draw(skyTarget, new Vector2(Main.screenWidth / 2f, Main.screenHeight) + twinkleOffset, skyTarget.Frame(), Color.White * fadeOpacity * twinkleFade, PolaritiesSystem.timer * MathHelper.TwoPi / 86400, skyTarget.Size() / 2, 1f, SpriteEffects.None, 0f);
+                        }
+                    }
+
+                    spriteBatch.End();
+                    spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                }
             }
         }
     }
