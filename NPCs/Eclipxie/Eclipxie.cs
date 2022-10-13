@@ -120,7 +120,7 @@ namespace Polarities.NPCs.Eclipxie
 
             NPC.defense = 45;
             NPC.damage = 70;
-            NPC.lifeMax = Main.masterMode ? 1000000 / 3 : Main.expertMode ? 864000 / 2 : 600000;
+            NPC.lifeMax = Main.masterMode ? 10000 / 3 : Main.expertMode ? 8640 / 2 : 6000;
 
             NPC.knockBackResist = 0f;
             NPC.value = Item.buyPrice(gold: 15);
@@ -143,6 +143,21 @@ namespace Polarities.NPCs.Eclipxie
             SoundEngine.PlaySound(SoundID.Item29, player.position);
         }
 
+        public override void OnSpawn(IEntitySource source)
+        {
+            NPC.realLife = NPC.whoAmI;
+            splitIntoMinions = false;
+
+            InitializeAIStates();
+        }
+
+        float phase2HealthThreshold => 0.66f;
+        float phase3HealthThreshold => 0.34f;
+
+        public bool splitIntoMinions;
+        public int sunMinion;
+        public int moonMinion;
+
         public override void AI()
         {
             Player player = Main.player[NPC.target];
@@ -157,10 +172,11 @@ namespace Polarities.NPCs.Eclipxie
                         NPC.timeLeft = 10;
                     }
                     //TODO: Despawning
+                    //TODO: Make it stay eclipse
                 }
             }
 
-            NPC.dontTakeDamage = false;
+            NPC.dontTakeDamage = splitIntoMinions;
 
             bool gotoNextAttack = false;
 
@@ -195,7 +211,29 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Phase 1 Dash (360, both?)
+                #region First Split
+                case -1:
+                    //TODO: This feels a bit too shaky, the visuals could feel more warpy/flowy maybe
+                    NPC.velocity *= 0.95f;
+                    NPC.velocity += new Vector2(NPC.ai[1] / 90f, 0).RotatedByRandom(MathHelper.TwoPi);
+
+                    if (NPC.ai[1] == 119)
+                    {
+                        //TODO: Maybe spawn these with some velocity?
+                        sunMinion = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<SolMoth>(), ai0: NPC.whoAmI);
+                        moonMinion = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<LunaButterfly>(), ai0: NPC.whoAmI);
+                        splitIntoMinions = true;
+                    }
+
+                    NPC.ai[1]++;
+                    if (NPC.ai[1] == 120)
+                    {
+                        gotoNextAttack = true;
+                    }
+                    break;
+                #endregion
+
+                #region Phase 1 Dash (360)
                 case 1:
                     {
                         //TODO: This attack still feels a bit dull?
@@ -259,7 +297,7 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Deathray rows (300, both?)
+                #region Deathray rows (300)
                 case 2:
                     {
                         const float distanceFromPlayer = 400f;
@@ -308,7 +346,7 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Planet Blender (450, both)
+                #region Planet Blender (450)
                 case 3:
                     {
                         const int setupTime = 60;
@@ -355,7 +393,7 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Circle player while bombarding with projectiles (390, either lunar or solar)
+                #region Circle player while bombarding with projectiles (390)
                 case 4:
                     {
                         const float distanceFromPlayer = 600f;
@@ -415,7 +453,7 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Starburst (480, both)
+                #region Starburst (480)
                 case 5:
                     {
                         const int setupTime = 60;
@@ -458,7 +496,7 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Meteor Shower (690, both? currently, should maybe be lunar)
+                #region Meteor Shower (690)
                 case 6:
                     {
                         const int setupTimePart1 = 60;
@@ -523,7 +561,7 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Star Pursuit (480, both?)
+                #region Star Pursuit (480)
                 case 7:
                     {
                         const int setupTime = 60;
@@ -579,7 +617,7 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Deathray Sweep (285, both)
+                #region Deathray Sweep (285)
                 case 8:
                     {
                         const int setupTime = 60;
@@ -631,7 +669,7 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Converging star rays (300, solar?)
+                #region Converging star rays (300)
                 case 9:
                     {
                         //Ideas for star ray type attacks:
@@ -688,7 +726,7 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Random rays (300, both)
+                #region Random rays (300)
                 case 10:
                     {
                         //TODO: This attack feels a bit too aggressive and unpredictable, and needs to be predictable in advance to let the player reposition
@@ -723,18 +761,120 @@ namespace Polarities.NPCs.Eclipxie
                         }
                         break;
                     }
-                    #endregion
+                #endregion
+
+                #region Phase 2 Dash (360)
+                case 11:
+                    NPC.ai[1]++;
+                    if (NPC.ai[1] == 360)
+                    {
+                        gotoNextAttack = true;
+                    }
+                    break;
+                #endregion
+                #region Full-screen attack (360)
+                case 12:
+                    NPC.ai[1]++;
+                    if (NPC.ai[1] == 360)
+                    {
+                        gotoNextAttack = true;
+                    }
+                    break;
+                #endregion
+            }
+
+            if (splitIntoMinions)
+            {
+                NPC.velocity = Vector2.Zero;
+                NPC.Center = (Main.npc[sunMinion].Center + Main.npc[moonMinion].Center) / 2;
             }
 
             if (gotoNextAttack)
             {
-                //TODO: I should do the fairly standard 'force attack diversity'
-
-                //TODO: p1 should alternate (solar or lunar), (lunar or solar), both?
-                NPC.ai[0] = Main.rand.Next(1, 11);
-                NPC.ai[1] = 0;
+                //TODO: We'll need better control for the phase 3 splitting and unsplitting transitions
+                if (NPC.life < NPC.lifeMax * phase2HealthThreshold && !splitIntoMinions)
+                {
+                    //first split
+                    NPC.ai[0] = -1;
+                    NPC.ai[1] = 0;
+                }
+                else
+                {
+                    //default weighted random phase transition
+                    GotoNextAIState();
+                }
             }
         }
+        
+        private float[] aiWeights = new float[12];
+        void GotoNextAIState()
+        {
+            float[] aiWeightMultipliers = new float[aiWeights.Length];
+
+            WeightedRandom<int> aiStatePool = new WeightedRandom<int>();
+            for (int state = 0; state < aiWeights.Length; state++)
+            {
+                float aiWeightMultiplier = 1f;
+                switch (state + 1)
+                {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                        if (splitIntoMinions) aiWeightMultiplier = 0f;
+                        break;
+                    case 11:
+                    case 12:
+                        if (!splitIntoMinions) aiWeightMultiplier = 0f;
+                        break;
+                }
+
+                aiWeightMultipliers[state] = aiWeightMultiplier;
+
+                //weights are raised to a power to bias more towards attacks that haven't been used in a while
+                aiStatePool.Add(state, Math.Pow(aiWeights[state], 4) * aiWeightMultiplier);
+            }
+
+            NPC.ai[0] = aiStatePool + 1;
+
+            float totalWeightMultiplier = 0;
+            for (int state = 0; state < aiWeights.Length; state++)
+            {
+                if (NPC.ai[0] - 1 != state) totalWeightMultiplier += aiWeights[state];
+            }
+
+            for (int state = 0; state < aiWeights.Length; state++)
+            {
+                if (NPC.ai[0] - 1 != state)
+                    aiWeights[state] += aiWeights[(int)NPC.ai[0] - 1] * ((totalWeightMultiplier == 0) ? 1 : aiWeightMultipliers[state] / totalWeightMultiplier);
+            }
+            aiWeights[(int)NPC.ai[0] - 1] = 0f;
+
+            NPC.ai[1] = 0;
+        }
+        void InitializeAIStates()
+        {
+            for (int state = 0; state < aiWeights.Length; state++)
+            {
+                aiWeights[state] = 1f;
+            }
+        }
+
+        public override bool? CanHitNPC(NPC target)
+        {
+            return splitIntoMinions ? false : null;
+        }
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            return !splitIntoMinions;
+        }
+
         public override void FindFrame(int frameHeight)
         {
             NPC.frameCounter = (NPC.frameCounter + 1) % 5;
@@ -753,6 +893,8 @@ namespace Polarities.NPCs.Eclipxie
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            if (splitIntoMinions) return false;
+
             drawColor = NPC.GetNPCColorTintedByBuffs(Color.White);
 
             Vector2 halfRenderTargetSize = RenderTargetLayer.GetRenderTargetLayer<EclipxieTarget>().Center;
@@ -858,7 +1000,258 @@ namespace Polarities.NPCs.Eclipxie
             return false;
         }
     }
+
+    [AutoloadBossHead]
+    public class SolMoth : ModNPC
+    {
+        public override void SetStaticDefaults()
+        {
+            //group with other bosses
+            NPCID.Sets.BossBestiaryPriority.Add(Type);
+
+            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
+            {
+                SpecificallyImmuneTo = new int[] {
+                    BuffID.OnFire,
+                    BuffID.Confused
+                }
+            };
+            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+
+            Main.npcFrameCount[NPC.type] = 8;
+        }
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            int associatedNPCType = NPCType<Eclipxie>();
+            bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
+
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                //spawn conditions
+				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.Eclipse,
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void SetDefaults()
+        {
+            NPC.aiStyle = -1;
+            NPC.width = 64;
+            NPC.height = 64;
+
+            NPC.defense = 45;
+            NPC.damage = 70;
+            NPC.lifeMax = Main.masterMode ? 10000 / 3 : Main.expertMode ? 8640 / 2 : 6000;
+
+            NPC.knockBackResist = 0f;
+            NPC.value = Item.buyPrice(gold: 15);
+            NPC.npcSlots = 15f;
+            NPC.boss = true;
+            NPC.lavaImmune = true;
+            NPC.noGravity = true;
+            NPC.noTileCollide = true;
+            NPC.HitSound = SoundID.NPCHit5;
+
+            NPC.hide = true;
+
+            Music = MusicID.EmpressOfLight;
+            //TODO: Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/Eclipxie");
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            NPC.realLife = (int)NPC.ai[0];
+        }
+        public override void AI()
+        {
+            
+        }
+        public override void FindFrame(int frameHeight)
+        {
+            NPC.frameCounter = (NPC.frameCounter + 1) % 5;
+            if (NPC.frameCounter == 0)
+            {
+                NPC.frame.Y = (NPC.frame.Y + frameHeight) % (8 * frameHeight);
+            }
+        }
+        public override void DrawBehind(int index)
+        {
+            RenderTargetLayer.AddNPC<EclipxieTarget>(index);
+            DrawLayer.AddNPC<DrawLayerBeforeScreenObstruction>(index);
+        }
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            drawColor = NPC.GetNPCColorTintedByBuffs(Color.White);
+
+            Vector2 halfRenderTargetSize = RenderTargetLayer.GetRenderTargetLayer<EclipxieTarget>().Center;
+
+            if (RenderTargetLayer.IsActive<EclipxieTarget>())
+            {
+                Texture2D texture = TextureAssets.Npc[Type].Value;
+
+                Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f / Main.npcFrameCount[Type] + 12);
+                Vector2 drawPos = halfRenderTargetSize;
+                spriteBatch.Draw(texture, drawPos, NPC.frame, drawColor, NPC.rotation, drawOrigin, 0.5f, SpriteEffects.None, 0f);
+
+                //glow
+                spriteBatch.Draw(Textures.Glow256.Value, drawPos, Textures.Glow256.Frame(), new Color(255, 224, 192) * 0.1f, 0f, Textures.Glow256.Size() / 2, 0.3f, SpriteEffects.None, 0f);
+
+                spriteBatch.End();
+                spriteBatch.Begin((SpriteSortMode)1, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+
+                Texture2D coronaTexture = Eclipxie.FireGradient.Value;
+
+                GameShaders.Misc["Polarities:EclipxieSun"].UseImage1(Textures.Perlin256).UseShaderSpecificData(new Vector4((PolaritiesSystem.timer / 120f) % 1, 0.75f, 0.45f, 0)).Apply();
+
+                Vector2 coronaScaling = new Vector2(1f / coronaTexture.Width, 1) * 86 * 0.5f;
+                spriteBatch.Draw(coronaTexture, drawPos, coronaTexture.Frame(), Color.White, 0f, coronaTexture.Size() / 2, coronaScaling, SpriteEffects.None, 0);
+
+                spriteBatch.End();
+                spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+
+                return false;
+            }
+
+            if (RenderTargetLayer.GetRenderTargetLayer<EclipxieTarget>().HasContent())
+                RenderTargetLayer.GetRenderTargetLayer<EclipxieTarget>().Draw(spriteBatch, NPC.Center - screenPos, Color.White, halfRenderTargetSize);
+
+            return false;
+        }
+    }
+
+    [AutoloadBossHead]
+    public class LunaButterfly : ModNPC
+    {
+        public override void SetStaticDefaults()
+        {
+            //group with other bosses
+            NPCID.Sets.BossBestiaryPriority.Add(Type);
+
+            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
+            {
+                SpecificallyImmuneTo = new int[] {
+                    BuffID.Frostburn,
+                    BuffID.Confused
+                }
+            };
+            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+
+            Main.npcFrameCount[NPC.type] = 8;
+        }
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            int associatedNPCType = NPCType<Eclipxie>();
+            bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
+
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                //spawn conditions
+				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.Eclipse,
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void SetDefaults()
+        {
+            NPC.aiStyle = -1;
+            NPC.width = 64;
+            NPC.height = 64;
+
+            NPC.defense = 45;
+            NPC.damage = 70;
+            NPC.lifeMax = Main.masterMode ? 10000 / 3 : Main.expertMode ? 8640 / 2 : 6000;
+
+            NPC.knockBackResist = 0f;
+            NPC.value = Item.buyPrice(gold: 15);
+            NPC.npcSlots = 15f;
+            NPC.boss = true;
+            NPC.lavaImmune = true;
+            NPC.noGravity = true;
+            NPC.noTileCollide = true;
+            NPC.HitSound = SoundID.NPCHit5;
+
+            NPC.hide = true;
+
+            Music = MusicID.EmpressOfLight;
+            //TODO: Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/Eclipxie");
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            NPC.realLife = (int)NPC.ai[0];
+        }
+        public override void AI()
+        {
+            NPC.velocity = (Main.LocalPlayer.Center + new Vector2(0, -200) - NPC.Center) / 120f;
+        }
+        public override void FindFrame(int frameHeight)
+        {
+            NPC.frameCounter = (NPC.frameCounter + 1) % 5;
+            if (NPC.frameCounter == 0)
+            {
+                NPC.frame.Y = (NPC.frame.Y + frameHeight) % (8 * frameHeight);
+            }
+        }
+        public override void DrawBehind(int index)
+        {
+            RenderTargetLayer.AddNPC<LunaButterflyTarget>(index);
+            DrawLayer.AddNPC<DrawLayerBeforeScreenObstruction>(index);
+        }
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            drawColor = NPC.GetNPCColorTintedByBuffs(Color.White);
+
+            Vector2 halfRenderTargetSize = RenderTargetLayer.GetRenderTargetLayer<LunaButterflyTarget>().Center;
+
+            if (RenderTargetLayer.IsActive<LunaButterflyTarget>())
+            {
+                Texture2D texture = TextureAssets.Npc[Type].Value;
+
+                Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f / Main.npcFrameCount[Type] + 12);
+                Vector2 drawPos = halfRenderTargetSize;
+                spriteBatch.Draw(texture, drawPos, NPC.frame, drawColor, NPC.rotation, drawOrigin, 0.5f, SpriteEffects.None, 0f);
+
+                //TODO: Make this use an actual moon texture
+                spriteBatch.End();
+                spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+
+                Texture2D moonTexture = Textures.PixelTexture.Value;
+
+                float solMothDistance = (Main.npc[(int)NPC.ai[0]].Center - NPC.Center).Length();
+                float tiltFromCloseness = -1 / (solMothDistance / 64f + 1) * 1.5f + 0.5f; //goes from -1 to 0.5
+                Vector2 solMothDirection = (Main.npc[(int)NPC.ai[0]].Center - NPC.Center).SafeNormalize(Vector2.Zero) * (float)Math.Sqrt(1 - tiltFromCloseness * tiltFromCloseness);
+
+                Vector3 moonColor = new Vector3(0.85f, 0.85f, 1f);
+                GameShaders.Misc["Polarities:DrawAsSphere"].UseShaderSpecificData(new Vector4(solMothDirection.X, solMothDirection.Y, tiltFromCloseness, 0)).UseColor(moonColor.X / 2, moonColor.Y / 2, moonColor.Z / 2).Apply();
+                spriteBatch.Draw(moonTexture, drawPos, moonTexture.Frame(), Color.White, 0f, moonTexture.Size() / 2, 32f / moonTexture.Width, SpriteEffects.None, 0);
+                GameShaders.Misc["Polarities:DrawAsSphere"].UseShaderSpecificData(new Vector4(solMothDirection.X, solMothDirection.Y, tiltFromCloseness, 0)).UseColor(moonColor.X, moonColor.Y, moonColor.Z).Apply();
+                spriteBatch.Draw(moonTexture, drawPos, moonTexture.Frame(), Color.White, 0f, moonTexture.Size() / 2, 30.5f / moonTexture.Width, SpriteEffects.None, 0);
+
+                spriteBatch.End();
+                spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+
+                return false;
+            }
+
+            if (RenderTargetLayer.GetRenderTargetLayer<LunaButterflyTarget>().HasContent())
+                RenderTargetLayer.GetRenderTargetLayer<LunaButterflyTarget>().Draw(spriteBatch, NPC.Center - screenPos, Color.White, halfRenderTargetSize);
+
+            return false;
+        }
+    }
+
     public class EclipxieTarget : RenderTargetLayer
+    {
+        public override int Width => 600;
+        public override int Height => 600;
+        public override bool useIdentityMatrix => true;
+
+        public override void Load(Mod mod)
+        {
+            base.Load(mod);
+
+            targetScale = 0.5f;
+        }
+    }
+    public class LunaButterflyTarget : RenderTargetLayer
     {
         public override int Width => 600;
         public override int Height => 600;

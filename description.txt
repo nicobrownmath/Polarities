@@ -27,6 +27,8 @@ v0.11 Beta 2 Changelog
   Fixed the pincer staff doing melee damage
   Added and adjusted some ghostwriter dialogue
   Re-added stalactites to the limestone caves in normal mode in order to make the speleothem obtainable
+  Adjusted the journey mode research cost of salt crates, torches, and the laser lens
+  Fixed the head splitter being unable to recieve melee prefixes
 
 Fixes to do:
   Worm guns break with manual

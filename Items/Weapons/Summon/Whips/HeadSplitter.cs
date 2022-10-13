@@ -25,6 +25,8 @@ namespace Polarities.Items.Weapons.Summon.Whips
             Item.rare = ItemRarityID.Pink;
             Item.value = Item.sellPrice(gold: 1);
         }
+
+        public override bool MeleePrefix() => true;
     }
 
     public class HeadSplitterProjectile : ModProjectile

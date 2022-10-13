@@ -36,6 +36,8 @@ namespace Polarities.Items.Placeable.Furniture
 		public virtual Color MapColor => new Color(174, 129, 92);
 		public virtual Color MapColorLocked => new Color(174, 129, 92);
 		public virtual int UnlockItem => -1;
+
+		//TODO: Chest display names are broken
 		public virtual string ChestName => Language.GetTextValue("Mods.Polarities.ItemName." + ItemLoader.GetItem(DropItem).Name);
 
 		public override void SetStaticDefaults()

@@ -70,6 +70,20 @@ float4 RadialOverlay(float2 coords : TEXCOORD0) : COLOR0
     }
 }
 
+float4 DrawAsSphere(float2 coords : TEXCOORD0) : COLOR0
+{
+    float2 normalizedCoords = coords * 2 - 1;
+    float r = length(normalizedCoords);
+    if (r <= 1) {
+        float theta = atan2(normalizedCoords.y, normalizedCoords.x);
+        float brightnessMultiplier = dot(float3(normalizedCoords, sqrt(1 - r * r)), uShaderSpecificData.xyz);
+        return float4(tex2D(uImage0, normalizedCoords * asin(r) / (r * 2)).xyz * uColor * brightnessMultiplier, 1);
+    }
+    else {
+        return float4(0, 0, 0, 0);
+    }
+}
+
 technique Technique1
 {
     pass TriangleFadePass
@@ -87,5 +101,9 @@ technique Technique1
     pass RadialOverlayPass
     {
         PixelShader = compile ps_2_0 RadialOverlay();
+    }
+    pass DrawAsSpherePass
+    {
+        PixelShader = compile ps_2_0 DrawAsSphere();
     }
 }

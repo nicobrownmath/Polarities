@@ -29,7 +29,7 @@ namespace Polarities.Items.Placeable.Furniture
 
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			this.SetResearch(100);
 		}
 
 		public override void SetDefaults()

@@ -61,7 +61,7 @@ namespace Polarities.Items.Consumables.Crates
 
             Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
 
-            this.SetResearch(1);
+            this.SetResearch(5);
 
 			ItemID.Sets.IsFishingCrate[Type] = true;
 			ItemID.Sets.IsFishingCrate[Type] = HardmodeCrate;

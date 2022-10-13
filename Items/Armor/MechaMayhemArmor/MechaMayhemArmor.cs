@@ -149,8 +149,10 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 		}
 
 		public override void SetStaticDefaults()
-		{
-			int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
+        {
+            this.SetResearch(1);
+
+            int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 			ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;
 
 			//registers a head glowmask
