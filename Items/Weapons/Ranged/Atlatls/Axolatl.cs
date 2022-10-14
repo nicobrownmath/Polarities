@@ -42,16 +42,20 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 		}
 
 		bool shotConsumed;
+		bool lastShotConsumable;
         public override bool CanConsumeAmmo(Item ammo, Player player)
         {
 			shotConsumed = Main.rand.NextBool();
-			return shotConsumed;
+			lastShotConsumable = true;
+            return shotConsumed;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-			if (!shotConsumed) type = ProjectileType<AxolatlBubble>();
-			return base.Shoot(player, source, position, velocity, type, damage, knockback);
+			if (!lastShotConsumable) shotConsumed = Main.rand.NextBool();
+            if (!shotConsumed) type = ProjectileType<AxolatlBubble>();
+			lastShotConsumable = false;
+            return base.Shoot(player, source, position, velocity, type, damage, knockback);
         }
 
         public override bool RealShoot(Player player, EntitySource_ItemUse_WithAmmo source, int index, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)

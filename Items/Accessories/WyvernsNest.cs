@@ -27,6 +27,7 @@ namespace Polarities.Items.Accessories
 			Item.height = 40;
 			Item.accessory = true;
 			Item.damage = 40;
+			Item.DamageType = DamageClass.Summon;
 
 			Item.value = Item.sellPrice(gold: 20);
 			Item.rare = RarityType<BetsyFlawlessRarity>();

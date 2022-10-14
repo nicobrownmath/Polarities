@@ -18,7 +18,7 @@ namespace Polarities.Items.Weapons.Melee
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			this.SetResearch(5);
 		}
 
         public override void SetDefaults()

@@ -12,6 +12,8 @@ namespace Polarities.Items.Placeable.Blocks
 		public override void SetStaticDefaults()
 		{
 			ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
+
+			this.SetResearch(100);
 		}
 
 		public override void SetDefaults()
