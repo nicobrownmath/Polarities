@@ -468,8 +468,6 @@ namespace Polarities.NPCs.Eclipxie
 
                         if (NPC.ai[1] < setupTime)
                         {
-                            if (NPC.ai[1] == 0) NPC.ai[3] = Main.rand.NextBool() ? 1 : -1;
-
                             Vector2 goalPosition = (NPC.Center - player.Center).SafeNormalize(Vector2.Zero) * distanceFromPlayer + player.Center;
                             Vector2 goalVelocity = (goalPosition - NPC.Center) / Math.Max(setupTime / 2 - NPC.ai[1], NPC.ai[1] - setupTime / 2 + 1);
                             NPC.velocity += (goalVelocity - NPC.velocity) / Math.Max(setupTime / 4 - NPC.ai[1], 1);
@@ -698,7 +696,6 @@ namespace Polarities.NPCs.Eclipxie
                         else
                         {
                             //TODO: Create burst on ray activation
-                            //TODO: Some sort of visual connection to the stars (wavy lines with a circle around them?)
                             //TODO: Maybe do something when the stars converge?
                             if (NPC.ai[1] == setupTime)
                             {
@@ -752,7 +749,7 @@ namespace Polarities.NPCs.Eclipxie
                             NPC.velocity = (player.Center - NPC.Center) / 120;
 
                             //TODO: Maybe start off slow and speed up?
-                            if ((NPC.ai[1] - setupTime) % 20 == 0 && NPC.ai[1] + 60 <= setupTime + attackTime)
+                            if ((NPC.ai[1] - setupTime) % 20 == 0 && NPC.ai[1] + 90 <= setupTime + attackTime)
                             {
                                 //TODO: It might be cool to briefly tint the entire screen based on the ray color (could also be weird but I should try it)
                                 int typeModifier = (int)(NPC.ai[1] - setupTime) % 40 / 20; //could also maybe alternate
@@ -769,25 +766,25 @@ namespace Polarities.NPCs.Eclipxie
                     }
                 #endregion
 
-                #region Phase 2 Dash (360)
+                #region Phase 2 Dash (375)
                 case 11:
                     {
-                        //TODO: This may need some startup delay
                         const float dashSpeed = 24f;
                         const float distanceFromPlayer = 400f;
+                        const int startSetupTime = 15;
                         const int setupTime = 112;
                         const int period = 75;
                         const int iterations = 3;
 
                         //sol moth dashes
-                        if ((NPC.ai[1] + period) % (period * 2) < setupTime)
+                        if ((NPC.ai[1] - startSetupTime + period) % (period * 2) < setupTime)
                         {
                             //dash setup
                             Vector2 goalPosition = (Main.npc[sunMinion].Center - player.Center).SafeNormalize(Vector2.Zero) * distanceFromPlayer + player.Center;
-                            Vector2 goalVelocity = (goalPosition - Main.npc[sunMinion].Center) / (setupTime - (NPC.ai[1] + period) % (period * 2)) * 3;
-                            Main.npc[sunMinion].velocity += (goalVelocity - Main.npc[sunMinion].velocity) / Math.Max(1, setupTime - (NPC.ai[1] + period) % (period * 2) - setupTime / 2);
+                            Vector2 goalVelocity = (goalPosition - Main.npc[sunMinion].Center) / (setupTime - (NPC.ai[1] - startSetupTime + period) % (period * 2)) * 3;
+                            Main.npc[sunMinion].velocity += (goalVelocity - Main.npc[sunMinion].velocity) / Math.Max(1, setupTime - (NPC.ai[1] - startSetupTime + period) % (period * 2) - setupTime / 2);
                         }
-                        else if ((NPC.ai[1] + period) % (period * 2) == setupTime)
+                        else if ((NPC.ai[1] - startSetupTime + period) % (period * 2) == setupTime)
                         {
                             Main.npc[sunMinion].velocity = (player.Center - Main.npc[sunMinion].Center).SafeNormalize(Vector2.Zero) * dashSpeed * 1.5f;
                             
@@ -805,14 +802,14 @@ namespace Polarities.NPCs.Eclipxie
                         }
 
                         //luna butterfly dashes
-                        if (NPC.ai[1] % (period * 2) < setupTime)
+                        if ((NPC.ai[1] - startSetupTime) % (period * 2) < setupTime)
                         {
                             //dash setup
                             Vector2 goalPosition = (Main.npc[moonMinion].Center - player.Center).SafeNormalize(Vector2.Zero) * distanceFromPlayer + player.Center;
-                            Vector2 goalVelocity = (goalPosition - Main.npc[moonMinion].Center) / (setupTime - NPC.ai[1] % (period * 2)) * 3;
-                            Main.npc[moonMinion].velocity += (goalVelocity - Main.npc[moonMinion].velocity) / Math.Max(1, setupTime - NPC.ai[1] % (period * 2) - setupTime / 2);
+                            Vector2 goalVelocity = (goalPosition - Main.npc[moonMinion].Center) / (setupTime - (NPC.ai[1] - startSetupTime) % (period * 2)) * 3;
+                            Main.npc[moonMinion].velocity += (goalVelocity - Main.npc[moonMinion].velocity) / Math.Max(1, setupTime - (NPC.ai[1] - startSetupTime) % (period * 2) - setupTime / 2);
                         }
-                        else if (NPC.ai[1] % (period * 2) == setupTime)
+                        else if ((NPC.ai[1] - startSetupTime) % (period * 2) == setupTime)
                         {
                             //default to velocity-matching if a predictive dash doesn't work
                             Main.npc[moonMinion].velocity = player.velocity.SafeNormalize(Vector2.Zero) * dashSpeed;
@@ -844,7 +841,7 @@ namespace Polarities.NPCs.Eclipxie
                         }
 
                         NPC.ai[1]++;
-                        if (NPC.ai[1] == period * iterations * 2)
+                        if (NPC.ai[1] == startSetupTime + period * iterations * 2)
                         {
                             gotoNextAttack = true;
                         }
@@ -919,31 +916,39 @@ namespace Polarities.NPCs.Eclipxie
                     {
                         const int setupTime = 60;
                         const int attackTime = 480;
-                        const float moonDistanceFromPlayer = 200f;
-                        const float sunDistanceFromPlayer = 600f;
+                        const float moonDistanceFromPlayer = 400f;
+                        const float sunDistanceFromPlayer = 400f;
 
                         if (NPC.ai[1] < setupTime)
                         {
-                            if (NPC.ai[1] == 0) NPC.ai[3] = Main.rand.NextBool() ? 1 : -1;
+                            Vector2 moonOffset = (Main.npc[moonMinion].Center - player.Center) / (Main.npc[moonMinion].Center - player.Center).LengthSquared();
+                            Vector2 sunOffset = (Main.npc[sunMinion].Center - player.Center) / (Main.npc[sunMinion].Center - player.Center).LengthSquared();
 
-                            Vector2 moonGoalPosition = (Main.npc[moonMinion].Center - player.Center).SafeNormalize(Vector2.Zero) * moonDistanceFromPlayer + player.Center;
+                            if (NPC.ai[1] == 0)
+                            {
+                                NPC.ai[3] = Vector2.Dot(moonOffset, sunOffset.RotatedBy(MathHelper.PiOver2)) > 0 ? 1 : -1;
+                            }
+
+                            Vector2 moonGoalPosition = (moonOffset + sunOffset.RotatedBy(MathHelper.Pi / 3 * NPC.ai[3])).SafeNormalize(Vector2.Zero) * moonDistanceFromPlayer + player.Center;
                             Vector2 moonGoalVelocity = (moonGoalPosition - Main.npc[moonMinion].Center) / Math.Max(setupTime / 2 - NPC.ai[1], NPC.ai[1] - setupTime / 2 + 1);
                             Main.npc[moonMinion].velocity += (moonGoalVelocity - Main.npc[moonMinion].velocity) / Math.Max(setupTime / 4 - NPC.ai[1], 1);
 
-                            Vector2 sunGoalPosition = (Main.npc[sunMinion].Center - player.Center).SafeNormalize(Vector2.Zero) * sunDistanceFromPlayer + player.Center;
+                            Vector2 sunGoalPosition = (sunOffset + moonOffset.RotatedBy(-MathHelper.Pi / 3 * NPC.ai[3])).SafeNormalize(Vector2.Zero) * sunDistanceFromPlayer + player.Center;
                             Vector2 sunGoalVelocity = (sunGoalPosition - Main.npc[sunMinion].Center) / Math.Max(setupTime / 2 - NPC.ai[1], NPC.ai[1] - setupTime / 2 + 1);
                             Main.npc[sunMinion].velocity += (sunGoalVelocity - Main.npc[sunMinion].velocity) / Math.Max(setupTime / 4 - NPC.ai[1], 1);
                         }
                         else
                         {
-                            //TODO: Try to avoid each other
-                            Vector2 moonGoalPosition = (Main.npc[moonMinion].Center - player.Center).SafeNormalize(Vector2.Zero) * moonDistanceFromPlayer + player.Center;
+                            Vector2 moonOffset = (Main.npc[moonMinion].Center - player.Center) / (Main.npc[moonMinion].Center - player.Center).LengthSquared();
+                            Vector2 sunOffset = (Main.npc[sunMinion].Center - player.Center) / (Main.npc[sunMinion].Center - player.Center).LengthSquared();
+
+                            Vector2 moonGoalPosition = (moonOffset + sunOffset.RotatedBy(MathHelper.Pi / 3 * NPC.ai[3])).SafeNormalize(Vector2.Zero) * moonDistanceFromPlayer + player.Center;
                             Main.npc[moonMinion].velocity = (moonGoalPosition - Main.npc[moonMinion].Center) / 10f;
 
-                            Vector2 sunGoalPosition = (Main.npc[sunMinion].Center - player.Center).SafeNormalize(Vector2.Zero) * sunDistanceFromPlayer + player.Center;
+                            Vector2 sunGoalPosition = (sunOffset + moonOffset.RotatedBy(-MathHelper.Pi / 3 * NPC.ai[3])).SafeNormalize(Vector2.Zero) * sunDistanceFromPlayer + player.Center;
                             Main.npc[sunMinion].velocity = (sunGoalPosition - Main.npc[sunMinion].Center) / 10f;
 
-                            //TODO: Projectiles feel erratic/placeholdery
+                            //TODO: Projectiles deathrays maybe shouldn't rotate?
                             if ((NPC.ai[1] - setupTime) % 180 == 0 && NPC.ai[1] - setupTime < 360)
                             {
                                 ParticleLayer.WarpParticles.Add(Particle.NewParticle<WarpZoomPulseParticle>(Main.npc[moonMinion].Center, Vector2.Zero, MathHelper.Pi, 0, Scale: 0f));
@@ -961,7 +966,7 @@ namespace Polarities.NPCs.Eclipxie
 
                                 for (int i = 0; i < 5; i++)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[sunMinion].Center, new Vector2(48, 0).RotatedBy((player.Center - Main.npc[sunMinion].Center).ToRotation() + (i + 0.5f) * MathHelper.TwoPi / 5), ProjectileType<EclipxieRayStar>(), ProjectileDamage, 0f, Main.myPlayer, ai0: i == 0 ? 1.5f : 1, ai1: 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[sunMinion].Center, new Vector2(32, 0).RotatedBy((player.Center - Main.npc[sunMinion].Center).ToRotation() + (i + 0.5f) * MathHelper.TwoPi / 5), ProjectileType<EclipxieRayStar>(), ProjectileDamage, 0f, Main.myPlayer, ai0: i == 0 ? 1.5f : 1, ai1: 0);
                                 }
                             }
                         }
@@ -974,26 +979,30 @@ namespace Polarities.NPCs.Eclipxie
                         break;
                     }
                 #endregion
-                #region Phase 2 deathray sweeps (405)
+                #region Phase 2 deathray sweeps (465)
                 case 14:
                     {
                         const int setupTime = 60;
                         const int hoverTime = 45;
-                        const int attackTime = 240;
+                        const int attackTime = 300;
                         const int windDownTime = 60;
 
                         if (NPC.ai[1] < setupTime)
                         {
-                            if (NPC.ai[1] == 0) NPC.ai[2] = Main.npc[sunMinion].Center.X < Main.npc[moonMinion].Center.X ? -1 : 1;
+                            if (NPC.ai[1] == 0)
+                            {
+                                NPC.ai[2] = Main.npc[sunMinion].Center.X < Main.npc[moonMinion].Center.X ? -1 : 1;
+                                NPC.ai[3] = Main.npc[sunMinion].Center.Y < Main.npc[moonMinion].Center.Y ? 1 : -1;
+                            }
 
                             float progress = NPC.ai[1] / setupTime;
 
-                            Vector2 finalSunGoalPosition = player.Center + new Vector2(NPC.ai[2] * 600, -350);
+                            Vector2 finalSunGoalPosition = player.Center + new Vector2(NPC.ai[2] * 600, NPC.ai[3] * -350);
                             Vector2 sunGoalPosition = player.Center + ((finalSunGoalPosition - player.Center).SafeNormalize(Vector2.Zero) * progress + (Main.npc[sunMinion].Center - player.Center).SafeNormalize(Vector2.Zero) * (1 - progress)).SafeNormalize(Vector2.Zero) * (finalSunGoalPosition - player.Center).Length();
                             Vector2 sunGoalVelocity = (sunGoalPosition - Main.npc[sunMinion].Center) / Math.Max(3 * setupTime / 4 - NPC.ai[1], 1);
                             Main.npc[sunMinion].velocity += (sunGoalVelocity - Main.npc[sunMinion].velocity) / Math.Max(setupTime / 4 - NPC.ai[1], 1);
 
-                            Vector2 finalMoonGoalPosition = player.Center + new Vector2(NPC.ai[2] * -600, 350);
+                            Vector2 finalMoonGoalPosition = player.Center + new Vector2(NPC.ai[2] * -600, NPC.ai[3] * 350);
                             Vector2 moonGoalPosition = player.Center + ((finalMoonGoalPosition - player.Center).SafeNormalize(Vector2.Zero) * progress + (Main.npc[moonMinion].Center - player.Center).SafeNormalize(Vector2.Zero) * (1 - progress)).SafeNormalize(Vector2.Zero) * (finalMoonGoalPosition - player.Center).Length();
                             Vector2 moonGoalVelocity = (moonGoalPosition - Main.npc[moonMinion].Center) / Math.Max(3 * setupTime / 4 - NPC.ai[1], 1);
                             Main.npc[moonMinion].velocity += (moonGoalVelocity - Main.npc[moonMinion].velocity) / Math.Max(setupTime / 4 - NPC.ai[1], 1);
@@ -1002,21 +1011,23 @@ namespace Polarities.NPCs.Eclipxie
                         {
                             if (NPC.ai[1] == setupTime)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[sunMinion].Center, new Vector2(0, 1), ProjectileType<EclipxieRaysBig>(), ProjectileDamage, 0f, Main.myPlayer, ai0: Main.npc[sunMinion].whoAmI, ai1: 6f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[moonMinion].Center, new Vector2(0, -1), ProjectileType<EclipxieRaysBig>(), ProjectileDamage, 0f, Main.myPlayer, ai0: Main.npc[moonMinion].whoAmI, ai1: 7f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[sunMinion].Center, new Vector2(0, NPC.ai[3]), ProjectileType<EclipxieRaysBig>(), ProjectileDamage, 0f, Main.myPlayer, ai0: Main.npc[sunMinion].whoAmI, ai1: 6f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[moonMinion].Center, new Vector2(0, -NPC.ai[3]), ProjectileType<EclipxieRaysBig>(), ProjectileDamage, 0f, Main.myPlayer, ai0: Main.npc[moonMinion].whoAmI, ai1: 7f);
                             }
 
-                            Vector2 sunGoalPosition = player.Center + new Vector2(NPC.ai[2] * 600, -350);
+                            Vector2 sunGoalPosition = player.Center + new Vector2(NPC.ai[2] * 600, NPC.ai[3] * -350);
                             Main.npc[sunMinion].velocity = (sunGoalPosition - Main.npc[sunMinion].Center) / 20f;
 
-                            Vector2 moonGoalPosition = player.Center + new Vector2(NPC.ai[2] * -600, 350);
+                            Vector2 moonGoalPosition = player.Center + new Vector2(NPC.ai[2] * -600, NPC.ai[3] * 350);
                             Main.npc[moonMinion].velocity = (moonGoalPosition - Main.npc[moonMinion].Center) / 20f;
                         }
                         else if (NPC.ai[1] < setupTime + hoverTime + attackTime)
                         {
                             float progress = (NPC.ai[1] - setupTime - hoverTime) / attackTime;
-                            Main.npc[sunMinion].velocity = new Vector2(-NPC.ai[2] * progress * 32, 0);
-                            Main.npc[moonMinion].velocity = new Vector2(NPC.ai[2] * progress * 32, 0);
+                            Main.npc[sunMinion].velocity = new Vector2(-NPC.ai[2] * progress * 40, 0);
+                            Main.npc[moonMinion].velocity = new Vector2(NPC.ai[2] * progress * 40, 0);
+
+                            //TODO: Maybe produce some secondary projectiles like in the p1 version
                         }
                         else
                         {
@@ -1024,12 +1035,12 @@ namespace Polarities.NPCs.Eclipxie
                             //TODO: Use sun pixie's arcing motions for this and probably some other stuff too
                             float progress = (NPC.ai[1] - setupTime - hoverTime - attackTime) / windDownTime;
 
-                            Vector2 finalSunGoalPosition = player.Center + new Vector2(-NPC.ai[2] * 600, -350);
+                            Vector2 finalSunGoalPosition = player.Center + new Vector2(-NPC.ai[2] * 600, NPC.ai[3] * -350);
                             Vector2 sunGoalPosition = player.Center + ((finalSunGoalPosition - player.Center).SafeNormalize(Vector2.Zero) * progress + (Main.npc[sunMinion].Center - player.Center).SafeNormalize(Vector2.Zero) * (1 - progress)).SafeNormalize(Vector2.Zero) * (finalSunGoalPosition - player.Center).Length();
                             Vector2 sunGoalVelocity = (sunGoalPosition - Main.npc[sunMinion].Center) / Math.Max(3 * windDownTime / 4 - (NPC.ai[1] - setupTime - hoverTime - attackTime), 1);
                             Main.npc[sunMinion].velocity += (sunGoalVelocity - Main.npc[sunMinion].velocity) / Math.Max(windDownTime / 4 - (NPC.ai[1] - setupTime - hoverTime - attackTime), 1);
 
-                            Vector2 finalMoonGoalPosition = player.Center + new Vector2(-NPC.ai[2] * -600, 350);
+                            Vector2 finalMoonGoalPosition = player.Center + new Vector2(-NPC.ai[2] * -600, NPC.ai[3] * 350);
                             Vector2 moonGoalPosition = player.Center + ((finalMoonGoalPosition - player.Center).SafeNormalize(Vector2.Zero) * progress + (Main.npc[moonMinion].Center - player.Center).SafeNormalize(Vector2.Zero) * (1 - progress)).SafeNormalize(Vector2.Zero) * (finalMoonGoalPosition - player.Center).Length();
                             Vector2 moonGoalVelocity = (moonGoalPosition - Main.npc[moonMinion].Center) / Math.Max(3 * windDownTime / 4 - (NPC.ai[1] - setupTime - hoverTime - attackTime), 1);
                             Main.npc[moonMinion].velocity += (moonGoalVelocity - Main.npc[moonMinion].velocity) / Math.Max(windDownTime / 4 - (NPC.ai[1] - setupTime - hoverTime - attackTime), 1);
@@ -1043,8 +1054,53 @@ namespace Polarities.NPCs.Eclipxie
 
                         break;
                     }
-                    #endregion
+                #endregion
                 #region Phase 2 random rays
+                case 15:
+                    {
+                        const int setupTime = 60;
+                        const int attackTime = 240;
+                        const float distanceFromPlayer = 400f;
+
+                        if (NPC.ai[1] < setupTime)
+                        {
+                            Vector2 moonOffset = (Main.npc[moonMinion].Center - player.Center) / (Main.npc[moonMinion].Center - player.Center).LengthSquared();
+                            Vector2 sunOffset = (Main.npc[sunMinion].Center - player.Center) / (Main.npc[sunMinion].Center - player.Center).LengthSquared();
+
+                            if (NPC.ai[1] == 0)
+                            {
+                                NPC.ai[3] = Vector2.Dot(moonOffset, sunOffset.RotatedBy(MathHelper.PiOver2)) > 0 ? 1 : -1;
+                            }
+
+                            Vector2 moonGoalPosition = (moonOffset + sunOffset.RotatedBy(MathHelper.Pi / 3 * NPC.ai[3])).SafeNormalize(Vector2.Zero) * distanceFromPlayer + player.Center;
+                            Vector2 moonGoalVelocity = (moonGoalPosition - Main.npc[moonMinion].Center) / Math.Max(setupTime / 2 - NPC.ai[1], NPC.ai[1] - setupTime / 2 + 1);
+                            Main.npc[moonMinion].velocity += (moonGoalVelocity - Main.npc[moonMinion].velocity) / Math.Max(setupTime / 4 - NPC.ai[1], 1);
+
+                            Vector2 sunGoalPosition = (sunOffset + moonOffset.RotatedBy(-MathHelper.Pi / 3 * NPC.ai[3])).SafeNormalize(Vector2.Zero) * distanceFromPlayer + player.Center;
+                            Vector2 sunGoalVelocity = (sunGoalPosition - Main.npc[sunMinion].Center) / Math.Max(setupTime / 2 - NPC.ai[1], NPC.ai[1] - setupTime / 2 + 1);
+                            Main.npc[sunMinion].velocity += (sunGoalVelocity - Main.npc[sunMinion].velocity) / Math.Max(setupTime / 4 - NPC.ai[1], 1);
+                        }
+                        else
+                        {
+                            Main.npc[moonMinion].velocity = (player.Center - Main.npc[moonMinion].Center) / 120 + (Main.npc[moonMinion].Center - Main.npc[sunMinion].Center).SafeNormalize(Vector2.Zero) * 2;
+                            Main.npc[sunMinion].velocity = (player.Center - Main.npc[sunMinion].Center) / 120 + (Main.npc[sunMinion].Center - Main.npc[moonMinion].Center).SafeNormalize(Vector2.Zero) * 2;
+
+                            //TODO: Maybe start off slow and speed up?
+                            if ((NPC.ai[1] - setupTime) % 30 == 0 && NPC.ai[1] + 90 <= setupTime + attackTime)
+                            {
+                                //TODO: It might be cool to briefly tint the entire screen based on the ray colors (could also be weird but I should try it)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[sunMinion].Center, new Vector2(1, 0).RotatedByRandom(MathHelper.TwoPi), ProjectileType<EclipxieRaysBig>(), ProjectileDamage, 0f, Main.myPlayer, ai0: sunMinion, ai1: 4);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[moonMinion].Center, new Vector2(1, 0).RotatedByRandom(MathHelper.TwoPi), ProjectileType<EclipxieRaysBig>(), ProjectileDamage, 0f, Main.myPlayer, ai0: moonMinion, ai1: 5);
+                            }
+                        }
+
+                        NPC.ai[1]++;
+                        if (NPC.ai[1] == setupTime + attackTime)
+                        {
+                            gotoNextAttack = true;
+                        }
+                        break;
+                    }
                 #endregion
                 #region Moon dashes, leaving behind trail, sun explodes turning trail into radiating deathrays
                 #endregion
@@ -1075,7 +1131,7 @@ namespace Polarities.NPCs.Eclipxie
             }
         }
         
-        private float[] aiWeights = new float[14];
+        private float[] aiWeights = new float[15];
         void GotoNextAIState()
         {
             float[] aiWeightMultipliers = new float[aiWeights.Length];
@@ -1102,6 +1158,7 @@ namespace Polarities.NPCs.Eclipxie
                     case 12:
                     case 13:
                     case 14:
+                    case 15:
                         if (!splitIntoMinions) aiWeightMultiplier = 0f;
                         break;
                 }
@@ -1384,11 +1441,11 @@ namespace Polarities.NPCs.Eclipxie
                 return false;
             }
 
-            if (owner.ai[0] == 11 && (owner.ai[1] + 75) % 150 >= 75 && (owner.ai[1] + 75) % 150 < 112)
+            if (owner.ai[0] == 11 && (owner.ai[1] + 60) % 150 >= 75 && (owner.ai[1] + 60) % 150 < 112)
             {
                 //phase 2 dash telegraph
                 //TODO: This currently feels a bit dull, should use a radial overlay maybe?
-                float telegraphProgress = (owner.ai[1] % 150) / 37f;
+                float telegraphProgress = ((owner.ai[1] - 15) % 150) / 37f;
                 Color telegraphColor = new Color(255, 224, 192);
                 spriteBatch.Draw(Textures.Glow256.Value, NPC.Center - screenPos, Textures.Glow256.Frame(), telegraphColor * telegraphProgress, 0f, Textures.Glow256.Size() / 2, (float)Math.Sqrt(1 - telegraphProgress) * 2f + 0.23f, SpriteEffects.None, 0f);
             }
@@ -1522,11 +1579,11 @@ namespace Polarities.NPCs.Eclipxie
                 return false;
             }
 
-            if (owner.ai[0] == 11 && owner.ai[1] % 150 >= 75 && owner.ai[1] % 150 < 112)
+            if (owner.ai[0] == 11 && (owner.ai[1] - 15) % 150 >= 75 && (owner.ai[1] - 15) % 150 < 112)
             {
                 //phase 2 dash telegraph
                 //TODO: This currently feels a bit dull, should use a radial overlay maybe?
-                float telegraphProgress = ((owner.ai[1] - 75) % 150) / 37f;
+                float telegraphProgress = ((owner.ai[1] - 90) % 150) / 37f;
                 Color telegraphColor = new Color(192, 224, 255);
                 spriteBatch.Draw(Textures.Glow256.Value, NPC.Center - screenPos, Textures.Glow256.Frame(), telegraphColor * telegraphProgress, 0f, Textures.Glow256.Size() / 2, (float)Math.Sqrt(1 - telegraphProgress) * 2f + 0.23f, SpriteEffects.None, 0f);
             }
@@ -2330,11 +2387,31 @@ namespace Polarities.NPCs.Eclipxie
             }
             else
             {
+                Color color = Color.White;
+                Texture2D texture = (Projectile.ai[1] == 0) ? EclipxieRay.Solar.Value : TextureAssets.Projectile[ProjectileType<EclipxieRay>()].Value;
+
+                if (Projectile.ai[0] == 2)
+                {
+                    //TODO: Draw circles around stars rather than connecting directly? (I'm not sure how I feel about the visuals for this)
+                    Main.spriteBatch.End();
+                    Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+
+                    float connectionWidth = Math.Clamp(Math.Min((Projectile.localAI[0] - Projectile.timeLeft) / 30f, Projectile.timeLeft / 30f), 0, 1);
+                    float connectionBendingProgress = Math.Max(0, (rayTime - Projectile.timeLeft) / rayTime);
+                    float connectionBending = 4 * Projectile.velocity.X * connectionBendingProgress * (1 - connectionBendingProgress);
+
+                    GameShaders.Misc["Polarities:DrawWavy"].UseShaderSpecificData(new Vector4(7.5f * connectionWidth * (Math.Abs(connectionBending) + 1), 6, Projectile.timeLeft * 0.2f + extraAI[0], connectionBending)).Apply();
+
+                    Vector2 ownerCenter = Main.npc[(int)Projectile.localAI[1]].Center;
+                    Main.spriteBatch.Draw(texture, ownerCenter - Main.screenPosition, texture.Frame(), Color.White, (Projectile.Center - ownerCenter).ToRotation(), new Vector2(0, texture.Height / 2), new Vector2((Projectile.Center - ownerCenter).Length() / texture.Width, 40 * connectionWidth * connectionWidth * (Math.Abs(connectionBending) + 1) / texture.Height), SpriteEffects.None, 0f);
+
+                    Main.spriteBatch.End();
+                    Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                }
+
                 //draw lasers
                 for (int laserIndex = 0; laserIndex < projectileRays; laserIndex++)
                 {
-                    Color color = Color.White;
-                    Texture2D texture = (Projectile.ai[1] == 0) ? EclipxieRay.Solar.Value : TextureAssets.Projectile[ProjectileType<EclipxieRay>()].Value;
                     if (Projectile.timeLeft < rayTime)
                     {
                         //fully active
@@ -2521,14 +2598,14 @@ namespace Polarities.NPCs.Eclipxie
                     Projectile.localAI[0] = 1;
                     break;
                 case 2:
-                    Projectile.timeLeft = 60;
+                    Projectile.timeLeft = 90;
                     rayTime = 20;
                     expansionTime = 5f;
                     Projectile.localAI[0] = 10;
                     break;
                 case 3:
-                    Projectile.timeLeft = 285;
-                    rayTime = 285;
+                    Projectile.timeLeft = 345;
+                    rayTime = 345;
                     Projectile.localAI[0] = 1;
                     break;
             }
@@ -2563,7 +2640,7 @@ namespace Polarities.NPCs.Eclipxie
                     break;
                 case 2:
                     if (Projectile.timeLeft > rayTime)
-                        Projectile.rotation += (Projectile.ai[1] % 2 * 2 - 1) * 0.0002f * (Projectile.timeLeft - rayTime);
+                        Projectile.rotation += (Projectile.ai[1] % 2 * 2 - 1) * 0.00005f * (Projectile.timeLeft - rayTime);
                     else if (Projectile.timeLeft == rayTime)
                     {
                         WarpZoomWaveParticle particle = Particle.NewParticle<WarpZoomWaveParticle>(Projectile.Center, Vector2.Zero, MathHelper.Pi, 0, Scale: 0f, TimeLeft: 180);

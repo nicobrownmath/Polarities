@@ -84,6 +84,26 @@ float4 DrawAsSphere(float2 coords : TEXCOORD0) : COLOR0
     }
 }
 
+float4 DrawWavy(float2 coords : TEXCOORD0) : COLOR0
+{
+    float4 output = float4(0, 0, 0, 0);
+
+    float absW = uShaderSpecificData.w > 0 ? uShaderSpecificData.w : -uShaderSpecificData.w;
+    float heightMult = coords.x * (1 - coords.x) * 2 / (1 + absW);
+    float fluctuation = (sin(coords.x * uShaderSpecificData.y + uShaderSpecificData.z) + uShaderSpecificData.w) * heightMult;
+    float y = coords.y * uShaderSpecificData.x - (uShaderSpecificData.x - 1) * (fluctuation + 0.5);
+    if (y >= 0 && y <= 1) {
+        output += tex2D(uImage0, float2(coords.x, y));
+    }
+    float fluctuation2 = (sin(coords.x * uShaderSpecificData.y + uShaderSpecificData.z + 3.14159) + uShaderSpecificData.w) * heightMult;
+    float y2 = coords.y * uShaderSpecificData.x - (uShaderSpecificData.x - 1) * (fluctuation2 + 0.5);
+    if (y2 >= 0 && y2 <= 1) {
+        output += tex2D(uImage0, float2(coords.x, y2));
+    }
+
+    return output;
+}
+
 technique Technique1
 {
     pass TriangleFadePass
@@ -105,5 +125,9 @@ technique Technique1
     pass DrawAsSpherePass
     {
         PixelShader = compile ps_2_0 DrawAsSphere();
+    }
+    pass DrawWavyPass
+    {
+        PixelShader = compile ps_2_0 DrawWavy();
     }
 }
