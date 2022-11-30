@@ -691,6 +691,16 @@
 			"StormcloudMask": "Summons clouds to drench your foes\nIncreases your max number of minions"
 		},
 		"ProjectileName": {
+			"ChordRay": "Chord Ray",
+			"RiftClaw": "Rift Claw",
+			"RiftBolt": "Rift Bolt",
+			"ParallaxBoltBehindTiles": "Parallax Bolt",
+			"ParallaxBolt": "Parallax Bolt",
+			"ParallaxRayBehindTiles": "Parallax Ray",
+			"ParallaxRay": "Parallax Ray",
+			"RiftOpeningHitbox": "Rift Opening",
+			"RiftOpening": "Rift Opening",
+
 			"SaltProjectile": "Salt Ball",
 			"AxolatlBubble": "Bubble",
 			"SaltShakerProjectile": "Salt",
@@ -849,6 +859,8 @@
 			"VariableWisponLaser": "Variable Wispon Laser"
 		},
 		"NPCName": {
+			"RiftDenizen": "Rift Denizen",
+
 			"Rattler": "Rattler",
 			"Zombat": "Zombat",
 			"BloodBat": "Blood Bat",

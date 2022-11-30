@@ -1,0 +1,8 @@
+*.user
+*.sln
+*.editorconfig
+.vs/
+.cache/
+bin/
+obj/
+Assets/Effects/.compiler
