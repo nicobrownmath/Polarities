@@ -366,6 +366,21 @@
 			"GemflyItem": " Gemfly",
 
 			//miscellaneous
+			"FractalDust": "Fractal Dust",
+			"FractalPlatform": "Fractal Platform",
+			"FractalDuststoneWall": "Fractal Duststone Wall",
+			"FractalDuststone": "Fractal Duststone",
+			"FractalStrandsWall": "Fractal Strands Wall",
+			"FractalStrands": "Fractal Strands",
+			"FractalMatterWall": "Fractal Matter Wall",
+			"FractalMatter": "Fractal Matter",
+			"SelfsimilarBar": "Selfsimilar Bar",
+			"SelfsimilarOre": "Selfsimilar Ore",
+			"FractalBar": "Fractal Bar",
+			"FractalOre": "Fractal Ore",
+			"FractalBrickWall": "Fractal Brick Wall",
+			"FractalBrick": "Fractal Brick",
+			"DendriticEnergy": "Dendritic Energy",
 			"SaltCrystals": "Salt Crystals",
 			"Salt": "Salt",
 			"RockSalt": "Rock Salt",
@@ -701,6 +716,7 @@
 			"RiftOpeningHitbox": "Rift Opening",
 			"RiftOpening": "Rift Opening",
 
+			"FractalDust": "Fractal Dust",
 			"SaltProjectile": "Salt Ball",
 			"AxolatlBubble": "Bubble",
 			"SaltShakerProjectile": "Salt",
@@ -977,6 +993,9 @@
 			"StormCloudfish": "A rather aggressive, predatory life form composed entirely of turbulent thunder clouds. It employs rain clouds to drench its foes, and even uses lightning as a last resort."
 		},
 		"MapObject": {
+			"SelfsimilarOreTile": "Selfsimilar Ore",
+			"FractalOreTile": "Fractal Ore",
+			"DendriticEnergyTile": "Dendritic Energy",
 			"SaltCrystalsTile": "{$Mods.Polarities.ItemName.SaltCrystals}",
 			"BannerTile": "Banner",
 			"TrophyTile": "Trophy",

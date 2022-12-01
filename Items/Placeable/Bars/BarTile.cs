@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Terraria.ID;
 using Polarities.Dusts;
 using Polarities.Items.Placeable.Blocks;
+using Polarities.Items.Placeable.Blocks.Fractal;
 
 namespace Polarities.Items.Placeable.Bars
 {
@@ -70,7 +71,7 @@ namespace Polarities.Items.Placeable.Bars
 			barIndexToItemType.Add(BarIndex, Type);
 			barIndexToDustIndex.Add(BarIndex, DustIndex);
 
-			this.SetResearch(25);
+			SacrificeTotal = 25;
 		}
 
 		public override void SetDefaults()
@@ -79,7 +80,7 @@ namespace Polarities.Items.Placeable.Bars
 
 			Item.width = 30;
 			Item.height = 24;
-			Item.maxStack = 99;
+			Item.maxStack = 9999;
 		}
 	}
 
@@ -120,6 +121,56 @@ namespace Polarities.Items.Placeable.Bars
 		{
 			CreateRecipe()
 				.AddIngredient(ItemType<MantellarOre>(), 4)
+				.AddTile(TileID.AdamantiteForge)
+				.Register();
+		}
+	}
+
+	public class FractalBar : BarBase
+	{
+		public override int BarIndex => 3;
+		public override int? DustIndex => DustType<MantellarDust>();
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+
+			Item.width = 30;
+			Item.height = 36;
+
+			Item.value = Item.sellPrice(silver: 50);
+			Item.rare = ItemRarityID.Pink;
+		}
+
+		public override void AddRecipes()
+		{
+			CreateRecipe()
+				.AddIngredient(ItemType<FractalOre>(), 4)
+				.AddTile(TileID.Hellforge)
+				.Register();
+		}
+	}
+
+	public class SelfsimilarBar : BarBase
+	{
+		public override int BarIndex => 4;
+		public override int? DustIndex => DustType<MantellarDust>();
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+
+			Item.width = 30;
+			Item.height = 36;
+
+			Item.value = 10000;
+			Item.rare = 8;
+		}
+
+		public override void AddRecipes()
+		{
+			CreateRecipe()
+				.AddIngredient(ItemType<SelfsimilarOre>(), 4)
 				.AddTile(TileID.AdamantiteForge)
 				.Register();
 		}
