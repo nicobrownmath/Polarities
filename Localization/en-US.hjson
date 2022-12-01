@@ -277,6 +277,8 @@
 			"TolerancePotion": "Tolerance Potion",
 
 			//foods
+			"FractusJuice": "Fractus Juice",
+			"FractusFruit": "Fractus Fruit",
 			"AlkalineSoup": "Alkaline Soup",
 			"Pretzel": "Pretzel",
 			"KeyLimePie": "Key Lime Pie",
@@ -366,6 +368,7 @@
 			"GemflyItem": " Gemfly",
 
 			//miscellaneous
+			"Fractus": "Fractus",
 			"FractalDust": "Fractal Dust",
 			"FractalPlatform": "Fractal Platform",
 			"FractalDuststoneWall": "Fractal Duststone Wall",
@@ -658,6 +661,8 @@
 			"TolerancePotion": "Halves duration of potion sickness when consumed, with a 60 second cooldown",
 
 			//foods
+			"FractusJuice": "Medium improvements to all stats\nIncreases fractalization by 20 seconds when in the fractal dimension\n'It'll quench ya!'",
+			"FractusFruit": "Minor improvements to all stats\nIncreases fractalization by 10 seconds when in the fractal dimension",
 			"AlkalineSoup": "Minor improvements to all stats\nSlightly corrosive",
 
 			//boss summons
@@ -993,6 +998,8 @@
 			"StormCloudfish": "A rather aggressive, predatory life form composed entirely of turbulent thunder clouds. It employs rain clouds to drench its foes, and even uses lightning as a last resort."
 		},
 		"MapObject": {
+			"FractusFruit": "FractusFruit",
+			"Fractus": "Fractus",
 			"SelfsimilarOreTile": "Selfsimilar Ore",
 			"FractalOreTile": "Fractal Ore",
 			"DendriticEnergyTile": "Dendritic Energy",
