@@ -38,6 +38,7 @@ using Microsoft.Xna.Framework;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Polarities.NPCs.Eclipxie;
+using Terraria.Audio;
 
 namespace Polarities
 {
@@ -56,6 +57,8 @@ namespace Polarities
 
         public static ModKeybind ArmorSetBonusHotkey;
         public static ModKeybind ConvectiveDashHotkey;
+
+        public const string BlankTexture = "Polarities/Projectiles/CallShootProjectile";
 
         public override void Load()
         {
@@ -360,6 +363,15 @@ namespace Polarities
                 //TODO: Check if it's the rapture/pestilence, activate/deactivate them
             }
             return null;
+        }
+
+        internal static SoundStyle GetSounds(string name, int num, float volume = 1f, float pitch = 0f, float variance = 0f)
+        {
+            return new SoundStyle("Polarities/Sounds" + name, 0, num) { Volume = volume, Pitch = pitch, PitchVariance = variance, };
+        }
+        internal static SoundStyle GetSound(string name, float volume = 1f, float pitch = 0f, float variance = 0f)
+        {
+            return new SoundStyle("Polarities/Sounds/" + name) { Volume = volume, Pitch = pitch, PitchVariance = variance, };
         }
     }
 }
