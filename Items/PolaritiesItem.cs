@@ -156,45 +156,51 @@ namespace Polarities.Items
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            int i;
-            for (i = 0; i < tooltips.Count; i++)
+            try
             {
-                if (tooltips[i].Name == "JourneyResearch" || tooltips[i].Name == "BestiaryNotes")
+                int i;
+                for (i = 0; i < tooltips.Count; i++)
                 {
-                    break;
-                }
-            }
-
-            if (!item.social && item.prefix > 0)
-            {
-                if (Main.tooltipPrefixComparisonItem != null && item.autoReuse ^ Main.tooltipPrefixComparisonItem.autoReuse) //TODO: This doesn't seem to work?
-                {
-                    if (item.autoReuse)
+                    if (tooltips[i].Name == "JourneyResearch" || tooltips[i].Name == "BestiaryNotes")
                     {
-                        TooltipLine line = new TooltipLine(Mod, "PrefixAutomated", Language.GetTextValue("Mods.Polarities.ItemTooltip.AutomaticPrefix"))
-                        {
-                            IsModifier = true
-                        };
-                        tooltips.Insert(i, line);
-                        i++;
-                    }
-                    else
-                    {
-                        TooltipLine line = new TooltipLine(Mod, "PrefixAutomated", Language.GetTextValue("Mods.Polarities.ItemTooltip.ManualPrefix"))
-                        {
-                            IsModifier = true,
-                            IsModifierBad = true
-                        };
-                        tooltips.Insert(i, line);
-                        i++;
+                        break;
                     }
                 }
-            }
 
-            if (flawless)
+                if (!item.social && item.prefix > 0)
+                {
+                    if (Main.tooltipPrefixComparisonItem != null && item.autoReuse != Main.tooltipPrefixComparisonItem.autoReuse) //TODO: This doesn't seem to work?
+                    {
+                        if (item.autoReuse)
+                        {
+                            TooltipLine line = new TooltipLine(Mod, "PrefixAutomated", Language.GetTextValue("Mods.Polarities.ItemTooltip.AutomaticPrefix"))
+                            {
+                                IsModifier = true
+                            };
+                            tooltips.Insert(i, line);
+                            i++;
+                        }
+                        else
+                        {
+                            TooltipLine line = new TooltipLine(Mod, "PrefixAutomated", Language.GetTextValue("Mods.Polarities.ItemTooltip.ManualPrefix"))
+                            {
+                                IsModifier = true,
+                                IsModifierBad = true
+                            };
+                            tooltips.Insert(i, line);
+                            i++;
+                        }
+                    }
+                }
+
+                if (flawless)
+                {
+                    tooltips.Insert(i, new TooltipLine(Mod, "Flawless", Language.GetTextValue("Mods.Polarities.ItemTooltip.TooltipFlawless")));
+                    i++;
+                }
+            }
+            catch
             {
-                tooltips.Insert(i, new TooltipLine(Mod, "Flawless", Language.GetTextValue("Mods.Polarities.ItemTooltip.TooltipFlawless")));
-                i++;
             }
         }
 
