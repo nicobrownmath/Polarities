@@ -1,10 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes.Fractal;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks.Fractal;
 using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -31,6 +36,7 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
                     BuffID.Venom,
                 }
             };
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { CustomTexturePath = "Polarities/Textures/Bestiary/ChaosCrawler", Position = new Vector2(0f, 70f), };
         }
 
         public override void SetDefaults()
@@ -52,8 +58,10 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.rarity = 1;
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<ChaosCrawlerBanner>();
+            Banner = NPC.type;
+            BannerItem = ItemType<ChaosCrawlerBanner>();
+
+            this.SetModBiome<FractalBiome, FractalUGBiome, FractalWastesBiome>();
 
             NPC.GetGlobalNPC<PolaritiesNPC>().usesProjectileHitCooldowns = true;
             NPC.GetGlobalNPC<PolaritiesNPC>().projectileHitCooldownTime = 10;
@@ -359,6 +367,22 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
             return true;
         }
 
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SelfsimilarOre>(), minimumDropped: 1, maximumDropped: 3));
+            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalKey>(), chanceDenominator: 3));
+            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<GliderGun>(), chanceDenominator: 20));
+            npcLoot.Add(ItemDropRule.Common(ItemID.RodofDiscord, chanceDenominator: 20));
+        }
+
         public override void OnKill()
         {
             //Item.NewItem(NPC.Hitbox, ItemType<SelfsimilarOre>(), Main.rand.Next(1, 3));
@@ -378,6 +402,9 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            if (NPC.IsABestiaryIconDummy)
+                return false;
+
             var legTexture = ModContent.Request<Texture2D>($"{Texture}Leg");
             //draw legs
             Vector2 center;
@@ -386,9 +413,9 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
             {
                 if (i % 2 == 0)
                 {
-                    Vector2 drawPosition = legPositions[i] - Main.screenPosition;
+                    Vector2 drawPosition = legPositions[i] - screenPos;
 
-                    center = NPC.Center - Main.screenPosition + new Vector2(0, 17).RotatedBy(NPC.rotation);
+                    center = NPC.Center - screenPos + new Vector2(0, 17).RotatedBy(NPC.rotation);
 
                     int segmentLength = 54;
 
@@ -405,9 +432,9 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
                 }
                 else
                 {
-                    Vector2 drawPosition = legPositions[i] - Main.screenPosition;
+                    Vector2 drawPosition = legPositions[i] - screenPos;
 
-                    center = NPC.Center - Main.screenPosition + new Vector2(0, 17).RotatedBy(NPC.rotation);
+                    center = NPC.Center - screenPos + new Vector2(0, 17).RotatedBy(NPC.rotation);
 
                     int segmentLength = 54;
 
@@ -434,11 +461,11 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
 
                 int frame = segmentActive[i / 17] ? 36 : 0;
 
-                spriteBatch.Draw(texture, drawPosition - Main.screenPosition, new Rectangle(0, frame + 34 + (i - 1) % 17 * 2, 34, 4), Lighting.GetColor((int)(drawPosition.X / 16), (int)(drawPosition.Y / 16)), rotation, new Vector2(17, 2), new Vector2(scale, 1), SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, drawPosition - screenPos, new Rectangle(0, frame + 34 + (i - 1) % 17 * 2, 34, 4), Lighting.GetColor((int)(drawPosition.X / 16), (int)(drawPosition.Y / 16)), rotation, new Vector2(17, 2), new Vector2(scale, 1), SpriteEffects.None, 0f);
             }
 
             //draw body
-            spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, new Rectangle(0, 0, 34, 34), Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16)), NPC.rotation, new Vector2(17, 17), new Vector2(1, 1), SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, NPC.Center - screenPos, new Rectangle(0, 0, 34, 34), Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16)), NPC.rotation, new Vector2(17, 17), new Vector2(1, 1), SpriteEffects.None, 0f);
 
             return false;
         }
@@ -450,6 +477,7 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
 
         public override void SetStaticDefaults()
         {
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, };
         }
 
         public override void SetDefaults()

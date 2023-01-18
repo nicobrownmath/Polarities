@@ -16,7 +16,7 @@ namespace Polarities.Items.Weapons.Ranged
 		private int charges;
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 		}
 
 		public override void SetDefaults()

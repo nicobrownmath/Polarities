@@ -1,8 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes.Fractal;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks.Fractal;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -17,6 +23,7 @@ namespace Polarities.NPCs.Enemies.Fractal
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 1;
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { CustomTexturePath = "Polarities/Textures/Bestiary/Bisector", };
         }
 
         public override void SetDefaults()
@@ -42,8 +49,10 @@ namespace Polarities.NPCs.Enemies.Fractal
 
             NPC.chaseable = false;
 
-            //Banner = NPCType<BisectorHead>();
-            //BannerItem = ItemType<BisectorBanner>();
+            Banner = NPCType<BisectorHead>();
+            BannerItem = ItemType<BisectorBanner>();
+
+            this.SetModBiome<FractalBiome, FractalUGBiome, FractalWastesBiome>();
         }
 
         public override void Init()
@@ -161,20 +170,31 @@ namespace Polarities.NPCs.Enemies.Fractal
             }
         }
 
+        public override void HitEffect(int hitDirection, double damage)
+        {
+            if (NPC.life <= 0 && Main.netMode != NetmodeID.Server)
+            {
+                GoreHelper.DeathGore(NPC, "BisectorGore1", velocity: NPC.velocity);
+                GoreHelper.DeathGore(NPC, "BisectorGore2", velocity: NPC.velocity);
+            }
+        }
         public override bool CheckDead()
         {
-            //Gore.NewGore(NPC.Center, NPC.velocity, Mod.GetGoreSlot("Gores/BisectorGore1"));
-            //Gore.NewGore(NPC.Center, NPC.velocity, Mod.GetGoreSlot("Gores/BisectorGore2"));
             return true;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //Item.NewItem(NPC.Hitbox, ItemType<Items.Placeable.FractalDuststone>(), Main.rand.Next(1, 3));
-            //if (Main.rand.NextBool(2))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<FractalResidue>());
-            //}
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalDuststone>(), minimumDropped: 1, maximumDropped: 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>(), chanceDenominator: 2));
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -193,6 +213,7 @@ namespace Polarities.NPCs.Enemies.Fractal
 
         public override void SetStaticDefaults()
         {
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, };
         }
 
         public override void SetDefaults()
@@ -216,8 +237,8 @@ namespace Polarities.NPCs.Enemies.Fractal
 
             NPC.buffImmune[BuffID.Confused] = true;
 
-            //Banner = NPCType<BisectorHead>();
-            //BannerItem = ItemType<BisectorBanner>();
+            Banner = NPCType<BisectorHead>();
+            BannerItem = ItemType<BisectorBanner>();
         }
 
         public override bool CheckActive()
@@ -298,7 +319,9 @@ namespace Polarities.NPCs.Enemies.Fractal
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 1;
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, };
         }
+
         public override void SetDefaults()
         {
             NPC.aiStyle = -1;
@@ -321,8 +344,8 @@ namespace Polarities.NPCs.Enemies.Fractal
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.buffImmune[BuffID.Confused] = true;
 
-            //Banner = NPCType<BisectorHead>();
-            //BannerItem = ItemType<BisectorBanner>();
+            Banner = NPCType<BisectorHead>();
+            BannerItem = ItemType<BisectorBanner>();
         }
 
         public override void Init()
@@ -335,12 +358,21 @@ namespace Polarities.NPCs.Enemies.Fractal
             segmentLength = 10;
         }
 
+        public override void HitEffect(int hitDirection, double damage)
+        {
+            if (NPC.life <= 0 && Main.netMode != NetmodeID.Server)
+            {
+                GoreHelper.DeathGore(NPC, "BisectorGore3", velocity: NPC.velocity);
+            }
+        }
+
         public override void CustomBehavior()
         {
             NPC.life = NPC.lifeMax;
             if (!Main.npc[NPC.realLife].active && Main.npc[NPC.realLife].life <= 1)
             {
-                //Gore.NewGore(NPC.Center, NPC.velocity, Mod.GetGoreSlot("Gores/BisectorGore3"));
+                NPC.life = -1;
+                NPC.HitEffect();
                 NPC.active = false;
             }
         }
@@ -351,6 +383,7 @@ namespace Polarities.NPCs.Enemies.Fractal
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 1;
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, };
         }
         public override void SetDefaults()
         {
@@ -374,8 +407,8 @@ namespace Polarities.NPCs.Enemies.Fractal
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.buffImmune[BuffID.Confused] = true;
 
-            //Banner = NPCType<BisectorHead>();
-            //BannerItem = ItemType<BisectorBanner>();
+            Banner = NPCType<BisectorHead>();
+            BannerItem = ItemType<BisectorBanner>();
         }
 
         public override void Init()
@@ -387,12 +420,21 @@ namespace Polarities.NPCs.Enemies.Fractal
             segmentLength = 6;
         }
 
+        public override void HitEffect(int hitDirection, double damage)
+        {
+            if (NPC.life <= 0 && Main.netMode != NetmodeID.Server)
+            {
+                GoreHelper.DeathGore(NPC, "BisectorGore4", velocity: NPC.velocity);
+            }
+        }
+
         public override void CustomBehavior()
         {
             NPC.life = NPC.lifeMax;
             if (!Main.npc[NPC.realLife].active && Main.npc[NPC.realLife].life <= 1)
             {
-                //Gore.NewGore(NPC.Center, NPC.velocity, Mod.GetGoreSlot("Gores/BisectorGore4"));
+                NPC.life = -1;
+                NPC.HitEffect();
                 NPC.active = false;
             }
         }
@@ -403,6 +445,7 @@ namespace Polarities.NPCs.Enemies.Fractal
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 1;
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, };
         }
         public override void SetDefaults()
         {
@@ -426,8 +469,8 @@ namespace Polarities.NPCs.Enemies.Fractal
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.buffImmune[BuffID.Confused] = true;
 
-            //Banner = NPCType<BisectorHead>();
-            //BannerItem = ItemType<BisectorBanner>();
+            Banner = NPCType<BisectorHead>();
+            BannerItem = ItemType<BisectorBanner>();
         }
 
         public override void Init()
@@ -439,12 +482,21 @@ namespace Polarities.NPCs.Enemies.Fractal
             segmentLength = 6;
         }
 
+        public override void HitEffect(int hitDirection, double damage)
+        {
+            if (NPC.life <= 0 && Main.netMode != NetmodeID.Server)
+            {
+                GoreHelper.DeathGore(NPC, "BisectorGore5", velocity: NPC.velocity);
+            }
+        }
+
         public override void CustomBehavior()
         {
             NPC.life = NPC.lifeMax;
             if (!Main.npc[NPC.realLife].active && Main.npc[NPC.realLife].life <= 1)
             {
-                //Gore.NewGore(NPC.Center, NPC.velocity, Mod.GetGoreSlot("Gores/BisectorGore5"));
+                NPC.life = -1;
+                NPC.HitEffect();
                 NPC.active = false;
             }
         }

@@ -22,7 +22,7 @@ namespace Polarities.Items.Weapons.Melee
             DisplayName.SetDefault("Volcanic Plume");
             Tooltip.SetDefault("Flies to the cursor and produces an explosion of volcanic fireballs");
 
-            this.SetResearch(1);
+            SacrificeTotal = (1);
         }
 
         public override void SetDefaults()

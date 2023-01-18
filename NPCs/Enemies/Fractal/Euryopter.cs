@@ -1,6 +1,12 @@
 using Microsoft.Xna.Framework;
+using Polarities.Biomes.Fractal;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks.Fractal;
 using System;
 using Terraria;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -35,8 +41,10 @@ namespace Polarities.NPCs.Enemies.Fractal
             NPC.noTileCollide = false;
             NPC.noGravity = true;
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<EuryopterBanner>();
+            Banner = NPC.type;
+            BannerItem = ItemType<EuryopterBanner>();
+
+            this.SetModBiome<FractalBiome>();
         }
 
         public override void AI()
@@ -201,13 +209,18 @@ namespace Polarities.NPCs.Enemies.Fractal
             return 0f;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //Item.NewItem(NPC.Hitbox, ItemType<Items.Placeable.FractalMatter>(), Main.rand.Next(1, 3));
-            //if (Main.rand.NextBool(4))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<FractalResidue>());
-            //}
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalMatter>(), minimumDropped: 1, maximumDropped: 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>(), chanceDenominator: 4));
         }
     }
 

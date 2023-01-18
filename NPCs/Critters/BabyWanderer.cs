@@ -187,7 +187,7 @@ namespace Polarities.NPCs.Critters
 
         public override void SetStaticDefaults()
         {
-            this.SetResearch(5);
+            SacrificeTotal = (5);
 
             DisplayName.SetDefault("{$Mods.Polarities.NPCName.BabyWanderer}");
 

@@ -17,7 +17,7 @@ namespace Polarities.Items.Armor.SunplateArmor
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 
 			//registers a body glowmask color
 			ArmorMasks.bodyIndexToBodyMaskColor.Add(EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body), this);
@@ -59,7 +59,7 @@ namespace Polarities.Items.Armor.SunplateArmor
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 		}
 
 		public override void SetDefaults()
@@ -91,7 +91,7 @@ namespace Polarities.Items.Armor.SunplateArmor
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 		}
 
 		public override void SetDefaults()

@@ -414,7 +414,7 @@ namespace Polarities.NPCs.Critters
 
         public override void SetStaticDefaults()
 		{
-			this.SetResearch(5);
+			SacrificeTotal = (5);
 
 			DisplayName.SetDefault(Lang.GetItemNameValue(GemItem) + "{$Mods.Polarities.ItemName.GemflyItem}");
 			Tooltip.SetDefault("{$Mods.Polarities.ItemTooltip.GemflyItem}");

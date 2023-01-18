@@ -368,6 +368,7 @@
 			"GemflyItem": " Gemfly",
 
 			//miscellaneous
+			"FractalResidue": "Fractal Residue",
 			"Fractus": "Fractus",
 			"FractalDust": "Fractal Dust",
 			"FractalPlatform": "Fractal Platform",
@@ -691,6 +692,7 @@
 			"StormCloudfishPetItem": "Summons a storm fry\n'A tiny start for such a large creature'",
 
 			//miscellaneous
+			"FractalResidue": "'Covered in winding contours'",
 			"SaltCrystals": "'Yum'",
 			"Rattle": "Makes a noise when you shake it",
 			"VenomGland": "'Gross'",
@@ -978,6 +980,21 @@
 			"BabyWanderer": "Baby Wanderer",
 		},
 		"Bestiary": {
+			"Sparkfly": "A surprisingly mundane bug found high in the fractal skies, its abdomen contains a mote of dendritic energy that blinks in strange sequences to communicate. Just don't look too closely...",
+			"FractusSpore": "When a fractus reaches maturity, it begins to produce these strange hopping creatures, which rove the wastes looking for a spot to lay root and grow. Plant, animal, or something more? Another mystery of the fractals...",
+			"FrondBud": "A juvenile Fractal Frond that has not yet developed any offensive capabilities, its instinctual teleportation nonetheless allows it to avoid predators and reach maturity.",
+			"Instability": "A localized tear in the space-time continuum, found at the upper edges of the world. Harmless on its own, but who knows what lurks within?",
+			"SelfsimilarSentinel": "Even the metal in the Fractal Dimension has rudimentary sentience, assembling into this machine-like form to defend itself from assault not of its own kind. A dizzying array of fractal attacks awaits any would-be miners...",
+			"RiftDenizen": "This terrifying alien creature emerged from the rift between worlds! It hovers out of reach, opening more portals to launch attacks through; target these to fight back!",
+			"ChaosCrawler": "The ruler of the fractal wastes' caverns, an alien arthropod that uses its infinite fractal tail to lash and constrict prey. It only targets weakened adventurers, so only fools or worthy challengers may encounter it.",
+			"Orthoconic": "This massive mollusc is the apex predator of the fractal depths, attracted to weakened travellers for easy prey. Look out for its repeating shell!",
+			"Shockflake": "As if dendritic energy wasn't perilous enough, now it's come alive! It haphazardly whirls through the fractal skies, launching electrical bolts to defend its territory.",
+			"TurbulenceSpark": "A chaotic well of fractal energy, barely keeping itself stable with the water's pressure. Any disruption will send it careening towards the source, disrupting logical momentum with its alien forces.",
+			"SeaAnomaly": "Don't let its terrestrial appearance fool you, this fractal creature is as deadly as any other, launching rays of energy to fry unlucky divers.",
+			"BisectorHead": "Creatures found deep in the fractal wastes, they tunnel at high speed through the porous caves and cleave prey in two at the atomic level with their infinitely sharp exoskeletons.",
+			"DustSprite": "Animate particulates inhabiting the barren fractal deserts, they attack by swarming targets and overwhelming their senses. May entitle you to financial compensation if inhaled.",
+			"FractalSlimeLarge": "A slime in name only, this fractal ooze ricochets freely around the alien landscape and splits when attacked. Watch out for the perfect corner bounce!",
+
 			"Rattler": "This small, venomous snake prefers dry climates. It loudly rattles to ward off any predators, but it’s just too cute to avoid!",
 			"Zombat": "There are bats, there are zombies. Sometimes, there are zombie bats. This feeble creature does its best to perform its batty duties in spite of its zombification.",
 			"BloodBat": "Even the bats are riled up from the horrible energy of the Blood Moon! Upon being exposed to its red light, cave dwelling bats become permanently warped.",
@@ -1285,6 +1302,11 @@
 			"LegendaryAtlatlPrefix": "Legendary"
 		},
 		"BiomeName": {
+			"FractalSkyBiome": "Dendritic Skies",
+			"FractalOceanBiome": "Fractal Ocean",
+			"FractalWastesBiome": "Fractal Wastes",
+			"FractalUGBiome": "Fractal Caves",
+			"FractalBiome": "Fractal Dimension",
 			"SaltCave": "Salt",
 			"LimestoneCave": "Limestone",
 			"HallowInvasion": "The Rapture",

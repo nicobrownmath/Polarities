@@ -12,7 +12,7 @@ namespace Polarities.Items.Placeable.Blocks
 		{
 			ItemID.Sets.SortingPriorityMaterials[Item.type] = ItemID.Sets.SortingPriorityMaterials[ItemID.StoneBlock];
 
-			this.SetResearch(100);
+			SacrificeTotal = (100);
 		}
 
 		public override void SetDefaults()

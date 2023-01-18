@@ -14,7 +14,7 @@ namespace Polarities.Items.Weapons.Melee
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(16);
+			SacrificeTotal = (16);
 		}
 
 		public override void SetDefaults()

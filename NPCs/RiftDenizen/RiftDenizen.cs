@@ -19,6 +19,9 @@ using System.Collections.Generic;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using ReLogic.Content;
+using Terraria.GameContent.Bestiary;
+using Polarities.Biomes.Fractal;
+using Terraria.DataStructures;
 
 namespace Polarities.NPCs.RiftDenizen
 {
@@ -28,6 +31,11 @@ namespace Polarities.NPCs.RiftDenizen
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 1;
+			NPCID.Sets.DebuffImmunitySets[Type] = new NPCDebuffImmunityData()
+			{
+				ImmuneToAllBuffsThatAreNotWhips = true,
+			};
+			NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { CustomTexturePath = "Polarities/Textures/BossChecklist/RiftDenizen", };
 		}
 
 		public override void SetDefaults()
@@ -56,6 +64,7 @@ namespace Polarities.NPCs.RiftDenizen
 			}
 
 			Music = MusicLoader.GetMusicSlot("Polarities/Sounds/Music/RiftDenizen");
+			this.SetModBiome<FractalBiome>();
 		}
 
 		public override bool? CanBeHitByItem(Player player, Item item)
@@ -683,6 +692,14 @@ namespace Polarities.NPCs.RiftDenizen
 			potionType = ItemID.HealingPotion;
         }
 
+		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+		{
+			bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+			});
+		}
+
 		public override void OnKill()
 		{
 			//if (Main.rand.NextBool(10) || NPC.GetGlobalNPC<PolaritiesNPC>().noHit)
@@ -749,6 +766,7 @@ namespace Polarities.NPCs.RiftDenizen
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 1;
+			NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, };
 		}
 
 		public override void SetDefaults()
@@ -1010,7 +1028,7 @@ namespace Polarities.NPCs.RiftDenizen
 			float xScale = Math.Min(1, Math.Max(1 / 8f, (Math.Abs(NPC.localAI[0]) - 22) / 8f));
 			float yScale = Math.Min(1, Math.Max(0, Math.Abs(NPC.localAI[0]) / 8f));
 
-			Main.spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, frame, Color.White, NPC.rotation, frame.Size() / 2, new Vector2(xScale, yScale), SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(texture, NPC.Center - screenPos, frame, Color.White, NPC.rotation, frame.Size() / 2, new Vector2(xScale, yScale), SpriteEffects.None, 0f);
 
 			switch(NPC.ai[1])
             {
@@ -1023,7 +1041,7 @@ namespace Polarities.NPCs.RiftDenizen
 							float telegraphDistance = 600 * (float)Math.Sqrt(2 + 2 * Math.Cos(i * MathHelper.Pi / 3));
 							float alpha = Math.Max(0, (60 - NPC.localAI[0]) / 30f) / 2f;
 
-							Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Polarities/Projectiles/CallShootProjectile", AssetRequestMode.ImmediateLoad).Value, NPC.Center - Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White * 0.5f * alpha, NPC.rotation + i * MathHelper.Pi / 6, new Vector2(0, 0.5f), new Vector2(telegraphDistance, 2), SpriteEffects.None, 0f);
+							Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Polarities/Projectiles/CallShootProjectile", AssetRequestMode.ImmediateLoad).Value, NPC.Center - screenPos, new Rectangle(0, 0, 1, 1), Color.White * 0.5f * alpha, NPC.rotation + i * MathHelper.Pi / 6, new Vector2(0, 0.5f), new Vector2(telegraphDistance, 2), SpriteEffects.None, 0f);
 						}
 					}
 					break;
@@ -1093,6 +1111,7 @@ namespace Polarities.NPCs.RiftDenizen
         public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 1;
+			NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, };
 		}
 
 		public override void SetDefaults()
@@ -1475,7 +1494,7 @@ namespace Polarities.NPCs.RiftDenizen
 
 				Color drawColor = Color.White * skyAlpha;
 
-				Texture2D riftTexture = ModContent.Request<Texture2D>("Polarities/Textures/Clouds/rift_1", AssetRequestMode.ImmediateLoad).Value;
+				Texture2D riftTexture = ModContent.Request<Texture2D>("Polarities/Biomes/Fractal/rift_1", AssetRequestMode.ImmediateLoad).Value;
 				Vector2 drawPos = new Vector2(rifts[i, 0], rifts[i, 1]) + Main.screenPosition * rifts[i, 2] - Main.screenPosition;
 
 				drawPos -= new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);

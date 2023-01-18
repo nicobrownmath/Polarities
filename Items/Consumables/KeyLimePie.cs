@@ -16,7 +16,7 @@ namespace Polarities.Items.Consumables
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(10);
+			SacrificeTotal = (10);
 
 			Tooltip.SetDefault(Lang.GetTooltip(ItemID.GoldenDelight).GetLine(0));
 
@@ -32,7 +32,7 @@ namespace Polarities.Items.Consumables
 		{
 			Item.width = 38;
 			Item.height = 30;
-			Item.maxStack = 999;
+			Item.maxStack = 9999;
 			Item.value = Item.sellPrice(silver: 40);
 			Item.rare = ItemRarityID.Orange;
 			Item.consumable = true;

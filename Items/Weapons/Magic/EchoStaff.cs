@@ -18,7 +18,7 @@ namespace Polarities.Items.Weapons.Magic
 		{
 			Item.staff[Item.type] = true;
 
-            this.SetResearch(1);
+            SacrificeTotal = (1);
 		}
 
 		public override void SetDefaults()

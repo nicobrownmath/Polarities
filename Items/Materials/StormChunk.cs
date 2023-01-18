@@ -15,7 +15,7 @@ namespace Polarities.Items.Materials
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(25);
+			SacrificeTotal = (25);
 			Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(5, 8));
 		}
 
@@ -23,7 +23,7 @@ namespace Polarities.Items.Materials
 		{
 			Item.width = 28;
 			Item.height = 18;
-			Item.maxStack = 999;
+			Item.maxStack = 9999;
 			Item.value = 50;
 			Item.rare = 1;
 		}

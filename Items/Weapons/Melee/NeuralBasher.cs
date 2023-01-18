@@ -20,7 +20,7 @@ namespace Polarities.Items.Weapons.Melee
     {
         public override void SetStaticDefaults()
         {
-            this.SetResearch(1);
+            SacrificeTotal = (1);
             Main.RegisterItemAnimation(Type, new DrawAnimationVertical(5, 8));
         }
 

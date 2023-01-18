@@ -101,10 +101,18 @@ namespace Polarities
 			c.Emit(OpCodes.Stloc, 8);
 		}
 
-		public static void SetResearch(this ModItem modItem, int researchValue)
+		public static void SetModBiome<T, T2, T3>(this ModNPC modNPC) where T : ModBiome where T2 : ModBiome where T3 : ModBiome
 		{
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[modItem.Type] = researchValue;
-		}
+			modNPC.SpawnModBiomes = new int[] { ModContent.GetInstance<T>().Type, ModContent.GetInstance<T2>().Type, ModContent.GetInstance<T3>().Type };
+        }
+		public static void SetModBiome<T, T2>(this ModNPC modNPC) where T : ModBiome where T2 : ModBiome
+		{
+			modNPC.SpawnModBiomes = new int[] { ModContent.GetInstance<T>().Type, ModContent.GetInstance<T2>().Type, };
+        }
+		public static void SetModBiome<T>(this ModNPC modNPC) where T : ModBiome
+		{
+			modNPC.SpawnModBiomes = new int[] { ModContent.GetInstance<T>().Type, };
+        }
 
 		public static FlavorTextBestiaryInfoElement TranslatedBestiaryEntry(this ModNPC modNPC)
 		{

@@ -12,7 +12,7 @@ namespace Polarities.Items.Consumables
     {
         public override void SetStaticDefaults()
         {
-            this.SetResearch(20);
+            SacrificeTotal = (20);
 
             ItemID.Sets.DrinkParticleColors[Type] = new Color[] { Color.Lime, Color.LimeGreen };
         }

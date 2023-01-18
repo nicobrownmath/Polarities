@@ -23,7 +23,7 @@ namespace Polarities.Items.Weapons.Melee
             Tooltip.SetDefault("Fires a line of homing star lances");
             Item.staff[Item.type] = true;
 
-            this.SetResearch(1);
+            SacrificeTotal = (1);
         }
 
         public override void SetDefaults()

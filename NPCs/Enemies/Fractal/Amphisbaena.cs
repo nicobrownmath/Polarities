@@ -1,6 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Polarities.Biomes.Fractal;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks.Fractal;
 using System.IO;
 using Terraria;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -34,14 +40,25 @@ namespace Polarities.NPCs.Enemies.Fractal
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.value = Item.buyPrice(silver: 20);
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<AmphisbaenaBanner>();
+            Banner = NPC.type;
+            BannerItem = ItemType<AmphisbaenaBanner>();
+
+            this.SetModBiome<FractalBiome, FractalWastesBiome>();
         }
 
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
         {
             NPC.damage = 100;
             NPC.lifeMax = 200;
+        }
+
+        public override void HitEffect(int hitDirection, double damage)
+        {
+            if (NPC.life <= 0 && Main.netMode != NetmodeID.Server)
+            {
+                for (int i = 1; i <= 4; i++)
+                    GoreHelper.DeathGore(NPC, $"AmphisbaenaGore{i}", Main.rand.NextVector2Unit() * NPC.Size / 2f);
+            }
         }
 
         public override void AI()
@@ -216,18 +233,21 @@ namespace Polarities.NPCs.Enemies.Fractal
 
         public override bool CheckDead()
         {
-            //for (int i = 1; i <= 4; i++)
-            //    Gore.NewGore(NPC.position, NPC.velocity, Mod.GetGoreSlot("Gores/AmphisbaenaGore" + i));
             return true;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //Item.NewItem(NPC.Hitbox, ItemType<Items.FractalDust>(), Main.rand.Next(2, 4));
-            //if (Main.rand.NextBool(2))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<FractalResidue>());
-            //}
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalDust>(), minimumDropped: 1, maximumDropped: 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>(), chanceDenominator: 2));
         }
 
         public override void OnHitPlayer(Player target, int damage, bool crit)

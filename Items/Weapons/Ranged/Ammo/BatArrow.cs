@@ -12,7 +12,7 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(99);
+			SacrificeTotal = (99);
 		}
 
 		public override void SetDefaults()
@@ -20,7 +20,7 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
 			Item.SetWeaponValues(6, 1f, 0);
 			Item.DamageType = DamageClass.Ranged;
 			Item.consumable = true;
-			Item.maxStack = 999;
+			Item.maxStack = 9999;
 			Item.ammo = AmmoID.Arrow;
 
 			Item.width = 12 * 2;

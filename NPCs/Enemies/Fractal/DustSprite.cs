@@ -1,6 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using Polarities.Biomes.Fractal;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Banners;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -29,11 +34,21 @@ namespace Polarities.NPCs.Enemies.Fractal
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<DustSpriteBanner>();
+            Banner = NPC.type;
+            BannerItem = ItemType<DustSpriteBanner>();
+
+            this.SetModBiome<FractalBiome, FractalWastesBiome>();
 
             NPC.GetGlobalNPC<PolaritiesNPC>().usesProjectileHitCooldowns = true;
             NPC.GetGlobalNPC<PolaritiesNPC>().projectileHitCooldownTime = 10;
+        }
+
+        public override void HitEffect(int hitDirection, double damage)
+        {
+            if (NPC.life <= 0 && Main.netMode != NetmodeID.Server)
+            {
+                GoreHelper.DeathGore(NPC, $"DustSpriteGore{1 + NPC.frame.Y / (TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type])}", velocity: NPC.velocity);
+            }
         }
 
         public override int SpawnNPC(int tileX, int tileY)
@@ -138,12 +153,6 @@ namespace Polarities.NPCs.Enemies.Fractal
             target.AddBuff(BuffID.Confused, 10, true);
         }
 
-        public override bool CheckDead()
-        {
-            //Gore.NewGore(NPC.Center, NPC.velocity, Mod.GetGoreSlot("Gores/DustSpriteGore" + (1 + NPC.frame.Y / (TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type]))), NPC.scale);
-            return true;
-        }
-
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             //if (Subworld.IsActive<FractalSubworld>())
@@ -153,12 +162,17 @@ namespace Polarities.NPCs.Enemies.Fractal
             return 0f;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //if (Main.rand.NextBool(30))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<FractalResidue>());
-            //}
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>(), chanceDenominator: 30));
         }
     }
 }

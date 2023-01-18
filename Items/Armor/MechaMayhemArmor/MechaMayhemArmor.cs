@@ -21,7 +21,7 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 
 			int equipSlotBody = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
 			ArmorIDs.Body.Sets.HidesArms[equipSlotBody] = true;
@@ -66,7 +66,7 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 
 			//registers a head glowmask
 			ArmorMasks.legIndexToArmorDraw.TryAdd(EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs), this);
@@ -150,7 +150,7 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 
 		public override void SetStaticDefaults()
         {
-            this.SetResearch(1);
+            SacrificeTotal = (1);
 
             int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 			ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;

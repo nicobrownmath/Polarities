@@ -37,7 +37,7 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
 
         public override void SetStaticDefaults()
         {
-            this.SetResearch(1);
+            SacrificeTotal = (1);
         }
 
         public override void UseStyle(Player player, Rectangle heldItemFrame)

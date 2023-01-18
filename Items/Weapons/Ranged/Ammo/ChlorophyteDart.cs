@@ -18,7 +18,7 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
 		{
 			Tooltip.SetDefault("Sticks to enemies");
 
-			this.SetResearch(99);
+			SacrificeTotal = (99);
 		}
 
 		public override void SetDefaults()
@@ -29,7 +29,7 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
 			Item.width = 14;
 			Item.height = 26;
 
-			Item.maxStack = 999;
+			Item.maxStack = 9999;
 			Item.consumable = true;
 
 			Item.value = 20;

@@ -1,9 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes.Fractal;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Banners;
 using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -14,6 +19,7 @@ namespace Polarities.NPCs.Enemies.Fractal
     {
         public override void SetStaticDefaults()
         {
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, };
         }
 
         public override void SetDefaults()
@@ -35,8 +41,8 @@ namespace Polarities.NPCs.Enemies.Fractal
 
             NPC.alpha = 128;
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<FractalSlimeBanner>();
+            Banner = NPC.type;
+            BannerItem = ItemType<FractalSlimeBanner>();
         }
 
         public override void AI()
@@ -89,12 +95,10 @@ namespace Polarities.NPCs.Enemies.Fractal
             return true;
         }
 
-        public override void OnKill()
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            //if (Main.rand.NextBool(16))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<FractalResidue>());
-            //}
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>(), chanceDenominator: 16));
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -103,7 +107,7 @@ namespace Polarities.NPCs.Enemies.Fractal
 
             Vector2 scale = new Vector2(1, 1) + new Vector2(1, -1) * (float)Math.Sin(NPC.ai[0] / 5) * 0.1f;
 
-            spriteBatch.Draw(smallSlimeTexture, NPC.Center - Main.screenPosition, new Rectangle(0, 0, smallSlimeTexture.Width, smallSlimeTexture.Height), NPC.GetNPCColorTintedByBuffs(drawColor) * ((255f - NPC.alpha) / 255f), 0, new Vector2(smallSlimeTexture.Width / 2, smallSlimeTexture.Height / 2), scale * NPC.scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(smallSlimeTexture, NPC.Center - screenPos, new Rectangle(0, 0, smallSlimeTexture.Width, smallSlimeTexture.Height), NPC.GetNPCColorTintedByBuffs(drawColor) * ((255f - NPC.alpha) / 255f), 0, new Vector2(smallSlimeTexture.Width / 2, smallSlimeTexture.Height / 2), scale * NPC.scale, SpriteEffects.None, 0f);
 
             return false;
         }
@@ -113,6 +117,7 @@ namespace Polarities.NPCs.Enemies.Fractal
     {
         public override void SetStaticDefaults()
         {
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, };
         }
 
         public override void SetDefaults()
@@ -135,8 +140,8 @@ namespace Polarities.NPCs.Enemies.Fractal
 
             NPC.alpha = 128;
 
-            //Banner = NPCType<FractalSlimeSmall>();
-            //BannerItem = ItemType<FractalSlimeBanner>();
+            Banner = NPCType<FractalSlimeSmall>();
+            BannerItem = ItemType<FractalSlimeBanner>();
         }
 
         public override void AI()
@@ -202,12 +207,9 @@ namespace Polarities.NPCs.Enemies.Fractal
             return true;
         }
 
-        public override void OnKill()
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            //if (Main.rand.NextBool(4))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<FractalResidue>());
-            //}
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>(), chanceDenominator: 4));
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -223,12 +225,12 @@ namespace Polarities.NPCs.Enemies.Fractal
                 offset.X *= scale.X;
                 offset.Y *= scale.Y;
 
-                Vector2 drawPos = NPC.Center + offset - Main.screenPosition;
+                Vector2 drawPos = NPC.Center + offset - screenPos;
 
                 spriteBatch.Draw(smallSlimeTexture, drawPos, new Rectangle(0, 0, smallSlimeTexture.Width, smallSlimeTexture.Height), drawColor * ((255f - NPC.alpha) / 255f), 0, new Vector2(smallSlimeTexture.Width / 2, smallSlimeTexture.Height / 2), scale * NPC.scale, SpriteEffects.None, 0f);
             }
 
-            spriteBatch.Draw(mediumSlimeTexture, NPC.Center - Main.screenPosition, new Rectangle(0, 0, mediumSlimeTexture.Width, mediumSlimeTexture.Height), drawColor * ((255f - NPC.alpha) / 255f), 0, new Vector2(mediumSlimeTexture.Width / 2, mediumSlimeTexture.Height / 2), scale * NPC.scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(mediumSlimeTexture, NPC.Center - screenPos, new Rectangle(0, 0, mediumSlimeTexture.Width, mediumSlimeTexture.Height), drawColor * ((255f - NPC.alpha) / 255f), 0, new Vector2(mediumSlimeTexture.Width / 2, mediumSlimeTexture.Height / 2), scale * NPC.scale, SpriteEffects.None, 0f);
 
             return false;
         }
@@ -259,8 +261,10 @@ namespace Polarities.NPCs.Enemies.Fractal
 
             NPC.alpha = 128;
 
-            //Banner = NPCType<FractalSlimeSmall>();
-            //BannerItem = ItemType<FractalSlimeBanner>();
+            Banner = NPCType<FractalSlimeSmall>();
+            BannerItem = ItemType<FractalSlimeBanner>();
+
+            this.SetModBiome<FractalBiome>();
         }
 
         public override void AI()
@@ -326,9 +330,27 @@ namespace Polarities.NPCs.Enemies.Fractal
             return true;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //Item.NewItem(NPC.Hitbox, ItemType<FractalResidue>());
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>()));
+        }
+
+        public override void FindFrame(int frameHeight)
+        {
+            if (NPC.IsABestiaryIconDummy)
+            {
+                NPC.rotation += 0.05f;
+                NPC.ai[0]++;
+                NPC.ai[1]++;
+            }
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -345,7 +367,7 @@ namespace Polarities.NPCs.Enemies.Fractal
                 offset.X *= scale.X;
                 offset.Y *= scale.Y;
 
-                Vector2 drawPos = NPC.Center + offset - Main.screenPosition;
+                Vector2 drawPos = NPC.Center + offset - screenPos;
 
                 for (int j = 0; j < 4; j++)
                 {
@@ -359,7 +381,7 @@ namespace Polarities.NPCs.Enemies.Fractal
                 spriteBatch.Draw(mediumSlimeTexture, drawPos, new Rectangle(0, 0, mediumSlimeTexture.Width, mediumSlimeTexture.Height), drawColor * ((255f - NPC.alpha) / 255f), 0, new Vector2(mediumSlimeTexture.Width / 2, mediumSlimeTexture.Height / 2), scale * NPC.scale, SpriteEffects.None, 0f);
             }
 
-            spriteBatch.Draw(largeSlimeTexture, NPC.Center - Main.screenPosition, new Rectangle(0, 0, largeSlimeTexture.Width, largeSlimeTexture.Height), drawColor * ((255f - NPC.alpha) / 255f), 0, new Vector2(largeSlimeTexture.Width / 2, largeSlimeTexture.Height / 2), scale * NPC.scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(largeSlimeTexture, NPC.Center - screenPos, new Rectangle(0, 0, largeSlimeTexture.Width, largeSlimeTexture.Height), drawColor * ((255f - NPC.alpha) / 255f), 0, new Vector2(largeSlimeTexture.Width / 2, largeSlimeTexture.Height / 2), scale * NPC.scale, SpriteEffects.None, 0f);
 
             return false;
         }

@@ -10,7 +10,7 @@ namespace Polarities.Items.Placeable.Walls
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(400);
+			SacrificeTotal = (400);
 		}
 
 		public override void SetDefaults()
