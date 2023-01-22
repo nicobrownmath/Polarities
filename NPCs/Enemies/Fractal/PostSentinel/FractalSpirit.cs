@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Polarities.Biomes.Fractal;
+using Polarities.Items;
 using Polarities.Items.Placeable.Banners;
 using Polarities.Items.Placeable.Blocks.Fractal;
+using Polarities.Items.Weapons.Summon.Orbs;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -290,8 +292,8 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DendriticEnergy>(), minimumDropped: 4, maximumDropped: 6));
-            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalKey>(), chanceDenominator: 3));
-            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MandelbrotOrb>(), chanceDenominator: 20));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalKey>(), chanceDenominator: 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MandelbrotOrb>(), chanceDenominator: 20));
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

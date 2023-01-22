@@ -1,20 +1,10 @@
-﻿using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Graphics.Shaders;
-using static Terraria.ModLoader.ModContent;
-using Terraria.GameInput;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
+using ReLogic.Content;
 using System.Collections.Generic;
-using Polarities.Items;
-using Polarities.NPCs;
-using MonoMod.Cil;
-using Terraria.ModLoader.IO;
-using Terraria.Enums;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ModLoader;
 
 namespace Polarities.Items.Armor
 {
@@ -97,6 +87,25 @@ namespace Polarities.Items.Armor
             legIndexToArmorDraw = null;
             wingIndexToArmorDraw = null;
             bodyIndexToBodyMaskColor = null;
+        }
+
+        public static void DrawHeadBasic(PlayerDrawSet drawInfo, Asset<Texture2D> glowTexture)
+        {
+            if (!drawInfo.drawPlayer.invis)
+            {
+                Rectangle bodyFrame3 = drawInfo.drawPlayer.bodyFrame;
+                Vector2 headVect2 = drawInfo.headVect;
+                if (drawInfo.drawPlayer.gravDir == 1f)
+                {
+                    bodyFrame3.Height -= 4;
+                }
+                else
+                {
+                    headVect2.Y -= 4f;
+                    bodyFrame3.Height -= 4;
+                }
+                drawInfo.DrawDataCache.Add(new DrawData(glowTexture.Value, drawInfo.helmetOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect, bodyFrame3, Color.White, drawInfo.drawPlayer.headRotation, headVect2, 1f, drawInfo.playerEffect, 0) { shader = drawInfo.cHead, });
+            }
         }
     }
 }

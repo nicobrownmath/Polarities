@@ -19,6 +19,7 @@ using Terraria.ID;
 using Terraria.GameContent;
 using static Terraria.ModLoader.ModContent;
 using Terraria.Graphics.Shaders;
+using Polarities.Items;
 
 namespace Polarities
 {
@@ -217,6 +218,19 @@ namespace Polarities
 		{
 			return new DropBasedOnMasterMode(ItemDropRule.ByCondition(new FlawlessDropCondition(), Type, amountDroppedMinimum, amountDroppedMaximum), new FlawlessOrRandomDropRule(Type, chanceDenominator, amountDroppedMinimum, amountDroppedMaximum, chanceNumerator));
 		}
+
+		public static PolaritiesPlayer Polarities(this Player player)
+        {
+			return player.GetModPlayer<PolaritiesPlayer>();
+        }
+		public static bool HasEquip<T>(this Player player) where T : EquipItem
+        {
+			return player.Polarities().HasEquip<T>();
+        }
+		public static T FindEquip<T>(this Player player) where T : EquipItem
+        {
+			return player.Polarities().FindEquip<T>();
+        }
 
 		public static int SpawnSentry(this Player player, IEntitySource source, int ownerIndex, int sentryProjectileId, int originalDamageNotScaledByMinionDamage, float KnockBack, bool spawnWithGravity = true, Vector2 offsetFromDefaultPosition = default)
 		{

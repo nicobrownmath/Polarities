@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Polarities.Biomes.Fractal;
+using Polarities.Items.Armor.Vanity;
 using Polarities.Items.Materials;
 using Polarities.Items.Placeable.Banners;
 using Polarities.Items.Placeable.Blocks.Fractal;
@@ -70,9 +71,9 @@ namespace Polarities.NPCs.Enemies.Fractal
                 player = Main.player[NPC.target];
             }
 
-            if (NPC.life < NPC.lifeMax / 2 && Main.netMode != 1)
+            if (NPC.life < NPC.lifeMax / 2)
             {
-                //NPC.catchItem = (short)ItemType<AmphisnekHat>();
+                NPC.catchItem = (short)ModContent.ItemType<AmphisnekHat>();
                 NPC.netUpdate = true;
             }
 

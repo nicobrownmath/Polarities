@@ -16,6 +16,7 @@ namespace Polarities.Items.Accessories
 		public override void SetStaticDefaults()
 		{
 			SacrificeTotal = (1);
+			PolaritiesItem.IsFlawless.Add(Type);
 		}
 
 		public override void SetDefaults()
@@ -27,7 +28,6 @@ namespace Polarities.Items.Accessories
 
 			Item.value = Item.sellPrice(gold: 5);
 			Item.rare = RarityType<WallOfFleshFlawlessRarity>();
-			Item.GetGlobalItem<PolaritiesItem>().flawless = true;
 		}
 
         public override void UpdateAccessory(Player player, bool hideVisual)

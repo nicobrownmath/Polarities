@@ -209,7 +209,7 @@ namespace Polarities.NPCs.Enemies.Fractal
 
     public class BisectorHeadHitbox : ModNPC
     {
-        public override string Texture => Polarities.BlankTexture;
+        public override string Texture => Polarities.CallShootProjectile;
 
         public override void SetStaticDefaults()
         {

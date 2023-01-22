@@ -58,7 +58,7 @@ namespace Polarities
         public static ModKeybind ArmorSetBonusHotkey;
         public static ModKeybind ConvectiveDashHotkey;
 
-        public const string BlankTexture = "Polarities/Projectiles/CallShootProjectile";
+        public const string CallShootProjectile = "Polarities/Projectiles/CallShootProjectile";
 
         public override void Load()
         {

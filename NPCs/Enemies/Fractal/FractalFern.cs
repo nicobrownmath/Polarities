@@ -3,6 +3,7 @@ using Polarities.Biomes.Fractal;
 using Polarities.Items.Materials;
 using Polarities.Items.Placeable.Banners;
 using Polarities.Items.Placeable.Blocks.Fractal;
+using Polarities.Items.Weapons.Summon.Minions;
 using System;
 using Terraria;
 using Terraria.GameContent.Bestiary;
@@ -187,7 +188,7 @@ namespace Polarities.NPCs.Enemies.Fractal
         {
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalStrands>(), minimumDropped: 1, maximumDropped: 3));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>(), chanceDenominator: 4));
-            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BarnsleyStaff>(), chanceDenominator: 40));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BarnsleyStaff>(), chanceDenominator: 40));
         }
     }
 

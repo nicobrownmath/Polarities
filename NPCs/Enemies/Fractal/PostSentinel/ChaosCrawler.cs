@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Polarities.Biomes.Fractal;
+using Polarities.Items;
 using Polarities.Items.Placeable.Banners;
 using Polarities.Items.Placeable.Blocks.Fractal;
+using Polarities.Items.Weapons.Ranged;
 using System;
 using Terraria;
 using Terraria.Audio;
@@ -378,8 +380,8 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SelfsimilarOre>(), minimumDropped: 1, maximumDropped: 3));
-            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalKey>(), chanceDenominator: 3));
-            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<GliderGun>(), chanceDenominator: 20));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalKey>(), chanceDenominator: 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<GliderGun>(), chanceDenominator: 20));
             npcLoot.Add(ItemDropRule.Common(ItemID.RodofDiscord, chanceDenominator: 20));
         }
 
@@ -473,7 +475,7 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
 
     public class ChaosCrawlerHitbox : ModNPC
     {
-        public override string Texture => Polarities.BlankTexture;
+        public override string Texture => Polarities.CallShootProjectile;
 
         public override void SetStaticDefaults()
         {

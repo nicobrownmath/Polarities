@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Polarities.Biomes.Fractal;
 using Polarities.Items.Materials;
 using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Furniture;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -219,7 +220,7 @@ namespace Polarities.NPCs.Enemies.Fractal
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Stromatolight>(), chanceDenominator: 2));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Stromatolight>(), chanceDenominator: 2));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>(), chanceDenominator: 2));
         }
 

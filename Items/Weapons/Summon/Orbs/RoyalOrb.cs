@@ -17,6 +17,7 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 		public override void SetStaticDefaults()
 		{
 			SacrificeTotal = (1);
+			PolaritiesItem.IsFlawless.Add(Type);
 		}
 
 		public override void SetDefaults()
@@ -38,7 +39,6 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 
 			Item.value = Item.sellPrice(gold: 4);
 			Item.rare = RarityType<QueenBeeFlawlessRarity>();
-			Item.GetGlobalItem<PolaritiesItem>().flawless = true;
 		}
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

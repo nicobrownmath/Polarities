@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Polarities.Biomes.Fractal;
 using Polarities.Items.Materials;
+using Polarities.Items.Pets;
 using Polarities.Items.Placeable.Banners;
 using System;
 using System.Collections.Generic;
@@ -201,7 +202,7 @@ namespace Polarities.NPCs.Enemies.Fractal
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Lightslate>(), minimumDropped: 1, maximumDropped: 2));
-            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SparkOfSimilarity>(), chanceDenominator: 50));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SparkOfSimilarity>(), chanceDenominator: 50));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>(), chanceDenominator: 4));
         }
 

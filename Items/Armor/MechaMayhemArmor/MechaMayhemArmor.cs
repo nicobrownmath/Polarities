@@ -29,6 +29,7 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 			ArmorIDs.Body.Sets.HidesBottomSkin[equipSlotBody] = true;
 			ArmorIDs.Body.Sets.HidesTopSkin[equipSlotBody] = true;
 			ArmorIDs.Body.Sets.shouldersAreAlwaysInTheBack[equipSlotBody] = true;
+			PolaritiesItem.IsFlawless.Add(Type);
 		}
 
 		public override void SetDefaults()
@@ -39,7 +40,6 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 			Item.defense = 20;
 
 			Item.rare = RarityType<MechBossFlawlessRarity>();
-			Item.GetGlobalItem<PolaritiesItem>().flawless = true;
 		}
 
 		public override void UpdateEquip(Player player)
@@ -72,6 +72,7 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 			ArmorMasks.legIndexToArmorDraw.TryAdd(EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs), this);
 
 			ArmorIDs.Legs.Sets.OverridesLegs[EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs)] = true;
+			PolaritiesItem.IsFlawless.Add(Type);
 		}
 
 		public override void SetDefaults()
@@ -82,7 +83,6 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 			Item.defense = 14;
 
 			Item.rare = RarityType<MechBossFlawlessRarity>();
-			Item.GetGlobalItem<PolaritiesItem>().flawless = true;
 		}
 
 		public override void UpdateEquip(Player player)
@@ -157,6 +157,7 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 
 			//registers a head glowmask
 			ArmorMasks.headIndexToArmorDraw.TryAdd(equipSlotHead, this);
+			PolaritiesItem.IsFlawless.Add(Type);
 		}
 
 		public override void SetDefaults()
@@ -167,7 +168,6 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 			Item.defense = 15;
 
 			Item.rare = RarityType<MechBossFlawlessRarity>();
-			Item.GetGlobalItem<PolaritiesItem>().flawless = true;
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs)

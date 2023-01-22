@@ -21,6 +21,7 @@ namespace Polarities.Items.Weapons.Summon.Minions
 			SacrificeTotal = (1);
 
 			Item.staff[Type] = true;
+			PolaritiesItem.IsFlawless.Add(Type);
 		}
 
 		public override void SetDefaults()
@@ -44,7 +45,6 @@ namespace Polarities.Items.Weapons.Summon.Minions
 
 			Item.value = Item.sellPrice(gold: 3);
 			Item.rare = RarityType<GigabatFlawlessRarity>();
-			Item.GetGlobalItem<PolaritiesItem>().flawless = true;
 		}
 
 		public override bool CanUseItem(Player player)

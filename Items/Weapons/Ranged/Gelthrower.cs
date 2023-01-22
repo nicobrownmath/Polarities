@@ -19,6 +19,7 @@ namespace Polarities.Items.Weapons.Ranged
         public override void SetStaticDefaults()
         {
             SacrificeTotal = (1);
+            PolaritiesItem.IsFlawless.Add(Type);
         }
 
         public override void SetDefaults()
@@ -42,7 +43,6 @@ namespace Polarities.Items.Weapons.Ranged
 
             Item.value = Item.sellPrice(gold: 1);
             Item.rare = RarityType<KingSlimeFlawlessRarity>();
-            Item.GetGlobalItem<PolaritiesItem>().flawless = true;
         }
 
         public override bool CanConsumeAmmo(Item ammo, Player player)

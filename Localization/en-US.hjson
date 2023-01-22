@@ -5,6 +5,7 @@
 			"TreasureBag": "Treasure Bag",
 
 			//melee weapons
+			"Stardance": "Stardance",
 			"SaltKnife": "Salt Knife",
 			"CavernCarver": "Cavern Carver",
 			"GlowYo": "Glow-Yo",
@@ -128,6 +129,7 @@
 			"Flopper": "Flopper",
 
 			//summon weapons
+			"BarnsleyStaff": "Barnsley Staff",
 			"ZombatStaff": "Zombat Staff",
 			"WingedStarStaff": "Winged Star Staff",
 			"BroodStaff": "Brood Staff",
@@ -252,6 +254,7 @@
 			"StormcloudMask": "Stormcloud Mask",
 
 			//vanity
+			"AmphisnekHat": "Amphisnek Hat",
 			"SnekHat": "Snek Hat",
 			"SeaSnekHat": "Sea Snek Hat",
 			"StarConstructMask": "Star Construct Mask",
@@ -422,6 +425,7 @@
 			"ManualPrefix": "-Autoswing",
 
 			//melee weapons
+			"Stardance": "Fires a line of homing star lances",
 			"SaltKnife": "Stacks up to 5",
 			"CavernCarver": "Throws blades which slash at the cursor",
 			"GlowYo": "Drips caustic fluids on enemies",
@@ -529,6 +533,7 @@
 			"Flopper": "Shoots fish",
 
 			//summon weapons
+			"BarnsleyStaff": "Summons a fractal fern",
 			"ZombatStaff": "Summons baby zombats to protect you",
 			"WingedStarStaff": "Summons a winged star to protect you",
 			"BroodStaff": "Summons nestlings",
@@ -1086,6 +1091,7 @@
 			"SpiritBottleDebuff": "Spirit Bite",
 
 			//minion buffs
+			"BarnsleyFernBuff": "Barnsley Fern",
 			"ZombatMinionBuff": "Baby Zombat",
 			"WingedStarMinionBuff": "Winged Star",
 			"GlobusCrucigerMinionBuff": "Hallowed Statue",
@@ -1122,6 +1128,7 @@
 			"SpiritBottleDebuff": "You have been bitten",
 
 			//minion buffs
+			"BarnsleyFernBuff": "The fractal ferns will fight for you",
 			"ZombatMinionBuff": "The baby zombats will fight for you",
 			"WingedStarMinionBuff": "The winged star will fight for you",
 			"GlobusCrucigerMinionBuff": "A hallowed statue protects you",
@@ -1170,6 +1177,56 @@
 			"LunaticCultistBookBuff": "Class damage is increased when near the celestial pillar corresponding to that class",
 			"MoonLordBook": "Your attacks have lifesteal"
 		},
+
+	# Accessories
+		ItemName.ChaosFlower: Chaos Flower
+		ItemTooltip.ChaosFlower: Channeled summoned weapons summon an addition minion
+
+	# Ranged weapons
+		ItemName.GliderGun: Glider Gun
+		ItemTooltip.GliderGun: Shoots gliders which redirect themselves toward enemies struck by other gliders
+
+	# Magic weapons
+		ItemName.ConeGun: Cone Gun
+		ItemTooltip.ConeGun: 
+			'''
+			Consumes all your mana to shoot a massive high-damage cone
+			Does more damage the more mana you use
+			Not affected by any form of mana cost reduction
+			Damage is decreased significantly if you have mana sickness
+			'''
+
+	# Summon Weapons
+
+	## Orbs
+		ItemName.MandelbrotOrb: Brot Orb
+		ItemTooltip.MandelbrotOrb: 
+			'''
+			{$Mods.Polarities.ItemTooltip.OrbBase}
+			Summons an antibrot minion
+			'Palindrome!'
+			'''
+
+	# Pets
+		ItemName.MiniMengerItem: Porous Cuboid
+		ItemTooltip.MiniMengerItem: Summons a mini menger
+		BuffName.MiniMengerBuff: Mini Menger
+		BuffDescription.MiniMengerBuff: A mini menger is following you
+		ItemName.SparkOfSimilarity: Spark of Similarity
+		ItemTooltip.SparkOfSimilarity: Summons a baby Spark Crawler
+		BuffName.BabySparkCrawlerBuff: Baby Spark Crawler
+		BuffDescription.BabySparkCrawlerBuff: A baby spark crawler is following you
+
+	# Tiles
+		ItemName.Stromatolight: Stromatolight
+		MapObject.Stromatolight: Stromatolight
+
+	# Misc
+		ItemName.FractalKey: Strand Key
+		ItemTooltip.FractalKey: Unlocks one locked fractal chest or lock box
+		ItemName.FractalBiomeKey: Fractal Dimension Key
+		ItemTooltip.FractalBiomeKey: Unlocks a Fractal Dimension Chest in the dungeon
+
 		"DropConditions": {
 			"Flawless": "Drops when defeated flawlessly",
 			"SunPixieSummonItem": "Drops at the end of the Rapture",

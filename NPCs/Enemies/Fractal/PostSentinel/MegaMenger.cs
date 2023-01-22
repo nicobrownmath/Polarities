@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Polarities.Biomes.Fractal;
+using Polarities.Items;
+using Polarities.Items.Pets;
 using Polarities.Items.Placeable.Banners;
 using Polarities.Items.Placeable.Blocks.Fractal;
 using System;
@@ -349,9 +351,9 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalOre>(), minimumDropped: 1, maximumDropped: 3));
-            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalKey>(), chanceDenominator: 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalKey>(), chanceDenominator: 3));
             //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<InfinitySponge>(), chanceDenominator: 20));
-            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MiniMengerItem>(), chanceDenominator: 20));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MiniMengerItem>(), chanceDenominator: 20));
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

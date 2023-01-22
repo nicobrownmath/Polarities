@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Polarities.Biomes.Fractal;
+using Polarities.Items;
 using Polarities.Items.Placeable.Banners;
 using Polarities.Items.Placeable.Blocks.Fractal;
+using Polarities.Items.Weapons.Magic;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -378,14 +380,14 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalOre>(), minimumDropped: 1, maximumDropped: 3));
-            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalKey>(), chanceDenominator: 3));
-            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<ConeGun>(), chanceDenominator: 20));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalKey>(), chanceDenominator: 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<ConeGun>(), chanceDenominator: 20));
         }
     }
 
     public class OrthoconicHitbox : ModNPC
     {
-        public override string Texture => Polarities.BlankTexture;
+        public override string Texture => Polarities.CallShootProjectile;
 
         public override void SetStaticDefaults()
         {

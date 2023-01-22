@@ -19,6 +19,7 @@ namespace Polarities.Items.Weapons.Melee
 		public override void SetStaticDefaults()
 		{
 			SacrificeTotal = (1);
+			PolaritiesItem.IsFlawless.Add(Type);
 		}
 
 		public override void SetDefaults()
@@ -42,7 +43,6 @@ namespace Polarities.Items.Weapons.Melee
 
 			Item.value = Item.sellPrice(gold: 7, silver: 50);
 			Item.rare = RarityType<PlanteraFlawlessRarity>();
-			Item.GetGlobalItem<PolaritiesItem>().flawless = true;
 		}
 
 		private int time;
