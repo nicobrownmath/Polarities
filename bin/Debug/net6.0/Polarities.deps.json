@@ -39,6 +39,7 @@
           "ReLogic": "1.0.0.0",
           "Steamworks.NET": "20.1.0.0",
           "SteelSeriesEngineWrapper": "1.0.0.0",
+          "SubworldLibrary": "1.0.0.0",
           "System.CodeDom": "6.0.0.0",
           "System.Composition.AttributedModel": "6.0.0.0",
           "System.Composition.Convention": "6.0.0.0",
@@ -508,6 +509,14 @@
           }
         }
       },
+      "SubworldLibrary/1.0.0.0": {
+        "runtime": {
+          "SubworldLibrary.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "System.CodeDom/6.0.0.0": {
         "runtime": {
           "System.CodeDom.dll": {
@@ -813,6 +822,11 @@
       "sha512": ""
     },
     "SteelSeriesEngineWrapper/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SubworldLibrary/1.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

@@ -19,5 +19,8 @@
     <Reference Include="MultiHitboxNPCLibrary">
       <HintPath>..\..\ModReader\MultiHitboxNPCLibrary\MultiHitboxNPCLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="SubworldLibrary">
+      <HintPath>..\SubworldLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

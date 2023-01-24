@@ -4,5 +4,5 @@ version = 0.11
 homepage = https://github.com/nicobrownmath/Polarities/
 includeSource = false
 includePDB = true
-modReferences = MultiHitboxNPCLibrary
+modReferences = MultiHitboxNPCLibrary, SubworldLibrary
 buildIgnore = *.csproj, *.user, *.sln, *.gitignore, *.editorconfig, *.DS_Store, obj\*, bin\*, .vs\*

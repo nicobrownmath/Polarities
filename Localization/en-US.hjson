@@ -1207,6 +1207,14 @@
 			'Palindrome!'
 			'''
 
+	# Consumables
+		ItemName.TwistedRecallPotion: Twisted Recall Potion
+		ItemTooltip.TwistedRecallPotion: 
+			'''
+			Teleports you to the fractal dimension's spawnpoint
+			Removes fractalization from the player, causing fractal enemies to disappear
+			'''
+
 	# Pets
 		ItemName.MiniMengerItem: Porous Cuboid
 		ItemTooltip.MiniMengerItem: Summons a mini menger
@@ -1218,6 +1226,11 @@
 		BuffDescription.BabySparkCrawlerBuff: A baby spark crawler is following you
 
 	# Tiles
+		ItemName.FractalLaserTrap: Fractal Laser Trap
+		ItemName.FractalEnergyTrap: Fractal Energy Trap
+		ProjectileName.FractalTrapEnergy: Fractal Energy Trap
+		ProjectileName.FractalTrapLaser: Fractal Laser Trap
+		ItemName.Lightslate: Lightslate
 		ItemName.Stromatolight: Stromatolight
 		MapObject.Stromatolight: Stromatolight
 
