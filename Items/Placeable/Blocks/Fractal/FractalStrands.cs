@@ -115,7 +115,7 @@ namespace Polarities.Items.Placeable.Blocks.Fractal
         }
     }
 
-    public class FractalStrandsWallatural : ModWall
+    public class FractalStrandsWallNatural : ModWall
     {
         public override string Texture => ModContent.GetInstance<FractalStrandsWallPlaced>().Texture;
 

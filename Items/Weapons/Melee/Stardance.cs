@@ -19,11 +19,10 @@ namespace Polarities.Items.Weapons.Melee
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Stardance");
-            Tooltip.SetDefault("Fires a line of homing star lances");
             Item.staff[Item.type] = true;
 
-            this.SetResearch(1);
+            SacrificeTotal = (1);
+            PolaritiesItem.IsFlawless.Add(Type);
         }
 
         public override void SetDefaults()
@@ -45,7 +44,6 @@ namespace Polarities.Items.Weapons.Melee
 
             Item.value = Item.sellPrice(gold: 2);
             Item.rare = RarityType<StarConstructFlawlessRarity>();
-            Item.GetGlobalItem<PolaritiesItem>().flawless = true;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

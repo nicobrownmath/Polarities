@@ -9,7 +9,7 @@ namespace Polarities.Items
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(2);
+			SacrificeTotal = (2);
 		}
 
 		public override void SetDefaults()

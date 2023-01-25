@@ -18,17 +18,22 @@ namespace Polarities.Items
 {
 	public class PolaritiesItem : GlobalItem
 	{
+        public static HashSet<int> IsFlawless { get; private set; }
+        public static HashSet<int> IsFractalWeapon { get; private set; }
+
         public override bool InstancePerEntity => true;
 
         public override void Load()
         {
+            IsFlawless = new HashSet<int>() { ItemID.EmpressBlade, };
+            IsFractalWeapon = new HashSet<int>();
+
             //custom biome mimic summons
             On.Terraria.NPC.BigMimicSummonCheck += NPC_BigMimicSummonCheck;
-
             On.Terraria.UI.ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += ItemSlot_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color;
         }
 
-        private void ItemSlot_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color(On.Terraria.UI.ItemSlot.orig_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color orig, SpriteBatch spriteBatch, Item[] inv, int context, int slot, Vector2 position, Color lightColor)
+        private static void ItemSlot_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color(On.Terraria.UI.ItemSlot.orig_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color orig, SpriteBatch spriteBatch, Item[] inv, int context, int slot, Vector2 position, Color lightColor)
         {
             bool doDraw = true;
             IInventoryDrawItem inventoryDrawItem = null;
@@ -48,7 +53,7 @@ namespace Polarities.Items
             }
         }
 
-        private bool NPC_BigMimicSummonCheck(On.Terraria.NPC.orig_BigMimicSummonCheck orig, int x, int y, Player user)
+        private static bool NPC_BigMimicSummonCheck(On.Terraria.NPC.orig_BigMimicSummonCheck orig, int x, int y, Player user)
         {
             //adapted from vanilla
 			if (Main.netMode == NetmodeID.MultiplayerClient || !Main.hardMode)
@@ -136,65 +141,75 @@ namespace Polarities.Items
 
         public override GlobalItem Clone(Item item, Item itemClone)
         {
-            PolaritiesItem myClone = (PolaritiesItem)base.Clone(item, itemClone);
-            myClone.flawless = flawless;
-            return myClone;
+            var clone = (PolaritiesItem)base.Clone(item, itemClone);
+            return clone;
         }
-
-        public bool flawless;
 
         public override void SetDefaults(Item item)
         {
-            switch(item.type)
+            if (item.type == ItemID.EmpressBlade)
             {
-                case ItemID.EmpressBlade:
-                    flawless = true;
-                    item.rare = RarityType<EmpressFlawlessRarity>();
-                    break;
+                item.rare = ModContent.RarityType<EmpressFlawlessRarity>();
             }
+        }
+
+        public override void ModifyManaCost(Item item, Player player, ref float reduce, ref float mult)
+        {
+        }
+
+        public override void UpdateEquip(Item item, Player player)
+        {
+            if (item.ModItem is EquipItem equip)
+                player.Polarities().equips[item.type] = equip;
         }
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            int i;
-            for (i = 0; i < tooltips.Count; i++)
+            try
             {
-                if (tooltips[i].Name == "JourneyResearch" || tooltips[i].Name == "BestiaryNotes")
+                int i;
+                for (i = 0; i < tooltips.Count; i++)
                 {
-                    break;
-                }
-            }
-
-            if (!item.social && item.prefix > 0)
-            {
-                if (Main.tooltipPrefixComparisonItem != null && item.autoReuse ^ Main.tooltipPrefixComparisonItem.autoReuse) //TODO: This doesn't seem to work?
-                {
-                    if (item.autoReuse)
+                    if (tooltips[i].Name == "JourneyResearch" || tooltips[i].Name == "BestiaryNotes")
                     {
-                        TooltipLine line = new TooltipLine(Mod, "PrefixAutomated", Language.GetTextValue("Mods.Polarities.ItemTooltip.AutomaticPrefix"))
-                        {
-                            IsModifier = true
-                        };
-                        tooltips.Insert(i, line);
-                        i++;
-                    }
-                    else
-                    {
-                        TooltipLine line = new TooltipLine(Mod, "PrefixAutomated", Language.GetTextValue("Mods.Polarities.ItemTooltip.ManualPrefix"))
-                        {
-                            IsModifier = true,
-                            IsModifierBad = true
-                        };
-                        tooltips.Insert(i, line);
-                        i++;
+                        break;
                     }
                 }
-            }
 
-            if (flawless)
+                if (!item.social && item.prefix > 0)
+                {
+                    if (Main.tooltipPrefixComparisonItem != null && item.autoReuse != Main.tooltipPrefixComparisonItem.autoReuse) //TODO: This doesn't seem to work?
+                    {
+                        if (item.autoReuse)
+                        {
+                            TooltipLine line = new TooltipLine(Mod, "PrefixAutomated", Language.GetTextValue("Mods.Polarities.ItemTooltip.AutomaticPrefix"))
+                            {
+                                IsModifier = true
+                            };
+                            tooltips.Insert(i, line);
+                            i++;
+                        }
+                        else
+                        {
+                            TooltipLine line = new TooltipLine(Mod, "PrefixAutomated", Language.GetTextValue("Mods.Polarities.ItemTooltip.ManualPrefix"))
+                            {
+                                IsModifier = true,
+                                IsModifierBad = true
+                            };
+                            tooltips.Insert(i, line);
+                            i++;
+                        }
+                    }
+                }
+
+                if (IsFlawless.Contains(item.type))
+                {
+                    tooltips.Insert(i, new TooltipLine(Mod, "Flawless", Language.GetTextValue("Mods.Polarities.ItemTooltip.TooltipFlawless")));
+                    i++;
+                }
+            }
+            catch
             {
-                tooltips.Insert(i, new TooltipLine(Mod, "Flawless", Language.GetTextValue("Mods.Polarities.ItemTooltip.TooltipFlawless")));
-                i++;
             }
         }
 

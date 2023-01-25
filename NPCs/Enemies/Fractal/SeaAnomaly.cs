@@ -1,8 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes.Fractal;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Furniture;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -14,6 +20,7 @@ namespace Polarities.NPCs.Enemies.Fractal
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 1;
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { CustomTexturePath = "Polarities/Textures/Bestiary/SeaAnomaly", Position = new Vector2(0f, 16f), };
         }
 
         public override void SetDefaults()
@@ -42,8 +49,10 @@ namespace Polarities.NPCs.Enemies.Fractal
             NPC.buffImmune[BuffID.Poisoned] = true;
             NPC.buffImmune[BuffID.Venom] = true;
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<SeaAnomalyBanner>();
+            Banner = NPC.type;
+            BannerItem = ItemType<SeaAnomalyBanner>();
+
+            this.SetModBiome<FractalBiome, FractalOceanBiome>();
 
             NPC.GetGlobalNPC<PolaritiesNPC>().usesProjectileHitCooldowns = true;
             NPC.GetGlobalNPC<PolaritiesNPC>().projectileHitCooldownTime = 10;
@@ -201,20 +210,24 @@ namespace Polarities.NPCs.Enemies.Fractal
             return true;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //if (Main.rand.NextBool(2))
-            //{
-            //    Item.NewItem(NPC.getRect(), ItemType<Tiles.Furniture.Stromatolight>());
-            //}
-            //if (Main.rand.NextBool(2))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<FractalResidue>());
-            //}
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Stromatolight>(), chanceDenominator: 2));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>(), chanceDenominator: 2));
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            if (NPC.IsABestiaryIconDummy)
+                return false;
             //draw the thing
             Texture2D texture = TextureAssets.Npc[NPC.type].Value;
             for (int i = segmentPositions.Length - 1; i > 0; i--)
@@ -222,8 +235,8 @@ namespace Polarities.NPCs.Enemies.Fractal
                 Vector2 drawPosition = (segmentPositions[i] + segmentPositions[i - 1]) / 2;
                 float rotation = (segmentPositions[i - 1] - segmentPositions[i]).ToRotation() + MathHelper.PiOver2;
 
-                spriteBatch.Draw(texture, drawPosition - Main.screenPosition, new Rectangle(0, (i - 1) * 2, 38, 4), Lighting.GetColor((int)(drawPosition.X / 16), (int)(drawPosition.Y / 16)), rotation, new Vector2(19, 2), new Vector2(1, 1), SpriteEffects.None, 0f);
-                spriteBatch.Draw(ModContent.Request<Texture2D>($"{Texture}_Mask").Value, drawPosition - Main.screenPosition, new Rectangle(0, (i - 1) * 2, 38, 4), Color.White, rotation, new Vector2(19, 2), new Vector2(1, 1), SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, drawPosition - screenPos, new Rectangle(0, (i - 1) * 2, 38, 4), Lighting.GetColor((int)(drawPosition.X / 16), (int)(drawPosition.Y / 16)), rotation, new Vector2(19, 2), new Vector2(1, 1), SpriteEffects.None, 0f);
+                spriteBatch.Draw(ModContent.Request<Texture2D>($"{Texture}_Mask").Value, drawPosition - screenPos, new Rectangle(0, (i - 1) * 2, 38, 4), Color.White, rotation, new Vector2(19, 2), new Vector2(1, 1), SpriteEffects.None, 0f);
             }
 
             return false;
@@ -236,7 +249,7 @@ namespace Polarities.NPCs.Enemies.Fractal
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sea Anomaly");
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, };
         }
 
         public override void SetDefaults()

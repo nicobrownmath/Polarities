@@ -13,7 +13,7 @@ namespace Polarities.Items.Placeable.Blocks
 		{
 			ItemID.Sets.SortingPriorityMaterials[Item.type] = 58;
 
-			this.SetResearch(100);
+			SacrificeTotal = (100);
 		}
 
 		public override void SetDefaults()
@@ -23,7 +23,7 @@ namespace Polarities.Items.Placeable.Blocks
 			Item.useAnimation = 15;
 			Item.useTime = 10;
 			Item.autoReuse = true;
-			Item.maxStack = 999;
+			Item.maxStack = 9999;
 			Item.consumable = true;
 			Item.createTile = TileType<MantellarOreTile>();
 			Item.rare = ItemRarityID.Yellow;

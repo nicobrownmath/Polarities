@@ -30,6 +30,17 @@ v0.11 Beta 2 Changelog
   Fixed the journey mode research cost of salt crates, torches, the laser lens, salt knives, mantellar ore, and life grasper
   Fixed the head splitter being unable to recieve melee prefixes
 
+Nalyd To-Do:
+    Rift Denizen Drops and Bestiary
+    Fractal Enemy Gores, Drops, Debuffs, and Bestiary
+    Fractal Furniture
+    Fractal Chest Loot
+    Fractal Biome
+    ^ Selfsimilar Sentinel
+    ^ Fractal Enemy Spawns
+    ^ Selfsimilar Sentinel/Bar Loot
+    Misc Fractal Stuff (Fishing, other missed content)
+
 Fixes to do:
   Worm guns break with manual
 

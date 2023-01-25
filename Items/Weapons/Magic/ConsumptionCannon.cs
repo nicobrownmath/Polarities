@@ -18,7 +18,8 @@ namespace Polarities.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            this.SetResearch(1);
+            SacrificeTotal = (1);
+            PolaritiesItem.IsFlawless.Add(Type);
         }
 
         public override void SetDefaults()
@@ -39,8 +40,6 @@ namespace Polarities.Items.Weapons.Magic
             Item.shootSpeed = 12f;
 
             Item.value = Item.sellPrice(gold: 2);
-            Item.rare = RarityType<EaterOfWorldsFlawlessRarity>();
-            Item.GetGlobalItem<PolaritiesItem>().flawless = true;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

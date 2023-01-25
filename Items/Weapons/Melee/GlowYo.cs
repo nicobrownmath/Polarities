@@ -17,7 +17,7 @@ namespace Polarities.Items.Weapons.Melee
 			ItemID.Sets.GamepadExtraRange[Item.type] = 15;
 			ItemID.Sets.GamepadSmartQuickReach[Item.type] = true;
 
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 		}
 
 		public override void SetDefaults()

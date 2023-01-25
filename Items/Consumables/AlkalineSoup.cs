@@ -16,7 +16,7 @@ namespace Polarities.Items.Consumables
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(10);
+			SacrificeTotal = (10);
 
 			DrawAnimationVertical animation = new DrawAnimationVertical(1, 3);
 			animation.NotActuallyAnimating = true;
@@ -30,7 +30,7 @@ namespace Polarities.Items.Consumables
 		{
 			Item.width = 36;
 			Item.height = 24;
-			Item.maxStack = 999;
+			Item.maxStack = 9999;
 			Item.value = Item.sellPrice(silver: 5);
 			Item.rare = ItemRarityID.Blue;
 			Item.consumable = true;

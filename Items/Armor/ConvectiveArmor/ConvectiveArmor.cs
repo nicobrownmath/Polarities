@@ -25,7 +25,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 
 			//registers a body glowmask color
 			ArmorMasks.bodyIndexToBodyMaskColor.Add(EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body), this);
@@ -83,7 +83,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 
 			//registers a head glowmask
 			ArmorMasks.legIndexToArmorDraw.TryAdd(EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs), this);
@@ -181,7 +181,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 
 			int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 			ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;
@@ -354,7 +354,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 
 			int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 			ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;
@@ -537,7 +537,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 
 			int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 			ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;
@@ -745,7 +745,7 @@ namespace Polarities.Items.Armor.ConvectiveArmor
 
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 
 			int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 			ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;

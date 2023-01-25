@@ -1,11 +1,17 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes.Fractal;
+using Polarities.Items.Materials;
+using Polarities.Items.Pets;
+using Polarities.Items.Placeable.Banners;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -20,6 +26,7 @@ namespace Polarities.NPCs.Enemies.Fractal
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 8;
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { CustomTexturePath = "Polarities/Textures/Bestiary/SparkCrawler", };
         }
 
         public override void SetDefaults()
@@ -48,8 +55,10 @@ namespace Polarities.NPCs.Enemies.Fractal
             NPC.buffImmune[BuffID.Poisoned] = true;
             NPC.buffImmune[BuffID.Venom] = true;
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<SparkCrawlerBanner>();
+            Banner = NPC.type;
+            BannerItem = ItemType<SparkCrawlerBanner>();
+
+            this.SetModBiome<FractalBiome, FractalUGBiome>();
         }
 
         public override bool PreAI()
@@ -181,21 +190,26 @@ namespace Polarities.NPCs.Enemies.Fractal
             //}
             return 0f;
         }
-        public override void OnKill()
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //Item.NewItem(NPC.Hitbox, ItemType<Items.Placeable.Lightslate>(), Main.rand.Next(1, 2));
-            //if (Main.rand.NextBool(50))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<SparkOfSimilarity>());
-            //}
-            //if (Main.rand.NextBool(4))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<FractalResidue>());
-            //}
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Lightslate>(), minimumDropped: 1, maximumDropped: 2));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SparkOfSimilarity>(), chanceDenominator: 50));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>(), chanceDenominator: 4));
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            if (NPC.IsABestiaryIconDummy)
+                return false;
             for (int i = 0; i < 3; i++)
             {
                 Texture2D legTexture = ModContent.Request<Texture2D>($"{Texture}Leg").Value;

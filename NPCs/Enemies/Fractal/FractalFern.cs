@@ -1,7 +1,13 @@
 using Microsoft.Xna.Framework;
+using Polarities.Biomes.Fractal;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Banners;
 using Polarities.Items.Placeable.Blocks.Fractal;
+using Polarities.Items.Weapons.Summon.Minions;
 using System;
 using Terraria;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -30,8 +36,10 @@ namespace Polarities.NPCs.Enemies.Fractal
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.value = Item.buyPrice(0, 0, 5, 0);
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<FractalFernBanner>();
+            Banner = NPC.type;
+            BannerItem = ItemType<FractalFernBanner>();
+
+            this.SetModBiome<FractalBiome>();
         }
 
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
@@ -168,17 +176,19 @@ namespace Polarities.NPCs.Enemies.Fractal
             return 0f;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //Item.NewItem(NPC.Hitbox, ItemType<FractalStrands>());
-            //if (Main.rand.NextBool(40))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<BarnsleyStaff>());
-            //}
-            //if (Main.rand.NextBool(4))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<FractalResidue>());
-            //}
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalStrands>(), minimumDropped: 1, maximumDropped: 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>(), chanceDenominator: 4));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BarnsleyStaff>(), chanceDenominator: 40));
         }
     }
 

@@ -13,7 +13,7 @@ namespace Polarities.Items.Placeable
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(25);
+			SacrificeTotal = (25);
 		}
 
 		public override void SetDefaults()

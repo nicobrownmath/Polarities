@@ -16,7 +16,7 @@ namespace Polarities.Items.Hooks
         {
             DisplayName.SetDefault("Phagefoot Hook");
 
-            this.SetResearch(1);
+            SacrificeTotal = (1);
         }
 
         public override void SetDefaults()

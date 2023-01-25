@@ -15,7 +15,7 @@ namespace Polarities.Items
 		{
 			ItemID.Sets.SortingPriorityBossSpawns[Type] = 12;
 
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 		}
 
 		public override void SetDefaults()

@@ -1,8 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes.Fractal;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Banners;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -33,8 +38,10 @@ namespace Polarities.NPCs.Enemies.Fractal
             NPC.noTileCollide = true;
             NPC.noGravity = true;
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<TurbulenceSparkBanner>();
+            Banner = NPC.type;
+            BannerItem = ItemType<TurbulenceSparkBanner>();
+
+            this.SetModBiome<FractalBiome, FractalOceanBiome>();
         }
 
         public override void AI()
@@ -102,7 +109,7 @@ namespace Polarities.NPCs.Enemies.Fractal
         {
             Color color = Color.White;
             Vector2 drawOrigin = new Vector2(TextureAssets.Npc[NPC.type].Value.Width * 0.5f, NPC.height * 0.5f);
-            Vector2 drawPos = NPC.Center - Main.screenPosition;
+            Vector2 drawPos = NPC.Center - screenPos;
 
             spriteBatch.Draw(TextureAssets.Npc[NPC.type].Value, drawPos, NPC.frame, color, NPC.rotation, drawOrigin, NPC.scale, SpriteEffects.None, 0f);
             spriteBatch.Draw(ModContent.Request<Texture2D>($"{Texture}_Mask").Value, drawPos, NPC.frame, color, NPC.rotation, drawOrigin, NPC.scale, SpriteEffects.None, 0f);
@@ -119,9 +126,17 @@ namespace Polarities.NPCs.Enemies.Fractal
             return 0f;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //Item.NewItem(NPC.Hitbox, ItemType<FractalResidue>());
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>()));
         }
     }
 }

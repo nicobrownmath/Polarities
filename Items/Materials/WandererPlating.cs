@@ -15,14 +15,14 @@ namespace Polarities.Items.Materials
     {
         public override void SetStaticDefaults()
         {
-            this.SetResearch(5);
+            SacrificeTotal = (5);
         }
 
         public override void SetDefaults()
         {
             Item.width = 24;
             Item.height = 28;
-            Item.maxStack = 999;
+            Item.maxStack = 9999;
             Item.value = Item.sellPrice(silver: 50);
             Item.rare = ItemRarityID.Yellow;
         }

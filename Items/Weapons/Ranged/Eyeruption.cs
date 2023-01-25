@@ -16,7 +16,8 @@ namespace Polarities.Items.Weapons.Ranged
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
+			PolaritiesItem.IsFlawless.Add(Type);
 		}
 
 		public override void SetDefaults()
@@ -40,7 +41,6 @@ namespace Polarities.Items.Weapons.Ranged
 
 			Item.value = Item.sellPrice(gold: 1, silver: 50);
 			Item.rare = RarityType<EyeOfCthulhuFlawlessRarity>();
-			Item.GetGlobalItem<PolaritiesItem>().flawless = true;
 		}
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

@@ -23,7 +23,7 @@ namespace Polarities.Items.Weapons.Summon.Minions
 			DisplayName.SetDefault("Salt Killifish Staff");
 			Tooltip.SetDefault("Summons a salt killifish to protect you");
 
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 		}
 
 		public override void SetDefaults()

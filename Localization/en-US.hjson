@@ -5,6 +5,7 @@
 			"TreasureBag": "Treasure Bag",
 
 			//melee weapons
+			"Stardance": "Stardance",
 			"SaltKnife": "Salt Knife",
 			"CavernCarver": "Cavern Carver",
 			"GlowYo": "Glow-Yo",
@@ -128,6 +129,7 @@
 			"Flopper": "Flopper",
 
 			//summon weapons
+			"BarnsleyStaff": "Barnsley Staff",
 			"ZombatStaff": "Zombat Staff",
 			"WingedStarStaff": "Winged Star Staff",
 			"BroodStaff": "Brood Staff",
@@ -252,6 +254,7 @@
 			"StormcloudMask": "Stormcloud Mask",
 
 			//vanity
+			"AmphisnekHat": "Amphisnek Hat",
 			"SnekHat": "Snek Hat",
 			"SeaSnekHat": "Sea Snek Hat",
 			"StarConstructMask": "Star Construct Mask",
@@ -368,6 +371,7 @@
 			"GemflyItem": " Gemfly",
 
 			//miscellaneous
+			"FractalResidue": "Fractal Residue",
 			"Fractus": "Fractus",
 			"FractalDust": "Fractal Dust",
 			"FractalPlatform": "Fractal Platform",
@@ -421,6 +425,7 @@
 			"ManualPrefix": "-Autoswing",
 
 			//melee weapons
+			"Stardance": "Fires a line of homing star lances",
 			"SaltKnife": "Stacks up to 5",
 			"CavernCarver": "Throws blades which slash at the cursor",
 			"GlowYo": "Drips caustic fluids on enemies",
@@ -528,6 +533,7 @@
 			"Flopper": "Shoots fish",
 
 			//summon weapons
+			"BarnsleyStaff": "Summons a fractal fern",
 			"ZombatStaff": "Summons baby zombats to protect you",
 			"WingedStarStaff": "Summons a winged star to protect you",
 			"BroodStaff": "Summons nestlings",
@@ -691,6 +697,7 @@
 			"StormCloudfishPetItem": "Summons a storm fry\n'A tiny start for such a large creature'",
 
 			//miscellaneous
+			"FractalResidue": "'Covered in winding contours'",
 			"SaltCrystals": "'Yum'",
 			"Rattle": "Makes a noise when you shake it",
 			"VenomGland": "'Gross'",
@@ -978,6 +985,28 @@
 			"BabyWanderer": "Baby Wanderer",
 		},
 		"Bestiary": {
+			"FractalPoint": "A curious little friend. Direct contact may result in complete obliteration, so tread with caution. Its nature as a fractal entity becomes frighteningly apparent when observing its reproductive capability...",
+			"FractalSpirit": "An apex predator of the Fractal Dimension, it’s overwhelming speed and relentless assault is a good motivator for keeping a low profile in its native habitat.",
+			"MegaMenger": "A mechanical organism seemingly bound to the four cardinal directions. Its surface area appears to be infinite, and within this infinity lies an immense amount of energy. It relentlessly hunts weakened prey with its predictable but fatal methods of locomotion, invariably sapping its victim of all energy.",
+			"Amphisbaena": "Perhaps the most familiar life form amongst the overwhelmingly alien biosphere of the Fractal Dimension. Double the heads means double the danger however, meaning it offers little comfort to weary adventurers.",
+			"SparkCrawler": "One of the many uncanny creatures inhabiting the Fractal Dimension, this one prefers locomotion by latching onto surrounding strands with its four extendable hooks.",
+			"FractalFern": "It’s debatable whether this entity categorizes as an animal or a plant. It’s firmly rooted in place, yet spontaneously warps to different locations, and it seems to possess some form of special awareness.",
+			"Euryopter": "A hovering arthropod-like lifeform, it is reminiscent of long extinct creatures. On close inspection, its claws appear to branch endlessly down in scale...",
+			"Sparkfly": "A surprisingly mundane bug found high in the fractal skies, its abdomen contains a mote of dendritic energy that blinks in strange sequences to communicate. Just don't look too closely...",
+			"FractusSpore": "When a fractus reaches maturity, it begins to produce these strange hopping creatures, which rove the wastes looking for a spot to lay root and grow. Plant, animal, or something more? Another mystery of the fractals...",
+			"FrondBud": "A juvenile Fractal Frond that has not yet developed any offensive capabilities, its instinctual teleportation nonetheless allows it to avoid predators and reach maturity.",
+			"Instability": "A localized tear in the space-time continuum, found at the upper edges of the world. Harmless on its own, but who knows what lurks within?",
+			"SelfsimilarSentinel": "Even the metal in the Fractal Dimension has rudimentary sentience, assembling into this machine-like form to defend itself from assault not of its own kind. A dizzying array of fractal attacks awaits any would-be miners...",
+			"RiftDenizen": "This terrifying alien creature emerged from the rift between worlds! It hovers out of reach, opening more portals to launch attacks through; target these to fight back!",
+			"ChaosCrawler": "The ruler of the fractal wastes' caverns, an alien arthropod that uses its infinite fractal tail to lash and constrict prey. It only targets weakened adventurers, so only fools or worthy challengers may encounter it.",
+			"Orthoconic": "This massive mollusc is the apex predator of the fractal depths, attracted to weakened travellers for easy prey. Look out for its repeating shell!",
+			"Shockflake": "As if dendritic energy wasn't perilous enough, now it's come alive! It haphazardly whirls through the fractal skies, launching electrical bolts to defend its territory.",
+			"TurbulenceSpark": "A chaotic well of fractal energy, barely keeping itself stable with the water's pressure. Any disruption will send it careening towards the source, disrupting logical momentum with its alien forces.",
+			"SeaAnomaly": "Don't let its terrestrial appearance fool you, this fractal creature is as deadly as any other, launching rays of energy to fry unlucky divers.",
+			"BisectorHead": "Creatures found deep in the fractal wastes, they tunnel at high speed through the porous caves and cleave prey in two at the atomic level with their infinitely sharp exoskeletons.",
+			"DustSprite": "Animate particulates inhabiting the barren fractal deserts, they attack by swarming targets and overwhelming their senses. May entitle you to financial compensation if inhaled.",
+			"FractalSlimeLarge": "A slime in name only, this fractal ooze ricochets freely around the alien landscape and splits when attacked. Watch out for the perfect corner bounce!",
+
 			"Rattler": "This small, venomous snake prefers dry climates. It loudly rattles to ward off any predators, but it’s just too cute to avoid!",
 			"Zombat": "There are bats, there are zombies. Sometimes, there are zombie bats. This feeble creature does its best to perform its batty duties in spite of its zombification.",
 			"BloodBat": "Even the bats are riled up from the horrible energy of the Blood Moon! Upon being exposed to its red light, cave dwelling bats become permanently warped.",
@@ -1062,6 +1091,7 @@
 			"SpiritBottleDebuff": "Spirit Bite",
 
 			//minion buffs
+			"BarnsleyFernBuff": "Barnsley Fern",
 			"ZombatMinionBuff": "Baby Zombat",
 			"WingedStarMinionBuff": "Winged Star",
 			"GlobusCrucigerMinionBuff": "Hallowed Statue",
@@ -1098,6 +1128,7 @@
 			"SpiritBottleDebuff": "You have been bitten",
 
 			//minion buffs
+			"BarnsleyFernBuff": "The fractal ferns will fight for you",
 			"ZombatMinionBuff": "The baby zombats will fight for you",
 			"WingedStarMinionBuff": "The winged star will fight for you",
 			"GlobusCrucigerMinionBuff": "A hallowed statue protects you",
@@ -1146,6 +1177,96 @@
 			"LunaticCultistBookBuff": "Class damage is increased when near the celestial pillar corresponding to that class",
 			"MoonLordBook": "Your attacks have lifesteal"
 		},
+
+	# Accessories
+		ItemName.ChaosFlower: Chaos Flower
+		ItemTooltip.ChaosFlower: Channeled summoned weapons summon an addition minion
+
+	# Ranged weapons
+		ItemName.GliderGun: Glider Gun
+		ItemTooltip.GliderGun: Shoots gliders which redirect themselves toward enemies struck by other gliders
+
+	# Magic weapons
+		ItemName.ConeGun: Cone Gun
+		ItemTooltip.ConeGun: 
+			'''
+			Consumes all your mana to shoot a massive high-damage cone
+			Does more damage the more mana you use
+			Not affected by any form of mana cost reduction
+			Damage is decreased significantly if you have mana sickness
+			'''
+
+	# Summon Weapons
+
+	## Orbs
+		ItemName.MandelbrotOrb: Brot Orb
+		ItemTooltip.MandelbrotOrb: 
+			'''
+			{$Mods.Polarities.ItemTooltip.OrbBase}
+			Summons an antibrot minion
+			'Palindrome!'
+			'''
+
+	# Consumables
+		ItemName.TwistedRecallPotion: Twisted Recall Potion
+		ItemTooltip.TwistedRecallPotion: 
+			'''
+			Teleports you to the fractal dimension's spawnpoint
+			Removes fractalization from the player, causing fractal enemies to disappear
+			'''
+
+	# Pets
+		ItemName.MiniMengerItem: Porous Cuboid
+		ItemTooltip.MiniMengerItem: Summons a mini menger
+		BuffName.MiniMengerBuff: Mini Menger
+		BuffDescription.MiniMengerBuff: A mini menger is following you
+		ItemName.SparkOfSimilarity: Spark of Similarity
+		ItemTooltip.SparkOfSimilarity: Summons a baby Spark Crawler
+		BuffName.BabySparkCrawlerBuff: Baby Spark Crawler
+		BuffDescription.BabySparkCrawlerBuff: A baby spark crawler is following you
+
+	# Tiles
+		ItemName.FractalWorkbench: Fractal Workbench
+		ItemName.FractalTorch: Fractal Torch
+		ItemName.FractalTable: Fractal Table
+		ItemName.FractalSofa: Fractal Sofa
+		ItemName.FractalSink: Fractal Sink
+		ItemName.FractalPiano: Fractal Piano
+		ItemName.FractalLantern: Fractal Lantern
+		ItemName.FractalLamp: Fractal Lamp
+		ItemName.FractalDresser: Fractal Dresser
+		ItemName.FractalDoor: Fractal Door
+		ItemName.FractalClock: Fractal Clock
+		ItemName.FractalChest: Fractal Chest
+		ItemName.FractalChandelier: Fractal Chandelier
+		ItemName.FractalCandle: Fractal Candle
+		ItemName.FractalCandelabra: Fractal Candelabra
+		ItemName.FractalBookcase: Fractal Bookcase
+		ItemName.FractalBed: Fractal Bed
+		ItemName.FractalBathtub: Fractal Bathtub
+		ItemName.WarpedLandscape: Warped Landscape
+		ItemTooltip.WarpedLandscape: 'S. Lunin'
+		ItemName.FractalAltar: Fractal Altar
+		ItemTooltip.FractalAltar: Allows entry into the Fractal Dimension
+		MapObject.FractalAltar: Fractal Altar
+		ItemName.FractalBiomeChest: Fractal Dimension Chest
+		ItemName.FractalAssembler: Fractal Assembler
+		MapObject.FractalAssembler: Fractal Assembler
+		ItemTooltip.FractalAssembler: Used to craft items from fractal materials
+		ItemName.FractalLaserTrap: Fractal Laser Trap
+		ItemName.FractalEnergyTrap: Fractal Energy Trap
+		ProjectileName.FractalTrapEnergy: Fractal Energy Trap
+		ProjectileName.FractalTrapLaser: Fractal Laser Trap
+		ItemName.Lightslate: Lightslate
+		ItemName.Stromatolight: Stromatolight
+		MapObject.Stromatolight: Stromatolight
+
+	# Misc
+		ItemName.FractalKey: Strand Key
+		ItemTooltip.FractalKey: Unlocks one locked fractal chest or lock box
+		ItemName.FractalBiomeKey: Fractal Dimension Key
+		ItemTooltip.FractalBiomeKey: Unlocks a Fractal Dimension Chest in the dungeon
+
 		"DropConditions": {
 			"Flawless": "Drops when defeated flawlessly",
 			"SunPixieSummonItem": "Drops at the end of the Rapture",
@@ -1285,6 +1406,11 @@
 			"LegendaryAtlatlPrefix": "Legendary"
 		},
 		"BiomeName": {
+			"FractalSkyBiome": "Dendritic Skies",
+			"FractalOceanBiome": "Fractal Ocean",
+			"FractalWastesBiome": "Fractal Wastes",
+			"FractalUGBiome": "Fractal Caves",
+			"FractalBiome": "Fractal Dimension",
 			"SaltCave": "Salt",
 			"LimestoneCave": "Limestone",
 			"HallowInvasion": "The Rapture",

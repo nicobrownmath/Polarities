@@ -30,7 +30,7 @@ namespace Polarities.Items.Accessories.Wings
 
         public override void SetStaticDefaults()
         {
-            this.SetResearch(1);
+            SacrificeTotal = (1);
 
             //registers a wings glowmask
             ArmorMasks.wingIndexToArmorDraw.TryAdd(EquipLoader.GetEquipSlot(Mod, Name, EquipType.Wings), this);

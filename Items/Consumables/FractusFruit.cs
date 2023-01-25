@@ -10,7 +10,7 @@ namespace Polarities.Items.Consumables
         {
             Item.width = 28;
             Item.height = 26;
-            Item.maxStack = 999;
+            Item.maxStack = 9999;
             Item.value = Item.sellPrice(silver: 5);
             Item.rare = ItemRarityID.White;
             Item.consumable = true;
@@ -41,7 +41,7 @@ namespace Polarities.Items.Consumables
         {
             Item.width = 24;
             Item.height = 30;
-            Item.maxStack = 999;
+            Item.maxStack = 9999;
             Item.value = Item.sellPrice(silver: 5);
             Item.rare = ItemRarityID.Blue;
             Item.consumable = true;

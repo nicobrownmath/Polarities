@@ -1,10 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes.Fractal;
+using Polarities.Items;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks.Fractal;
+using Polarities.Items.Weapons.Magic;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -52,8 +59,10 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
             NPC.buffImmune[BuffID.Poisoned] = true;
             NPC.buffImmune[BuffID.Venom] = true;
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<OrthoconicBanner>();
+            Banner = NPC.type;
+            BannerItem = ItemType<OrthoconicBanner>();
+
+            this.SetModBiome<FractalBiome, FractalOceanBiome>();
         }
 
         public override bool? CanBeHitByItem(Player player, Item item)
@@ -360,26 +369,29 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
             return true;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //Item.NewItem(NPC.Hitbox, ItemType<Items.Placeable.FractalOre>(), Main.rand.Next(1, 3));
-            //if (Main.rand.NextBool(3))
-            //{
-            //    Item.NewItem(NPC.getRect(), ItemType<Items.FractalKey>());
-            //}
-            //if (Main.rand.NextBool(20))
-            //{
-            //    Item.NewItem(NPC.getRect(), ItemType<Items.Weapons.ConeGun>());
-            //}
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalOre>(), minimumDropped: 1, maximumDropped: 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalKey>(), chanceDenominator: 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<ConeGun>(), chanceDenominator: 20));
         }
     }
 
     public class OrthoconicHitbox : ModNPC
     {
-        public override string Texture => Polarities.BlankTexture;
+        public override string Texture => Polarities.CallShootProjectile;
 
         public override void SetStaticDefaults()
         {
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, };
         }
 
         public override void SetDefaults()

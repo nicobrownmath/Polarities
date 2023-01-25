@@ -1,9 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes.Fractal;
+using Polarities.Items;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks.Fractal;
+using Polarities.Items.Weapons.Summon.Orbs;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -34,6 +41,7 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
                     BuffID.Venom,
                 }
             };
+            NPCID.Sets.NPCBestiaryDrawOffset[Type] = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Position = new Vector2(0f, -40f), PortraitPositionYOverride = -24f, };
 
             /*
 			Texture2D texture = new Texture2D(Main.spriteBatch.GraphicsDevice, 166, 166, false, SurfaceFormat.Color);
@@ -133,8 +141,10 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
             NPC.DeathSound = SoundID.NPCDeath39;
             NPC.rarity = 1;
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<FractalSpiritBanner>();
+            this.SetModBiome<FractalBiome>();
+
+            Banner = NPC.type;
+            BannerItem = ItemType<FractalSpiritBanner>();
         }
 
         public override void AI()
@@ -271,17 +281,19 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
             return NPC.ai[0] == 0 && NPC.ai[1] <= 90;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //Item.NewItem(NPC.Hitbox, ItemType<DendriticEnergy>(), Main.rand.Next(4, 6));
-            //if (Main.rand.NextBool(3))
-            //{
-            //    Item.NewItem(NPC.getRect(), ItemType<Items.FractalKey>());
-            //}
-            //if (Main.rand.NextBool(20))
-            //{
-            //    Item.NewItem(NPC.getRect(), ItemType<Items.Weapons.MandelbrotOrb>());
-            //}
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DendriticEnergy>(), minimumDropped: 4, maximumDropped: 6));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalKey>(), chanceDenominator: 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MandelbrotOrb>(), chanceDenominator: 20));
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -305,7 +317,7 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
 			}*/
 
             Vector2 drawOrigin = new Vector2(82, 61); //new Vector2(Main.npcTexture[npc.type].Width * 0.5f, npc.height * 0.5f);
-            Vector2 drawPos = NPC.Center - Main.screenPosition;
+            Vector2 drawPos = NPC.Center - screenPos;
             Color color = Color.White;
             if (NPC.spriteDirection == -1)
             {

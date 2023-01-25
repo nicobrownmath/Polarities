@@ -14,7 +14,7 @@ namespace Polarities.Items.Placeable.Furniture
 
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(200);
+			SacrificeTotal = (200);
 		}
 
 		public override void SetDefaults()

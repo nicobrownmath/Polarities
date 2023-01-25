@@ -20,7 +20,8 @@ namespace Polarities.Items.Weapons.Magic
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
+			PolaritiesItem.IsFlawless.Add(Type);
 		}
 
 		public override void SetDefaults()
@@ -44,7 +45,6 @@ namespace Polarities.Items.Weapons.Magic
 
 			Item.value = Item.sellPrice(gold: 6, silver: 50);
 			Item.rare = RarityType<SunPixieFlawlessRarity>();
-			Item.GetGlobalItem<PolaritiesItem>().flawless = true;
 		}
 
 		private int time;

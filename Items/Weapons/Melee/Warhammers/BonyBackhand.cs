@@ -25,6 +25,12 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
         public override float SwingTime => 20f;
         public override float SwingTilt => 0.1f;
 
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+            PolaritiesItem.IsFlawless.Add(Type);
+        }
+
         public override void SetDefaults()
         {
             Item.SetWeaponValues(50, 18, 0);
@@ -40,7 +46,6 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 
             Item.value = Item.sellPrice(gold: 4);
             Item.rare = RarityType<SkeletronFlawlessRarity>();
-            Item.GetGlobalItem<PolaritiesItem>().flawless = true;
         }
 
         public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)

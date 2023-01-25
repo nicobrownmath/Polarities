@@ -1,9 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes.Fractal;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Banners;
 using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -38,8 +43,10 @@ namespace Polarities.NPCs.Enemies.Fractal
             NPC.noTileCollide = true;
             NPC.noGravity = true;
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<ShockflakeBanner>();
+            Banner = NPC.type;
+            BannerItem = ItemType<ShockflakeBanner>();
+
+            this.SetModBiome<FractalBiome, FractalSkyBiome>();
         }
 
         public override void AI()
@@ -210,23 +217,28 @@ namespace Polarities.NPCs.Enemies.Fractal
             return 0f;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //if (Main.rand.NextBool(4))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<FractalResidue>());
-            //}
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalResidue>(), chanceDenominator: 2));
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Vector2 drawOrigin = new Vector2(TextureAssets.Npc[NPC.type].Value.Width * 0.5f, TextureAssets.Npc[NPC.type].Value.Height * 0.5f);
-            Vector2 drawPos = NPC.Center - Main.screenPosition;
+            Vector2 drawPos = NPC.Center - screenPos;
             Color color = Color.White;
 
             for (int k = 0; k < NPC.oldPos.Length; k++)
             {
-                drawPos = NPC.Center - NPC.position + NPC.oldPos[k] - Main.screenPosition;
+                drawPos = NPC.Center - NPC.position + NPC.oldPos[k] - screenPos;
                 color = Color.White * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
                 if (NPC.spriteDirection == -1)
                 {
@@ -238,7 +250,7 @@ namespace Polarities.NPCs.Enemies.Fractal
                 }
             }
 
-            drawPos = NPC.Center - Main.screenPosition;
+            drawPos = NPC.Center - screenPos;
             color = Color.White;
             if (NPC.spriteDirection == -1)
             {

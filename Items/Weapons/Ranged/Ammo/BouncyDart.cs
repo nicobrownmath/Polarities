@@ -13,7 +13,7 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(99);
+			SacrificeTotal = (99);
 		}
 
 		public override void SetDefaults()
@@ -24,7 +24,7 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
 			Item.width = 10;
 			Item.height = 22;
 
-			Item.maxStack = 999;
+			Item.maxStack = 9999;
 			Item.consumable = true;
 
 			Item.shoot = ProjectileType<BouncyDartProjectile>();

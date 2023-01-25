@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "raejG/n/d9gba+M/7TFDXKrR8i5kGwFoipzsQDbUvk+RYDwOiw+Y9fJ089IkVx7D4r4qkySjNQc8WngUJblTMA==",
+  "dgSpecHash": "7JFo1K9P3J4RAsCIn5z2zudKOAgAqjog2dr/6To2JtYCb489L5PiVXdmRE80JTL8gIBO4Ht/eI6gTxa2g9fsFw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\nicob\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\Polarities\\Polarities.csproj",
+  "projectFilePath": "C:\\Users\\nalyddd\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\Polarities\\Polarities.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\nicob\\.nuget\\packages\\tmodloader.codeassist\\0.1.5\\tmodloader.codeassist.0.1.5.nupkg.sha512"
+    "C:\\Users\\nalyddd\\.nuget\\packages\\tmodloader.codeassist\\0.1.5\\tmodloader.codeassist.0.1.5.nupkg.sha512"
   ],
   "logs": []
 }

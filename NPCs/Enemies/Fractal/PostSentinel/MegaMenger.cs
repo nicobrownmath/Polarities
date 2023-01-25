@@ -1,9 +1,16 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes.Fractal;
+using Polarities.Items;
+using Polarities.Items.Pets;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks.Fractal;
 using System;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -47,8 +54,10 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
             NPC.buffImmune[BuffID.Poisoned] = true;
             NPC.buffImmune[BuffID.Venom] = true;
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<MegaMengerBanner>();
+            Banner = NPC.type;
+            BannerItem = ItemType<MegaMengerBanner>();
+
+            this.SetModBiome<FractalBiome, FractalUGBiome>();
         }
 
         public override bool PreAI()
@@ -331,21 +340,20 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
             return 0f;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //Item.NewItem(NPC.Hitbox, ItemType<Items.Placeable.FractalOre>(), Main.rand.Next(1, 3));
-            //if (Main.rand.NextBool(20))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<InfinitySponge>());
-            //}
-            //if (Main.rand.NextBool(20))
-            //{
-            //    Item.NewItem(NPC.Hitbox, ItemType<MiniMengerItem>());
-            //}
-            //if (Main.rand.NextBool(3))
-            //{
-            //    Item.NewItem(NPC.getRect(), ItemType<Items.FractalKey>());
-            //}
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalOre>(), minimumDropped: 1, maximumDropped: 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FractalKey>(), chanceDenominator: 3));
+            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<InfinitySponge>(), chanceDenominator: 20));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MiniMengerItem>(), chanceDenominator: 20));
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

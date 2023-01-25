@@ -20,7 +20,8 @@ namespace Polarities.Items.Weapons.Ranged
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
+			PolaritiesItem.IsFlawless.Add(Type);
 		}
 
 		public override void SetDefaults()
@@ -44,7 +45,6 @@ namespace Polarities.Items.Weapons.Ranged
 
 			Item.value = Item.sellPrice(gold: 7);
 			Item.rare = RarityType<EsophageFlawlessRarity>();
-			Item.GetGlobalItem<PolaritiesItem>().flawless = true;
 		}
 
 		int soundTime;

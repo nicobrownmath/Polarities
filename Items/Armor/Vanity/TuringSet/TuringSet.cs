@@ -17,7 +17,7 @@ namespace Polarities.Items.Armor.Vanity.TuringSet
     {
         public override void SetStaticDefaults()
         {
-            this.SetResearch(1);
+            SacrificeTotal = (1);
         }
 
         public override void SetDefaults()
@@ -35,7 +35,7 @@ namespace Polarities.Items.Armor.Vanity.TuringSet
     {
         public override void SetStaticDefaults()
         {
-            this.SetResearch(1);
+            SacrificeTotal = (1);
         }
 
         public override void SetDefaults()
@@ -53,7 +53,7 @@ namespace Polarities.Items.Armor.Vanity.TuringSet
     {
         public override void SetStaticDefaults()
         {
-            this.SetResearch(1);
+            SacrificeTotal = (1);
 
             //registers a legs glowmask
             ArmorMasks.legIndexToArmorDraw.TryAdd(EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs), this);

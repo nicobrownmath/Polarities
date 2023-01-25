@@ -20,8 +20,9 @@ namespace Polarities.Items.Weapons.Melee
     {
         public override void SetStaticDefaults()
         {
-            this.SetResearch(1);
+            SacrificeTotal = (1);
             Main.RegisterItemAnimation(Type, new DrawAnimationVertical(5, 8));
+            PolaritiesItem.IsFlawless.Add(Type);
         }
 
         public override void SetDefaults()
@@ -45,7 +46,6 @@ namespace Polarities.Items.Weapons.Melee
 
             Item.value = Item.sellPrice(gold: 2);
             Item.rare = RarityType<BrainOfCthulhuFlawlessRarity>();
-            Item.GetGlobalItem<PolaritiesItem>().flawless = true;
         }
     }
 

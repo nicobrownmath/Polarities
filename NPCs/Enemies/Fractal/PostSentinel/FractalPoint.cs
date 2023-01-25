@@ -1,21 +1,17 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes.Fractal;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks.Fractal;
+using System;
+using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Tiles;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
 
 namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
 {
@@ -43,8 +39,10 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
             NPC.noTileCollide = true;
             NPC.dontTakeDamage = true;
 
-            //Banner = NPC.type;
-            //BannerItem = ItemType<FractalPointBanner>();
+            this.SetModBiome<FractalBiome>();
+
+            Banner = NPC.type;
+            BannerItem = ItemType<FractalPointBanner>();
         }
 
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
@@ -114,7 +112,7 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
         {
             Color color = Color.White;
             Vector2 drawOrigin = new Vector2(TextureAssets.Npc[NPC.type].Value.Width * 0.5f, NPC.height * 0.5f);
-            Vector2 drawPos = NPC.position - Main.screenPosition + drawOrigin + new Vector2(0f, NPC.gfxOffY);
+            Vector2 drawPos = NPC.position - screenPos + drawOrigin + new Vector2(0f, NPC.gfxOffY);
 
             spriteBatch.Draw(TextureAssets.Npc[NPC.type].Value, drawPos, NPC.frame, color * 0.5f, NPC.rotation, drawOrigin, NPC.scale * (1 + (float)Math.Cos(Main.GameUpdateCount / 5f)) * 0.25f + 1, SpriteEffects.None, 0f);
             spriteBatch.Draw(TextureAssets.Npc[NPC.type].Value, drawPos, NPC.frame, color * 0.5f, NPC.rotation, drawOrigin, NPC.scale * (1 - (float)Math.Cos(Main.GameUpdateCount / 5f)) * 0.25f + 1, SpriteEffects.None, 0f);
@@ -126,12 +124,17 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
             return false;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            //if (Main.rand.NextBool(20))
-            //{
-            //    Item.NewItem(NPC.getRect(), ItemType<Items.Placeable.DendriticEnergy>());
-            //}
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				//flavor text
+				this.TranslatedBestiaryEntry()
+            });
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DendriticEnergy>(), chanceDenominator: 20));
         }
     }
 }

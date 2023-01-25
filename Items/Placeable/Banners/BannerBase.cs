@@ -19,6 +19,8 @@ using Polarities.NPCs.Enemies.WorldEvilInvasion;
 using Polarities.NPCs.Enemies.Granite;
 using Polarities.NPCs.Enemies.Marble;
 using Polarities.NPCs.Enemies.LavaOcean;
+using Polarities.NPCs.Enemies.Fractal;
+using Polarities.NPCs.Enemies.Fractal.PostSentinel;
 
 namespace Polarities.Items.Placeable.Banners
 {
@@ -109,7 +111,7 @@ namespace Polarities.Items.Placeable.Banners
 		{
 			bannerIndexToNPCType.Add(BannerIndex, NPCType);
 
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 
 			string npcKey = "{$Mods.Polarities.NPCName." + NPCLoader.GetNPC(NPCType).Name + "}";
 			DisplayName.SetDefault(npcKey + "{$Mods.Polarities.ItemName.BannerBase}");
@@ -166,6 +168,21 @@ namespace Polarities.Items.Placeable.Banners
 		}
     }
 
+	public class TurbulenceSparkBanner : BannerBase { public override int BannerIndex => 42; public override int NPCType => NPCType<TurbulenceSpark>(); }
+	public class SparkCrawlerBanner : BannerBase { public override int BannerIndex => 15; public override int NPCType => NPCType<SparkCrawler>(); }
+	public class ShockflakeBanner : BannerBase { public override int BannerIndex => 36; public override int NPCType => NPCType<Shockflake>(); }
+	public class SeaAnomalyBanner : BannerBase { public override int BannerIndex => 39; public override int NPCType => NPCType<SeaAnomaly>(); }
+	public class OrthoconicBanner : BannerBase { public override int BannerIndex => 32; public override int NPCType => NPCType<Orthoconic>(); }
+	public class MegaMengerBanner : BannerBase { public override int BannerIndex => 21; public override int NPCType => NPCType<MegaMenger>(); }
+	public class FractalSpiritBanner : BannerBase { public override int BannerIndex => 23; public override int NPCType => NPCType<FractalSpirit>(); }
+	public class FractalSlimeBanner : BannerBase { public override int BannerIndex => 40; public override int NPCType => NPCType<FractalSlimeSmall>(); }
+	public class FractalPointBanner : BannerBase { public override int BannerIndex => 25; public override int NPCType => NPCType<FractalPoint>(); }
+	public class FractalFernBanner : BannerBase { public override int BannerIndex => 16; public override int NPCType => NPCType<FractalFern>(); }
+	public class EuryopterBanner : BannerBase { public override int BannerIndex => 17; public override int NPCType => NPCType<Euryopter>(); }
+	public class DustSpriteBanner : BannerBase { public override int BannerIndex => 41; public override int NPCType => NPCType<DustSprite>(); }
+	public class ChaosCrawlerBanner : BannerBase { public override int BannerIndex => 38; public override int NPCType => NPCType<ChaosCrawler>(); }
+	public class BisectorBanner : BannerBase { public override int BannerIndex => 37; public override int NPCType => NPCType<BisectorHead>(); }
+	public class AmphisbaenaBanner : BannerBase { public override int BannerIndex => 24; public override int NPCType => NPCType<Amphisbaena>(); }
 	public class SpitterBanner : BannerBase { public override int BannerIndex => 0; public override int NPCType => NPCType<Spitter>(); }
 	public class RattlerBanner : BannerBase { public override int BannerIndex => 1; public override int NPCType => NPCType<Rattler>(); }
 	public class BrineFlyBanner : BannerBase { public override int BannerIndex => 2; public override int NPCType => NPCType<BrineFly>(); public override int BannerKills => 200; }

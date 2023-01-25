@@ -16,7 +16,7 @@ namespace Polarities.Items.Weapons.Melee
 		{
 			Item.staff[Type] = true;
 
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 		}
 
 		public override void ModifyTooltips(List<TooltipLine> tooltips)

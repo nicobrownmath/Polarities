@@ -17,7 +17,7 @@ namespace Polarities.Items.Armor
 	{
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(1);
+			SacrificeTotal = (1);
 		}
 
 		public override void SetDefaults()
