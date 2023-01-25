@@ -102,6 +102,31 @@ namespace Polarities
 			c.Emit(OpCodes.Stloc, 8);
 		}
 
+		public static void SetMerge(int type1, int type2, bool merge = true)
+		{
+			if (type1 != type2)
+			{
+				Main.tileMerge[type1][type2] = merge;
+				Main.tileMerge[type2][type1] = merge;
+			}
+		}
+		public static void SetMerge<T>(int type2, bool merge = true) where T : ModTile
+		{
+			SetMerge(ModContent.TileType<T>(), type2, merge);
+		}
+		public static void SetMerge<T, T2>(int type2, bool merge = true) where T : ModTile where T2 : ModTile
+		{
+			SetMerge(ModContent.TileType<T>(), ModContent.TileType<T2>(), merge);
+		}
+		public static void SetMerge(this ModTile modTile, int type2, bool merge = true)
+        {
+			SetMerge(modTile.Type, type2, merge);
+        }
+		public static void SetMerge<T2>(this ModTile modTile, bool merge = true) where T2 : ModTile
+		{
+			SetMerge(modTile.Type, ModContent.TileType<T2>(), merge);
+        }
+
 		public static void SetModBiome<T, T2, T3>(this ModNPC modNPC) where T : ModBiome where T2 : ModBiome where T3 : ModBiome
 		{
 			modNPC.SpawnModBiomes = new int[] { ModContent.GetInstance<T>().Type, ModContent.GetInstance<T2>().Type, ModContent.GetInstance<T3>().Type };

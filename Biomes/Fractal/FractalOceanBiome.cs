@@ -7,7 +7,8 @@ namespace Polarities.Biomes.Fractal
     {
         public override bool IsBiomeActive(Player player)
         {
-            return false;
+            var tile = player.Center.ToTileCoordinates();
+            return player.InModBiome<FractalBiome>() && FractalSubworld.IsFractalOcean(tile.X, tile.Y);
         }
 
         public override float GetWeight(Player player)

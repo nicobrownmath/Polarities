@@ -301,7 +301,7 @@ namespace Polarities.Tiles
 		public override void SetStaticDefaults()
 		{
 			substrateType = (ushort)ModContent.TileType<FractalMatterTile>();
-
+			base.SetStaticDefaults();
 			Main.tileLighted[Type] = true;
 			Main.tileSolid[Type] = true;
 			Main.tileBlockLight[Type] = true;
@@ -337,6 +337,7 @@ namespace Polarities.Tiles
 		public override void SetStaticDefaults()
 		{
 			substrateType = (ushort)ModContent.TileType<FractalStrandsTile>();
+			base.SetStaticDefaults();
 
 			Main.tileLighted[Type] = true;
 			Main.tileSolid[Type] = true;
@@ -380,6 +381,7 @@ namespace Polarities.Tiles
 		public override void SetStaticDefaults()
 		{
 			substrateType = (ushort)ModContent.TileType<FractalDuststoneTile>();
+			base.SetStaticDefaults();
 
 			Main.tileLighted[Type] = true;
 			Main.tileSolid[Type] = true;
@@ -414,6 +416,18 @@ namespace Polarities.Tiles
 	public abstract class Hyphae: ModTile
     {
 		public ushort substrateType;
+
+        public override void SetStaticDefaults()
+        {
+			Main.tileBrick[base.Type] = true;
+			TileID.Sets.ChecksForMerge[Type] = true;
+			TileID.Sets.NeedsGrassFraming[base.Type] = true;
+			TileID.Sets.NeedsGrassFramingDirt[base.Type] = substrateType;
+			this.SetMerge(substrateType);
+			this.SetMerge<FractalMatterTile>();
+			this.SetMerge<FractalDuststoneTile>();
+			this.SetMerge<FractalStrandsTile>();
+		}
 
 		public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
 		{

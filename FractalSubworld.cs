@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Polarities.Items.Placeable.Bars;
 using Polarities.Items.Placeable.Blocks.Fractal;
 using Polarities.Items.Placeable.Furniture;
+using Polarities.Items.Placeable.Furniture.Fractal;
 using Polarities.Tiles;
 using SubworldLibrary;
 using System;
@@ -14,7 +14,6 @@ using Terraria;
 using Terraria.GameContent.Generation;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Utilities;
 using Terraria.WorldBuilding;
 using static Terraria.ModLoader.ModContent;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -244,13 +243,6 @@ namespace Polarities
         public static bool exiting;
         private static int animSeed;
         public static Stopwatch animStopwatch = new Stopwatch();
-
-        [Obsolete("Replace with proper FractalChestTile")]
-        public static ushort FractalChest => TileID.Containers;
-        [Obsolete("Replace with proper FractalDoorClosed")]
-        public static ushort FractalDoorClosed => TileID.ClosedDoor;
-        [Obsolete("Replace with proper FractalTorchTile")]
-        public static ushort FractalTorchTile => TileID.Torches;
 
         public override void DrawMenu(GameTime gameTime)
         {
@@ -808,7 +800,6 @@ namespace Polarities
             Main.rockLayer = Main.maxTilesY; //Hides the cavern layer way out of bounds
             SubworldSystem.hideUnderworld = true;
             SubworldSystem.noReturn = true;
-
             for (int i = 0; i < 8; i++)
             {
                 randOffsets[i] = WorldGen.genRand.NextDouble() * 2 * Math.PI;
@@ -1880,8 +1871,8 @@ namespace Polarities
                                     }
                                 }
                             }
-                            WorldGen.PlaceTile(i - 1, j - 2, FractalTorchTile, mute: true);
-                            WorldGen.PlaceTile(i + 2, j - 2, FractalTorchTile, mute: true);
+                            WorldGen.PlaceTile(i - 1, j - 2, ModContent.TileType<FractalTorchTile>(), mute: true);
+                            WorldGen.PlaceTile(i + 2, j - 2, ModContent.TileType<FractalTorchTile>(), mute: true);
                         }
                     }
                 }
@@ -2411,7 +2402,7 @@ namespace Polarities
                                 WorldGen.KillTile(room2.X, doorHeight, noItem: true);
                                 WorldGen.KillTile(room2.X, doorHeight - 1, noItem: true);
                                 WorldGen.KillTile(room2.X, doorHeight - 2, noItem: true);
-                                WorldGen.PlaceObject(room2.X, doorHeight - 1, FractalDoorClosed, true);
+                                WorldGen.PlaceObject(room2.X, doorHeight - 1, ModContent.TileType<FractalDoorClosed>(), true);
                             }
 
                             availabilities[room][2] = false;
@@ -2484,7 +2475,7 @@ namespace Polarities
                     WorldGen.KillTile(doorX, doorY, noItem: true);
                     WorldGen.KillTile(doorX, doorY - 1, noItem: true);
                     WorldGen.KillTile(doorX, doorY - 2, noItem: true);
-                    WorldGen.PlaceObject(doorX, doorY - 1, FractalDoorClosed, true);
+                    WorldGen.PlaceObject(doorX, doorY - 1, ModContent.TileType<FractalDoorClosed>(), true);
                 }
                 if (availabilities[room][3])
                 {
@@ -2496,7 +2487,7 @@ namespace Polarities
                     WorldGen.KillTile(doorX, doorY, noItem: true);
                     WorldGen.KillTile(doorX, doorY - 1, noItem: true);
                     WorldGen.KillTile(doorX, doorY - 2, noItem: true);
-                    WorldGen.PlaceObject(doorX, doorY - 1, FractalDoorClosed, true);
+                    WorldGen.PlaceObject(doorX, doorY - 1, ModContent.TileType<FractalDoorClosed>(), true);
                 }
             }
             ModLoader.GetMod("Polarities").Logger.Debug("HouseI");
@@ -2616,7 +2607,7 @@ namespace Polarities
             switch (WorldGen.genRand.Next(2))
             {
                 case 0:
-                    int chestIndex = WorldGen.PlaceChest(x, y + 1, FractalChest, true, style: 0);
+                    int chestIndex = WorldGen.PlaceChest(x, y + 1, (ushort)ModContent.TileType<FractalChestTile>(), true, style: 0);
                     if (chestIndex != -1)
                     {
                         //put items in chest
@@ -2631,7 +2622,7 @@ namespace Polarities
                     }
                     break;
                 case 1:
-                    int chestIndexB = WorldGen.PlaceChest(x, y + 1, FractalChest, true, style: 1);
+                    int chestIndexB = WorldGen.PlaceChest(x, y + 1, (ushort)ModContent.TileType<FractalChestTile>(), true, style: 1);
                     if (chestIndexB != -1)
                     {
                         //put items in chest

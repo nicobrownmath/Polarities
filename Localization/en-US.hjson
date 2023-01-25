@@ -1226,6 +1226,33 @@
 		BuffDescription.BabySparkCrawlerBuff: A baby spark crawler is following you
 
 	# Tiles
+		ItemName.FractalWorkbench: Fractal Workbench
+		ItemName.FractalTorch: Fractal Torch
+		ItemName.FractalTable: Fractal Table
+		ItemName.FractalSofa: Fractal Sofa
+		ItemName.FractalSink: Fractal Sink
+		ItemName.FractalPiano: Fractal Piano
+		ItemName.FractalLantern: Fractal Lantern
+		ItemName.FractalLamp: Fractal Lamp
+		ItemName.FractalDresser: Fractal Dresser
+		ItemName.FractalDoor: Fractal Door
+		ItemName.FractalClock: Fractal Clock
+		ItemName.FractalChest: Fractal Chest
+		ItemName.FractalChandelier: Fractal Chandelier
+		ItemName.FractalCandle: Fractal Candle
+		ItemName.FractalCandelabra: Fractal Candelabra
+		ItemName.FractalBookcase: Fractal Bookcase
+		ItemName.FractalBed: Fractal Bed
+		ItemName.FractalBathtub: Fractal Bathtub
+		ItemName.WarpedLandscape: Warped Landscape
+		ItemTooltip.WarpedLandscape: 'S. Lunin'
+		ItemName.FractalAltar: Fractal Altar
+		ItemTooltip.FractalAltar: Allows entry into the Fractal Dimension
+		MapObject.FractalAltar: Fractal Altar
+		ItemName.FractalBiomeChest: Fractal Dimension Chest
+		ItemName.FractalAssembler: Fractal Assembler
+		MapObject.FractalAssembler: Fractal Assembler
+		ItemTooltip.FractalAssembler: Used to craft items from fractal materials
 		ItemName.FractalLaserTrap: Fractal Laser Trap
 		ItemName.FractalEnergyTrap: Fractal Energy Trap
 		ProjectileName.FractalTrapEnergy: Fractal Energy Trap
