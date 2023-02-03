@@ -103,7 +103,7 @@ namespace Polarities.Items.Placeable.Furniture.Fractal
 
         public override bool RightClick(int i, int j)
         {
-            if (SubworldSystem.IsActive<FractalSubworld>())
+            if (FractalSubworld.Active)
             {
                 FractalSubworld.DoExit();
             }

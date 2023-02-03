@@ -4,6 +4,7 @@ using Polarities.Biomes.Fractal;
 using Polarities.Items.Materials;
 using Polarities.Items.Placeable.Banners;
 using Polarities.Items.Placeable.Blocks.Fractal;
+using SubworldLibrary;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
@@ -199,10 +200,10 @@ namespace Polarities.NPCs.Enemies.Fractal
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            //if (Subworld.IsActive<FractalSubworld>())
-            //{
-            //    return FractalSubworld.SpawnConditionFractalWastes(spawnInfo) * FractalSubworld.SpawnConditionFractalUnderground(spawnInfo);
-            //}
+            if (FractalSubworld.Active)
+            {
+                return FractalSubworld.SpawnConditionFractalWastes(spawnInfo) * FractalSubworld.SpawnConditionFractalUnderground(spawnInfo);
+            }
             return 0f;
         }
     }

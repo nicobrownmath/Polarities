@@ -358,9 +358,176 @@ namespace Polarities
                         PolaritiesSystem.hallowInvasion = false;
                     }
                     return eventOccurring;
+
                 case "InFractalDimension":
-                    return false;//TODO: Subworld.IsActive<FractalSubworld>();
-                //TODO: Check if it's the rapture/pestilence, activate/deactivate them
+                    return FractalSubworld.Active;
+
+                case "PestilenceActive":
+                    return PolaritiesSystem.worldEvilInvasion;
+                case "StartPestilence":
+                    if (!PolaritiesSystem.worldEvilInvasion)
+                    {
+                        WorldEvilInvasion.StartInvasion();
+                        return true;
+                    }
+                    return false;
+                case "EndPestilence":
+                    if (!PolaritiesSystem.worldEvilInvasion)
+                    {
+                        PolaritiesSystem.worldEvilInvasion = false;
+                        PolaritiesSystem.worldEvilInvasionSize = 0;
+                        PolaritiesSystem.worldEvilInvasionSizeStart = 0;
+                        return true;
+                    }
+                    return false;
+                case "ActivateEsophageSpawn":
+                    PolaritiesSystem.esophageSpawnTimer++;
+                    return true;
+                case "DeactivateEsophageSpawn":
+                    PolaritiesSystem.esophageSpawnTimer = 0;
+                    return true;
+
+                case "RaptureActive":
+                    return PolaritiesSystem.hallowInvasion;
+                case "StartRapture":
+                    if (!PolaritiesSystem.hallowInvasion)
+                    {
+                        HallowInvasion.StartInvasion();
+                        return true;
+                    }
+                    return false;
+                case "EndRapture":
+                    if (!PolaritiesSystem.hallowInvasion)
+                    {
+                        PolaritiesSystem.hallowInvasion = false;
+                        PolaritiesSystem.hallowInvasionSize = 0;
+                        PolaritiesSystem.hallowInvasionSizeStart = 0;
+                        return true;
+                    }
+                    return false;
+                case "ActivateSunPixieSpawn":
+                    PolaritiesSystem.sunPixieSpawnTimer++;
+                    return true;
+                case "DeactivateSunPixieSpawn":
+                    PolaritiesSystem.sunPixieSpawnTimer = 0;
+                    return true;
+
+                case "GetDowned":
+                    {
+                        switch ((string)args[1])
+                        {
+                            case "Gray":
+                            case "StormCloudfish":
+                                return PolaritiesSystem.downedStormCloudfish;
+
+                            case "StarConstruct":
+                                return PolaritiesSystem.downedStarConstruct;
+
+                            case "Gigabat":
+                                return PolaritiesSystem.downedGigabat;
+
+                            case "Fractal":
+                            case "Denizen":
+                            case "RiftDenizen":
+                                return PolaritiesSystem.downedRiftDenizen;
+
+                            case "Rapture":
+                            case "HallowInvasion":
+                                return PolaritiesSystem.downedHallowInvasion;
+
+                            case "SunPixie":
+                                return PolaritiesSystem.downedSunPixie;
+
+                            case "Pestilence":
+                            case "WorldEvilInvasion":
+                                return PolaritiesSystem.downedWorldEvilInvasion;
+
+                            case "Esophage":
+                                return PolaritiesSystem.downedEsophage;
+
+                            case "Sentinel":
+                            case "Selfsimilar":
+                            case "SelfsimilarSentinel":
+                                return PolaritiesSystem.downedSelfsimilarSentinel;
+
+                            case "ConvectiveWanderer":
+                            case "Convective":
+                            case "Wanderer":
+                                return PolaritiesSystem.downedConvectiveWanderer;
+
+                            case "Eclipxie":
+                            case "Eclipixie":
+                                return PolaritiesSystem.downedEclipxie;
+
+                            case "Hemorphage":
+                            case "Hemmorphage":
+                            case "Hemorrphage":
+                                return PolaritiesSystem.downedHemorrphage;
+
+                            case "Polarities":
+                            case "PolaritiesBoss":
+                                return PolaritiesSystem.downedPolarities;
+                        }
+                    }
+                    return null;
+                case "SetDowned":
+                    {
+                        switch ((string)args[1])
+                        {
+                            case "Gray":
+                            case "StormCloudfish":
+                                return PolaritiesSystem.downedStormCloudfish = (bool)args[2];
+
+                            case "StarConstruct":
+                                return PolaritiesSystem.downedStarConstruct = (bool)args[2];
+
+                            case "Gigabat":
+                                return PolaritiesSystem.downedGigabat = (bool)args[2];
+
+                            case "Fractal":
+                            case "Denizen":
+                            case "RiftDenizen":
+                                return PolaritiesSystem.downedRiftDenizen = (bool)args[2];
+
+                            case "Rapture":
+                            case "HallowInvasion":
+                                return PolaritiesSystem.downedHallowInvasion = (bool)args[2];
+
+                            case "SunPixie":
+                                return PolaritiesSystem.downedSunPixie = (bool)args[2];
+
+                            case "Pestilence":
+                            case "WorldEvilInvasion":
+                                return PolaritiesSystem.downedWorldEvilInvasion = (bool)args[2];
+
+                            case "Esophage":
+                                return PolaritiesSystem.downedEsophage = (bool)args[2];
+
+                            case "Sentinel":
+                            case "Selfsimilar":
+                            case "SelfsimilarSentinel":
+                                return PolaritiesSystem.downedSelfsimilarSentinel = (bool)args[2];
+
+                            case "ConvectiveWanderer":
+                            case "Convective":
+                            case "Wanderer":
+                                return PolaritiesSystem.downedConvectiveWanderer = (bool)args[2];
+
+                            case "Eclipxie":
+                            case "Eclipixie":
+                                return PolaritiesSystem.downedEclipxie = (bool)args[2];
+
+                            case "Hemorphage":
+                            case "Hemmorphage":
+                            case "Hemorrphage":
+                                return PolaritiesSystem.downedHemorrphage = (bool)args[2];
+
+                            case "Polarities":
+                            case "PolaritiesBoss":
+                                return PolaritiesSystem.downedPolarities = (bool)args[2];
+                        }
+                    }
+                    return null;
             }
             return null;
         }

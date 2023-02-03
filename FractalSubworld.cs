@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Polarities.Biomes.Fractal;
 using Polarities.Items.Placeable.Bars;
 using Polarities.Items.Placeable.Blocks.Fractal;
 using Polarities.Items.Placeable.Furniture;
@@ -238,6 +239,8 @@ namespace Polarities
         //        Main.anglerQuestFinished = subworldSyncedData.GetBool("anglerQuestFinished");
         //    }
         //}
+
+        public static bool Active => FractalSubworld.Active;
 
         public static bool entering;
         public static bool exiting;
@@ -2782,6 +2785,14 @@ namespace Polarities
             //{
             //    GenSentinelVein(PolaritiesWorld.sentinelCaves[i], PolaritiesWorld.sentinelCaveVars[i], PolaritiesWorld.sentinelCaveRots[i], onlyGenVein: true);
             //}
+        }
+    }
+
+    public class FractalSystem : ModSystem
+    {
+        public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
+        {
+            FractalWastesBiome.TileCount = tileCounts[ModContent.TileType<FractalDustTile>()] + tileCounts[ModContent.TileType<FractalDuststoneTile>()] + tileCounts[ModContent.TileType<HyphaeFractalDuststone>()];
         }
     }
 }

@@ -264,10 +264,10 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            //if (Subworld.IsActive<FractalSubworld>() && spawnInfo.Player.GetModPlayer<PolaritiesPlayer>().GetFractalization() > FractalSubworld.POST_GOLEM_TIME)
-            //{
-            //    return 0.15f;
-            //}
+            if (FractalSubworld.Active && spawnInfo.Player.GetFractalization() > FractalSubworld.POST_GOLEM_TIME)
+            {
+                return 0.15f;
+            }
             return 0f;
         }
 

@@ -82,7 +82,7 @@ namespace Polarities.Items.Consumables
 
         private void Spawn(Player player)
         {
-            if (!SubworldSystem.IsActive<FractalSubworld>())
+            if (!FractalSubworld.Active)
             {
                 FractalSubworld.DoEnter();
             }

@@ -9,7 +9,7 @@ namespace Polarities.Biomes.Fractal
     {
         public override bool IsBiomeActive(Player player)
         {
-            return SubworldSystem.IsActive<FractalSubworld>();
+            return FractalSubworld.Active;
         }
 
         public override float GetWeight(Player player)
@@ -33,7 +33,7 @@ namespace Polarities.Biomes.Fractal
 
         private static void Main_DrawBlack(On.Terraria.Main.orig_DrawBlack orig, Main self, bool force)
         {
-            if (SubworldSystem.IsActive<FractalSubworld>())
+            if (FractalSubworld.Active)
             {
                 force = true;
             }

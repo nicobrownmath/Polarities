@@ -1157,6 +1157,11 @@ namespace Polarities
             return true;
         }
 
+        public int GetFractalization()
+        {
+            return NPC.downedGolemBoss ? (FractalSubworld.POST_GOLEM_TIME + 100) : 100; // For debugging purposes
+        }
+
         private void Player_Update_NPCCollision(ILContext il)
         {
             ILCursor c = new ILCursor(il);

@@ -79,10 +79,10 @@ namespace Polarities.NPCs.Enemies.Fractal
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            //if (Subworld.IsActive<FractalSubworld>())
-            //{
-            //    return 0.15f;
-            //}
+            if (FractalSubworld.Active)
+            {
+                return 0.15f;
+            }
             return 0f;
         }
 
@@ -180,7 +180,7 @@ namespace Polarities.NPCs.Enemies.Fractal
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            //if (Subworld.IsActive<FractalSubworld>())
+            //if (FractalSubworld.Active)
             //{
             //    return 0.15f;
             //}
@@ -303,7 +303,7 @@ namespace Polarities.NPCs.Enemies.Fractal
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            //if (Subworld.IsActive<FractalSubworld>())
+            //if (FractalSubworld.Active)
             //{
             //    return 0.15f;
             //}

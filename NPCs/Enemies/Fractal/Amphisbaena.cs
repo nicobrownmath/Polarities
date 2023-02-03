@@ -4,6 +4,7 @@ using Polarities.Items.Armor.Vanity;
 using Polarities.Items.Materials;
 using Polarities.Items.Placeable.Banners;
 using Polarities.Items.Placeable.Blocks.Fractal;
+using SubworldLibrary;
 using System.IO;
 using Terraria;
 using Terraria.GameContent.Bestiary;
@@ -225,10 +226,10 @@ namespace Polarities.NPCs.Enemies.Fractal
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            //if (Subworld.IsActive<FractalSubworld>())
-            //{
-            //    return FractalSubworld.SpawnConditionFractalWastes(spawnInfo) * (1f - FractalSubworld.SpawnConditionFractalSky(spawnInfo));
-            //}
+            if (FractalSubworld.Active)
+            {
+                return FractalSubworld.SpawnConditionFractalWastes(spawnInfo) * (1f - FractalSubworld.SpawnConditionFractalSky(spawnInfo));
+            }
             return 0f;
         }
 

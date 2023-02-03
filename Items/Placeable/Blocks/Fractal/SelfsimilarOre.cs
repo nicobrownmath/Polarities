@@ -73,7 +73,7 @@ namespace Polarities.Items.Placeable.Blocks.Fractal
 			{
 				noItem = true;
 			}
-			//else if (Subworld.IsActive<FractalSubworld>() && !player.GetModPlayer<PolaritiesPlayer>().selfsimilarMining) // Avert if we're using a selfsimilar pick
+			//else if (FractalSubworld.Active && !player.GetModPlayer<PolaritiesPlayer>().selfsimilarMining) // Avert if we're using a selfsimilar pick
 			//{
 			//	Vector2 position = new Vector2(i * 16 + 8, j * 16 + 8);
 

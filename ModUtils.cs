@@ -244,6 +244,10 @@ namespace Polarities
 			return new DropBasedOnMasterMode(ItemDropRule.ByCondition(new FlawlessDropCondition(), Type, amountDroppedMinimum, amountDroppedMaximum), new FlawlessOrRandomDropRule(Type, chanceDenominator, amountDroppedMinimum, amountDroppedMaximum, chanceNumerator));
 		}
 
+		public static int GetFractalization(this Player player)
+        {
+			return player.Polarities().GetFractalization();
+        }
 		public static PolaritiesPlayer Polarities(this Player player)
         {
 			return player.GetModPlayer<PolaritiesPlayer>();
