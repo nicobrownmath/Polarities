@@ -28,9 +28,9 @@ namespace Polarities.Items.Placeable.Blocks
 				.AddTile(TileID.Furnaces)
 				.Register();
 
-			/*TODO: CreateRecipe()
+			CreateRecipe()
 				.AddIngredient(ItemType<Furniture.Limestone.LimestonePlatform>(), 2)
-				.Register();*/
+				.Register();
 
 			CreateRecipe()
 				.AddIngredient(ItemType<Walls.LimestoneBrickWall>(), 4)

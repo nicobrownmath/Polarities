@@ -143,7 +143,12 @@ namespace Polarities.Items.Placeable.Furniture
 			}
         }
 
-        public override void SetStaticDefaults()
+		protected virtual void AddMapEntry()
+        {
+			AddMapEntry(MapColor, Language.GetText("MapObject.Chair"));
+		}
+
+		public override void SetStaticDefaults()
 		{
 			if (IsChairTileBase == null)
             {
@@ -171,7 +176,7 @@ namespace Polarities.Items.Placeable.Furniture
 
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
 
-			AddMapEntry(MapColor, Language.GetText("MapObject.Chair"));
+			AddMapEntry();
 
 			DustType = MyDustType;
 

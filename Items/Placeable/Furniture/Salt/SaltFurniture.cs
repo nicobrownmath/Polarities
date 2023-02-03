@@ -8,9 +8,38 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 using Polarities.Biomes;
+using Polarities.Items.Placeable.Blocks;
 
 namespace Polarities.Items.Placeable.Furniture.Salt
 {
+    public class SaltToilet : ModItem 
+    {
+        public override void SetStaticDefaults()
+        {
+            SacrificeTotal = 1;
+        }
+
+        public override void SetDefaults()
+        {
+            Item.CloneDefaults(ItemID.WoodenChair);
+            Item.createTile = ModContent.TileType<SaltToiletTile>();
+            Item.placeStyle = 0;
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<SaltBrick>(), 6)
+                .AddTile(TileID.Sawmill)
+                .Register();
+        }
+    }
+    public class SaltToiletTile : ToiletTileBase 
+    {
+        public override int MyDustType => DustType<SaltDust>();
+        public override int DropItem => ItemType<SaltToilet>();
+    }
+
     public class SaltPlatform : PlatformBase
     {
         public override int PlaceTile => TileType<SaltPlatformTile>();

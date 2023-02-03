@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Polarities.Items.Placeable.Furniture.Fractal;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

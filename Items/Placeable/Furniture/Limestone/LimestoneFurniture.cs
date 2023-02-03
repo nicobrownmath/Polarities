@@ -8,10 +8,38 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 using Polarities.Biomes;
+using Polarities.Items.Placeable.Blocks;
 
 namespace Polarities.Items.Placeable.Furniture.Limestone
 {
-    /* TODO: Limestone platforms
+    public class LimestoneToilet : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            SacrificeTotal = 1;
+        }
+
+        public override void SetDefaults()
+        {
+            Item.CloneDefaults(ItemID.WoodenChair);
+            Item.createTile = ModContent.TileType<LimestoneToiletTile>();
+            Item.placeStyle = 0;
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<LimestoneBrick>(), 6)
+                .AddTile(TileID.Sawmill)
+                .Register();
+        }
+    }
+    public class LimestoneToiletTile : ToiletTileBase
+    {
+        public override int MyDustType => DustType<LimestoneDust>();
+        public override int DropItem => ItemType<LimestoneToilet>();
+    }
+
     public class LimestonePlatform : PlatformBase
     {
         public override int PlaceTile => TileType<LimestonePlatformTile>();
@@ -28,7 +56,7 @@ namespace Polarities.Items.Placeable.Furniture.Limestone
         public override Color MapColor => new Color(200, 200, 200);
         public override int MyDustType => DustType<LimestoneDust>();
         public override int DropItem => ItemType<LimestonePlatform>();
-    }*/
+    }
 
     public class LimestoneBathtub : BathtubBase
     {

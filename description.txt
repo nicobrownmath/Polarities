@@ -32,14 +32,14 @@ v0.11 Beta 2 Changelog
 
 Nalyd To-Do:
     Rift Denizen Drops and Bestiary
-    Fractal Enemy Gores, Drops, Debuffs, and Bestiary
-    Fractal Furniture
+    Fractal Enemy Gores, Debuffs
     Fractal Chest Loot
-    Fractal Biome
-    ^ Selfsimilar Sentinel
-    ^ Fractal Enemy Spawns
-    ^ Selfsimilar Sentinel/Bar Loot
+    Selfsimilar Sentinel
+    Fractal Enemy Spawns
+    Selfsimilar Sentinel/Bar Loot
     Misc Fractal Stuff (Fishing, other missed content)
+    Fix some Music Box Sprites (SOME ARE GRABBED FROM WIKI AND HAVE COMPRESSION NOISE)
+    Fix some Music being MP3s
 
 Fixes to do:
   Worm guns break with manual
