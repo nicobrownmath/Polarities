@@ -33,16 +33,16 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Polarities.NPCs.Enemies.HallowInvasion;
 using Polarities.NPCs.Enemies.WorldEvilInvasion;
-using Polarities.Items.Placeable.Furniture.MusicBoxes;
 using Microsoft.Xna.Framework;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Polarities.NPCs.Eclipxie;
 using Terraria.Audio;
+using Polarities.Items.Placeable.MusicBoxes;
 
 namespace Polarities
 {
-	public class Polarities : Mod
+    public class Polarities : Mod
 	{
         public static bool AprilFools => (DateTime.Now.Day == 1) && (DateTime.Now.Month == 4);
         public static bool SnakeDay => (DateTime.Now.Day == 16) && (DateTime.Now.Month == 7);

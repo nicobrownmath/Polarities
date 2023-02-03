@@ -339,13 +339,22 @@
 			"LimestoneTorch": "Limestone Torch",
 			"LimestoneWorkBench": "Limestone WorkBench",
 
-			//music boxes
-			"StormCloudfishMusicBox": "Music Box (Storm Cloudfish)",
-			"StarConstructMusicBox": "Music Box (Star Construct)",
-			"GigabatMusicBox": "Music Box (Gigabat)",
-			"SunPixieMusicBox": "Music Box (Sun Pixie)",
-			"PestilenceMusicBox": "Music Box (Pestilence)",
-			"EsophageMusicBox": "Music Box (Esophage)",
+		# Music boxes
+			"StormCloudfishMusicBox": "Music Box (Jetstream Migration)",
+			"StarConstructMusicBox": "Music Box (Cosmic Screaming)",
+			"GigabatMusicBox": "Music Box (Squeaking Doom)",
+			"SunPixieMusicBox": "Music Box (Winged Plasma)",
+			"PestilenceMusicBox": "Music Box (Greater Evil)",
+			"EsophageMusicBox": "Music Box (Necrosis)",
+			"FractalDimensionMusicBox": "Music Box (Fractal Palace)",
+			"FractalDimensionLoadingMusicBox": "Music Box (Fractal Dimension Loading)",
+			"RiftDenizenMusicBox": "Music Box (New Perspective)",
+			"SentinelP1MusicBox": "Music Box (Negative Space - Part 1)",
+			"SentinelP2MusicBox": "Music Box (Negative Space - Part 2)",
+			"EclipxieMusicBox": "Music Box (Winged Umbra)",
+			"HemorrphageMusicBox": "Music Box (Sepsis)",
+			"PolaritiesMusicBox": "Music Box (Field of Battle)",
+			"ConvectiveWandererMusicBox": "Music Box (Even Deeper Burns)",
 
 			//pets
 			"StarConstructPetItem": "Cosmic Communicator",
@@ -687,6 +696,23 @@
 
 			//critters
 			"GemflyItem": "May attract bats",
+
+			# Music boxes
+			"StormCloudfishMusicBox": "Theme of the Storm Cloudfish",
+			"StarConstructMusicBox": "Theme of the Star Construct",
+			"GigabatMusicBox": "Theme of the Gigabat",
+			"SunPixieMusicBox": "Theme of the Sun Pixie",
+			"PestilenceMusicBox": "Theme of the Pestilence",
+			"EsophageMusicBox": "Theme of the Esophage",
+			"FractalDimensionMusicBox": "Theme of the Fractal Dimension",
+			"FractalDimensionLoadingMusicBox": "Theme for loading the Fractal Dimension",
+			"RiftDenizenMusicBox": "Theme of the Rift Denizen",
+			"SentinelP1MusicBox": "Theme of the Selfsimilar Sentinel",
+			"SentinelP2MusicBox": "{$Mods.Polarities.ItemTooltip.SentinelP1MusicBox}",
+			"EclipxieMusicBox": "Theme of the Eclipxie",
+			"HemorrphageMusicBox": "Theme of the Hemorrphage",
+			"PolaritiesMusicBox": "Theme of the Polarities",
+			"ConvectiveWandererMusicBox": "Theme of the Convective Wanderer",
 
 			//pets
 			"StarConstructPetItem": "Summons a dwarf star construct\n'S.C. phone home'",
