@@ -697,23 +697,6 @@
 			//critters
 			"GemflyItem": "May attract bats",
 
-			# Music boxes
-			"StormCloudfishMusicBox": "Theme of the Storm Cloudfish",
-			"StarConstructMusicBox": "Theme of the Star Construct",
-			"GigabatMusicBox": "Theme of the Gigabat",
-			"SunPixieMusicBox": "Theme of the Sun Pixie",
-			"PestilenceMusicBox": "Theme of the Pestilence",
-			"EsophageMusicBox": "Theme of the Esophage",
-			"FractalDimensionMusicBox": "Theme of the Fractal Dimension",
-			"FractalDimensionLoadingMusicBox": "Theme for loading the Fractal Dimension",
-			"RiftDenizenMusicBox": "Theme of the Rift Denizen",
-			"SentinelP1MusicBox": "Theme of the Selfsimilar Sentinel",
-			"SentinelP2MusicBox": "{$Mods.Polarities.ItemTooltip.SentinelP1MusicBox}",
-			"EclipxieMusicBox": "Theme of the Eclipxie",
-			"HemorrphageMusicBox": "Theme of the Hemorrphage",
-			"PolaritiesMusicBox": "Theme of the Polarities",
-			"ConvectiveWandererMusicBox": "Theme of the Convective Wanderer",
-
 			//pets
 			"StarConstructPetItem": "Summons a dwarf star construct\n'S.C. phone home'",
 			"GigabatPetItem": "Summons a bat, a kilobat, and a megabat\n'Mega bitey'",
