@@ -33,10 +33,13 @@ namespace Polarities
     {
         public static List<int> DrawCacheProjsBehindWalls = new List<int>();
 
+        public static List<Vector2> sentinelCaves;
+
         public override void Load()
         {
             SkyManager.Instance["Polarities: Rift Denizen"] = new RiftDenizenSky();
 
+            sentinelCaves = new List<Vector2>();
             On.Terraria.Main.CacheProjDraws += Main_CacheProjDraws;
             On.Terraria.Main.DoDraw_WallsAndBlacks += Main_DoDraw_WallsAndBlacks;
 
@@ -230,6 +233,7 @@ namespace Polarities
         public override void OnWorldLoad()
         {
             DrawCacheProjsBehindWalls.Clear();
+            sentinelCaves?.Clear();
 
             downedStormCloudfish = false;
             downedStarConstruct = false;
@@ -267,6 +271,7 @@ namespace Polarities
         public override void OnWorldUnload()
         {
             DrawCacheProjsBehindWalls.Clear();
+            sentinelCaves?.Clear();
 
             downedStormCloudfish = false;
             downedStarConstruct = false;

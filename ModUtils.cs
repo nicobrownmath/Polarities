@@ -100,6 +100,137 @@ namespace Polarities
             c.Emit(OpCodes.Stloc, 8);
         }
 
+        public static bool CheckAABBvDisc(Rectangle rectangle, Circle circle)
+        {
+            float nearestX = Math.Max(rectangle.X, Math.Min(circle.Center.X, rectangle.X + rectangle.Size().X));
+            float nearestY = Math.Max(rectangle.Y, Math.Min(circle.Center.Y, rectangle.Y + rectangle.Size().Y));
+            return (new Vector2(circle.Center.X - nearestX, circle.Center.Y - nearestY)).Length() < circle.radius;
+        }
+
+        public static bool CheckAABBvSegment(Rectangle rectangle, Vector2 start, Vector2 end)
+        {
+            if ((start.X < rectangle.Left && end.X < rectangle.Left) || (start.X > rectangle.Right && end.X > rectangle.Right) || (start.Y < rectangle.Top && end.Y < rectangle.Top) || (start.Y > rectangle.Bottom && end.Y > rectangle.Bottom))
+                return false;
+
+            float f1 = (end.Y - start.Y) * rectangle.Left + (start.X - end.X) * rectangle.Top + (end.X * start.Y - start.X * end.Y);
+            float f2 = (end.Y - start.Y) * rectangle.Left + (start.X - end.X) * rectangle.Bottom + (end.X * start.Y - start.X * end.Y);
+            float f3 = (end.Y - start.Y) * rectangle.Right + (start.X - end.X) * rectangle.Top + (end.X * start.Y - start.X * end.Y);
+            float f4 = (end.Y - start.Y) * rectangle.Right + (start.X - end.X) * rectangle.Bottom + (end.X * start.Y - start.X * end.Y);
+
+            if (f1 < 0 && f2 < 0 && f3 < 0 && f4 < 0) return false;
+            if (f1 > 0 && f2 > 0 && f3 > 0 && f4 > 0) return false;
+
+            return true;
+        }
+
+        public static bool CheckPointvTriangle(Vector2 point, Vector2 vertex0, Vector2 vertex1, Vector2 vertex2)
+        {
+            var s = vertex0.Y * vertex2.X - vertex0.X * vertex2.Y + (vertex2.Y - vertex0.Y) * point.X + (vertex0.X - vertex2.X) * point.Y;
+            var t = vertex0.X * vertex1.Y - vertex0.Y * vertex1.X + (vertex0.Y - vertex1.Y) * point.X + (vertex1.X - vertex0.X) * point.Y;
+
+            if ((s < 0) != (t < 0) || s == 0 || t == 0)
+                return false;
+
+            var A = -vertex1.Y * vertex2.X + vertex0.Y * (vertex2.X - vertex1.X) + vertex0.X * (vertex1.Y - vertex2.Y) + vertex1.X * vertex2.Y;
+
+            return A < 0 ?
+                    (s < 0 && s + t > A) :
+                    (s > 0 && s + t < A);
+        }
+
+        public static bool CheckAABBvTriangle(Rectangle rectangle, Vector2 vertex0, Vector2 vertex1, Vector2 vertex2)
+        {
+            if (CheckAABBvPoint(rectangle, vertex0))
+                return true;
+            if (CheckAABBvPoint(rectangle, vertex1))
+                return true;
+            if (CheckAABBvPoint(rectangle, vertex2))
+                return true;
+            if (CheckAABBvSegment(rectangle, vertex0, vertex1))
+                return true;
+            if (CheckAABBvSegment(rectangle, vertex1, vertex2))
+                return true;
+            if (CheckAABBvSegment(rectangle, vertex2, vertex0))
+                return true;
+            if (CheckPointvTriangle(rectangle.TopLeft(), vertex0, vertex1, vertex2))
+                return true;
+            return false;
+        }
+
+        public static float AngleBetween(Vector2 a, Vector2 b)
+        {
+            return (float)Math.Acos(Vector2.Dot(a, b) / (a.Length() * b.Length()));
+        }
+
+        public static bool CheckAABBvCircle(Rectangle rectangle, Circle circle, float thickness = 0f)
+        {
+            float nearestX = Math.Max(rectangle.X, Math.Min(circle.Center.X, rectangle.X + rectangle.Size().X));
+            float nearestY = Math.Max(rectangle.Y, Math.Min(circle.Center.Y, rectangle.Y + rectangle.Size().Y));
+            bool isInside = (new Vector2(circle.Center.X - nearestX, circle.Center.Y - nearestY)).Length() < circle.radius + thickness / 2;
+
+            float furthestX = rectangle.X + rectangle.Size().X / 2 - circle.Center.X > 0 ? rectangle.X + rectangle.Size().X : rectangle.X;
+            float furthestY = rectangle.Y + rectangle.Size().Y / 2 - circle.Center.Y > 0 ? rectangle.Y + rectangle.Size().Y : rectangle.Y;
+            bool isOutside = (new Vector2(circle.Center.X - furthestX, circle.Center.Y - furthestY)).Length() > circle.radius - thickness / 2;
+
+            return isInside && isOutside;
+        }
+
+        public static bool CheckArcAngle(Vector2 a, Arc arc)
+        {
+            float angle = (a - arc.Center).ToRotation();
+            float startAngle = arc.StartAngle();
+
+            if (startAngle <= angle && angle <= startAngle + arc.Angle) return true;
+            if (startAngle <= angle + MathHelper.TwoPi && angle + MathHelper.TwoPi <= startAngle + arc.Angle) return true;
+            return false;
+        }
+
+        public static bool CheckSegmentvArc(Vector2 a, Vector2 b, Arc arc)
+        {
+            Circle circle = arc.ToCircle();
+
+            float A = (a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y);
+            float B = 2 * (a.X - b.X) * (b.X - circle.Center.X) + 2 * (a.Y - b.Y) * (b.Y - circle.Center.Y);
+            float C = (b.X - circle.Center.X) * (b.X - circle.Center.X) + (b.Y - circle.Center.Y) * (b.Y - circle.Center.Y) - circle.radius * circle.radius;
+
+            float det = B * B - 4 * A * C;
+            if (det < 0) return false;
+
+            float t0 = (-B + (float)Math.Sqrt(det)) / (2 * A);
+            float t1 = (-B - (float)Math.Sqrt(det)) / (2 * A);
+
+            if (t0 >= 0 && t0 <= 1)
+            {
+                if (CheckArcAngle(a * t0 + b * (1 - t0), arc)) return true;
+            }
+            if (t1 >= 0 && t1 <= 1)
+            {
+                if (CheckArcAngle(a * t1 + b * (1 - t1), arc)) return true;
+            }
+            return false;
+        }
+
+        public static bool CheckAABBvPoint(Rectangle rectangle, float pointX, float pointY)
+        {
+            return pointX >= rectangle.X && pointX <= rectangle.Right && pointY >= rectangle.Y && pointY <= rectangle.Bottom;
+        }
+        public static bool CheckAABBvPoint(Rectangle rectangle, Vector2 point)
+        {
+            return point.X >= rectangle.X && point.X <= rectangle.Right && point.Y >= rectangle.Y && point.Y <= rectangle.Bottom;
+        }
+
+        public static bool CheckAABBvArc(Rectangle rectangle, Arc arc)
+        {
+            if (!CheckAABBvCircle(rectangle, arc.ToCircle())) return false;
+
+            if (CheckSegmentvArc(rectangle.TopLeft(), rectangle.TopRight(), arc)) return true;
+            if (CheckSegmentvArc(rectangle.TopLeft(), rectangle.BottomLeft(), arc)) return true;
+            if (CheckSegmentvArc(rectangle.TopRight(), rectangle.BottomRight(), arc)) return true;
+            if (CheckSegmentvArc(rectangle.BottomLeft(), rectangle.BottomRight(), arc)) return true;
+
+            return CheckAABBvPoint(rectangle, arc.Start);
+        }
+
         public static void SetMerge(int type1, int type2, bool merge = true)
         {
             if (type1 != type2)
@@ -249,14 +380,6 @@ namespace Polarities
         public static PolaritiesPlayer Polarities(this Player player)
         {
             return player.GetModPlayer<PolaritiesPlayer>();
-        }
-        public static bool HasEquip<T>(this Player player) where T : EquipItem
-        {
-            return player.Polarities().HasEquip<T>();
-        }
-        public static T FindEquip<T>(this Player player) where T : EquipItem
-        {
-            return player.Polarities().FindEquip<T>();
         }
 
         public static int SpawnSentry(this Player player, IEntitySource source, int ownerIndex, int sentryProjectileId, int originalDamageNotScaledByMinionDamage, float KnockBack, bool spawnWithGravity = true, Vector2 offsetFromDefaultPosition = default)
@@ -469,6 +592,46 @@ namespace Polarities
             float g = clampedProgress < 0.5f ? 4 * clampedProgress * (1 - clampedProgress) : 13 / 12f - clampedProgress / 6f;
             float b = 2 * clampedProgress;
             return new Color(r, g, b);
+        }
+    }
+
+    public readonly struct Arc
+    {
+        public readonly Vector2 Center;
+        public readonly Vector2 Start;
+        public readonly float Angle;
+
+        public Arc(Vector2 _Center, Vector2 _Start, float _angle)
+        {
+            Center = _Center;
+            Start = _Start;
+            Angle = _angle;
+
+            if (Angle < 0)
+            {
+                Start = Move(1);
+                Angle = -Angle;
+            }
+        }
+
+        public float StartAngle()
+        {
+            return (Start - Center).ToRotation();
+        }
+
+        public float Radius()
+        {
+            return (Start - Center).Length();
+        }
+
+        public Vector2 Move(float progress)
+        {
+            return Center + (Start - Center).RotatedBy(Angle * progress);
+        }
+
+        public Circle ToCircle()
+        {
+            return new Circle(Center, (Start - Center).Length());
         }
     }
 }

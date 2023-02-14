@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Polarities.NPCs.Eclipxie;
+using Polarities.NPCs.Eclipxie.EclipxieRework;
 using Polarities.NPCs.SunPixie;
 using Terraria;
 using Terraria.GameContent;
@@ -35,7 +35,7 @@ namespace Polarities.Items
 
         public override bool CanUseItem(Player player)
         {
-            return !NPC.AnyNPCs(NPCType<SunPixie>()) && PolaritiesSystem.sunPixieSpawnTimer == 0 && !NPC.AnyNPCs(NPCType<Eclipxie>());
+            return !NPC.AnyNPCs(NPCType<SunPixie>()) && PolaritiesSystem.sunPixieSpawnTimer == 0 && !NPC.AnyNPCs(NPCType<Rework_Eclipxie>());
         }
 
         public override void UseAnimation(Player player)
@@ -45,9 +45,9 @@ namespace Polarities.Items
 
         public override bool? UseItem(Player player)
         {
-            if (!NPC.AnyNPCs(NPCType<Eclipxie>()) && Main.eclipse)
+            if (!NPC.AnyNPCs(NPCType<Rework_Eclipxie>()) && Main.eclipse)
             {
-                Eclipxie.SpawnOn(player);
+                Rework_Eclipxie.SpawnOn(player);
             }
             else
             {

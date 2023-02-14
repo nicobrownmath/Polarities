@@ -20,6 +20,9 @@ namespace Polarities.Effects
         {
             //register layer
             drawLayers[this.GetType()] = this;
+            projCache = new List<int>();
+            npcCache = new List<int>();
+            drawCaches = new List<IDrawType>();
             ResetCaches();
         }
 
@@ -38,6 +41,11 @@ namespace Polarities.Effects
             GetDrawLayer<T>().npcCache.Add(index);
         }
 
+        public static void AddDraw<T>(IDrawType instance) where T : DrawLayer
+        {
+            GetDrawLayer<T>().drawCaches.Add(instance);
+        }
+
         public static bool IsActive<T>() where T : DrawLayer
         {
             return GetDrawLayer<T>().active;
@@ -45,6 +53,7 @@ namespace Polarities.Effects
 
         private List<int> projCache;
         private List<int> npcCache;
+        private List<IDrawType> drawCaches;
         private bool active;
 
         public BlendState blendState = BlendState.AlphaBlend;
@@ -53,8 +62,9 @@ namespace Polarities.Effects
 
         public void ResetCaches()
         {
-            projCache = new List<int>();
-            npcCache = new List<int>();
+            projCache.Clear();
+            npcCache.Clear();
+            drawCaches.Clear();
         }
 
         public void Draw()
@@ -102,6 +112,26 @@ namespace Polarities.Effects
 
                 ResetCaches();
                 active = false;
+            }
+        }
+    }
+
+    public class DrawLayerBehindWalls : DrawLayer
+    {
+        public override void Load(Mod mod)
+        {
+            base.Load(mod);
+            blendState = BlendState.AlphaBlend;
+            On.Terraria.Main.DrawCachedNPCs += Main_DrawCachedNPCs1;
+        }
+
+        private void Main_DrawCachedNPCs1(On.Terraria.Main.orig_DrawCachedNPCs orig, Main self, List<int> npcCache, bool behindTiles)
+        {
+            orig(self, npcCache, behindTiles);
+
+            if (npcCache == Main.instance.DrawCacheNPCsMoonMoon)
+            {
+                Draw();
             }
         }
     }

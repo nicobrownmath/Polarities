@@ -26,7 +26,7 @@ using Polarities.Items.Weapons.Ranged;
 using Polarities.Items.Weapons.Summon.Minions;
 using Polarities.NPCs;
 using Polarities.NPCs.ConvectiveWanderer;
-using Polarities.NPCs.Eclipxie;
+using Polarities.NPCs.Eclipxie.EclipxieRework;
 using Polarities.Projectiles;
 using System;
 using System.Collections.Generic;
@@ -63,6 +63,9 @@ namespace Polarities
 
         public Dictionary<float, float> screenShakes = new Dictionary<float, float>(); //key is time at which the screenshake ends, value is magnitude
         private int screenshakeRandomSeed;
+
+        public int selfsimilarHits;
+        public int selfsimilarHitTimer;
 
         public float hookSpeedMult;
         public float manaStarMultiplier;
@@ -155,22 +158,8 @@ namespace Polarities
         public int bubbyWingFrameCounter;
         public int bubbyWingFrame;
 
-        public Dictionary<int, EquipItem> equips;
-
-        public bool HasEquip<T>() where T : EquipItem
-        {
-            return FindEquip<T>() != null;
-        }
-        public T FindEquip<T>() where T : EquipItem
-        {
-            if (equips == null || !equips.TryGetValue(GetInstance<T>().Type, out var val))
-                return null;
-            return (T)val;
-        }
-
         public override void Initialize()
         {
-            equips = new Dictionary<int, EquipItem>();
         }
 
         public override void UpdateDead()
@@ -180,6 +169,15 @@ namespace Polarities
 
         public override void ResetEffects()
         {
+            if (selfsimilarHitTimer > 0)
+            {
+                selfsimilarHitTimer--;
+            }
+            else
+            {
+                selfsimilarHits = 0;
+            }
+
             //update old positions, velocities, etc.
             for (int i = trailCacheLength - 1; i > 0; i--)
             {
@@ -190,10 +188,6 @@ namespace Polarities
             oldCenters[0] = Player.Center;
             oldVelocities[0] = Player.velocity;
             oldDirections[0] = Player.direction;
-
-            if (equips == null)
-                equips = new Dictionary<int, EquipItem>();
-            equips.Clear();
 
             //reset a bunch of values
             warhammerDefenseBoost = 0;
@@ -1247,7 +1241,7 @@ namespace Polarities
             c.Emit(OpCodes.Ldarg, 0);
             c.EmitDelegate((Player player) =>
             {
-                player.ManageSpecialBiomeVisuals("Polarities:EclipxieSky", NPC.AnyNPCs(NPCType<Eclipxie>()));
+                player.ManageSpecialBiomeVisuals("Polarities:EclipxieSky", NPC.AnyNPCs(NPCType<Rework_Eclipxie>()));
             });
         }
 
