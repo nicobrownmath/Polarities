@@ -1171,7 +1171,7 @@ namespace Polarities
 
         public int GetFractalization()
         {
-            return fractalization; // For debugging purposes
+            return fractalization;
         }
 
         private void Player_Update_NPCCollision(ILContext il)

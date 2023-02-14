@@ -41,6 +41,7 @@ Nalyd To-Do:
     Fix some Music Box Sprites (SOME ARE GRABBED FROM WIKI AND HAVE COMPRESSION NOISE)
     Fix some Music being MP3s
     Fractal HP bar
+    Fractal Loading Screen
 
 Fixes to do:
   Worm guns break with manual
