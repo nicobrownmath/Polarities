@@ -1,31 +1,23 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes;
+using Polarities.Effects;
+using Polarities.Items.Consumables;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks;
+using Polarities.Items.Weapons.Ranged.Atlatls;
+using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Tiles;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using System.Collections.Generic;
-using Terraria.Audio;
-using Terraria.GameContent;
-using ReLogic.Content;
-using Terraria.GameContent.ItemDropRules;
-using Polarities.Items.Materials;
-using Polarities.Items.Placeable.Blocks;
-using Polarities.Items.Consumables;
-using Polarities.Biomes;
-using Terraria.GameContent.Bestiary;
-using Polarities.Items.Weapons.Ranged.Atlatls;
-using Polarities.Effects;
 
 namespace Polarities.NPCs.Enemies.Limestone
 {
@@ -72,7 +64,7 @@ namespace Polarities.NPCs.Enemies.Limestone
             SpawnModBiomes = new int[1] { GetInstance<LimestoneCave>().Type };
         }
 
-        bool hostile => NPC.life < NPC.lifeMax;
+        private bool hostile => NPC.life < NPC.lifeMax;
 
         public override bool PreAI()
         {
@@ -299,7 +291,7 @@ namespace Polarities.NPCs.Enemies.Limestone
             npcLoot.Add(ItemDropRule.Common(ItemType<KeyLimePie>(), 50));
         }
 
-        static Asset<Texture2D> MaskTexture;
+        private static Asset<Texture2D> MaskTexture;
 
         public override void Load()
         {

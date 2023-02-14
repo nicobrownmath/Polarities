@@ -1,14 +1,11 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Polarities.Biomes;
 using Polarities.Dusts;
-using System.Collections.Generic;
+using Polarities.Items.Placeable.Blocks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Polarities.Biomes;
-using Polarities.Items.Placeable.Blocks;
 
 namespace Polarities.Items.Placeable.Furniture.Limestone
 {

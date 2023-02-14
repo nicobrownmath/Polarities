@@ -1,15 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
+using Polarities.Buffs;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Polarities.Items.Weapons;
-using Polarities.Items.Placeable.Banners;
-using Terraria.GameContent.Bestiary;
-using Polarities.Buffs;
 using Terraria.ModLoader.Utilities;
-using Terraria.DataStructures;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.NPCs.Critters
 {

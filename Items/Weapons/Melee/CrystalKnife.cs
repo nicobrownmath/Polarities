@@ -1,72 +1,70 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using System;
+using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Polarities.Projectiles;
-using Terraria.DataStructures;
-using System;
 
 namespace Polarities.Items.Weapons.Melee
 {
-	public class CrystalKnife : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			SacrificeTotal = (16);
-		}
+    public class CrystalKnife : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            SacrificeTotal = (16);
+        }
 
-		public override void SetDefaults()
-		{
-			Item.SetWeaponValues(30, 1f, 0);
-			Item.DamageType = DamageClass.Melee;
-			Item.maxStack = 16;
+        public override void SetDefaults()
+        {
+            Item.SetWeaponValues(30, 1f, 0);
+            Item.DamageType = DamageClass.Melee;
+            Item.maxStack = 16;
 
-			Item.width = 34;
-			Item.height = 34;
+            Item.width = 34;
+            Item.height = 34;
 
-			Item.useTime = 96;
-			Item.useAnimation = 96;
-			Item.useStyle = 5;
-			Item.noMelee = true;
-			Item.noUseGraphic = true;
-			Item.UseSound = SoundID.Item1;
-			Item.autoReuse = true;
+            Item.useTime = 96;
+            Item.useAnimation = 96;
+            Item.useStyle = 5;
+            Item.noMelee = true;
+            Item.noUseGraphic = true;
+            Item.UseSound = SoundID.Item1;
+            Item.autoReuse = true;
 
-			Item.shoot = ProjectileType<CrystalKnifeProjectile>();
-			Item.shootSpeed = 1f;
+            Item.shoot = ProjectileType<CrystalKnifeProjectile>();
+            Item.shootSpeed = 1f;
 
-			Item.value = 5000;
-			Item.rare = ItemRarityID.Blue;
-		}
+            Item.value = 5000;
+            Item.rare = ItemRarityID.Blue;
+        }
 
-		public override void UpdateInventory(Player player)
-		{
-			Item.maxStack = 16;
-			Item.useTime = (int)Math.Ceiling(96f / Item.stack);
-			Item.useAnimation = (int)Math.Ceiling(96f / Item.stack);
-		}
+        public override void UpdateInventory(Player player)
+        {
+            Item.maxStack = 16;
+            Item.useTime = (int)Math.Ceiling(96f / Item.stack);
+            Item.useAnimation = (int)Math.Ceiling(96f / Item.stack);
+        }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-		{
-			if (player.ownedProjectileCounts[Item.shoot] < Item.stack)
-			{
-				Projectile.NewProjectile(source, position, Vector2.Zero, type, damage, knockback, player.whoAmI, 0, 100);
-			}
-			return false;
-		}
+        {
+            if (player.ownedProjectileCounts[Item.shoot] < Item.stack)
+            {
+                Projectile.NewProjectile(source, position, Vector2.Zero, type, damage, knockback, player.whoAmI, 0, 100);
+            }
+            return false;
+        }
 
-		public override void AddRecipes()
-		{
-			CreateRecipe()
-				.AddIngredient(ItemType<SaltKnife>())
-				.AddIngredient(ItemID.CrystalShard, 10)
-				.AddIngredient(ItemID.SoulofLight, 3)
-				.AddTile(TileID.MythrilAnvil)
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemType<SaltKnife>())
+                .AddIngredient(ItemID.CrystalShard, 10)
+                .AddIngredient(ItemID.SoulofLight, 3)
+                .AddTile(TileID.MythrilAnvil)
                 .Register();
-		}
-	}
+        }
+    }
 
     public class CrystalKnifeProjectile : ModProjectile
     {

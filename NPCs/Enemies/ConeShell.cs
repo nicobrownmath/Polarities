@@ -1,14 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Weapons.Melee;
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Polarities.Items.Weapons;
-using Polarities.Items.Placeable.Banners;
 using Terraria.ModLoader.Utilities;
-using Terraria.GameContent.Bestiary;
-using Polarities.Items.Weapons.Melee;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.NPCs.Enemies
 {

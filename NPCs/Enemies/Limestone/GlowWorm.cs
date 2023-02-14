@@ -1,29 +1,21 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes;
+using Polarities.Items.Accessories;
+using Polarities.Items.Consumables;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks;
+using Polarities.Items.Placeable.Walls;
+using ReLogic.Content;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Tiles;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using Terraria.GameContent.Bestiary;
-using Polarities.Biomes;
-using Polarities.Items.Placeable.Blocks;
-using Terraria.Audio;
-using Polarities.Items.Placeable.Walls;
-using Terraria.GameContent.ItemDropRules;
-using Polarities.Items.Consumables;
-using Terraria.GameContent;
-using ReLogic.Content;
-using Polarities.Items.Accessories;
 
 namespace Polarities.NPCs.Enemies.Limestone
 {
@@ -207,10 +199,10 @@ namespace Polarities.NPCs.Enemies.Limestone
             NPC.rotation = curvature;
         }
 
-        static Asset<Texture2D> TailTexture;
-        static Asset<Texture2D> TailMaskTexture;
-        static Asset<Texture2D> ChainTexture;
-        static Asset<Texture2D> ChainMaskTexture;
+        private static Asset<Texture2D> TailTexture;
+        private static Asset<Texture2D> TailMaskTexture;
+        private static Asset<Texture2D> ChainTexture;
+        private static Asset<Texture2D> ChainMaskTexture;
 
         public override void Load()
         {
@@ -403,8 +395,8 @@ namespace Polarities.NPCs.Enemies.Limestone
 
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
                 {
-                    Color color = mainColor * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                    float scale = Projectile.scale * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                    Color color = mainColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                    float scale = Projectile.scale * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
 
                     float rotation = Projectile.rotation;
 

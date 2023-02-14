@@ -1,25 +1,17 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Buffs;
+using Polarities.Items.Placeable.Trophies;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Accessories;
-using Polarities.Items.Placeable.Trophies;
-using Terraria.Audio;
-using Terraria.GameContent;
-using ReLogic.Content;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.DataStructures;
-using Terraria.GameContent.Bestiary;
 
 namespace Polarities.NPCs.Gigabat
 {

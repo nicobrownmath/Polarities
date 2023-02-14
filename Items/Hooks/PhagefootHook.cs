@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.NPCs.Esophage;
+using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using System;
-using Terraria.Audio;
-using Polarities.NPCs.Esophage;
 
 namespace Polarities.Items.Hooks
 {
@@ -81,7 +81,7 @@ namespace Polarities.Items.Hooks
                 return false;
             }
             Vector2 mountedCenter3 = Main.player[Projectile.owner].MountedCenter;
-            Vector2 vector131 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+            Vector2 vector131 = new Vector2(Projectile.position.X + Projectile.width * 0.5f, Projectile.position.Y + Projectile.height * 0.5f);
             float num2510 = mountedCenter3.X - vector131.X;
             float num2509 = mountedCenter3.Y - vector131.Y;
             float num2508 = (float)Math.Sqrt(num2510 * num2510 + num2509 * num2509);
@@ -204,9 +204,9 @@ namespace Polarities.Items.Hooks
                     return false;
                 }
                 int num2490 = (int)(Projectile.position.X / 16f) - 1;
-                int num2489 = (int)((Projectile.position.X + (float)Projectile.width) / 16f) + 2;
+                int num2489 = (int)((Projectile.position.X + Projectile.width) / 16f) + 2;
                 int num2488 = (int)((Projectile.position.Y + 180) / 16f) - 1;
-                int num2487 = (int)(((Projectile.position.Y + 180) + (float)Projectile.height) / 16f) + 2;
+                int num2487 = (int)(((Projectile.position.Y + 180) + Projectile.height) / 16f) + 2;
                 if (num2490 < 0)
                 {
                     num2490 = 0;
@@ -231,7 +231,7 @@ namespace Polarities.Items.Hooks
                     {
                         vector134.X = num2486 * 16;
                         vector134.Y = num2485 * 16;
-                        if (Projectile.position.X + (float)(Projectile.width / 2) > vector134.X && Projectile.position.X + (float)(Projectile.width / 2) < vector134.X + 16f && (Projectile.position.Y + 180) + (float)(Projectile.height / 2) > vector134.Y && (Projectile.position.Y + 180) + (float)(Projectile.height / 2) < vector134.Y + 16f && Main.tile[num2486, num2485].HasUnactuatedTile && (Main.tileSolid[Main.tile[num2486, num2485].TileType] || Main.tile[num2486, num2485].TileType == 314 || Main.tile[num2486, num2485].TileType == 5))
+                        if (Projectile.position.X + Projectile.width / 2 > vector134.X && Projectile.position.X + Projectile.width / 2 < vector134.X + 16f && (Projectile.position.Y + 180) + Projectile.height / 2 > vector134.Y && (Projectile.position.Y + 180) + Projectile.height / 2 < vector134.Y + 16f && Main.tile[num2486, num2485].HasUnactuatedTile && (Main.tileSolid[Main.tile[num2486, num2485].TileType] || Main.tile[num2486, num2485].TileType == 314 || Main.tile[num2486, num2485].TileType == 5))
                         {
                             flag149 = false;
                         }

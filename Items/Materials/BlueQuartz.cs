@@ -1,14 +1,4 @@
-﻿using Polarities.NPCs;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-
-namespace Polarities.Items.Materials
+﻿namespace Polarities.Items.Materials
 {
     //TODO: Make this useful for literally anything
     /*public class BlueQuartz : ModItem

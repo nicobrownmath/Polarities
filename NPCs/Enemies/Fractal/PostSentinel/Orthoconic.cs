@@ -356,10 +356,10 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            //if (Subworld.IsActive<FractalSubworld>() && spawnInfo.Player.GetModPlayer<PolaritiesPlayer>().GetFractalization() > FractalSubworld.POST_GOLEM_TIME)
-            //{
-            //    return 0.15f * FractalSubworld.SpawnConditionFractalWaters(spawnInfo) * (1 - FractalSubworld.SpawnConditionFractalSky(spawnInfo));
-            //}
+            if (FractalSubworld.Active && spawnInfo.Player.GetFractalization() > FractalSubworld.POST_SENTINEL_TIME)
+            {
+                return 0.15f * FractalSubworld.SpawnConditionFractalWaters(spawnInfo) * (1 - FractalSubworld.SpawnConditionFractalSky(spawnInfo));
+            }
             return 0f;
         }
 
@@ -546,8 +546,8 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
 
             for (int k = 0; k < Math.Min(Projectile.oldPos.Length, 598 - Projectile.timeLeft); k++)
             {
-                Color color = mainColor * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                float scale = Projectile.scale * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                Color color = mainColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                float scale = Projectile.scale * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
 
                 float rotation;
                 if (k + 1 >= Projectile.oldPos.Length)
@@ -621,8 +621,8 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
 
             for (int k = 0; k < Math.Min(Projectile.oldPos.Length, 268 - Projectile.timeLeft); k++)
             {
-                Color color = mainColor * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                float scale = Projectile.scale * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                Color color = mainColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                float scale = Projectile.scale * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
 
                 float rotation;
                 if (k + 1 >= Projectile.oldPos.Length)

@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Polarities.Biomes;
+﻿using Polarities.Biomes;
 using Polarities.NPCs.SunPixie;
 using Terraria;
 using Terraria.Audio;

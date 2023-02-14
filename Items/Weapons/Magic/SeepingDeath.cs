@@ -1,15 +1,12 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Polarities.Projectiles;
-using System;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
-using ReLogic.Content;
-using Terraria.GameContent;
 
 namespace Polarities.Items.Weapons.Magic
 {
@@ -85,7 +82,7 @@ namespace Polarities.Items.Weapons.Magic
 
     public class SeepingDeathProjectile : ModProjectile
     {
-        static Asset<Texture2D> TrailTexture;
+        private static Asset<Texture2D> TrailTexture;
 
         public override void Load()
         {

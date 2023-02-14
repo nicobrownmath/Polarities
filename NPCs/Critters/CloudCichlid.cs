@@ -1,12 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using MonoMod.Cil;
-using System;
-using Terraria;
+﻿using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent.Bestiary;
 
 namespace Polarities.NPCs.Critters
 {

@@ -1,16 +1,14 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.GameContent.Bestiary;
-using Terraria.Localization;
-using Terraria.GameContent;
 
 namespace Polarities.NPCs.Enemies
 {
@@ -19,7 +17,7 @@ namespace Polarities.NPCs.Enemies
         private int attackCooldown
         {
             get => attackCooldown = (int)NPC.ai[0];
-            set => NPC.ai[0] = (float)value;
+            set => NPC.ai[0] = value;
         }
 
         private int rattleCooldown
@@ -196,7 +194,7 @@ namespace Polarities.NPCs.Enemies
             //adapted from vanilla npc drawcode
             drawColor = NPC.GetNPCColorTintedByBuffs(drawColor);
             Vector2 halfSize = NPC.frame.Size() / 2;
-            SpriteEffects spriteEffects = (SpriteEffects)0;
+            SpriteEffects spriteEffects = 0;
             if (NPC.spriteDirection == 1)
             {
                 spriteEffects = (SpriteEffects)1;
@@ -209,7 +207,7 @@ namespace Polarities.NPCs.Enemies
             Main.spriteBatch.Draw(npcTexture, new Vector2(NPC.Center.X - screenPos.X - npcTexture.Width * NPC.scale / 2f / numHorizontalFrames + halfSize.X * NPC.scale, NPC.position.Y - screenPos.Y + NPC.height - npcTexture.Height * NPC.scale / Main.npcFrameCount[Type] + 4f + halfSize.Y * NPC.scale + Main.NPCAddHeight(NPC) + NPC.gfxOffY), NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, halfSize, NPC.scale, spriteEffects, 0f);
             if (NPC.confused)
             {
-                Main.spriteBatch.Draw(TextureAssets.Confuse.Value, new Vector2(NPC.position.X - screenPos.X + (float)(NPC.width / 2) - (float)TextureAssets.Npc[Type].Width() * NPC.scale / 2f / numHorizontalFrames + halfSize.X * NPC.scale, NPC.position.Y - screenPos.Y + (float)NPC.height - (float)TextureAssets.Npc[Type].Height() * NPC.scale / (float)Main.npcFrameCount[Type] + 4f + halfSize.Y * NPC.scale + Main.NPCAddHeight(NPC) - (float)TextureAssets.Confuse.Height() - 20f), (Rectangle?)new Rectangle(0, 0, TextureAssets.Confuse.Width(), TextureAssets.Confuse.Height()), new Color(250, 250, 250, 70), NPC.velocity.X * -0.05f, new Vector2((float)(TextureAssets.Confuse.Width() / 2), (float)(TextureAssets.Confuse.Height() / 2)), Main.essScale + 0.2f, (SpriteEffects)0, 0f);
+                Main.spriteBatch.Draw(TextureAssets.Confuse.Value, new Vector2(NPC.position.X - screenPos.X + NPC.width / 2 - TextureAssets.Npc[Type].Width() * NPC.scale / 2f / numHorizontalFrames + halfSize.X * NPC.scale, NPC.position.Y - screenPos.Y + NPC.height - TextureAssets.Npc[Type].Height() * NPC.scale / Main.npcFrameCount[Type] + 4f + halfSize.Y * NPC.scale + Main.NPCAddHeight(NPC) - TextureAssets.Confuse.Height() - 20f), (Rectangle?)new Rectangle(0, 0, TextureAssets.Confuse.Width(), TextureAssets.Confuse.Height()), new Color(250, 250, 250, 70), NPC.velocity.X * -0.05f, new Vector2(TextureAssets.Confuse.Width() / 2, TextureAssets.Confuse.Height() / 2), Main.essScale + 0.2f, 0, 0f);
             }
 
             return false;

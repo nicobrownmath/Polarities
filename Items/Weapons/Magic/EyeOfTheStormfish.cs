@@ -1,17 +1,12 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Polarities.Projectiles;
-using System;
-using Polarities.Buffs;
-using Terraria.DataStructures;
-using Terraria.Audio;
-using Polarities.Effects;
-using ReLogic.Content;
 
 namespace Polarities.Items.Weapons.Magic
 {
@@ -48,7 +43,7 @@ namespace Polarities.Items.Weapons.Magic
 
         public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
-            player.itemRotation = -player.direction * 2 * MathHelper.TwoPi * (float)player.itemTime / Item.useTime * player.gravDir;
+            player.itemRotation = -player.direction * 2 * MathHelper.TwoPi * player.itemTime / Item.useTime * player.gravDir;
             player.itemLocation = player.Center + new Vector2(-player.direction * 24, 24).RotatedBy(player.itemRotation) + new Vector2(player.direction * 10, 0f);
         }
 
@@ -96,13 +91,13 @@ namespace Polarities.Items.Weapons.Magic
 
         public void DrawHeldItem(ref PlayerDrawSet drawInfo)
         {
-            Color currentColor = Lighting.GetColor((int)((double)drawInfo.drawPlayer.position.X + (double)drawInfo.drawPlayer.width * 0.5) / 16, (int)(((double)drawInfo.drawPlayer.position.Y + (double)drawInfo.drawPlayer.height * 0.5) / 16.0));
+            Color currentColor = Lighting.GetColor((int)(drawInfo.drawPlayer.position.X + drawInfo.drawPlayer.width * 0.5) / 16, (int)((drawInfo.drawPlayer.position.Y + drawInfo.drawPlayer.height * 0.5) / 16.0));
             Texture2D texture = HeldTexture.Value;
             SpriteEffects spriteEffects = (SpriteEffects)((drawInfo.drawPlayer.gravDir != 1f) ? ((drawInfo.drawPlayer.direction != 1) ? 3 : 2) : ((drawInfo.drawPlayer.direction != 1) ? 1 : 0));
 
             Vector2 value21 = Vector2.Zero;
             int type6 = drawInfo.drawPlayer.inventory[drawInfo.drawPlayer.selectedItem].type;
-            DrawData drawData = new DrawData(texture, new Vector2((float)(int)(drawInfo.drawPlayer.itemLocation.X - Main.screenPosition.X), (float)(int)(drawInfo.drawPlayer.itemLocation.Y - Main.screenPosition.Y)), (Rectangle?)new Rectangle(0, 0, texture.Width, texture.Height), currentColor, drawInfo.drawPlayer.itemRotation, new Vector2((float)texture.Width * 0.5f - (float)texture.Height * 0.5f * (float)drawInfo.drawPlayer.direction, (float)texture.Height) + value21, drawInfo.drawPlayer.inventory[drawInfo.drawPlayer.selectedItem].scale, spriteEffects, 0);
+            DrawData drawData = new DrawData(texture, new Vector2((int)(drawInfo.drawPlayer.itemLocation.X - Main.screenPosition.X), (int)(drawInfo.drawPlayer.itemLocation.Y - Main.screenPosition.Y)), (Rectangle?)new Rectangle(0, 0, texture.Width, texture.Height), currentColor, drawInfo.drawPlayer.itemRotation, new Vector2(texture.Width * 0.5f - texture.Height * 0.5f * drawInfo.drawPlayer.direction, texture.Height) + value21, drawInfo.drawPlayer.inventory[drawInfo.drawPlayer.selectedItem].scale, spriteEffects, 0);
             drawInfo.DrawDataCache.Add(drawData);
         }
 

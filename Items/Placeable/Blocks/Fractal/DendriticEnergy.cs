@@ -81,7 +81,7 @@ namespace Polarities.Items.Placeable.Blocks.Fractal
             {
                 noItem = true;
             }
-            //else if (Subworld.IsActive<FractalSubworld>() && player.buffTime[player.FindBuffIndex(BuffType<Buffs.FractalSubworldDebuff>())] < FractalSubworld.HARDMODE_DANGER_TIME)
+            //else if (FractalSubworld.Active && player.buffTime[player.FindBuffIndex(BuffType<Buffs.FractalSubworldDebuff>())] < FractalSubworld.HARDMODE_DANGER_TIME)
             //{
             //    fail = true;
             //}

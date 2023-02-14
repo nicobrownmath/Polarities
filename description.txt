@@ -40,6 +40,7 @@ Nalyd To-Do:
     Misc Fractal Stuff (Fishing, other missed content)
     Fix some Music Box Sprites (SOME ARE GRABBED FROM WIKI AND HAVE COMPRESSION NOISE)
     Fix some Music being MP3s
+    Fractal HP bar
 
 Fixes to do:
   Worm guns break with manual

@@ -1,15 +1,13 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Items.Materials;
+using System;
+using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Items.Materials;
-using Terraria.Localization;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using Microsoft.Xna.Framework;
-using Terraria.GameContent;
 
 namespace Polarities.Items.Armor.StormcloudArmor
 {

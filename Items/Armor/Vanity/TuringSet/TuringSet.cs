@@ -1,14 +1,11 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.Items.Accessories.Wings;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Polarities.Items.Accessories.Wings;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace Polarities.Items.Armor.Vanity.TuringSet
 {
@@ -115,8 +112,10 @@ namespace Polarities.Items.Armor.Vanity.TuringSet
 
                         float pulseRotation = drawPlayer.gravDir == 1 ? 0 : MathHelper.Pi;
 
-                        DrawData drawData = new DrawData(texture, drawPlayer.position - drawPlayer.oldPosition + pulsePosition - Main.screenPosition, frame, color * alpha * ((4.5f - pulseScale) / 4.5f), rotation + pulseRotation, origin, pulseScale, spriteEffects, 0);
-                        drawData.shader = drawInfo.cWings;
+                        DrawData drawData = new DrawData(texture, drawPlayer.position - drawPlayer.oldPosition + pulsePosition - Main.screenPosition, frame, color * alpha * ((4.5f - pulseScale) / 4.5f), rotation + pulseRotation, origin, pulseScale, spriteEffects, 0)
+                        {
+                            shader = drawInfo.cWings
+                        };
                         drawInfo.DrawDataCache.Add(drawData);
                     }
                 }
@@ -134,8 +133,10 @@ namespace Polarities.Items.Armor.Vanity.TuringSet
                     legFrame3.Height -= 4;
                 }
                 Vector2 legsOffset = drawInfo.legsOffset;
-                DrawData data = new DrawData(TextureAssets.ArmorLeg[EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs)].Value, legsOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawPlayer.legFrame.Width / 2) + (float)(drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawPlayer.height - (float)drawPlayer.legFrame.Height + 4f)) + drawPlayer.legPosition + drawInfo.legVect, legFrame3, drawInfo.colorArmorLegs, drawPlayer.legRotation, legVect2, 1f, drawInfo.playerEffect, 0);
-                data.shader = drawInfo.cLegs;
+                DrawData data = new DrawData(TextureAssets.ArmorLeg[EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs)].Value, legsOffset + new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - drawPlayer.legFrame.Width / 2 + drawPlayer.width / 2), (int)(drawInfo.Position.Y - Main.screenPosition.Y + drawPlayer.height - drawPlayer.legFrame.Height + 4f)) + drawPlayer.legPosition + drawInfo.legVect, legFrame3, drawInfo.colorArmorLegs, drawPlayer.legRotation, legVect2, 1f, drawInfo.playerEffect, 0)
+                {
+                    shader = drawInfo.cLegs
+                };
                 drawInfo.DrawDataCache.Add(data);
             }
         }

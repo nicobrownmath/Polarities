@@ -1,13 +1,6 @@
-﻿using Terraria.ModLoader;
+﻿using Terraria;
 using Terraria.ID;
-using Polarities.NPCs;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
-using Terraria;
-using Terraria.GameContent;
-using ReLogic.Content;
+using Terraria.ModLoader;
 
 namespace Polarities.Items.Armor.Vanity
 {

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -66,7 +66,7 @@ namespace Polarities.Effects
                 {
                     Main.spriteBatch.End();
                 }
-                Main.spriteBatch.Begin((SpriteSortMode)0, blendState, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+                Main.spriteBatch.Begin(0, blendState, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
                 for (int i = 0; i < projCache.Count; i++)
                 {
@@ -97,7 +97,7 @@ namespace Polarities.Effects
                 Main.spriteBatch.End();
                 if (doWeResetSpritebatch)
                 {
-                    Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+                    Main.spriteBatch.Begin(0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                 }
 
                 ResetCaches();
@@ -141,7 +141,7 @@ namespace Polarities.Effects
             {
                 if (RenderTargetLayer.GetRenderTargetLayer<BehindTilesWithLightingTarget>().HasContent())
                 {
-                    Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+                    Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                     RenderTargetLayer.GetRenderTargetLayer<BehindTilesWithLightingTarget>().Draw(Main.spriteBatch, Vector2.Zero, Color.White);
                     Main.spriteBatch.End();
                 }
@@ -152,8 +152,8 @@ namespace Polarities.Effects
             if (projCache == Main.instance.DrawCacheProjsBehindNPCs)
             {
                 Draw();
-                
-                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                 ParticleLayer.BeforeNPCsAdditive.Draw(Main.spriteBatch);
                 Main.spriteBatch.End();
             }

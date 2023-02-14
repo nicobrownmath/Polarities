@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Mono.Cecil.Cil;
@@ -10,40 +8,40 @@ using Polarities.Biomes;
 using Polarities.Items;
 using Polarities.Items.Armor.Vanity;
 using Polarities.Items.Pets;
+using Polarities.Items.Placeable.MusicBoxes;
 using Polarities.Items.Placeable.Relics;
 using Polarities.Items.Placeable.Trophies;
 using Polarities.Items.Weapons.Magic;
 using Polarities.Items.Weapons.Melee;
 using Polarities.Items.Weapons.Ranged;
 using Polarities.Items.Weapons.Summon.Minions;
-using Polarities.NPCs;
-using Polarities.NPCs.Critters;
 using Polarities.NPCs.ConvectiveWanderer;
+using Polarities.NPCs.Critters;
+using Polarities.NPCs.Enemies.HallowInvasion;
+using Polarities.NPCs.Enemies.WorldEvilInvasion;
 using Polarities.NPCs.Esophage;
 using Polarities.NPCs.Gigabat;
 using Polarities.NPCs.StarConstruct;
 using Polarities.NPCs.StormCloudfish;
 using Polarities.NPCs.SunPixie;
 using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Polarities.NPCs.Enemies.HallowInvasion;
-using Polarities.NPCs.Enemies.WorldEvilInvasion;
-using Microsoft.Xna.Framework;
-using Terraria.Graphics.Effects;
-using Terraria.Graphics.Shaders;
-using Polarities.NPCs.Eclipxie;
-using Terraria.Audio;
-using Polarities.Items.Placeable.MusicBoxes;
 
 namespace Polarities
 {
     public class Polarities : Mod
-	{
+    {
         public static bool AprilFools => (DateTime.Now.Day == 1) && (DateTime.Now.Month == 4);
         public static bool SnakeDay => (DateTime.Now.Day == 16) && (DateTime.Now.Month == 7);
 
@@ -170,7 +168,8 @@ namespace Polarities
                     new List<int> { ItemType<PestilenceMusicBox>() }, //collection
                     ItemType<WorldEvilInvasionSummonItem>(), //spawning
                     "Use a [i:" + ItemType<WorldEvilInvasionSummonItem>() + "], or wait after defeating every mechanical boss.",
-                    (SpriteBatch sb, Rectangle rect, Color color) => {
+                    (SpriteBatch sb, Rectangle rect, Color color) =>
+                    {
                         Texture2D texture = Request<Texture2D>("Polarities/Textures/BossChecklist/WorldEvilInvasion").Value;
                         Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
                         sb.Draw(texture, centered, color);
@@ -182,7 +181,8 @@ namespace Polarities
                     ItemType<StormCloudfishSummonItem>(), //spawning
                     "Fly a [i:" + ItemType<StormCloudfishSummonItem>() + " as high as you can at the surface.",
                     null,
-                    (SpriteBatch sb, Rectangle rect, Color color) => {
+                    (SpriteBatch sb, Rectangle rect, Color color) =>
+                    {
                         Texture2D texture = Request<Texture2D>("Polarities/Textures/BossChecklist/StormCloudfish").Value;
                         Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
                         sb.Draw(texture, centered, color);
@@ -193,7 +193,8 @@ namespace Polarities
                     ItemType<StarConstructSummonItem>(), //spawning
                     "Wait for a dormant construct to spawn at night while the player has at least 300 maximum life, or use a [i:" + ItemType<StarConstructSummonItem>() + " at the surface.",
                     null,
-                    (SpriteBatch sb, Rectangle rect, Color color) => {
+                    (SpriteBatch sb, Rectangle rect, Color color) =>
+                    {
                         Texture2D texture = Request<Texture2D>("Polarities/Textures/BossChecklist/StarConstruct").Value;
                         Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
                         sb.Draw(texture, centered, color);
@@ -209,7 +210,8 @@ namespace Polarities
                     ItemType<SunPixieSummonItem>(), //spawning
                     "Reach the end of the Rapture, or use a [i:" + ItemType<SunPixieSummonItem>() + "] anywhere.",
                     null,
-                    (SpriteBatch sb, Rectangle rect, Color color) => {
+                    (SpriteBatch sb, Rectangle rect, Color color) =>
+                    {
                         Texture2D texture = Request<Texture2D>("Polarities/Textures/BossChecklist/SunPixie").Value;
                         Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
                         sb.Draw(texture, centered, color);
@@ -220,7 +222,8 @@ namespace Polarities
                     ItemType<EsophageSummonItem>(), //spawning
                     "Reach the end of the Pestilence, or use a [i:" + ItemType<EsophageSummonItem>() + "] anywhere.",
                     null,
-                    (SpriteBatch sb, Rectangle rect, Color color) => {
+                    (SpriteBatch sb, Rectangle rect, Color color) =>
+                    {
                         Texture2D texture = Request<Texture2D>("Polarities/Textures/BossChecklist/Esophage").Value;
                         Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
                         sb.Draw(texture, centered, color);
@@ -231,7 +234,8 @@ namespace Polarities
                     new List<int> { ItemType<BabyWandererItem>(), ItemType<ConvectiveWandererSummonItem>() }, //spawning
                     "Kill a baby wanderer, or use a [i:" + ItemType<ConvectiveWandererSummonItem>() + "], at the lava ocean.",
                     null,
-                    (SpriteBatch sb, Rectangle rect, Color color) => {
+                    (SpriteBatch sb, Rectangle rect, Color color) =>
+                    {
                         Texture2D texture = Request<Texture2D>("Polarities/Textures/BossChecklist/ConvectiveWanderer").Value;
                         Vector2 centered = new Vector2(rect.X + (rect.Width / 2), rect.Y + (rect.Height / 2));
                         sb.Draw(texture, centered, texture.Frame(), color, 0f, texture.Size() / 2, 0.2f, SpriteEffects.None, 0f);
@@ -358,9 +362,176 @@ namespace Polarities
                         PolaritiesSystem.hallowInvasion = false;
                     }
                     return eventOccurring;
+
                 case "InFractalDimension":
-                    return false;//TODO: Subworld.IsActive<FractalSubworld>();
-                //TODO: Check if it's the rapture/pestilence, activate/deactivate them
+                    return FractalSubworld.Active;
+
+                case "PestilenceActive":
+                    return PolaritiesSystem.worldEvilInvasion;
+                case "StartPestilence":
+                    if (!PolaritiesSystem.worldEvilInvasion)
+                    {
+                        WorldEvilInvasion.StartInvasion();
+                        return true;
+                    }
+                    return false;
+                case "EndPestilence":
+                    if (!PolaritiesSystem.worldEvilInvasion)
+                    {
+                        PolaritiesSystem.worldEvilInvasion = false;
+                        PolaritiesSystem.worldEvilInvasionSize = 0;
+                        PolaritiesSystem.worldEvilInvasionSizeStart = 0;
+                        return true;
+                    }
+                    return false;
+                case "ActivateEsophageSpawn":
+                    PolaritiesSystem.esophageSpawnTimer++;
+                    return true;
+                case "DeactivateEsophageSpawn":
+                    PolaritiesSystem.esophageSpawnTimer = 0;
+                    return true;
+
+                case "RaptureActive":
+                    return PolaritiesSystem.hallowInvasion;
+                case "StartRapture":
+                    if (!PolaritiesSystem.hallowInvasion)
+                    {
+                        HallowInvasion.StartInvasion();
+                        return true;
+                    }
+                    return false;
+                case "EndRapture":
+                    if (!PolaritiesSystem.hallowInvasion)
+                    {
+                        PolaritiesSystem.hallowInvasion = false;
+                        PolaritiesSystem.hallowInvasionSize = 0;
+                        PolaritiesSystem.hallowInvasionSizeStart = 0;
+                        return true;
+                    }
+                    return false;
+                case "ActivateSunPixieSpawn":
+                    PolaritiesSystem.sunPixieSpawnTimer++;
+                    return true;
+                case "DeactivateSunPixieSpawn":
+                    PolaritiesSystem.sunPixieSpawnTimer = 0;
+                    return true;
+
+                case "GetDowned":
+                    {
+                        switch ((string)args[1])
+                        {
+                            case "Gray":
+                            case "StormCloudfish":
+                                return PolaritiesSystem.downedStormCloudfish;
+
+                            case "StarConstruct":
+                                return PolaritiesSystem.downedStarConstruct;
+
+                            case "Gigabat":
+                                return PolaritiesSystem.downedGigabat;
+
+                            case "Fractal":
+                            case "Denizen":
+                            case "RiftDenizen":
+                                return PolaritiesSystem.downedRiftDenizen;
+
+                            case "Rapture":
+                            case "HallowInvasion":
+                                return PolaritiesSystem.downedHallowInvasion;
+
+                            case "SunPixie":
+                                return PolaritiesSystem.downedSunPixie;
+
+                            case "Pestilence":
+                            case "WorldEvilInvasion":
+                                return PolaritiesSystem.downedWorldEvilInvasion;
+
+                            case "Esophage":
+                                return PolaritiesSystem.downedEsophage;
+
+                            case "Sentinel":
+                            case "Selfsimilar":
+                            case "SelfsimilarSentinel":
+                                return PolaritiesSystem.downedSelfsimilarSentinel;
+
+                            case "ConvectiveWanderer":
+                            case "Convective":
+                            case "Wanderer":
+                                return PolaritiesSystem.downedConvectiveWanderer;
+
+                            case "Eclipxie":
+                            case "Eclipixie":
+                                return PolaritiesSystem.downedEclipxie;
+
+                            case "Hemorphage":
+                            case "Hemmorphage":
+                            case "Hemorrphage":
+                                return PolaritiesSystem.downedHemorrphage;
+
+                            case "Polarities":
+                            case "PolaritiesBoss":
+                                return PolaritiesSystem.downedPolarities;
+                        }
+                    }
+                    return null;
+                case "SetDowned":
+                    {
+                        switch ((string)args[1])
+                        {
+                            case "Gray":
+                            case "StormCloudfish":
+                                return PolaritiesSystem.downedStormCloudfish = (bool)args[2];
+
+                            case "StarConstruct":
+                                return PolaritiesSystem.downedStarConstruct = (bool)args[2];
+
+                            case "Gigabat":
+                                return PolaritiesSystem.downedGigabat = (bool)args[2];
+
+                            case "Fractal":
+                            case "Denizen":
+                            case "RiftDenizen":
+                                return PolaritiesSystem.downedRiftDenizen = (bool)args[2];
+
+                            case "Rapture":
+                            case "HallowInvasion":
+                                return PolaritiesSystem.downedHallowInvasion = (bool)args[2];
+
+                            case "SunPixie":
+                                return PolaritiesSystem.downedSunPixie = (bool)args[2];
+
+                            case "Pestilence":
+                            case "WorldEvilInvasion":
+                                return PolaritiesSystem.downedWorldEvilInvasion = (bool)args[2];
+
+                            case "Esophage":
+                                return PolaritiesSystem.downedEsophage = (bool)args[2];
+
+                            case "Sentinel":
+                            case "Selfsimilar":
+                            case "SelfsimilarSentinel":
+                                return PolaritiesSystem.downedSelfsimilarSentinel = (bool)args[2];
+
+                            case "ConvectiveWanderer":
+                            case "Convective":
+                            case "Wanderer":
+                                return PolaritiesSystem.downedConvectiveWanderer = (bool)args[2];
+
+                            case "Eclipxie":
+                            case "Eclipixie":
+                                return PolaritiesSystem.downedEclipxie = (bool)args[2];
+
+                            case "Hemorphage":
+                            case "Hemmorphage":
+                            case "Hemorrphage":
+                                return PolaritiesSystem.downedHemorrphage = (bool)args[2];
+
+                            case "Polarities":
+                            case "PolaritiesBoss":
+                                return PolaritiesSystem.downedPolarities = (bool)args[2];
+                        }
+                    }
+                    return null;
             }
             return null;
         }

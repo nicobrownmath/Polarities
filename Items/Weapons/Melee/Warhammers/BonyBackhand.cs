@@ -1,16 +1,11 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using MultiHitboxNPCLibrary;
+using Polarities.NPCs;
+using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Polarities.NPCs;
-using System;
-using System.Collections.Generic;
-using Terraria.DataStructures;
-using Terraria.Audio;
-using MultiHitboxNPCLibrary;
 
 namespace Polarities.Items.Weapons.Melee.Warhammers
 {
@@ -180,7 +175,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
             Projectile.localAI[0] += 1f;
 
             bool hitEffect = Projectile.localAI[0] % 30f == 0f;
-            int projTargetIndex = (int)TargetWhoAmI;
+            int projTargetIndex = TargetWhoAmI;
             if (Projectile.localAI[0] >= 60 * aiFactor || projTargetIndex < 0 || projTargetIndex >= 200)
             {
                 Projectile.Kill();

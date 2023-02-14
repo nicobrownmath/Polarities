@@ -1,12 +1,10 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Polarities.NPCs;
 using Polarities.NPCs.Esophage;
 using ReLogic.Content;
+using System;
 using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
@@ -79,7 +77,7 @@ namespace Polarities.Biomes
             PolaritiesSystem.worldEvilInvasionSize = 100 * numPlayers;
             PolaritiesSystem.worldEvilInvasionSizeStart = PolaritiesSystem.worldEvilInvasionSize;
 
-            String text = Language.GetTextValue("Mods.Polarities.StatusMessage.SpawnWorldEvilInvasion");
+            string text = Language.GetTextValue("Mods.Polarities.StatusMessage.SpawnWorldEvilInvasion");
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
                 Main.NewText(text, 175, 75, 255);
@@ -171,7 +169,7 @@ namespace Polarities.Biomes
             //Syncing start of invasion
             foreach (Player p in Main.player)
             {
-                NetMessage.SendData(MessageID.InvasionProgressReport, p.whoAmI, -1, null, PolaritiesSystem.worldEvilInvasionSizeStart - PolaritiesSystem.worldEvilInvasionSize, (float)PolaritiesSystem.worldEvilInvasionSizeStart, (float)Main.invasionType, 0f, 0, 0, 0);
+                NetMessage.SendData(MessageID.InvasionProgressReport, p.whoAmI, -1, null, PolaritiesSystem.worldEvilInvasionSizeStart - PolaritiesSystem.worldEvilInvasionSize, PolaritiesSystem.worldEvilInvasionSizeStart, Main.invasionType, 0f, 0, 0, 0);
             }
         }
     }
@@ -198,10 +196,10 @@ namespace Polarities.Biomes
     //TODO: Needs to take into account pausing better
     public class WorldEvilInvasionSky : CustomSky, ILoadable
     {
-        bool isActive;
-        float fadeOpacity;
-        WorldEvilInvasionParticle[] particles;
-        WorldEvilInvasionPlume[] plumes;
+        private bool isActive;
+        private float fadeOpacity;
+        private WorldEvilInvasionParticle[] particles;
+        private WorldEvilInvasionPlume[] plumes;
 
         private struct WorldEvilInvasionPlume
         {
@@ -248,7 +246,7 @@ namespace Polarities.Biomes
             particles = new WorldEvilInvasionParticle[1024];
         }
 
-        void InitializePlume(int i)
+        private void InitializePlume(int i)
         {
             plumes[i].Depth = Main.rand.NextFloat() * 7f + 1f;
             plumes[i].Position = Main.LocalPlayer.Center + new Vector2(Main.rand.NextFloat(-1f, 1f) * Main.screenWidth * plumes[i].Depth, Main.screenHeight * plumes[i].Depth);
@@ -257,7 +255,7 @@ namespace Polarities.Biomes
             if (Main.LocalPlayer.ZoneCrimson) plumes[i].Bias = 1 - plumes[i].Bias;
         }
 
-        void InitializeParticle(int i)
+        private void InitializeParticle(int i)
         {
             int plume = Main.rand.Next(plumes.Length);
 

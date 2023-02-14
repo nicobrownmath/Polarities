@@ -1,32 +1,20 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Items.Accessories;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Weapons.Melee;
+using Polarities.Items.Weapons.Summon.Whips;
+using ReLogic.Content;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Tiles;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using System.Collections.Generic;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
-using Polarities.Items.Materials;
-using ReLogic.Content;
-using Terraria.GameContent.Bestiary;
-using Polarities.Items.Weapons.Melee;
-using Polarities.Items.Accessories;
-using Polarities.Items.Weapons.Summon.Whips;
-using Polarities.NPCs.Esophage;
-using Terraria.GameContent;
-using static Humanizer.In;
-using System.Reflection;
 
 namespace Polarities.NPCs.Enemies.Marble
 {
@@ -586,10 +574,10 @@ namespace Polarities.NPCs.Enemies.Marble
             {
                 float num246 = Main.NPCAddHeight(NPC);
                 SpriteEffects spriteEffects = (SpriteEffects)1;
-                Vector2 halfSize = new Vector2((float)(TextureAssets.Npc[Type].Width() / 2), (float)(TextureAssets.Npc[Type].Height() / Main.npcFrameCount[Type] / 2));
+                Vector2 halfSize = new Vector2(TextureAssets.Npc[Type].Width() / 2, TextureAssets.Npc[Type].Height() / Main.npcFrameCount[Type] / 2);
                 Rectangle frame = new Rectangle(0, 0, (int)halfSize.X * 2, (int)halfSize.Y * 2);
 
-                spriteBatch.Draw(TextureAssets.Npc[Type].Value, center + new Vector2(0, 17) - screenPos + new Vector2((float)(-TextureAssets.Npc[Type].Width()) * NPC.scale / 2f + halfSize.X * NPC.scale, (float)(-TextureAssets.Npc[Type].Height()) * NPC.scale / (float)Main.npcFrameCount[Type] + 4f + halfSize.Y * NPC.scale + num246 + NPC.gfxOffY), frame, drawColor, NPC.rotation, halfSize, NPC.scale, spriteEffects, 0f);
+                spriteBatch.Draw(TextureAssets.Npc[Type].Value, center + new Vector2(0, 17) - screenPos + new Vector2(-TextureAssets.Npc[Type].Width() * NPC.scale / 2f + halfSize.X * NPC.scale, -TextureAssets.Npc[Type].Height() * NPC.scale / Main.npcFrameCount[Type] + 4f + halfSize.Y * NPC.scale + num246 + NPC.gfxOffY), frame, drawColor, NPC.rotation, halfSize, NPC.scale, spriteEffects, 0f);
             }
         }
     }

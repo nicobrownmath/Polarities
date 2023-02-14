@@ -1,67 +1,65 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Polarities.Projectiles;
-using System;
-using Terraria.DataStructures;
-using Terraria.Audio;
 
 namespace Polarities.Items.Weapons.Magic
 {
-	public class Shatterslash : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			SacrificeTotal = (1);
-		}
+    public class Shatterslash : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            SacrificeTotal = (1);
+        }
 
-		public override void SetDefaults()
-		{
-			Item.SetWeaponValues(40, 5f, 0);
-			Item.DamageType = DamageClass.Magic;
-			Item.mana = 12;
+        public override void SetDefaults()
+        {
+            Item.SetWeaponValues(40, 5f, 0);
+            Item.DamageType = DamageClass.Magic;
+            Item.mana = 12;
 
-			Item.width = 32;
-			Item.height = 40;
+            Item.width = 32;
+            Item.height = 40;
 
-			Item.useTime = 60;
-			Item.useAnimation = 60;
-			Item.useStyle = 5;
-			Item.noMelee = true;
-			Item.UseSound = SoundID.Item8;
-			Item.autoReuse = true;
+            Item.useTime = 60;
+            Item.useAnimation = 60;
+            Item.useStyle = 5;
+            Item.noMelee = true;
+            Item.UseSound = SoundID.Item8;
+            Item.autoReuse = true;
 
-			Item.shoot = ProjectileType<ShatterslashProjectile>();
-			Item.shootSpeed = 6f;
+            Item.shoot = ProjectileType<ShatterslashProjectile>();
+            Item.shootSpeed = 6f;
 
-			Item.value = Item.sellPrice(gold: 1);
-			Item.rare = ItemRarityID.LightPurple;
-		}
+            Item.value = Item.sellPrice(gold: 1);
+            Item.rare = ItemRarityID.LightPurple;
+        }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-		{
-			double rotation = Main.rand.NextDouble() * 2 * Math.PI;
-			for (int i = 0; i < 6; i++)
-			{
-				Projectile.NewProjectile(source, position, (new Vector2(Item.shootSpeed, 0)).RotatedBy(rotation + Math.PI * i / 3), type, damage, knockback, player.whoAmI);
-			}
-			return false;
-		}
+        {
+            double rotation = Main.rand.NextDouble() * 2 * Math.PI;
+            for (int i = 0; i < 6; i++)
+            {
+                Projectile.NewProjectile(source, position, (new Vector2(Item.shootSpeed, 0)).RotatedBy(rotation + Math.PI * i / 3), type, damage, knockback, player.whoAmI);
+            }
+            return false;
+        }
 
-		public override void AddRecipes()
-		{
-			CreateRecipe()
-				.AddIngredient(ItemID.SpellTome)
-				.AddIngredient(ItemID.FrostCore)
-				.AddIngredient(ItemID.IceBlock, 20)
-				.AddIngredient(ItemID.SoulofNight, 5)
-				.AddTile(TileID.Bookcases)
-				.Register();
-		}
-	}
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.SpellTome)
+                .AddIngredient(ItemID.FrostCore)
+                .AddIngredient(ItemID.IceBlock, 20)
+                .AddIngredient(ItemID.SoulofNight, 5)
+                .AddTile(TileID.Bookcases)
+                .Register();
+        }
+    }
 
     public class ShatterslashProjectile : ModProjectile
     {

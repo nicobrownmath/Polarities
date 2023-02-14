@@ -1,21 +1,13 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Polarities.Items.Placeable.Banners;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.GameContent.Bestiary;
 
 namespace Polarities.NPCs.Enemies
 {
@@ -24,7 +16,7 @@ namespace Polarities.NPCs.Enemies
         private int attackCooldown
         {
             get => attackCooldown = (int)NPC.ai[0];
-            set => NPC.ai[0] = (float)value;
+            set => NPC.ai[0] = value;
         }
 
         public override void SetStaticDefaults()

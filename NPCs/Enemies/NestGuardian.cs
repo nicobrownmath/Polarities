@@ -1,17 +1,12 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameContent;
-using Terraria.DataStructures;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.GameContent.Bestiary;
-using Terraria.Localization;
 
 namespace Polarities.NPCs.Enemies
 {
@@ -20,7 +15,7 @@ namespace Polarities.NPCs.Enemies
         private int attackCooldown
         {
             get => attackCooldown = (int)NPC.ai[0];
-            set => NPC.ai[0] = (float)value;
+            set => NPC.ai[0] = value;
         }
 
         private int rattleCooldown

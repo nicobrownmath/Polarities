@@ -1,34 +1,24 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.Effects;
+using Polarities.Items.Weapons.Ranged;
+using Polarities.Projectiles;
+using ReLogic.Content;
 using System;
-using System.IO;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
 using System.Collections.Generic;
-using Terraria.Utilities;
+using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
-using Terraria.DataStructures;
-using ReLogic.Content;
-using Polarities;
-using Terraria.Localization;
-using Polarities.Effects;
-using Polarities.Projectiles;
-using Polarities.Items.Weapons.Ranged;
-using Terraria.Graphics.Shaders;
 using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.Utilities;
+using static Terraria.ModLoader.ModContent;
 using Filters = Terraria.Graphics.Effects.Filters;
-using static tModPorter.ProgressUpdate;
-using static Humanizer.In;
 
 namespace Polarities.NPCs.Eclipxie
 {
@@ -152,8 +142,9 @@ namespace Polarities.NPCs.Eclipxie
             InitializeAIStates();
         }
 
-        float phase2HealthThreshold => 0.66f;
-        float phase3HealthThreshold => 0.34f;
+        private float phase2HealthThreshold => 0.66f;
+
+        private float phase3HealthThreshold => 0.34f;
 
         public bool splitIntoMinions;
         public int sunMinion;
@@ -407,7 +398,7 @@ namespace Polarities.NPCs.Eclipxie
                         const int attackTime = 240;
                         const int windDownTime = 90;
                         const float totalAngle = MathHelper.TwoPi;
-                        
+
                         if (NPC.ai[1] < setupTime)
                         {
                             if (NPC.ai[1] == 0)
@@ -787,7 +778,7 @@ namespace Polarities.NPCs.Eclipxie
                         else if ((NPC.ai[1] - startSetupTime + period) % (period * 2) == setupTime)
                         {
                             Main.npc[sunMinion].velocity = (player.Center - Main.npc[sunMinion].Center).SafeNormalize(Vector2.Zero) * dashSpeed * 1.5f;
-                            
+
                             WarpZoomWaveParticle particle = Particle.NewParticle<WarpZoomWaveParticle>(Main.npc[sunMinion].Center, Vector2.Zero, MathHelper.Pi, 0, Scale: 0f, TimeLeft: 180);
                             ParticleLayer.WarpParticles.Add(particle);
 
@@ -1101,11 +1092,11 @@ namespace Polarities.NPCs.Eclipxie
                         }
                         break;
                     }
-                #endregion
-                #region Moon dashes, leaving behind trail, sun explodes turning trail into radiating deathrays
-                #endregion
-                #region Fullscreen attack
-                #endregion
+                    #endregion
+                    #region Moon dashes, leaving behind trail, sun explodes turning trail into radiating deathrays
+                    #endregion
+                    #region Fullscreen attack
+                    #endregion
             }
 
             if (splitIntoMinions)
@@ -1130,9 +1121,10 @@ namespace Polarities.NPCs.Eclipxie
                 }
             }
         }
-        
+
         private float[] aiWeights = new float[15];
-        void GotoNextAIState()
+
+        private void GotoNextAIState()
         {
             float[] aiWeightMultipliers = new float[aiWeights.Length];
 
@@ -1186,7 +1178,8 @@ namespace Polarities.NPCs.Eclipxie
 
             NPC.ai[1] = 0;
         }
-        void InitializeAIStates()
+
+        private void InitializeAIStates()
         {
             for (int state = 0; state < aiWeights.Length; state++)
             {
@@ -1239,7 +1232,7 @@ namespace Polarities.NPCs.Eclipxie
                 spriteBatch.Draw(Textures.Glow256.Value, drawPos, Textures.Glow256.Frame(), new Color(255, 224, 192) * 0.1f, 0f, Textures.Glow256.Size() / 2, 0.3f, SpriteEffects.None, 0f);
 
                 spriteBatch.End();
-                spriteBatch.Begin((SpriteSortMode)1, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                spriteBatch.Begin((SpriteSortMode)1, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
 
                 Texture2D coronaTexture = FireGradient.Value;
 
@@ -1249,7 +1242,7 @@ namespace Polarities.NPCs.Eclipxie
                 spriteBatch.Draw(coronaTexture, drawPos, coronaTexture.Frame(), Color.White, 0f, coronaTexture.Size() / 2, coronaScaling, SpriteEffects.None, 0);
 
                 spriteBatch.End();
-                spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                spriteBatch.Begin(0, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
 
                 Vector2 newDrawOrigin = new Vector2(MoonTexture.Width() / 2, MoonTexture.Height() / 2);
                 Vector2 moonOffset = (Main.LocalPlayer.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 1.5f; //TODO: Move eye nontrivially
@@ -1283,14 +1276,14 @@ namespace Polarities.NPCs.Eclipxie
 
                 //TODO: Maybe go for more of an inverse starry/hyperspace look?
                 spriteBatch.End();
-                spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
 
                 GameShaders.Misc["Polarities:RadialOverlay"].UseImage1(Textures.Perlin256).UseShaderSpecificData(new Vector4(MathHelper.TwoPi * 8f, progress, Math.Clamp(1.5f - 3 * progress, 0, 1), 0)).UseOpacity(glowAlpha).Apply();
 
                 spriteBatch.Draw(Textures.Glow256.Value, NPC.Center - screenPos, Textures.Glow256.Frame(), Color.White * glowAlpha, 0f, Textures.Glow256.Size() / 2, glowScale, SpriteEffects.None, 0f);
 
                 spriteBatch.End();
-                spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                spriteBatch.Begin(0, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
 
                 Color modifiedColor = new Color(new Vector3(1 - 12f * (1 - progress))) * ((progress - 0.1f) / 0.4f);
 
@@ -1391,7 +1384,7 @@ namespace Polarities.NPCs.Eclipxie
         }
         public override void AI()
         {
-            
+
         }
         public override void FindFrame(int frameHeight)
         {
@@ -1426,7 +1419,7 @@ namespace Polarities.NPCs.Eclipxie
                 spriteBatch.Draw(Textures.Glow256.Value, drawPos, Textures.Glow256.Frame(), new Color(255, 224, 192) * 0.1f, 0f, Textures.Glow256.Size() / 2, 0.3f, SpriteEffects.None, 0f);
 
                 spriteBatch.End();
-                spriteBatch.Begin((SpriteSortMode)1, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                spriteBatch.Begin((SpriteSortMode)1, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
 
                 Texture2D coronaTexture = Eclipxie.FireGradient.Value;
 
@@ -1436,7 +1429,7 @@ namespace Polarities.NPCs.Eclipxie
                 spriteBatch.Draw(coronaTexture, drawPos, coronaTexture.Frame(), Color.White, 0f, coronaTexture.Size() / 2, coronaScaling, SpriteEffects.None, 0);
 
                 spriteBatch.End();
-                spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                spriteBatch.Begin(0, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
 
                 return false;
             }
@@ -1552,7 +1545,7 @@ namespace Polarities.NPCs.Eclipxie
 
                 //TODO: Make this use an actual moon texture
                 spriteBatch.End();
-                spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
 
                 Texture2D moonTexture = Textures.PixelTexture.Value;
 
@@ -1574,7 +1567,7 @@ namespace Polarities.NPCs.Eclipxie
                 spriteBatch.Draw(moonTexture, drawPos, moonTexture.Frame(), Color.White, 0f, moonTexture.Size() / 2, 30.3f / moonTexture.Width, SpriteEffects.None, 0);
 
                 spriteBatch.End();
-                spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                spriteBatch.Begin(0, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
 
                 return false;
             }
@@ -1623,8 +1616,8 @@ namespace Polarities.NPCs.Eclipxie
     }
     public class EclipxieSky : CustomSky, ILoadable
     {
-        bool isActive;
-        float fadeOpacity;
+        private bool isActive;
+        private float fadeOpacity;
 
         public void Load(Mod mod)
         {
@@ -1641,9 +1634,9 @@ namespace Polarities.NPCs.Eclipxie
             }
         }
 
-        static RenderTarget2D skyTarget;
-        static int numStars = 0;
-        static float textureGenProgress = 0f;
+        private static RenderTarget2D skyTarget;
+        private static int numStars = 0;
+        private static float textureGenProgress = 0f;
 
         //TODO: This approach to star drawing is almost certainly horribly inefficient
         //Generates stars gradually over the course of the spawn anim to avoid freezing up
@@ -1666,7 +1659,7 @@ namespace Polarities.NPCs.Eclipxie
 
                 Main.spriteBatch.GraphicsDevice.SetRenderTarget(skyTargetBackup);
                 Main.spriteBatch.GraphicsDevice.Clear(new Color(0, 0, 2));
-                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
 
                 Main.spriteBatch.Draw(skyTarget, skyTarget.Frame(), Color.White);
 
@@ -1674,7 +1667,7 @@ namespace Polarities.NPCs.Eclipxie
 
                 Main.spriteBatch.GraphicsDevice.SetRenderTarget(skyTarget);
                 Main.spriteBatch.GraphicsDevice.Clear(new Color(0, 0, 2));
-                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
 
                 if (skyTargetBackup != null) Main.spriteBatch.Draw(skyTargetBackup, skyTarget.Frame(), Color.White);
 
@@ -1708,7 +1701,7 @@ namespace Polarities.NPCs.Eclipxie
                 }
 
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
 
                 for (int i = numStars; i < maxStars; i++)
                 {
@@ -1813,7 +1806,7 @@ namespace Polarities.NPCs.Eclipxie
                     spriteBatch.Draw(skyTarget, new Vector2(Main.screenWidth / 2f, Main.screenHeight), skyTarget.Frame(), new Color(192, 192, 192) * fadeOpacity, PolaritiesSystem.timer * MathHelper.TwoPi / 86400, skyTarget.Size() / 2, 1f, SpriteEffects.None, 0f);
 
                     spriteBatch.End();
-                    spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                    spriteBatch.Begin(0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
 
                     for (int i = 0; i < 6; i++)
                     {
@@ -1826,7 +1819,7 @@ namespace Polarities.NPCs.Eclipxie
                     }
 
                     spriteBatch.End();
-                    spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                    spriteBatch.Begin(0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
                 }
             }
         }
@@ -1847,7 +1840,7 @@ namespace Polarities.NPCs.Eclipxie
 
         public override void AI()
         {
-            Scale += ScaleIncrement / (float)MaxTimeLeft;
+            Scale += ScaleIncrement / MaxTimeLeft;
             Alpha = TimeLeft / (float)MaxTimeLeft;
         }
     }
@@ -1867,14 +1860,14 @@ namespace Polarities.NPCs.Eclipxie
 
         public override void AI()
         {
-            Scale += ScaleIncrement / (float)MaxTimeLeft;
+            Scale += ScaleIncrement / MaxTimeLeft;
             Alpha = TimeLeft / (float)MaxTimeLeft * AlphaMultiplier;
         }
 
         public override void Draw(SpriteBatch spritebatch)
         {
             spritebatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
             float width = Math.Min(256f, Scale / 2);
             GameShaders.Misc["Polarities:WarpZoomRipple"].UseShaderSpecificData(new Vector4(1 - width / Math.Max(Scale, 1 / width), width / 256 * Alpha, 0, 0)).Apply();
 
@@ -1885,7 +1878,7 @@ namespace Polarities.NPCs.Eclipxie
             spritebatch.Draw(particleTexture.Value, drawPosition, particleTexture.Frame(), Color.White, 0f, particleTexture.Size() / 2, Scale, SpriteEffects.None, 0f);
 
             spritebatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
         }
     }
     public class EclipxieRay : ModProjectile
@@ -2006,7 +1999,7 @@ namespace Polarities.NPCs.Eclipxie
             Projectile.position += (Main.LocalPlayer.Center - Projectile.Center) / 300;
         }
 
-        const float radius = 4000f;
+        private const float radius = 4000f;
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
@@ -2038,7 +2031,7 @@ namespace Polarities.NPCs.Eclipxie
 
                     Color offsetColor = new Color((float)Math.Cos(Projectile.rotation) * 0.5f * heightMultiplier / 2 + 0.5f, (float)Math.Sin(Projectile.rotation) * heightMultiplier / 2 * 0.5f + 0.5f, 0.5f) * (heightMultiplier / 4);
 
-                    Vector2 scale = new Vector2(segmentWidth / (float)TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / (float)TextureAssets.Projectile[Type].Height());
+                    Vector2 scale = new Vector2(segmentWidth / TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / TextureAssets.Projectile[Type].Height());
                     Vector2 drawOffset = new Vector2((Projectile.timeLeft * 36) % segmentWidth, 0).RotatedBy(Projectile.rotation);
                     Vector2 drawOffsetPer = new Vector2(segmentWidth, 0).RotatedBy(Projectile.rotation);
                     for (int i = -numExtraDrawsOnEachSide; i <= numExtraDrawsOnEachSide; i++)
@@ -2057,7 +2050,7 @@ namespace Polarities.NPCs.Eclipxie
                 const int numExtraDrawsOnEachSide = 18;
                 float segmentWidth = radius * 2 / (2 * numExtraDrawsOnEachSide - 1);
                 float heightMultiplier = Math.Min(1, Math.Min(Projectile.timeLeft / 5f, (60 - Projectile.timeLeft) / 5f));
-                Vector2 scale = new Vector2(segmentWidth / (float)TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / (float)TextureAssets.Projectile[Type].Height());
+                Vector2 scale = new Vector2(segmentWidth / TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / TextureAssets.Projectile[Type].Height());
                 Vector2 drawOffset = new Vector2((Projectile.timeLeft * 18) % segmentWidth, 0).RotatedBy(Projectile.rotation);
                 Vector2 drawOffsetPer = new Vector2(segmentWidth, 0).RotatedBy(Projectile.rotation);
                 for (int i = -numExtraDrawsOnEachSide; i <= numExtraDrawsOnEachSide; i++)
@@ -2068,7 +2061,7 @@ namespace Polarities.NPCs.Eclipxie
             else if (Projectile.timeLeft < 90)
             {
                 //telegraphing
-                Vector2 scale = new Vector2(radius * 2 / (float)TextureAssets.Projectile[Type].Width(), 2 / (float)TextureAssets.Projectile[Type].Height());
+                Vector2 scale = new Vector2(radius * 2 / TextureAssets.Projectile[Type].Width(), 2 / (float)TextureAssets.Projectile[Type].Height());
                 color *= (Projectile.timeLeft - 60) * (90 - Projectile.timeLeft) / 225f;
                 Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), color, Projectile.rotation, TextureAssets.Projectile[Type].Size() / 2, scale, SpriteEffects.None, 0);
             }
@@ -2082,7 +2075,7 @@ namespace Polarities.NPCs.Eclipxie
     {
         public override string Texture => "Polarities/Textures/Glow58";
 
-        float Radius => (float)Math.Sqrt(Projectile.ai[1] + 1) * 120;
+        private float Radius => (float)Math.Sqrt(Projectile.ai[1] + 1) * 120;
 
         public override void SetStaticDefaults()
         {
@@ -2200,12 +2193,12 @@ namespace Polarities.NPCs.Eclipxie
     {
         public override string Texture => "Polarities/Textures/Glow58";
 
-        const int numRays = 4;
-        int projectileRays = numRays; //TODO: Draw cap if this is 1
-        float starRotation;
-        float[] extraAI;
-        float telegraphTime = 30;
-        float rayTime = 60;
+        private const int numRays = 4;
+        private int projectileRays = numRays; //TODO: Draw cap if this is 1
+        private float starRotation;
+        private float[] extraAI;
+        private float telegraphTime = 30;
+        private float rayTime = 60;
 
         public override void SetStaticDefaults()
         {
@@ -2319,7 +2312,7 @@ namespace Polarities.NPCs.Eclipxie
             DrawLayer.AddProjectile<DrawLayerAdditiveAfterNPCs>(index);
         }
 
-        const float radius = 4000f;
+        private const float radius = 4000f;
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
@@ -2359,7 +2352,7 @@ namespace Polarities.NPCs.Eclipxie
 
                         Color offsetColor = new Color(-(float)Math.Cos(Projectile.rotation + laserIndex * MathHelper.TwoPi / projectileRays) * 0.5f * heightMultiplier / 2 + 0.5f, -(float)Math.Sin(Projectile.rotation + laserIndex * MathHelper.TwoPi / projectileRays) * heightMultiplier / 2 * 0.5f + 0.5f, 0.5f) * (heightMultiplier / 4);
 
-                        Vector2 scale = new Vector2(segmentWidth / (float)TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / (float)TextureAssets.Projectile[Type].Height());
+                        Vector2 scale = new Vector2(segmentWidth / TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / TextureAssets.Projectile[Type].Height());
                         Vector2 drawOffset = new Vector2(((360 - Projectile.timeLeft) * 36) % segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / projectileRays);
                         Vector2 drawOffsetPer = new Vector2(segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / projectileRays);
                         Vector2 center = new Vector2(0, distortion.Height / 2);
@@ -2394,7 +2387,7 @@ namespace Polarities.NPCs.Eclipxie
                 {
                     //TODO: Draw circles around stars rather than connecting directly? (I'm not sure how I feel about the visuals for this)
                     Main.spriteBatch.End();
-                    Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                    Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
 
                     float connectionWidth = Math.Clamp(Math.Min((Projectile.localAI[0] - Projectile.timeLeft) / 30f, Projectile.timeLeft / 30f), 0, 1);
                     float connectionBendingProgress = Math.Max(0, (rayTime - Projectile.timeLeft) / rayTime);
@@ -2406,7 +2399,7 @@ namespace Polarities.NPCs.Eclipxie
                     Main.spriteBatch.Draw(texture, ownerCenter - Main.screenPosition, texture.Frame(), Color.White, (Projectile.Center - ownerCenter).ToRotation(), new Vector2(0, texture.Height / 2), new Vector2((Projectile.Center - ownerCenter).Length() / texture.Width, 40 * connectionWidth * connectionWidth * (Math.Abs(connectionBending) + 1) / texture.Height), SpriteEffects.None, 0f);
 
                     Main.spriteBatch.End();
-                    Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Matrix.Identity);
+                    Main.spriteBatch.Begin(0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Matrix.Identity);
                 }
 
                 //draw lasers
@@ -2418,7 +2411,7 @@ namespace Polarities.NPCs.Eclipxie
                         const int numDraws = 18;
                         float segmentWidth = radius / numDraws;
                         float heightMultiplier = Math.Min(1, Math.Min(Projectile.timeLeft / 5f, (rayTime - Projectile.timeLeft) / 5f));
-                        Vector2 scale = new Vector2(segmentWidth / (float)TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / (float)TextureAssets.Projectile[Type].Height());
+                        Vector2 scale = new Vector2(segmentWidth / TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / TextureAssets.Projectile[Type].Height());
                         Vector2 drawOffset = new Vector2(((360 - Projectile.timeLeft) * 18) % segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / projectileRays);
                         Vector2 drawOffsetPer = new Vector2(segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / projectileRays);
                         Vector2 center = new Vector2(0, texture.Height / 2);
@@ -2431,7 +2424,7 @@ namespace Polarities.NPCs.Eclipxie
                         Rectangle startFrame = new Rectangle(texture.Width - (int)extra, 0, (int)extra, texture.Height);
                         Vector2 startOrigin = new Vector2((int)extra - extra, texture.Height / 2);
                         Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, startFrame, color, Projectile.rotation + laserIndex * MathHelper.TwoPi / projectileRays, startOrigin, scale, SpriteEffects.None, 0);
-                        
+
                         if (drawCap)
                         {
                             Texture2D capTexture = EclipxieRaysBig.CapSolar.Value;
@@ -2442,7 +2435,7 @@ namespace Polarities.NPCs.Eclipxie
                     else if (Projectile.timeLeft < rayTime + telegraphTime)
                     {
                         //telegraphing
-                        Vector2 scale = new Vector2(radius / (float)TextureAssets.Projectile[Type].Width(), 2 / (float)TextureAssets.Projectile[Type].Height());
+                        Vector2 scale = new Vector2(radius / TextureAssets.Projectile[Type].Width(), 2 / (float)TextureAssets.Projectile[Type].Height());
                         color *= (Projectile.timeLeft - rayTime) * (rayTime + telegraphTime - Projectile.timeLeft) * 4f / (telegraphTime * telegraphTime);
                         Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), color, Projectile.rotation + laserIndex * MathHelper.TwoPi / projectileRays, new Vector2(0, TextureAssets.Projectile[Type].Height() / 2), scale, SpriteEffects.None, 0);
                     }
@@ -2580,8 +2573,8 @@ namespace Polarities.NPCs.Eclipxie
             Projectile.GetGlobalProjectile<PolaritiesProjectile>().canLeaveWorld = true;
         }
 
-        float rayTime = 360;
-        float expansionTime = 20f;
+        private float rayTime = 360;
+        private float expansionTime = 20f;
 
         public override void OnSpawn(IEntitySource source)
         {
@@ -2650,7 +2643,7 @@ namespace Polarities.NPCs.Eclipxie
             }
         }
 
-        const float radius = 4000f;
+        private const float radius = 4000f;
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
@@ -2714,7 +2707,7 @@ namespace Polarities.NPCs.Eclipxie
 
                         Color offsetColor = new Color(-(float)Math.Cos(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]) * 0.5f * heightMultiplier / 2 + 0.5f, -(float)Math.Sin(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]) * heightMultiplier / 2 * 0.5f + 0.5f, 0.5f) * (heightMultiplier / 4);
 
-                        Vector2 scale = new Vector2(segmentWidth / (float)TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / (float)TextureAssets.Projectile[Type].Height());
+                        Vector2 scale = new Vector2(segmentWidth / TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / TextureAssets.Projectile[Type].Height());
                         Vector2 drawOffset = new Vector2(((360 - Projectile.timeLeft) * 36) % segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]);
                         Vector2 drawOffsetPer = new Vector2(segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]);
                         Vector2 center = new Vector2(0, distortion.Height / 2);
@@ -2752,7 +2745,7 @@ namespace Polarities.NPCs.Eclipxie
                         const int numDraws = 18;
                         float segmentWidth = radius / numDraws;
                         float heightMultiplier = baseHeightMultiplier;
-                        Vector2 scale = new Vector2(segmentWidth / (float)TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / (float)TextureAssets.Projectile[Type].Height());
+                        Vector2 scale = new Vector2(segmentWidth / TextureAssets.Projectile[Type].Width(), heightMultiplier * Projectile.height / TextureAssets.Projectile[Type].Height());
                         Vector2 drawOffset = new Vector2(((360 - Projectile.timeLeft) * 18) % segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]);
                         Vector2 drawOffsetPer = new Vector2(segmentWidth, 0).RotatedBy(Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0]);
                         Vector2 center = new Vector2(0, texture.Height / 2);
@@ -2776,7 +2769,7 @@ namespace Polarities.NPCs.Eclipxie
                     else
                     {
                         //telegraphing
-                        Vector2 scale = new Vector2(radius / (float)TextureAssets.Projectile[Type].Width(), 4 / (float)TextureAssets.Projectile[Type].Height());
+                        Vector2 scale = new Vector2(radius / TextureAssets.Projectile[Type].Width(), 4 / (float)TextureAssets.Projectile[Type].Height());
                         color *= (Projectile.timeLeft - rayTime) * (Projectile.localAI[1] - Projectile.timeLeft) * 4f / ((Projectile.localAI[1] - rayTime) * (Projectile.localAI[1] - rayTime));
                         Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, TextureAssets.Projectile[Type].Frame(), color, Projectile.rotation + laserIndex * MathHelper.TwoPi / (int)Projectile.localAI[0], new Vector2(0, TextureAssets.Projectile[Type].Height() / 2), scale, SpriteEffects.None, 0);
                     }
@@ -2802,7 +2795,7 @@ namespace Polarities.NPCs.Eclipxie
     {
         public override string Texture => "Polarities/Textures/Glow58";
 
-        float Radius => (float)Math.Sqrt(Projectile.ai[1] + 1) * 120;
+        private float Radius => (float)Math.Sqrt(Projectile.ai[1] + 1) * 120;
 
         public override void SetStaticDefaults()
         {

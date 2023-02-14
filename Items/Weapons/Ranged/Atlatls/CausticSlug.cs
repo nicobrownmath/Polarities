@@ -1,68 +1,63 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Polarities.NPCs;
-using System;
-using System.Collections.Generic;
-using Terraria.DataStructures;
-using Terraria.Audio;
-using Polarities.Items.Weapons.Ranged.Ammo;
-using Terraria.GameContent;
 
 namespace Polarities.Items.Weapons.Ranged.Atlatls
 {
-	public class CausticSlug : AtlatlBase
-	{
+    public class CausticSlug : AtlatlBase
+    {
         public override Vector2[] ShotDistances => new Vector2[] { new Vector2(38), new Vector2(38), new Vector2(38) };
 
         public override void SetDefaults()
         {
             Item.SetWeaponValues(23, 3, 0);
-			Item.DamageType = DamageClass.Ranged;
+            Item.DamageType = DamageClass.Ranged;
 
-			Item.width = 48;
-			Item.height = 50;
+            Item.width = 48;
+            Item.height = 50;
 
-			Item.useTime = 24;
-			Item.useAnimation = 24;
-			Item.useStyle = ItemUseStyleID.Swing;
-			Item.noMelee = true;
-			Item.autoReuse = true;
+            Item.useTime = 24;
+            Item.useAnimation = 24;
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.noMelee = true;
+            Item.autoReuse = true;
 
-			Item.shoot = 10;
-			Item.shootSpeed = 17f;
-			Item.useAmmo = AmmoID.Dart;
+            Item.shoot = 10;
+            Item.shootSpeed = 17f;
+            Item.useAmmo = AmmoID.Dart;
 
-			Item.value = Item.sellPrice(gold: 2, silver: 50);
-			Item.rare = ItemRarityID.Pink;
-		}
+            Item.value = Item.sellPrice(gold: 2, silver: 50);
+            Item.rare = ItemRarityID.Pink;
+        }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-			base.Shoot(player, source, position, velocity, type, damage, knockback);
+            base.Shoot(player, source, position, velocity, type, damage, knockback);
 
-			for (int i = 0; i < mostRecentShotTypes.Length; i++)
+            for (int i = 0; i < mostRecentShotTypes.Length; i++)
             {
-				mostRecentShotTypes[i] = ProjectileType<CausticSlugProjectile>();
+                mostRecentShotTypes[i] = ProjectileType<CausticSlugProjectile>();
             }
 
-			return false;
+            return false;
         }
 
         public override bool RealShoot(Player player, EntitySource_ItemUse_WithAmmo source, int index, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-			Vector2 goalPos = Main.MouseWorld + new Vector2(Main.rand.NextFloat(64f)).RotatedByRandom(MathHelper.TwoPi);
-			float ai0 = goalPos.X;
-			float ai1 = goalPos.Y;
-			velocity = velocity.RotatedByRandom(0.2f) * Main.rand.NextFloat(0.9f, 1.1f);
+            Vector2 goalPos = Main.MouseWorld + new Vector2(Main.rand.NextFloat(64f)).RotatedByRandom(MathHelper.TwoPi);
+            float ai0 = goalPos.X;
+            float ai1 = goalPos.Y;
+            velocity = velocity.RotatedByRandom(0.2f) * Main.rand.NextFloat(0.9f, 1.1f);
 
             Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, ai0: ai0, ai1: ai1);
 
-			return false;
+            return false;
         }
 
         public override bool DoDartDraw(int index, ref PlayerDrawSet drawInfo)

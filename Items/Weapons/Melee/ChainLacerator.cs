@@ -1,16 +1,14 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Items.Materials;
+using ReLogic.Content;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Polarities.Projectiles;
-using System;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
-using Polarities.Items.Materials;
-using Terraria.Audio;
-using ReLogic.Content;
 
 namespace Polarities.Items.Weapons.Melee
 {
@@ -104,7 +102,7 @@ namespace Polarities.Items.Weapons.Melee
             }
             if (Projectile.alpha == 0)
             {
-                if (Projectile.position.X + (float)(Projectile.width / 2) > Main.player[Projectile.owner].position.X + (float)(Main.player[Projectile.owner].width / 2))
+                if (Projectile.position.X + Projectile.width / 2 > Main.player[Projectile.owner].position.X + Main.player[Projectile.owner].width / 2)
                 {
                     Main.player[Projectile.owner].ChangeDir(1);
                 }
@@ -114,8 +112,8 @@ namespace Polarities.Items.Weapons.Melee
                 }
             }
             Vector2 vector140 = Projectile.Center;
-            float num2390 = Main.player[Projectile.owner].position.X + (float)(Main.player[Projectile.owner].width / 2) - vector140.X;
-            float num2389 = Main.player[Projectile.owner].position.Y + (float)(Main.player[Projectile.owner].height / 2) - vector140.Y;
+            float num2390 = Main.player[Projectile.owner].position.X + Main.player[Projectile.owner].width / 2 - vector140.X;
+            float num2389 = Main.player[Projectile.owner].position.Y + Main.player[Projectile.owner].height / 2 - vector140.Y;
             float num2388 = (float)Math.Sqrt(num2390 * num2390 + num2389 * num2389);
             if (Projectile.ai[0] == 0f)
             {

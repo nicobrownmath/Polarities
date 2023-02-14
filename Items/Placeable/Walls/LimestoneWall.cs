@@ -6,56 +6,56 @@ using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Items.Placeable.Walls
 {
-	public class LimestoneWall : ModItem
-	{
-		public override void SetDefaults()
-		{
-			Item.DefaultToPlacableWall((ushort)WallType<LimestoneWallPlaced>());
+    public class LimestoneWall : ModItem
+    {
+        public override void SetDefaults()
+        {
+            Item.DefaultToPlacableWall((ushort)WallType<LimestoneWallPlaced>());
 
-			SacrificeTotal = (400);
-		}
+            SacrificeTotal = (400);
+        }
 
-		public override void AddRecipes()
-		{
-			CreateRecipe(4)
-				.AddIngredient(ItemType<Blocks.Limestone>())
-				.AddTile(TileID.WorkBenches)
-				.Register();
-		}
-	}
+        public override void AddRecipes()
+        {
+            CreateRecipe(4)
+                .AddIngredient(ItemType<Blocks.Limestone>())
+                .AddTile(TileID.WorkBenches)
+                .Register();
+        }
+    }
 
-	public class LimestoneWallPlaced : ModWall
-	{
-		public override void SetStaticDefaults()
-		{
-			Main.wallHouse[Type] = true;
-			ItemDrop = ItemType<LimestoneWall>();
-			AddMapEntry(new Color(34, 50, 30));
+    public class LimestoneWallPlaced : ModWall
+    {
+        public override void SetStaticDefaults()
+        {
+            Main.wallHouse[Type] = true;
+            ItemDrop = ItemType<LimestoneWall>();
+            AddMapEntry(new Color(34, 50, 30));
 
-			DustType = DustType<Dusts.LimestoneDust>();
-		}
+            DustType = DustType<Dusts.LimestoneDust>();
+        }
 
-		public override void NumDust(int i, int j, bool fail, ref int num)
-		{
-			num = fail ? 1 : 3;
-		}
-	}
+        public override void NumDust(int i, int j, bool fail, ref int num)
+        {
+            num = fail ? 1 : 3;
+        }
+    }
 
-	public class LimestoneWallNatural : ModWall
-	{
+    public class LimestoneWallNatural : ModWall
+    {
         public override string Texture => "Polarities/Items/Placeable/Walls/LimestoneWallPlaced";
 
         public override void SetStaticDefaults()
-		{
-			Main.wallHouse[Type] = false;
-			AddMapEntry(new Color(34, 50, 30));
+        {
+            Main.wallHouse[Type] = false;
+            AddMapEntry(new Color(34, 50, 30));
 
-			DustType = DustType<Dusts.LimestoneDust>();
-		}
+            DustType = DustType<Dusts.LimestoneDust>();
+        }
 
-		public override void NumDust(int i, int j, bool fail, ref int num)
-		{
-			num = fail ? 1 : 3;
-		}
-	}
+        public override void NumDust(int i, int j, bool fail, ref int num)
+        {
+            num = fail ? 1 : 3;
+        }
+    }
 }

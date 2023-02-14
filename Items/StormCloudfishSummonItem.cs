@@ -1,24 +1,16 @@
-﻿using Polarities.NPCs;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.NPCs.StormCloudfish;
+using ReLogic.Content;
+using System;
+using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.NPCs.SunPixie;
-using Terraria.GameContent;
-using Terraria.Localization;
-using System.Collections.Generic;
-using Terraria.DataStructures;
-using Microsoft.CodeAnalysis;
-using static Humanizer.In;
-using static Terraria.ModLoader.PlayerDrawLayer;
-using Polarities.NPCs.StormCloudfish;
-using Polarities.NPCs.ConvectiveWanderer;
-using Terraria.Audio;
-using ReLogic.Content;
 
 namespace Polarities.Items
 {
@@ -143,7 +135,7 @@ namespace Polarities.Items
                     {
                         Vector2 mouseWorld = Main.MouseWorld;
                         mouseWorld = Projectile.Center;
-                        mouseWorld += new Vector2(num10, (float)Math.Sin((double)Main.GlobalTimeWrappedHourly) + cloudAlpha * 5f) * 25f;
+                        mouseWorld += new Vector2(num10, (float)Math.Sin(Main.GlobalTimeWrappedHourly) + cloudAlpha * 5f) * 25f;
                         Vector2 v = mouseWorld - Projectile.Center;
                         v = v.SafeNormalize(Vector2.Zero) * (3f + cloudAlpha * 7f);
                         if (num11 == 0f)
@@ -217,7 +209,7 @@ namespace Polarities.Items
                 float num4 = (-value2).ToRotation() + (float)Math.PI / 4f;
                 if (Projectile.spriteDirection == -1)
                 {
-                    num4 -= (float)Math.PI / 2f * (float)player.direction;
+                    num4 -= (float)Math.PI / 2f * player.direction;
                 }
                 Projectile.rotation = num4 + Projectile.velocity.X * 0.05f;
             }
@@ -309,7 +301,7 @@ namespace Polarities.Items
             Color alpha = Projectile.GetAlpha(color);
             Texture2D value6 = TextureAssets.FishingLine.Value;
             Rectangle value7 = value6.Frame();
-            Vector2 origin2 = new Vector2((float)(value7.Width / 2), 2f);
+            Vector2 origin2 = new Vector2(value7.Width / 2, 2f);
             Rectangle rectangle2 = value5.Frame(num);
             int width = rectangle2.Width;
             rectangle2.Width -= 2;
@@ -410,7 +402,7 @@ namespace Polarities.Items
                     value7.Height = (int)num11;
                 }
                 Color color2 = Lighting.GetColor(center.ToTileCoordinates());
-                Main.EntitySpriteDraw(value6, vector - Main.screenPosition, value7, color2, rotation, origin2, 1f, (SpriteEffects)0, 0);
+                Main.EntitySpriteDraw(value6, vector - Main.screenPosition, value7, color2, rotation, origin2, 1f, 0, 0);
             }
             Vector2 value8 = Projectile.Size / 2f;
             float num17 = Math.Abs(Main.WindForVisuals);
@@ -426,28 +418,28 @@ namespace Polarities.Items
             {
                 rectangle2.X = width * (num - 1);
                 List<Vector2> list = new List<Vector2>();
-                Vector2 value9 = new Vector2(num18 * (float)num3 * (float)Projectile.spriteDirection, (float)Math.Sin(Main.timeForVisualEffects / 300.0 * 6.2831854820251465) * num19) * 2f;
+                Vector2 value9 = new Vector2(num18 * num3 * Projectile.spriteDirection, (float)Math.Sin(Main.timeForVisualEffects / 300.0 * 6.2831854820251465) * num19) * 2f;
                 float num22 = num35 + num6;
                 float num24 = num36 + num7;
                 switch (i)
                 {
                     case 1:
-                        value9 = new Vector2(num18 * (float)num3 * (float)Projectile.spriteDirection, (float)Math.Sin(Main.timeForVisualEffects / 300.0 * 6.2831854820251465) * num19 + 0.5f) * 2f;
+                        value9 = new Vector2(num18 * num3 * Projectile.spriteDirection, (float)Math.Sin(Main.timeForVisualEffects / 300.0 * 6.2831854820251465) * num19 + 0.5f) * 2f;
                         num22 -= 8f;
                         num24 -= 8f;
                         break;
                     case 2:
-                        value9 = new Vector2(num18 * (float)num3 * (float)Projectile.spriteDirection, (float)Math.Sin(Main.timeForVisualEffects / 300.0 * 6.2831854820251465) * num19 + 1f) * 2f;
+                        value9 = new Vector2(num18 * num3 * Projectile.spriteDirection, (float)Math.Sin(Main.timeForVisualEffects / 300.0 * 6.2831854820251465) * num19 + 1f) * 2f;
                         num22 -= 4f;
                         num24 -= 4f;
                         break;
                     case 3:
-                        value9 = new Vector2(num18 * (float)num3 * (float)Projectile.spriteDirection, (float)Math.Sin(Main.timeForVisualEffects / 300.0 * 6.2831854820251465) * num19 + 1.5f) * 2f;
+                        value9 = new Vector2(num18 * num3 * Projectile.spriteDirection, (float)Math.Sin(Main.timeForVisualEffects / 300.0 * 6.2831854820251465) * num19 + 1.5f) * 2f;
                         num22 -= 12f;
                         num24 -= 12f;
                         break;
                 }
-                Vector2 value10 = Projectile.Center + Utils.RotatedBy(new Vector2(((float)rectangle.Width * 0.5f + num22) * (float)Projectile.spriteDirection, num24), Projectile.rotation + num34);
+                Vector2 value10 = Projectile.Center + Utils.RotatedBy(new Vector2((rectangle.Width * 0.5f + num22) * Projectile.spriteDirection, num24), Projectile.rotation + num34);
                 list.Add(value10);
                 int num25 = num20;
                 int num26 = 1;
@@ -464,8 +456,8 @@ namespace Polarities.Items
                     }
                     else
                     {
-                        value11 += value8 + Utils.RotatedBy(new Vector2(((float)rectangle.Width * 0.5f + num22) * (float)Projectile.oldSpriteDirection[num25], num24), Projectile.oldRot[num25] + num34);
-                        value11 += value9 * (float)(num26 + 1);
+                        value11 += value8 + Utils.RotatedBy(new Vector2((rectangle.Width * 0.5f + num22) * Projectile.oldSpriteDirection[num25], num24), Projectile.oldRot[num25] + num34);
+                        value11 += value9 * (num26 + 1);
                         Vector2 value12 = value10 - value11;
                         float num27 = value12.Length();
                         if (num27 > num33)
@@ -490,7 +482,7 @@ namespace Polarities.Items
                         if (!(num29 < 2f))
                         {
                             float rotation2 = v.ToRotation() - (float)Math.PI / 2f;
-                            Main.EntitySpriteDraw(value6, vector3 - Main.screenPosition, value2, alpha, rotation2, origin2, new Vector2(1f, num29 / (float)value2.Height), (SpriteEffects)0, 0);
+                            Main.EntitySpriteDraw(value6, vector3 - Main.screenPosition, value2, alpha, rotation2, origin2, new Vector2(1f, num29 / value2.Height), 0, 0);
                         }
                     }
                 }

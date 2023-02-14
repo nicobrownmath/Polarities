@@ -19,7 +19,7 @@ namespace Polarities.NPCs.Enemies.Fractal
         private int attackCooldown
         {
             get => attackCooldown = (int)NPC.ai[0];
-            set => NPC.ai[0] = (float)value;
+            set => NPC.ai[0] = value;
         }
 
         public override void SetStaticDefaults()
@@ -225,10 +225,10 @@ namespace Polarities.NPCs.Enemies.Fractal
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            //if (Subworld.IsActive<FractalSubworld>())
-            //{
-            //    return FractalSubworld.SpawnConditionFractalWastes(spawnInfo) * (1f - FractalSubworld.SpawnConditionFractalSky(spawnInfo));
-            //}
+            if (FractalSubworld.Active)
+            {
+                return FractalSubworld.SpawnConditionFractalWastes(spawnInfo) * (1f - FractalSubworld.SpawnConditionFractalSky(spawnInfo));
+            }
             return 0f;
         }
 

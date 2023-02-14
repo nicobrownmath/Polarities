@@ -1,10 +1,6 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using System.Collections.Generic;
-using System;
-using Polarities.Buffs;
 
 namespace Polarities.Items.Accessories
 {

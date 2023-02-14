@@ -5,9 +5,11 @@ namespace Polarities.Biomes.Fractal
 {
     public class FractalWastesBiome : ModBiome
     {
+        public static int TileCount;
+
         public override bool IsBiomeActive(Player player)
         {
-            return false;
+            return TileCount > 150;
         }
 
         public override float GetWeight(Player player)

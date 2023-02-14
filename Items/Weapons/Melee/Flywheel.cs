@@ -1,7 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Polarities.Items.Materials;
-using Polarities.Projectiles;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

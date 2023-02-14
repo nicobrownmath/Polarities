@@ -25,7 +25,7 @@ namespace Polarities.Items.Consumables
 
         public override bool ConsumeItem(Player player)
         {
-            //if (SubworldSystem.IsActive<FractalSubworld>())
+            //if (FractalSubworld.Active)
             //{
             //    player.AddBuff(BuffType<FractalSubworldDebuff>(), 10 * 60);
             //    player.GetModPlayer<PolaritiesPlayer>().suddenFractalizationChange = true;
@@ -56,7 +56,7 @@ namespace Polarities.Items.Consumables
 
         public override bool ConsumeItem(Player player)
         {
-            //if (SubworldSystem.IsActive<FractalSubworld>())
+            //if (FractalSubworld.Active)
             //{
             //    player.AddBuff(BuffType<FractalSubworldDebuff>(), 20 * 60);
             //    player.GetModPlayer<PolaritiesPlayer>().suddenFractalizationChange = true;

@@ -175,19 +175,21 @@ namespace Polarities.NPCs.Enemies.Fractal
             }
         }
 
-        public override bool CheckDead()
+        public override void HitEffect(int hitDirection, double damage)
         {
-            //Gore.NewGore(NPC.position, NPC.velocity, Mod.GetGoreSlot("Gores/SparkCrawlerGore1"));
-            //Gore.NewGore(NPC.position, NPC.velocity, Mod.GetGoreSlot("Gores/SparkCrawlerGore2"));
-            return true;
+            if (NPC.life <= 0)
+            {
+                GoreHelper.DeathGore(NPC, "SparkCrawlerGore1");
+                GoreHelper.DeathGore(NPC, "SparkCrawlerGore2");
+            }
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            //if (Subworld.IsActive<FractalSubworld>())
-            //{
-            //    return FractalSubworld.SpawnConditionFractalUnderground(spawnInfo);
-            //}
+            if (FractalSubworld.Active)
+            {
+                return FractalSubworld.SpawnConditionFractalUnderground(spawnInfo);
+            }
             return 0f;
         }
 
@@ -310,8 +312,8 @@ namespace Polarities.NPCs.Enemies.Fractal
 
             for (int k = 1; k < Projectile.oldPos.Length; k++)
             {
-                Color color = mainColor * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                float scale = Projectile.scale * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                Color color = mainColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                float scale = Projectile.scale * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
 
                 float rotation = (Projectile.oldPos[k - 1] - Projectile.oldPos[k]).ToRotation();
 

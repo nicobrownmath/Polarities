@@ -1,9 +1,7 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Terraria.DataStructures;
+﻿using Polarities.NPCs;
+using Terraria;
 using Terraria.ID;
-using static Terraria.ModLoader.ModContent;
-using Polarities.NPCs;
+using Terraria.ModLoader;
 
 namespace Polarities.Buffs
 {

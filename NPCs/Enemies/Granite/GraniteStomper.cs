@@ -1,28 +1,21 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MultiHitboxNPCLibrary;
+using Polarities.Effects;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Projectiles;
+using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using Terraria.DataStructures;
-using Terraria.GameContent.Bestiary;
-using System.Collections.Generic;
-using MultiHitboxNPCLibrary;
-using Terraria.GameContent;
-using Terraria.GameContent.ItemDropRules;
-using ReLogic.Content;
-using Polarities.Items.Materials;
-using Terraria.Audio;
-using Polarities.Effects;
 
 namespace Polarities.NPCs.Enemies.Granite
 {
@@ -467,7 +460,7 @@ namespace Polarities.NPCs.Enemies.Granite
             Projectile.GetGlobalProjectile<PolaritiesProjectile>().ForceDraw = true;
         }
 
-        const float MAX_LENGTH = 4000;
+        private const float MAX_LENGTH = 4000;
 
         public override void OnSpawn(IEntitySource source)
         {

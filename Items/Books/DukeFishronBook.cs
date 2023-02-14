@@ -1,11 +1,6 @@
 ﻿using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Polarities.Buffs;
-using Microsoft.Xna.Framework;
-using Terraria.GameContent;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Polarities.Items.Books
 {

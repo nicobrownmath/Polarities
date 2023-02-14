@@ -1,13 +1,11 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Polarities.Items.Materials;
+using System;
+using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria.DataStructures;
-using Polarities.Items.Materials;
-using Terraria.Audio;
 
 namespace Polarities.Items.Weapons.Ranged
 {

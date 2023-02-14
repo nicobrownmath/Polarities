@@ -1,39 +1,25 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Buffs;
+using Polarities.Effects;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Tiles;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using Terraria.GameContent.Bestiary;
-using Polarities.Biomes;
-using Polarities.Items.Placeable.Blocks;
-using Terraria.Audio;
-using Polarities.Items.Placeable.Walls;
-using Terraria.GameContent.ItemDropRules;
-using Polarities.Items.Consumables;
-using Terraria.GameContent;
-using ReLogic.Content;
-using Polarities.Items.Accessories;
-using Terraria.DataStructures;
-using Polarities.Items.Materials;
-using Terraria.ModLoader.Utilities;
-using System.Collections.Generic;
-using Polarities.Effects;
 
 namespace Polarities.NPCs.Enemies.LavaOcean
 {
-	public class MantleOWar : ModNPC
-	{
+    public class MantleOWar : ModNPC
+    {
         public override void SetStaticDefaults()
         {
             Polarities.customNPCGlowMasks[Type] = TextureAssets.Npc[Type];
@@ -96,9 +82,9 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             tentacles = new MantleOWarTentacle[NUM_TENTACLES];
         }
 
-        MantleOWarTentacle[] tentacles;
-        const int NUM_TENTACLES = 8;
-        const int TENTACLE_LENGTH = 16;
+        private MantleOWarTentacle[] tentacles;
+        private const int NUM_TENTACLES = 8;
+        private const int TENTACLE_LENGTH = 16;
 
         public override void OnSpawn(IEntitySource source)
         {
@@ -106,7 +92,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
 
             for (int i = 0; i < NUM_TENTACLES; i++)
             {
-                tentacles[i].Initialize(NPC.Center, TENTACLE_LENGTH, MathHelper.TwoPi * i / (float)NUM_TENTACLES);
+                tentacles[i].Initialize(NPC.Center, TENTACLE_LENGTH, MathHelper.TwoPi * i / NUM_TENTACLES);
             }
         }
 
@@ -178,7 +164,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
                     }
                 }
 
-                exitLoop:
+            exitLoop:
 
                 NPC.velocity.X += 0.1f * NPC.direction;
                 NPC.velocity.Y -= 0.2f; //float upwards
@@ -243,10 +229,10 @@ namespace Polarities.NPCs.Enemies.LavaOcean
 
         private struct MantleOWarTentacle
         {
-            Vector2[] positions;
-            float progressAlongTentacle;
-            float angle;
-            int direction;
+            private Vector2[] positions;
+            private float progressAlongTentacle;
+            private float angle;
+            private int direction;
 
             public void Initialize(Vector2 startingPosition, int length, float angle)
             {
@@ -414,7 +400,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
         public override void AI()
         {
             if (Projectile.ai[0] < 30)
-                Projectile.velocity *= (float)Math.Pow(4, 1/30f);
+                Projectile.velocity *= (float)Math.Pow(4, 1 / 30f);
             Projectile.ai[0]++;
 
             Projectile.rotation = Projectile.velocity.ToRotation();

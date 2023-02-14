@@ -42,7 +42,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace Polarities
 {
-    public class PolaritiesPlayer : ModPlayer
+    public partial class PolaritiesPlayer : ModPlayer
     {
         public override void Load()
         {
@@ -62,7 +62,7 @@ namespace Polarities
         public int warhammerTimeBoost = 0;
 
         public Dictionary<float, float> screenShakes = new Dictionary<float, float>(); //key is time at which the screenshake ends, value is magnitude
-        int screenshakeRandomSeed;
+        private int screenshakeRandomSeed;
 
         public float hookSpeedMult;
         public float manaStarMultiplier;
@@ -147,7 +147,7 @@ namespace Polarities
         public int itemHitCooldown = 0;
 
         //trail info
-        const int trailCacheLength = 20;
+        private const int trailCacheLength = 20;
         public Vector2[] oldCenters = new Vector2[trailCacheLength];
         public Vector2[] oldVelocities = new Vector2[trailCacheLength];
         public int[] oldDirections = new int[trailCacheLength];
@@ -163,7 +163,7 @@ namespace Polarities
         }
         public T FindEquip<T>() where T : EquipItem
         {
-            if (equips == null || !equips.TryGetValue(ModContent.GetInstance<T>().Type, out var val))
+            if (equips == null || !equips.TryGetValue(GetInstance<T>().Type, out var val))
                 return null;
             return (T)val;
         }
@@ -171,6 +171,11 @@ namespace Polarities
         public override void Initialize()
         {
             equips = new Dictionary<int, EquipItem>();
+        }
+
+        public override void UpdateDead()
+        {
+            fractalization = 0;
         }
 
         public override void ResetEffects()
@@ -449,11 +454,11 @@ namespace Polarities
                         ParticleLayer.AfterLiquidsAdditive.Add(particle);
 
                         //ramming! (based on EoC)
-                        Rectangle rectangle = new Rectangle((int)((double)Player.position.X + (double)Player.velocity.X * 0.5 - 4.0), (int)((double)Player.position.Y + (double)Player.velocity.Y * 0.5 - 4.0), Player.width + 8, Player.height + 8);
+                        Rectangle rectangle = new Rectangle((int)(Player.position.X + Player.velocity.X * 0.5 - 4.0), (int)(Player.position.Y + Player.velocity.Y * 0.5 - 4.0), Player.width + 8, Player.height + 8);
                         for (int i = 0; i < 200; i++)
                         {
                             NPC nPC = Main.npc[i];
-                            if (!nPC.active || nPC.dontTakeDamage || nPC.friendly || (nPC.aiStyle == 112 && !(nPC.ai[2] <= 1f)) || !Player.CanNPCBeHitByPlayerOrPlayerProjectile(nPC))
+                            if (!nPC.active || nPC.dontTakeDamage || nPC.friendly || nPC.aiStyle == 112 && !(nPC.ai[2] <= 1f) || !Player.CanNPCBeHitByPlayerOrPlayerProjectile(nPC))
                             {
                                 continue;
                             }
@@ -463,7 +468,7 @@ namespace Polarities
                                 float num = Player.GetTotalDamage(DamageClass.Generic).ApplyTo(100f);
                                 float num12 = Player.GetTotalKnockback(DamageClass.Generic).ApplyTo(10f);
                                 bool crit = false;
-                                if ((float)Main.rand.Next(100) < Player.GetTotalCritChance(DamageClass.Generic))
+                                if (Main.rand.Next(100) < Player.GetTotalCritChance(DamageClass.Generic))
                                 {
                                     crit = true;
                                 }
@@ -544,7 +549,7 @@ namespace Polarities
                     amountOfDay = (float)Math.Abs(Main.time - Main.nightLength / 2) / (float)Main.nightLength;
                 }
                 Player.GetDamage(DamageClass.Generic) += 0.12f * amountOfDay;
-                Player.endurance *= (1 - 0.1f * (1 - amountOfDay));
+                Player.endurance *= 1 - 0.1f * (1 - amountOfDay);
             }
 
             //wing time boost
@@ -649,7 +654,7 @@ namespace Polarities
             {
                 if (flawlessMechMask || flawlessMechChestplate || flawlessMechTail)
                 {
-                    Player.direction = (Main.MouseWorld.X > Player.Center.X) ? 1 : -1;
+                    Player.direction = Main.MouseWorld.X > Player.Center.X ? 1 : -1;
                 }
 
                 //mask has deathrays
@@ -761,7 +766,7 @@ namespace Polarities
                     }
                     else
                     {
-                        Main.screenPosition += new Vector2(Polarities.preGeneratedRand.NextNormallyDistributedFloat(screenShakes[timeLeft] * (timeLeft - (float)PolaritiesSystem.timer)), 0).RotatedBy(Polarities.preGeneratedRand.NextFloat(MathHelper.TwoPi));
+                        Main.screenPosition += new Vector2(Polarities.preGeneratedRand.NextNormallyDistributedFloat(screenShakes[timeLeft] * (timeLeft - PolaritiesSystem.timer)), 0).RotatedBy(Polarities.preGeneratedRand.NextFloat(MathHelper.TwoPi));
                     }
                 }
                 foreach (float timeLeft in removeTimesLeft) screenShakes.Remove(timeLeft);
@@ -826,7 +831,7 @@ namespace Polarities
                         itemDrop = ItemType<SaltCrate>();
                     return;
                 }
-                if ((!attempt.common && !attempt.uncommon && !attempt.rare && !attempt.veryrare && !attempt.legendary) || Main.rand.NextBool())
+                if (!attempt.common && !attempt.uncommon && !attempt.rare && !attempt.veryrare && !attempt.legendary || Main.rand.NextBool())
                 {
                     switch (Main.rand.Next(2))
                     {
@@ -958,7 +963,7 @@ namespace Polarities
 
             if (Player.HasBuff(BuffType<EyeOfCthulhuBookBuff>()))
             {
-                Projectile.NewProjectile(Player.GetSource_Buff(Player.FindBuffIndex(BuffType<EyeOfCthulhuBookBuff>())), Player.Center, new Vector2(4, 0).RotatedByRandom(2 * Math.PI), ProjectileType<Items.Books.EyeOfCthulhuBookEye>(), 12, 3, Player.whoAmI);
+                Projectile.NewProjectile(Player.GetSource_Buff(Player.FindBuffIndex(BuffType<EyeOfCthulhuBookBuff>())), Player.Center, new Vector2(4, 0).RotatedByRandom(2 * Math.PI), ProjectileType<EyeOfCthulhuBookEye>(), 12, 3, Player.whoAmI);
             }
 
             if (skeletronBook && skeletronBookCooldown == 0)
@@ -999,7 +1004,7 @@ namespace Polarities
             {
                 for (int j = (int)((Player.position.Y - 1) / 16); j < (int)((Player.position.Y + 1 + Player.height) / 16) + 1; j++)
                 {
-                    if (Main.tile[i, j].TileType == TileType<MantellarOreTile>() || (Main.tile[i, j].TileType == TileType<BarTile>() && Main.tile[i, j].TileFrameX == 18))
+                    if (Main.tile[i, j].TileType == TileType<MantellarOreTile>() || Main.tile[i, j].TileType == TileType<BarTile>() && Main.tile[i, j].TileFrameX == 18)
                     {
                         incinerating = true;
                     }
@@ -1020,8 +1025,8 @@ namespace Polarities
             {
                 if (Main.rand.NextBool(60) && Main.netMode != 1)
                 {
-                    int positionX = ((int)(Player.Center.X + Main.rand.Next(-600, 600))) / 16;
-                    int positionY = ((int)(Player.Center.Y)) / 16 - 10;
+                    int positionX = (int)(Player.Center.X + Main.rand.Next(-600, 600)) / 16;
+                    int positionY = (int)Player.Center.Y / 16 - 10;
 
                     if (!Main.tile[positionX, positionY].HasUnactuatedTile)
                     {
@@ -1044,8 +1049,15 @@ namespace Polarities
             }
         }
 
+        public override void PreUpdateBuffs()
+        {
+            UpdateFractalizationTimer();
+        }
+
         public override void PreUpdateMovement()
         {
+            Turbulence.Update(Player);
+
             //apply dash if it exists
             if (Dash.HasDash(dashIndex) && CanUseAnyDash())
             {
@@ -1100,7 +1112,7 @@ namespace Polarities
             Player.velocity *= velocityMultiplier;
         }
 
-        bool CanUseAnyDash()
+        private bool CanUseAnyDash()
         {
             return Player.dashType == 0 && !Player.setSolar && !Player.mount.Active;
         }
@@ -1151,10 +1163,15 @@ namespace Polarities
         {
             if (crit && !pvp)
             {
-                damage = (int)(Main.CalculateDamagePlayersTake(damage, Player.statDefense)) * 2;
+                damage = (int)Main.CalculateDamagePlayersTake(damage, Player.statDefense) * 2;
                 customDamage = true;
             }
             return true;
+        }
+
+        public int GetFractalization()
+        {
+            return fractalization; // For debugging purposes
         }
 
         private void Player_Update_NPCCollision(ILContext il)
@@ -1164,7 +1181,7 @@ namespace Polarities
             if (!c.TryGotoNext(MoveType.After,
                 i => i.MatchLdarg(0),
                 i => i.MatchLdloc(1),
-                i => i.MatchCall(typeof(Terraria.DataStructures.PlayerDeathReason).GetMethod("ByNPC", BindingFlags.Public | BindingFlags.Static)),
+                i => i.MatchCall(typeof(PlayerDeathReason).GetMethod("ByNPC", BindingFlags.Public | BindingFlags.Static)),
                 i => i.MatchLdloc(11),
                 i => i.MatchLdloc(10),
                 i => i.MatchLdcI4(0),
@@ -1181,7 +1198,7 @@ namespace Polarities
             c.Emit(OpCodes.Ldloc, 14);
         }
 
-        static readonly Color DamagedFriendlyCritFromEnemyColor = new Color(255, 0, 0);
+        private static readonly Color DamagedFriendlyCritFromEnemyColor = new Color(255, 0, 0);
         private void Player_Hurt(ILContext il)
         {
             ILCursor c = new ILCursor(il);
@@ -1189,9 +1206,9 @@ namespace Polarities
             if (!c.TryGotoNext(MoveType.After,
                 i => i.MatchLdarg(6),
                 i => i.MatchBrtrue(out _),
-                i => i.MatchLdsfld(typeof(Terraria.CombatText).GetField("DamagedFriendly", BindingFlags.Public | BindingFlags.Static)),
+                i => i.MatchLdsfld(typeof(CombatText).GetField("DamagedFriendly", BindingFlags.Public | BindingFlags.Static)),
                 i => i.MatchBr(out _),
-                i => i.MatchLdsfld(typeof(Terraria.CombatText).GetField("DamagedFriendlyCrit", BindingFlags.Public | BindingFlags.Static)),
+                i => i.MatchLdsfld(typeof(CombatText).GetField("DamagedFriendlyCrit", BindingFlags.Public | BindingFlags.Static)),
                 i => i.MatchStloc(8)
                 ))
             {
@@ -1202,9 +1219,9 @@ namespace Polarities
             c.Emit(OpCodes.Ldloc, 8); //defaultColor
             c.Emit(OpCodes.Ldarg, 6); //Crit
             c.Emit(OpCodes.Ldarg, 4); //pvp
-            c.EmitDelegate<Func<Color, bool, bool, Color>>((Color defaultColor, bool Crit, bool pvp) =>
+            c.EmitDelegate((Color defaultColor, bool Crit, bool pvp) =>
             {
-                return (Crit && !pvp) ? DamagedFriendlyCritFromEnemyColor : defaultColor;
+                return Crit && !pvp ? DamagedFriendlyCritFromEnemyColor : defaultColor;
             });
             c.Emit(OpCodes.Stloc, 8);
         }
@@ -1228,7 +1245,7 @@ namespace Polarities
             }
 
             c.Emit(OpCodes.Ldarg, 0);
-            c.EmitDelegate<Action<Player>>((Player player) =>
+            c.EmitDelegate((Player player) =>
             {
                 player.ManageSpecialBiomeVisuals("Polarities:EclipxieSky", NPC.AnyNPCs(NPCType<Eclipxie>()));
             });
@@ -1242,6 +1259,7 @@ namespace Polarities
                 Player.lifeRegenTime = 3600;
                 Player.bleed = false; //force regen
             }
+            UpdateFractalHP();
         }
 
         public override void NaturalLifeRegen(ref float regen)
@@ -1388,22 +1406,22 @@ namespace Polarities
                         switch (Main.rand.Next(3))
                         {
                             case 0:
-                                self.QuickSpawnItem(source, ModContent.ItemType<TuringHead>());
-                                self.QuickSpawnItem(source, ModContent.ItemType<TuringBody>());
-                                self.QuickSpawnItem(source, ModContent.ItemType<TuringLegs>());
-                                self.QuickSpawnItem(source, ModContent.ItemType<TuringWings>());
+                                self.QuickSpawnItem(source, ItemType<TuringHead>());
+                                self.QuickSpawnItem(source, ItemType<TuringBody>());
+                                self.QuickSpawnItem(source, ItemType<TuringLegs>());
+                                self.QuickSpawnItem(source, ItemType<TuringWings>());
                                 break;
                             case 1:
-                                self.QuickSpawnItem(source, ModContent.ItemType<ElectroManiacHead>());
-                                self.QuickSpawnItem(source, ModContent.ItemType<ElectroManiacBody>());
-                                self.QuickSpawnItem(source, ModContent.ItemType<ElectroManiacLegs>());
+                                self.QuickSpawnItem(source, ItemType<ElectroManiacHead>());
+                                self.QuickSpawnItem(source, ItemType<ElectroManiacBody>());
+                                self.QuickSpawnItem(source, ItemType<ElectroManiacLegs>());
                                 break;
                             case 2:
-                                self.QuickSpawnItem(source, ModContent.ItemType<BubbyHead>());
-                                self.QuickSpawnItem(source, ModContent.ItemType<BubbyBody>());
-                                self.QuickSpawnItem(source, ModContent.ItemType<BubbyLegs>());
-                                self.QuickSpawnItem(source, ModContent.ItemType<BubbyWings>());
-                                self.QuickSpawnItem(source, ModContent.ItemType<VariableWispon>());
+                                self.QuickSpawnItem(source, ItemType<BubbyHead>());
+                                self.QuickSpawnItem(source, ItemType<BubbyBody>());
+                                self.QuickSpawnItem(source, ItemType<BubbyLegs>());
+                                self.QuickSpawnItem(source, ItemType<BubbyWings>());
+                                self.QuickSpawnItem(source, ItemType<VariableWispon>());
                                 break;
                         }
                     }

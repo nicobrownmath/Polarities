@@ -1,15 +1,13 @@
-﻿using Terraria.ModLoader;
-using Terraria.ID;
-using Polarities.NPCs;
-using static Terraria.ModLoader.ModContent;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
-using Terraria;
-using Terraria.GameContent;
-using ReLogic.Content;
 using Polarities.Items.Armor;
-using Polarities.Effects;
+using ReLogic.Content;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Items.Accessories.Wings
 {
@@ -80,20 +78,26 @@ namespace Polarities.Items.Accessories.Wings
                 float rotation = drawPlayer.bodyRotation;
                 SpriteEffects spriteEffects = drawInfo.playerEffect;
 
-                DrawData drawData = new DrawData(texture, position, frame, color, rotation, origin, 1f, spriteEffects, 0);
-                drawData.shader = drawInfo.cWings;
+                DrawData drawData = new DrawData(texture, position, frame, color, rotation, origin, 1f, spriteEffects, 0)
+                {
+                    shader = drawInfo.cWings
+                };
                 drawInfo.DrawDataCache.Add(drawData);
 
                 texture = Mask1Texture.Value;
                 color = Color.White * drawPlayer.stealth;
-                drawData = new DrawData(texture, position, frame, color, rotation, origin, 1f, spriteEffects, 0);
-                drawData.shader = drawInfo.cWings;
+                drawData = new DrawData(texture, position, frame, color, rotation, origin, 1f, spriteEffects, 0)
+                {
+                    shader = drawInfo.cWings
+                };
                 drawInfo.DrawDataCache.Add(drawData);
 
                 texture = Mask2Texture.Value;
                 color = Color.White * drawPlayer.stealth * 0.5f;
-                drawData = new DrawData(texture, position, frame, color, rotation, origin, 1f, spriteEffects, 0);
-                drawData.shader = drawInfo.cWings;
+                drawData = new DrawData(texture, position, frame, color, rotation, origin, 1f, spriteEffects, 0)
+                {
+                    shader = drawInfo.cWings
+                };
                 drawInfo.DrawDataCache.Add(drawData);
             }
         }

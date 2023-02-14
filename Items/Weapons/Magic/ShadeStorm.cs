@@ -1,15 +1,13 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Polarities.Projectiles;
-using System;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
-using Terraria.Audio;
-using Terraria.GameContent;
 
 namespace Polarities.Items.Weapons.Magic
 {
@@ -141,8 +139,8 @@ namespace Polarities.Items.Weapons.Magic
 
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
-                Color color = mainColor * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                float scale = Projectile.scale * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                Color color = mainColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                float scale = Projectile.scale * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
 
                 if (Projectile.timeLeft < 30)
                 {

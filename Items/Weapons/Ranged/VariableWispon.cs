@@ -1,17 +1,13 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Polarities.Projectiles;
-using System;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
-using Polarities.Effects;
-using Terraria.Audio;
-using Terraria.GameContent;
-using ReLogic.Content;
 
 namespace Polarities.Items.Weapons.Ranged
 {
@@ -155,25 +151,25 @@ namespace Polarities.Items.Weapons.Ranged
             {
                 drawColor = new Color(255, 198, 98);
             }
-            Color currentColor = Lighting.GetColor((int)((double)drawPlayer.position.X + (double)drawPlayer.width * 0.5) / 16, (int)(((double)drawPlayer.position.Y + (double)drawPlayer.height * 0.5) / 16.0), drawColor);
-            Vector2 vector12 = new Vector2((float)(texture.Width / 2), (float)(texture.Height / 2));
+            Color currentColor = Lighting.GetColor((int)(drawPlayer.position.X + drawPlayer.width * 0.5) / 16, (int)((drawPlayer.position.Y + drawPlayer.height * 0.5) / 16.0), drawColor);
+            Vector2 vector12 = new Vector2(texture.Width / 2, texture.Height / 2);
             Vector2 vector10 = (Vector2)HoldoutOffset();
             vector10.Y *= drawPlayer.gravDir;
             int num76 = (int)vector10.X;
             vector12.Y += vector10.Y;
             texture = MaskTexture.Value;
-            Vector2 origin6 = new Vector2((float)(-num76), (float)(texture.Height / 2));
+            Vector2 origin6 = new Vector2(-num76, texture.Height / 2);
             if (drawPlayer.direction == -1)
             {
-                origin6 = new Vector2((float)(texture.Width + num76), (float)(texture.Height / 2));
+                origin6 = new Vector2(texture.Width + num76, texture.Height / 2);
             }
-            DrawData drawData = new DrawData(texture, new Vector2((float)(int)(drawPlayer.itemLocation.X - Main.screenPosition.X + vector12.X), (float)(int)(drawPlayer.itemLocation.Y - Main.screenPosition.Y + vector12.Y)), (Rectangle?)new Rectangle(0, 0, texture.Width, texture.Height), drawPlayer.inventory[drawPlayer.selectedItem].GetAlpha(currentColor), drawPlayer.itemRotation, origin6, drawPlayer.inventory[drawPlayer.selectedItem].scale, spriteEffects, 0);
+            DrawData drawData = new DrawData(texture, new Vector2((int)(drawPlayer.itemLocation.X - Main.screenPosition.X + vector12.X), (int)(drawPlayer.itemLocation.Y - Main.screenPosition.Y + vector12.Y)), (Rectangle?)new Rectangle(0, 0, texture.Width, texture.Height), drawPlayer.inventory[drawPlayer.selectedItem].GetAlpha(currentColor), drawPlayer.itemRotation, origin6, drawPlayer.inventory[drawPlayer.selectedItem].scale, spriteEffects, 0);
             drawInfo.DrawDataCache.Add(drawData);
             for (int i = 1; i <= 6; i++)
             {
                 float alpha = i / 6f;
                 texture = MaskTextures[i - 1].Value;
-                drawData = new DrawData(texture, new Vector2((float)(int)(drawPlayer.itemLocation.X - Main.screenPosition.X + vector12.X), (float)(int)(drawPlayer.itemLocation.Y - Main.screenPosition.Y + vector12.Y)), (Rectangle?)new Rectangle(0, 0, texture.Width, texture.Height), drawColor * alpha, drawPlayer.itemRotation, origin6, drawPlayer.inventory[drawPlayer.selectedItem].scale, spriteEffects, 0);
+                drawData = new DrawData(texture, new Vector2((int)(drawPlayer.itemLocation.X - Main.screenPosition.X + vector12.X), (int)(drawPlayer.itemLocation.Y - Main.screenPosition.Y + vector12.Y)), (Rectangle?)new Rectangle(0, 0, texture.Width, texture.Height), drawColor * alpha, drawPlayer.itemRotation, origin6, drawPlayer.inventory[drawPlayer.selectedItem].scale, spriteEffects, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }
         }
@@ -260,7 +256,7 @@ namespace Polarities.Items.Weapons.Ranged
 
             for (int k = 1; k < Projectile.oldPos.Length; k++)
             {
-                Color color = mainColor * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                Color color = mainColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
                 float scale = Projectile.scale;
 
                 float rotation = (Projectile.oldPos[k - 1] - Projectile.oldPos[k]).ToRotation();
@@ -360,8 +356,8 @@ namespace Polarities.Items.Weapons.Ranged
 
             for (int k = 1; k < Projectile.oldPos.Length; k++)
             {
-                Color color = mainColor * 0.75f * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                float scale = Projectile.scale * ((float)(Projectile.oldPos.Length * 2 - k) / (float)(Projectile.oldPos.Length * 2));
+                Color color = mainColor * 0.75f * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                float scale = Projectile.scale * ((Projectile.oldPos.Length * 2 - k) / (float)(Projectile.oldPos.Length * 2));
 
                 float rotationMultiplier = Projectile.ai[0] == 1 ? 0 : 0.4f;
                 float rotation = Projectile.rotation - Projectile.spriteDirection * k * rotationMultiplier;
@@ -492,8 +488,8 @@ namespace Polarities.Items.Weapons.Ranged
 
             for (int k = 1; k < Projectile.oldPos.Length; k++)
             {
-                Color color = mainColor * 0.75f * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                float scale = Projectile.scale * ((float)(Projectile.oldPos.Length * 2 - k) / (float)(Projectile.oldPos.Length * 2));
+                Color color = mainColor * 0.75f * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                float scale = Projectile.scale * ((Projectile.oldPos.Length * 2 - k) / (float)(Projectile.oldPos.Length * 2));
 
                 float rotation = (Projectile.oldPos[k - 1] - Projectile.oldPos[k]).ToRotation();
 

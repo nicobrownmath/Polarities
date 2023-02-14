@@ -1,5 +1,4 @@
-﻿using SubworldLibrary;
-using Terraria;
+﻿using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
 
@@ -9,7 +8,7 @@ namespace Polarities.Biomes.Fractal
     {
         public override bool IsBiomeActive(Player player)
         {
-            return SubworldSystem.IsActive<FractalSubworld>();
+            return FractalSubworld.Active;
         }
 
         public override float GetWeight(Player player)
@@ -20,6 +19,8 @@ namespace Polarities.Biomes.Fractal
         public override string MapBackground => "Polarities/Biomes/Fractal/FractalMapBackground";
         public override string BackgroundPath => MapBackground;
         public override string BestiaryIcon => "Polarities/Biomes/Fractal/FractalBestiaryIcon";
+
+        public override int Music => MusicLoader.GetMusicSlot(Mod, "Sounds/Music/FractalPalace");
 
         public override void Load()
         {
@@ -33,7 +34,7 @@ namespace Polarities.Biomes.Fractal
 
         private static void Main_DrawBlack(On.Terraria.Main.orig_DrawBlack orig, Main self, bool force)
         {
-            if (SubworldSystem.IsActive<FractalSubworld>())
+            if (FractalSubworld.Active)
             {
                 force = true;
             }

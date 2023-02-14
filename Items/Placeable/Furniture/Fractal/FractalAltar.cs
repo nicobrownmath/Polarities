@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Polarities.Items.Placeable.Blocks.Fractal;
-using SubworldLibrary;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
@@ -103,7 +102,7 @@ namespace Polarities.Items.Placeable.Furniture.Fractal
 
         public override bool RightClick(int i, int j)
         {
-            if (SubworldSystem.IsActive<FractalSubworld>())
+            if (FractalSubworld.Active)
             {
                 FractalSubworld.DoExit();
             }

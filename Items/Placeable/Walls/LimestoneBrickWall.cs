@@ -6,41 +6,41 @@ using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Items.Placeable.Walls
 {
-	public class LimestoneBrickWall : ModItem
-	{
+    public class LimestoneBrickWall : ModItem
+    {
         public override void SetStaticDefaults()
-		{
-			SacrificeTotal = (400);
-		}
+        {
+            SacrificeTotal = (400);
+        }
 
         public override void SetDefaults()
-		{
-			Item.DefaultToPlacableWall((ushort)WallType<LimestoneBrickWallPlaced>());
-		}
+        {
+            Item.DefaultToPlacableWall((ushort)WallType<LimestoneBrickWallPlaced>());
+        }
 
-		public override void AddRecipes()
-		{
-			CreateRecipe(4)
-				.AddIngredient(ItemType<Blocks.LimestoneBrick>())
-				.AddTile(TileID.WorkBenches)
-				.Register();
-		}
-	}
+        public override void AddRecipes()
+        {
+            CreateRecipe(4)
+                .AddIngredient(ItemType<Blocks.LimestoneBrick>())
+                .AddTile(TileID.WorkBenches)
+                .Register();
+        }
+    }
 
-	public class LimestoneBrickWallPlaced : ModWall
-	{
-		public override void SetStaticDefaults()
-		{
-			Main.wallHouse[Type] = true;
-			ItemDrop = ItemType<LimestoneWall>();
-			AddMapEntry(new Color(34, 50, 30));
+    public class LimestoneBrickWallPlaced : ModWall
+    {
+        public override void SetStaticDefaults()
+        {
+            Main.wallHouse[Type] = true;
+            ItemDrop = ItemType<LimestoneWall>();
+            AddMapEntry(new Color(34, 50, 30));
 
-			DustType = DustType<Dusts.LimestoneDust>();
-		}
+            DustType = DustType<Dusts.LimestoneDust>();
+        }
 
-		public override void NumDust(int i, int j, bool fail, ref int num)
-		{
-			num = fail ? 1 : 3;
-		}
-	}
+        public override void NumDust(int i, int j, bool fail, ref int num)
+        {
+            num = fail ? 1 : 3;
+        }
+    }
 }

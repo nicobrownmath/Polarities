@@ -1,13 +1,11 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Items.Materials;
+using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Polarities.Projectiles;
-using Terraria.DataStructures;
-using Polarities.Items.Materials;
 
 namespace Polarities.Items.Weapons.Magic
 {
@@ -55,7 +53,7 @@ namespace Polarities.Items.Weapons.Magic
         public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
             player.itemRotation = (Main.MouseWorld - player.MountedCenter).ToRotation();
-            if (player.direction == -1) { player.itemRotation += (float)MathHelper.Pi; }
+            if (player.direction == -1) { player.itemRotation += MathHelper.Pi; }
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

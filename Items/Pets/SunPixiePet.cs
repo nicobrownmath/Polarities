@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -7,57 +6,57 @@ using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Items.Pets
 {
-	public class SunPixiePetItem : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			SacrificeTotal = (1);
-		}
+    public class SunPixiePetItem : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            SacrificeTotal = (1);
+        }
 
-		public override void SetDefaults()
-		{
-			Item.damage = 0;
-			Item.useStyle = 1;
-			Item.shoot = ProjectileType<SunPixiePet>();
-			Item.width = 32;
-			Item.height = 24;
-			Item.UseSound = SoundID.Item2;
-			Item.useAnimation = 20;
-			Item.useTime = 20;
-			Item.rare = ItemRarityID.Expert;
-			Item.expert = true;
-			Item.noMelee = true;
-			Item.value = Item.sellPrice(gold: 5);
-			Item.buffType = BuffType<SunPixiePetBuff>();
-		}
+        public override void SetDefaults()
+        {
+            Item.damage = 0;
+            Item.useStyle = 1;
+            Item.shoot = ProjectileType<SunPixiePet>();
+            Item.width = 32;
+            Item.height = 24;
+            Item.UseSound = SoundID.Item2;
+            Item.useAnimation = 20;
+            Item.useTime = 20;
+            Item.rare = ItemRarityID.Expert;
+            Item.expert = true;
+            Item.noMelee = true;
+            Item.value = Item.sellPrice(gold: 5);
+            Item.buffType = BuffType<SunPixiePetBuff>();
+        }
 
-		public override void UseStyle(Player player, Rectangle heldItemFrame)
-		{
-			if (player.whoAmI == Main.myPlayer && player.itemTime == 0)
-			{
-				player.AddBuff(Item.buffType, 3600, true);
-			}
-		}
-	}
+        public override void UseStyle(Player player, Rectangle heldItemFrame)
+        {
+            if (player.whoAmI == Main.myPlayer && player.itemTime == 0)
+            {
+                player.AddBuff(Item.buffType, 3600, true);
+            }
+        }
+    }
 
-	public class SunPixiePetBuff : ModBuff
-	{
-		public override void SetStaticDefaults()
-		{
-			Main.buffNoTimeDisplay[Type] = true;
-			Main.lightPet[Type] = true;
-		}
+    public class SunPixiePetBuff : ModBuff
+    {
+        public override void SetStaticDefaults()
+        {
+            Main.buffNoTimeDisplay[Type] = true;
+            Main.lightPet[Type] = true;
+        }
 
-		public override void Update(Player player, ref int buffIndex)
-		{
-			player.buffTime[buffIndex] = 18000;
-			int projType = ModContent.ProjectileType<SunPixiePet>();
-			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[projType] <= 0)
-			{
-				Projectile.NewProjectile(player.GetSource_Buff(buffIndex), player.Center, Vector2.Zero, projType, 0, 0f, player.whoAmI);
-			}
-		}
-	}
+        public override void Update(Player player, ref int buffIndex)
+        {
+            player.buffTime[buffIndex] = 18000;
+            int projType = ModContent.ProjectileType<SunPixiePet>();
+            if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[projType] <= 0)
+            {
+                Projectile.NewProjectile(player.GetSource_Buff(buffIndex), player.Center, Vector2.Zero, projType, 0, 0f, player.whoAmI);
+            }
+        }
+    }
 
     public class SunPixiePet : ModProjectile
     {

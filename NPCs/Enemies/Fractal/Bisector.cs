@@ -199,10 +199,10 @@ namespace Polarities.NPCs.Enemies.Fractal
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            //if (Subworld.IsActive<FractalSubworld>())
-            //{
-            //    return FractalSubworld.SpawnConditionFractalWastes(spawnInfo) * FractalSubworld.SpawnConditionFractalUnderground(spawnInfo);
-            //}
+            if (FractalSubworld.Active)
+            {
+                return FractalSubworld.SpawnConditionFractalWastes(spawnInfo) * FractalSubworld.SpawnConditionFractalUnderground(spawnInfo);
+            }
             return 0f;
         }
     }

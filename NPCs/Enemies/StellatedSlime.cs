@@ -1,21 +1,14 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Items.Placeable.Banners;
+using System;
+using Terraria;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.GameContent;
-using Terraria.GameContent.Bestiary;
 
 namespace Polarities.NPCs.Enemies
 {
@@ -77,7 +70,7 @@ namespace Polarities.NPCs.Enemies
             {
                 if (NPC.collideY && NPC.oldVelocity.Y != 0f && Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
                 {
-                    NPC.position.X -= NPC.velocity.X + (float)NPC.direction;
+                    NPC.position.X -= NPC.velocity.X + NPC.direction;
                 }
                 if (NPC.ai[3] == NPC.position.X)
                 {
@@ -86,7 +79,7 @@ namespace Polarities.NPCs.Enemies
                 }
                 NPC.ai[3] = 0f;
                 NPC.velocity.X *= 0.8f;
-                if ((double)NPC.velocity.X > -0.1 && (double)NPC.velocity.X < 0.1)
+                if (NPC.velocity.X > -0.1 && NPC.velocity.X < 0.1)
                 {
                     NPC.velocity.X = 0f;
                 }
@@ -114,14 +107,14 @@ namespace Polarities.NPCs.Enemies
                     if (jumpState == 3)
                     {
                         NPC.velocity.Y = -16f;
-                        NPC.velocity.X += (float)(3 * NPC.direction);
+                        NPC.velocity.X += 3 * NPC.direction;
                         NPC.ai[0] = -200f;
                         NPC.ai[3] = NPC.position.X;
                     }
                     else
                     {
                         NPC.velocity.Y = -12f;
-                        NPC.velocity.X += (float)(3 * NPC.direction);
+                        NPC.velocity.X += 3 * NPC.direction;
                         NPC.ai[0] = -120f;
                         if (jumpState == 1)
                         {
@@ -142,15 +135,15 @@ namespace Polarities.NPCs.Enemies
             {
                 if (NPC.collideX && Math.Abs(NPC.velocity.X) == 0.2f)
                 {
-                    NPC.position.X -= 1.4f * (float)NPC.direction;
+                    NPC.position.X -= 1.4f * NPC.direction;
                 }
                 if (NPC.collideY && NPC.oldVelocity.Y != 0f && Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
                 {
-                    NPC.position.X -= NPC.velocity.X + (float)NPC.direction;
+                    NPC.position.X -= NPC.velocity.X + NPC.direction;
                 }
-                if ((NPC.direction == -1 && (double)NPC.velocity.X < 0.01) || (NPC.direction == 1 && (double)NPC.velocity.X > -0.01))
+                if ((NPC.direction == -1 && NPC.velocity.X < 0.01) || (NPC.direction == 1 && NPC.velocity.X > -0.01))
                 {
-                    NPC.velocity.X += 0.2f * (float)NPC.direction;
+                    NPC.velocity.X += 0.2f * NPC.direction;
                 }
                 else
                 {
@@ -253,11 +246,11 @@ namespace Polarities.NPCs.Enemies
             globalTimeWrappedHourly2 = globalTimeWrappedHourly2 * 0.5f + 0.5f;
             for (float num11 = 0f; num11 < 1f; num11 += 0.25f)
             {
-                spriteBatch.Draw(star, drawPos + Utils.RotatedBy(new Vector2(0f, 8f), (num11 + num10) * ((float)Math.PI * 2f)) * scale * globalTimeWrappedHourly2, frame, new Color(50, 50, 255, 50), 0f, drawOrigin, scale, (SpriteEffects)0, 0f);
+                spriteBatch.Draw(star, drawPos + Utils.RotatedBy(new Vector2(0f, 8f), (num11 + num10) * ((float)Math.PI * 2f)) * scale * globalTimeWrappedHourly2, frame, new Color(50, 50, 255, 50), 0f, drawOrigin, scale, 0, 0f);
             }
             for (float num12 = 0f; num12 < 1f; num12 += 0.34f)
             {
-                spriteBatch.Draw(star, drawPos + Utils.RotatedBy(new Vector2(0f, 4f), (num12 + num10) * ((float)Math.PI * 2f)) * scale * globalTimeWrappedHourly2, frame, new Color(120, 120, 255, 127), 0f, drawOrigin, scale, (SpriteEffects)0, 0f);
+                spriteBatch.Draw(star, drawPos + Utils.RotatedBy(new Vector2(0f, 4f), (num12 + num10) * ((float)Math.PI * 2f)) * scale * globalTimeWrappedHourly2, frame, new Color(120, 120, 255, 127), 0f, drawOrigin, scale, 0, 0f);
             }
 
             spriteBatch.Draw(star, drawPos, frame, Color.White, NPC.rotation, drawOrigin, NPC.scale * 0.5f, SpriteEffects.None, 0f);

@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Polarities.Biomes.Fractal;
+using Polarities.Buffs;
 using Polarities.Items.Placeable.Bars;
 using Polarities.Items.Placeable.Blocks.Fractal;
 using Polarities.Items.Placeable.Furniture;
@@ -11,9 +13,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using Terraria;
+using Terraria.GameContent.Events;
 using Terraria.GameContent.Generation;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
 using static Terraria.ModLoader.ModContent;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -95,149 +99,124 @@ namespace Polarities
     public class FractalSubworld : Subworld
     {
         //for data syncing
-        //public static TagCompound subworldSyncedData;
-        //public static bool justLeftDimensionAndNeedSyncing;
-        //public static void SyncUniversalData()
-        //{
-        //    var downed = new List<String>();
+        public static TagCompound subworldSyncedData;
 
-        //    //vanilla bosses
-        //    if (NPC.downedSlimeKing) downed.Add("slimeKing");
-        //    if (NPC.downedBoss1) downed.Add("boss1");
-        //    if (NPC.downedBoss2) downed.Add("boss2");
-        //    if (NPC.downedQueenBee) downed.Add("queenBee");
-        //    if (NPC.downedBoss3) downed.Add("boss3");
-        //    if (Main.hardMode) downed.Add("hardMode");
-        //    if (NPC.downedMechBossAny) downed.Add("mechBossAny");
-        //    if (NPC.downedMechBoss1) downed.Add("mechBoss1");
-        //    if (NPC.downedMechBoss2) downed.Add("mechBoss2");
-        //    if (NPC.downedMechBoss3) downed.Add("mechBoss3");
-        //    if (NPC.downedPlantBoss) downed.Add("plantBoss");
-        //    if (NPC.downedGolemBoss) downed.Add("golemBoss");
-        //    if (NPC.downedFishron) downed.Add("fishron");
-        //    if (NPC.downedAncientCultist) downed.Add("ancientCultist");
-        //    if (NPC.downedMoonlord) downed.Add("moonlord");
+        internal delegate ref bool DownedFlag();
 
-        //    //vanilla events
-        //    if (NPC.downedGoblins) downed.Add("goblins");
-        //    if (Terraria.GameContent.Events.DD2Event.DownedInvasionT1) downed.Add("oldOnesArmyT1");
-        //    if (Terraria.GameContent.Events.DD2Event.DownedInvasionT2) downed.Add("oldOnesArmyT2");
-        //    if (Terraria.GameContent.Events.DD2Event.DownedInvasionT3) downed.Add("oldOnesArmyT3");
-        //    if (NPC.downedFrost) downed.Add("frost");
-        //    if (NPC.downedPirates) downed.Add("pirates");
-        //    if (NPC.downedHalloweenTree) downed.Add("halloweenTree");
-        //    if (NPC.downedHalloweenKing) downed.Add("halloweenKing");
-        //    if (NPC.downedChristmasTree) downed.Add("christmasTree");
-        //    if (NPC.downedChristmasSantank) downed.Add("christmasSantank");
-        //    if (NPC.downedChristmasIceQueen) downed.Add("christmasIceQueen");
-        //    if (NPC.downedMartians) downed.Add("martians");
-        //    if (NPC.downedTowerNebula) downed.Add("towerNebula");
-        //    if (NPC.downedTowerSolar) downed.Add("towerSolar");
-        //    if (NPC.downedTowerStardust) downed.Add("towerStardust");
-        //    if (NPC.downedTowerVortex) downed.Add("towerVortex");
+        internal static Dictionary<string, DownedFlag> DownedFunctions { get; private set; }
 
-        //    //polarities bosses
-        //    if (PolaritiesWorld.downedGreyBoss) downed.Add("greyBoss");
-        //    if (PolaritiesWorld.downedStarConstruct) downed.Add("starConstruct");
-        //    if (PolaritiesWorld.downedBatBoss) downed.Add("batBoss");
-        //    if (PolaritiesWorld.downedRiftDenizen) downed.Add("riftDenizen");
-        //    if (PolaritiesWorld.downedSunPixie) downed.Add("sunPixie");
-        //    if (PolaritiesWorld.downedEsophage) downed.Add("esophage");
-        //    if (PolaritiesWorld.downedSentinel) downed.Add("sentinel");
-        //    if (PolaritiesWorld.downedEclipsePixie) downed.Add("eclipsePixie");
-        //    if (PolaritiesWorld.downedHemorrphage) downed.Add("hemorrphage");
-        //    if (PolaritiesWorld.downedPolarities) downed.Add("polarities");
+        public override void Load()
+        {
+            DownedFunctions = new Dictionary<string, DownedFlag>()
+            {
+                ["slimeKing"] = () => ref NPC.downedSlimeKing,
+                ["boss1"] = () => ref NPC.downedBoss1,
+                ["boss2"] = () => ref NPC.downedBoss2,
+                ["boss3"] = () => ref NPC.downedBoss3,
+                ["queenBee"] = () => ref NPC.downedQueenBee,
+                ["hardMode"] = () => ref Main.hardMode,
+                ["mechBossAny"] = () => ref NPC.downedMechBossAny,
+                ["mechBoss1"] = () => ref NPC.downedMechBoss1,
+                ["mechBoss2"] = () => ref NPC.downedMechBoss2,
+                ["mechBoss3"] = () => ref NPC.downedMechBoss3,
+                ["plantBoss"] = () => ref NPC.downedPlantBoss,
+                ["golemBoss"] = () => ref NPC.downedGolemBoss,
+                ["fishron"] = () => ref NPC.downedFishron,
+                ["ancientCultist"] = () => ref NPC.downedAncientCultist,
+                ["moonlord"] = () => ref NPC.downedMoonlord,
+                ["qs"] = () => ref NPC.downedQueenSlime, // queenSlime
+                ["eol"] = () => ref NPC.downedEmpressOfLight, // empressOfLight
 
-        //    //polarities events
-        //    if (PolaritiesWorld.downedHallowInvasion) downed.Add("hallowInvasion");
-        //    if (PolaritiesWorld.downedWorldEvilInvasion) downed.Add("worldEvilInvasion");
+                ["goblins"] = () => ref NPC.downedGoblins,
+                ["oldOnesArmyT1"] = () => ref DD2Event.DownedInvasionT1,
+                ["oldOnesArmyT2"] = () => ref DD2Event.DownedInvasionT2,
+                ["oldOnesArmyT3"] = () => ref DD2Event.DownedInvasionT3,
+                ["frost"] = () => ref NPC.downedFrost,
+                ["pirates"] = () => ref NPC.downedPirates,
+                ["halloweenTree"] = () => ref NPC.downedHalloweenTree,
+                ["halloweenKing"] = () => ref NPC.downedHalloweenKing,
+                ["christmasTree"] = () => ref NPC.downedChristmasTree,
+                ["christmasSantank"] = () => ref NPC.downedChristmasSantank,
+                ["christmasIceQueen"] = () => ref NPC.downedChristmasIceQueen,
+                ["martians"] = () => ref NPC.downedMartians,
+                ["towerNebula"] = () => ref NPC.downedTowerNebula,
+                ["towerSolar"] = () => ref NPC.downedTowerSolar,
+                ["towerStardust"] = () => ref NPC.downedTowerStardust,
+                ["towerVortex"] = () => ref NPC.downedTowerVortex,
 
-        //    //other
-        //    if (PolaritiesWorld.downedBrainofCthulhu) downed.Add("brainofCthulhu");
-        //    if (PolaritiesWorld.downedEaterofWorlds) downed.Add("eaterofWorlds");
+                ["scfish"] = () => ref PolaritiesSystem.downedStormCloudfish, // stormCloudfish
+                ["starConstruct"] = () => ref PolaritiesSystem.downedStarConstruct,
+                ["gb"] = () => ref PolaritiesSystem.downedGigabat, // gigabat
+                ["riftDenizen"] = () => ref PolaritiesSystem.downedRiftDenizen,
+                ["sunPixie"] = () => ref PolaritiesSystem.downedSunPixie,
+                ["esophage"] = () => ref PolaritiesSystem.downedEsophage,
+                ["sentinel"] = () => ref PolaritiesSystem.downedSelfsimilarSentinel,
+                ["ecp"] = () => ref PolaritiesSystem.downedEclipxie, // eclipxie
+                ["hemorrphage"] = () => ref PolaritiesSystem.downedHemorrphage,
+                ["polarities"] = () => ref PolaritiesSystem.downedPolarities,
 
-        //    subworldSyncedData = new TagCompound()
-        //    {
-        //        ["downed"] = downed,
-        //        ["killCount"] = NPC.killCount.ToList(),
-        //        ["anglerQuest"] = Main.anglerQuest,
-        //        ["anglerQuestFinished"] = Main.anglerQuestFinished,
-        //    };
-        //}
-        //public static void LoadUniversalData()
-        //{
-        //    if (subworldSyncedData.ContainsKey("downed"))
-        //    {
-        //        var downed = subworldSyncedData.GetList<string>("downed");
+                ["hallowInvasion"] = () => ref PolaritiesSystem.downedHallowInvasion,
+                ["worldEvilInvasion"] = () => ref PolaritiesSystem.downedWorldEvilInvasion,
 
-        //        //vanilla bosses
-        //        NPC.downedSlimeKing = downed.Contains("slimeKing");
-        //        NPC.downedBoss1 = downed.Contains("boss1");
-        //        NPC.downedBoss2 = downed.Contains("boss2");
-        //        NPC.downedQueenBee = downed.Contains("queenBee");
-        //        NPC.downedBoss3 = downed.Contains("boss3");
-        //        Main.hardMode = downed.Contains("hardMode");
-        //        NPC.downedMechBossAny = downed.Contains("mechBossAny");
-        //        NPC.downedMechBoss1 = downed.Contains("mechBoss1");
-        //        NPC.downedMechBoss2 = downed.Contains("mechBoss2");
-        //        NPC.downedMechBoss3 = downed.Contains("mechBoss3");
-        //        NPC.downedPlantBoss = downed.Contains("plantBoss");
-        //        NPC.downedGolemBoss = downed.Contains("golemBoss");
-        //        NPC.downedFishron = downed.Contains("fishron");
-        //        NPC.downedAncientCultist = downed.Contains("ancientCultist");
-        //        NPC.downedMoonlord = downed.Contains("moonlord");
+                ["boc"] = () => ref PolaritiesSystem.downedBrainOfCthulhu, // brainOfCthulhu
+                ["eow"] = () => ref PolaritiesSystem.downedEaterOfWorlds, // eaterOfWorlds
+            };
+        }
 
-        //        //vanilla events
-        //        NPC.downedGoblins = downed.Contains("goblins");
-        //        Terraria.GameContent.Events.DD2Event.DownedInvasionT1 = downed.Contains("oldOnesArmyT1");
-        //        Terraria.GameContent.Events.DD2Event.DownedInvasionT2 = downed.Contains("oldOnesArmyT2");
-        //        Terraria.GameContent.Events.DD2Event.DownedInvasionT3 = downed.Contains("oldOnesArmyT3");
-        //        NPC.downedFrost = downed.Contains("frost");
-        //        NPC.downedPirates = downed.Contains("pirates");
-        //        NPC.downedHalloweenTree = downed.Contains("halloweenTree");
-        //        NPC.downedHalloweenKing = downed.Contains("halloweenKing");
-        //        NPC.downedChristmasTree = downed.Contains("christmasTree");
-        //        NPC.downedChristmasSantank = downed.Contains("christmasSantank");
-        //        NPC.downedChristmasIceQueen = downed.Contains("christmasIceQueen");
-        //        NPC.downedMartians = downed.Contains("martians");
-        //        NPC.downedTowerNebula = downed.Contains("towerNebula");
-        //        NPC.downedTowerSolar = downed.Contains("towerSolar");
-        //        NPC.downedTowerStardust = downed.Contains("towerStardust");
-        //        NPC.downedTowerVortex = downed.Contains("towerVortex");
+        public override void Unload()
+        {
+            DownedFunctions?.Clear();
+            DownedFunctions = null;
+        }
 
-        //        //polarities bosses
-        //        PolaritiesWorld.downedGreyBoss = downed.Contains("greyBoss");
-        //        PolaritiesWorld.downedStarConstruct = downed.Contains("starConstruct");
-        //        PolaritiesWorld.downedBatBoss = downed.Contains("batBoss");
-        //        PolaritiesWorld.downedRiftDenizen = downed.Contains("riftDenizen");
-        //        PolaritiesWorld.downedSunPixie = downed.Contains("sunPixie");
-        //        PolaritiesWorld.downedEsophage = downed.Contains("esophage");
-        //        PolaritiesWorld.downedSentinel = downed.Contains("sentinel");
-        //        PolaritiesWorld.downedEclipsePixie = downed.Contains("eclipsePixie");
-        //        PolaritiesWorld.downedHemorrphage = downed.Contains("hemorrphage");
-        //        PolaritiesWorld.downedPolarities = downed.Contains("polarities");
+        public static void SaveUniversalData()
+        {
+            var downed = new List<string>();
+            foreach (var pair in DownedFunctions)
+            {
+                if (pair.Value?.Invoke() == true)
+                {
+                    downed.Add(pair.Key);
+                }
+            }
 
-        //        //polarities events
-        //        PolaritiesWorld.downedHallowInvasion = downed.Contains("hallowInvasion");
-        //        PolaritiesWorld.downedWorldEvilInvasion = downed.Contains("worldEvilInvasion");
+            subworldSyncedData = new TagCompound()
+            {
+                ["downed"] = downed,
+                ["killCount"] = NPC.killCount.ToList(),
+                ["anglerQuest"] = Main.anglerQuest,
+                ["anglerQuestFinished"] = Main.anglerQuestFinished,
+            };
+        }
+        public static void LoadUniversalData()
+        {
+            if (subworldSyncedData.ContainsKey("downed"))
+            {
+                var downed = subworldSyncedData.GetList<string>("downed");
 
-        //        //other
-        //        PolaritiesWorld.downedEaterofWorlds = downed.Contains("eaterofWorlds");
-        //        PolaritiesWorld.downedBrainofCthulhu = downed.Contains("brainofCthulhu");
-        //    }
-        //    if (subworldSyncedData.ContainsKey("killCount"))
-        //    {
-        //        NPC.killCount = subworldSyncedData.GetList<int>("killCount").ToArray();
-        //    }
-        //    if (subworldSyncedData.ContainsKey("anglerQuest"))
-        //    {
-        //        Main.anglerQuest = subworldSyncedData.GetInt("anglerQuest");
-        //    }
-        //    if (subworldSyncedData.ContainsKey("anglerQuestFinished"))
-        //    {
-        //        Main.anglerQuestFinished = subworldSyncedData.GetBool("anglerQuestFinished");
-        //    }
-        //}
+                foreach (var pair in DownedFunctions)
+                {
+                    if (pair.Value != null && downed.Contains(pair.Key))
+                    {
+                        pair.Value() = true;
+                    }
+                }
+            }
+            if (subworldSyncedData.ContainsKey("killCount"))
+            {
+                NPC.killCount = subworldSyncedData.GetList<int>("killCount").ToArray();
+            }
+            if (subworldSyncedData.ContainsKey("anglerQuest"))
+            {
+                Main.anglerQuest = subworldSyncedData.GetInt("anglerQuest");
+            }
+            if (subworldSyncedData.ContainsKey("anglerQuestFinished"))
+            {
+                Main.anglerQuestFinished = subworldSyncedData.GetBool("anglerQuestFinished");
+            }
+        }
+
+        public static bool Active => SubworldSystem.IsActive<FractalSubworld>();
 
         public static bool entering;
         public static bool exiting;
@@ -326,6 +305,7 @@ namespace Polarities
         public static void DoEnter()
         {
             entering = true;
+            SaveUniversalData();
 
             for (int i = 0; i < Main.maxProjectiles; i++)
             {
@@ -350,22 +330,32 @@ namespace Polarities
             Main.time = Main.dayLength / 2;
             SubworldSystem.noReturn = false;
 
-            //Regenerate selfsimilar ore veins
             ResetDimension();
 
             base.OnLoad();
-
-            //load synced data
-            //LoadUniversalData();
         }
         public override void OnUnload()
         {
             base.OnUnload();
-
-            //set to load synced data
-            //justLeftDimensionAndNeedSyncing = true;
         }
 
+        public override void OnEnter()
+        {
+            if (Main.netMode != NetmodeID.Server)
+            {
+                Main.LocalPlayer.ClearBuff(ModContent.BuffType<Fractalizing>());
+                Main.LocalPlayer.Polarities().fractalization = 0;
+            }
+        }
+
+        public override void OnExit()
+        {
+            if (Main.netMode != NetmodeID.Server)
+            {
+                Main.LocalPlayer.ClearBuff(ModContent.BuffType<Fractalizing>());
+                Main.LocalPlayer.Polarities().fractalization = 0;
+            }
+        }
 
 
         public override int Width => Main.maxTilesX; //lower these values if testing worldgen because tbh it takes a while
@@ -406,7 +396,7 @@ namespace Polarities
         {
             get => Main.expertMode ? 18000 : 27000;
         }
-        public static int POST_GOLEM_TIME
+        public static int POST_SENTINEL_TIME
         {
             get => Main.expertMode ? 36000 : 54000;
         }
@@ -615,8 +605,7 @@ namespace Polarities
             0.0024644351176327946,
             -0.00036048322412911445
         };
-
-        static int wastesDirection;
+        private static int wastesDirection;
 
         public override List<GenPass> Tasks => new List<GenPass>()
         {
@@ -812,7 +801,7 @@ namespace Polarities
                     progress.Set((j + i * Main.maxTilesY) / (float)(Main.maxTilesX * Main.maxTilesY)); //Controls the progress bar, should only be set between 0f and 1f
 
 
-                    double x = (2 * i / (double)Width - 1) / 128 * (double)Width / (double)Height;
+                    double x = (2 * i / (double)Width - 1) / 128 * Width / Height;
                     double y = (2 * j / (double)Height - 2) / 128;
 
                     Vector2 vars = new Vector2((float)expInterpolate(-1.77985, -1.779, j / (double)Height, Math.Pow(FEIGENBAUMCONSTANT, 0.25)), 0) + FindRandomVariance(i, j) / (int)Math.Pow(2, 15) * (j / (float)Height);
@@ -1052,8 +1041,8 @@ namespace Polarities
             {
                 for (int y = 10; y < Main.maxTilesY - 10; y++)
                 {
-                    float xFrac = (x + WorldGen.genRand.NextFloat(-20, 20)) / (float)Main.maxTilesX;
-                    float yFrac = (y + WorldGen.genRand.NextFloat(-20, 20)) / (float)Main.maxTilesY;
+                    float xFrac = (x + WorldGen.genRand.NextFloat(-20, 20)) / Main.maxTilesX;
+                    float yFrac = (y + WorldGen.genRand.NextFloat(-20, 20)) / Main.maxTilesY;
 
                     if (yFrac > 2 - 3 * (2 * xFrac - 1) * (2 * xFrac - 1))
                     {
@@ -1152,14 +1141,14 @@ namespace Polarities
             {
                 for (int j = 0; j < Main.maxTilesY; j++)
                 {
-                    double x = (2 * i / (double)Width - 1) / 128 * (double)Width / (double)Height;
+                    double x = (2 * i / (double)Width - 1) / 128 * Width / Height;
                     double y = (2 * j / (double)Height - 2) / 128;
 
                     Vector2 vars = new Vector2((float)x, (float)y) + FindRandomVariance(i, j) / 1024 * (j / (float)Height); //new Vector2((float)expInterpolate(-1.77985, -1.779, j / (double)Height, Math.Pow(FEIGENBAUMCONSTANT, 0.25)), 0) + FindRandomVariance(i, j) / (int)Math.Pow(2, 15) * (j / (float)Height);
 
                     if ((vars - new Vector2(0.02f * wastesDirection, -0.02f)).Length() < 0.015f)
                     {
-                        if (Main.tile[i, j].HasTile && !protectedTiles.Contains((int)Main.tile[i, j].TileType))
+                        if (Main.tile[i, j].HasTile && !protectedTiles.Contains(Main.tile[i, j].TileType))
                         {
                             WorldGen.PlaceTile(i, j, TileType<FractalStrandsTile>(), mute: true, forced: true);
                             if (Main.tile[i, j].WallType != 0) Main.tile[i, j].WallType = (ushort)WallType<FractalStrandsWallNatural>();
@@ -1182,7 +1171,7 @@ namespace Polarities
                     centerX = WorldGen.genRand.Next(Main.maxTilesX);
                     centerY = WorldGen.genRand.Next(Main.maxTilesY);
 
-                    if (Main.tile[centerX, centerY].HasTile && !protectedTiles.Contains((int)Main.tile[centerX, centerY].TileType))
+                    if (Main.tile[centerX, centerY].HasTile && !protectedTiles.Contains(Main.tile[centerX, centerY].TileType))
                     {
                         xFrac = centerX / (float)Main.maxTilesX;
                         yFrac = centerY / (float)Main.maxTilesY;
@@ -1195,7 +1184,7 @@ namespace Polarities
                     }
                 }
 
-                double xPos = (2 * centerX / (double)Width - 1) / 128 * (double)Width / (double)Height;
+                double xPos = (2 * centerX / (double)Width - 1) / 128 * Width / Height;
                 double yPos = (2 * centerY / (double)Height - 2) / 128;
 
                 Vector2 vars = new Vector2((float)xPos, (float)yPos) + FindRandomVariance(centerX, centerY) / 1024 * (centerY / (float)Height);
@@ -1230,7 +1219,7 @@ namespace Polarities
                 {
                     for (int j = Math.Max(0, centerY - scale * 2); j <= Math.Min(Main.maxTilesY - 1, centerY + scale * 2); j++)
                     {
-                        if (Main.tile[i, j].HasTile && !protectedTiles.Contains((int)Main.tile[i, j].TileType))
+                        if (Main.tile[i, j].HasTile && !protectedTiles.Contains(Main.tile[i, j].TileType))
                         {
                             double x = (centerX - i) / (double)scale * Math.Cos(rot) - (centerY - j) / (double)scale * Math.Sin(rot);
                             double y = (centerY - j) / (double)scale * Math.Cos(rot) + (centerX - i) / (double)scale * Math.Sin(rot);
@@ -1301,7 +1290,7 @@ namespace Polarities
                 {
                     for (int j = Math.Max(0, centerY - scale * 2); j <= Math.Min(Main.maxTilesY - 4, centerY + scale * 2); j++)
                     {
-                        if (Main.tile[i, j].HasTile && !protectedTiles.Contains((int)Main.tile[i, j].TileType))
+                        if (Main.tile[i, j].HasTile && !protectedTiles.Contains(Main.tile[i, j].TileType))
                         {
                             double x = (centerX - i) / (double)scale * Math.Cos(rot) - (centerY - j) / (double)scale * Math.Sin(rot);
                             double y = (centerY - j) / (double)scale * Math.Cos(rot) + (centerX - i) / (double)scale * Math.Sin(rot);
@@ -1368,7 +1357,7 @@ namespace Polarities
                 {
                     for (int j = Math.Max(0, centerY - scale * 2); j <= Math.Min(Main.maxTilesY - 1, centerY + scale * 2); j++)
                     {
-                        if (Main.tile[i, j].HasTile && !protectedTiles.Contains((int)Main.tile[i, j].TileType))
+                        if (Main.tile[i, j].HasTile && !protectedTiles.Contains(Main.tile[i, j].TileType))
                         {
                             double x = (centerX - i) / (double)scale * Math.Cos(rot) - (centerY - j) / (double)scale * Math.Sin(rot);
                             double y = (centerY - j) / (double)scale * Math.Cos(rot) + (centerX - i) / (double)scale * Math.Sin(rot);
@@ -1471,13 +1460,13 @@ namespace Polarities
         {
             progress.Message = "Generating suspicious caves";
 
-            //PolaritiesWorld.sentinelCaves = new List<Vector2>();
-            //PolaritiesWorld.sentinelCaveVars = new List<Vector2>();
-            //PolaritiesWorld.sentinelCaveRots = new List<double>();
+            //PolaritiesSystem.sentinelCaves = new List<Vector2>();
+            //PolaritiesSystem.sentinelCaveVars = new List<Vector2>();
+            //PolaritiesSystem.sentinelCaveRots = new List<double>();
 
-            //while (PolaritiesWorld.sentinelCaves.Count < NUM_SENTINEL_CAVES)
+            //while (PolaritiesSystem.sentinelCaves.Count < NUM_SENTINEL_CAVES)
             //{
-            //    progress.Set(PolaritiesWorld.sentinelCaves.Count / (float)NUM_SENTINEL_CAVES);
+            //    progress.Set(PolaritiesSystem.sentinelCaves.Count / (float)NUM_SENTINEL_CAVES);
 
             //    TryGenSentinelCave();
             //}
@@ -1487,11 +1476,11 @@ namespace Polarities
         {
             progress.Message = "Generating suspicious ore";
 
-            //for (int c = 0; c < PolaritiesWorld.sentinelCaves.Count; c++)
+            //for (int c = 0; c < PolaritiesSystem.sentinelCaves.Count; c++)
             //{
-            //    progress.Set(c / (float)PolaritiesWorld.sentinelCaves.Count);
+            //    progress.Set(c / (float)PolaritiesSystem.sentinelCaves.Count);
 
-            //    GenSentinelVein(PolaritiesWorld.sentinelCaves[c], PolaritiesWorld.sentinelCaveVars[c], PolaritiesWorld.sentinelCaveRots[c]);
+            //    GenSentinelVein(PolaritiesSystem.sentinelCaves[c], PolaritiesSystem.sentinelCaveVars[c], PolaritiesSystem.sentinelCaveRots[c]);
             //}
         }
 
@@ -1928,7 +1917,7 @@ namespace Polarities
 
             //Vector2 cavePosition = new Vector2(WorldGen.genRand.NextFloat(3 * ARENA_RADIUS, Main.maxTilesX * 16 - 3 * ARENA_RADIUS), WorldGen.genRand.NextFloat(3 * ARENA_RADIUS, Main.maxTilesY * 16 - 3 * ARENA_RADIUS));
 
-            //foreach (Vector2 cavePosition2 in PolaritiesWorld.sentinelCaves)
+            //foreach (Vector2 cavePosition2 in PolaritiesSystem.sentinelCaves)
             //{
             //    if ((cavePosition - cavePosition2).Length() < ARENA_RADIUS * 3) return;
             //}
@@ -1976,7 +1965,7 @@ namespace Polarities
 
 
             ////we have successfully found a position!
-            //PolaritiesWorld.sentinelCaves.Add(cavePosition);
+            //PolaritiesSystem.sentinelCaves.Add(cavePosition);
             ////vars and rotation
             //double rot = WorldGen.genRand.NextDouble() * Math.PI * 2;
 
@@ -1985,8 +1974,8 @@ namespace Polarities
             //Vector2 vars = bulbCenter + (bulbEdge - bulbCenter).RotatedBy(WorldGen.genRand.NextFloat(MathHelper.TwoPi)) * WorldGen.genRand.NextFloat(1f);
             //vars.Y *= (WorldGen.genRand.NextBool() ? 1 : -1);
 
-            //PolaritiesWorld.sentinelCaveVars.Add(vars);
-            //PolaritiesWorld.sentinelCaveRots.Add(rot);
+            //PolaritiesSystem.sentinelCaveVars.Add(vars);
+            //PolaritiesSystem.sentinelCaveRots.Add(rot);
 
             ////fill it all in with ore temporarily, this blocks other stuff from generating in to the cave
             //for (int i = (int)(cavePosition.X - ARENA_RADIUS) / 16; i <= (int)(cavePosition.X + ARENA_RADIUS) / 16; i++)
@@ -2167,8 +2156,10 @@ namespace Polarities
             const int minSize = 7;
             const int maxSize = 14;
 
-            List<Rectangle> rooms = new List<Rectangle>();
-            rooms.Add(new Rectangle(x, y, WorldGen.genRand.Next(minSize, maxSize), WorldGen.genRand.Next(minSize, maxSize)));
+            List<Rectangle> rooms = new List<Rectangle>
+            {
+                new Rectangle(x, y, WorldGen.genRand.Next(minSize, maxSize), WorldGen.genRand.Next(minSize, maxSize))
+            };
             rooms[0] = new Rectangle(rooms[0].X - rooms[0].Width / 2, rooms[0].Y - rooms[0].Height / 2, rooms[0].Width, rooms[0].Height);
 
             ModLoader.GetMod("Polarities").Logger.Debug("HouseA");
@@ -2565,15 +2556,13 @@ namespace Polarities
             //TODO: furniture
         }
 
-
-
-        static int unlockedChestItemIndex = 0;
-        static int lockedChestItemIndex = 0;
-        static int[] itemsToPlaceInUnlockedFractalChests = { };
-        static int[] itemsToPlaceInLockedFractalChests = { };
+        private static int unlockedChestItemIndex = 0;
+        private static int lockedChestItemIndex = 0;
+        private static int[] itemsToPlaceInUnlockedFractalChests = { };
+        private static int[] itemsToPlaceInLockedFractalChests = { };
 
         //this is initialized in InitGenpass
-        static int[] protectedTiles;
+        private static int[] protectedTiles;
 
         private static void ResetFractalChestData()
         {
@@ -2778,10 +2767,18 @@ namespace Polarities
             }
 
             //regenerate sentinel veins
-            //for (int i = 0; i < PolaritiesWorld.sentinelCaves.Count; i++)
+            //for (int i = 0; i < PolaritiesSystem.sentinelCaves.Count; i++)
             //{
-            //    GenSentinelVein(PolaritiesWorld.sentinelCaves[i], PolaritiesWorld.sentinelCaveVars[i], PolaritiesWorld.sentinelCaveRots[i], onlyGenVein: true);
+            //    GenSentinelVein(PolaritiesSystem.sentinelCaves[i], PolaritiesSystem.sentinelCaveVars[i], PolaritiesSystem.sentinelCaveRots[i], onlyGenVein: true);
             //}
+        }
+    }
+
+    public class FractalSystem : ModSystem
+    {
+        public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
+        {
+            FractalWastesBiome.TileCount = tileCounts[ModContent.TileType<FractalDustTile>()] + tileCounts[ModContent.TileType<FractalDuststoneTile>()] + tileCounts[ModContent.TileType<HyphaeFractalDuststone>()];
         }
     }
 }

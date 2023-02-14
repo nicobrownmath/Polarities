@@ -1,54 +1,50 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Polarities.Buffs;
+using Polarities.Projectiles;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Polarities.Projectiles;
-using System;
-using Polarities.Buffs;
-using System.Collections.Generic;
 
 namespace Polarities.Items.Weapons.Magic
 {
-	public class EchoStaff : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			Item.staff[Item.type] = true;
+    public class EchoStaff : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            Item.staff[Item.type] = true;
 
             SacrificeTotal = (1);
-		}
+        }
 
-		public override void SetDefaults()
-		{
-			Item.SetWeaponValues(0, 0, 0);
-			Item.DamageType = DamageClass.Magic;
-			Item.mana = 50;
+        public override void SetDefaults()
+        {
+            Item.SetWeaponValues(0, 0, 0);
+            Item.DamageType = DamageClass.Magic;
+            Item.mana = 50;
 
-			Item.width = 44;
-			Item.height = 44;
+            Item.width = 44;
+            Item.height = 44;
 
-			Item.useTime = 60;
-			Item.useAnimation = 60;
-			Item.autoReuse = false;
-			Item.noMelee = true;
-			Item.useStyle = 5;
-			Item.UseSound = SoundID.Item8;
+            Item.useTime = 60;
+            Item.useAnimation = 60;
+            Item.autoReuse = false;
+            Item.noMelee = true;
+            Item.useStyle = 5;
+            Item.UseSound = SoundID.Item8;
 
-			Item.shoot = ProjectileType<EchoStaffProjectile>();
-			Item.shootSpeed = 4f;
+            Item.shoot = ProjectileType<EchoStaffProjectile>();
+            Item.shootSpeed = 4f;
 
-			Item.value = 10000;
-			Item.rare = 2;
-		}
+            Item.value = 10000;
+            Item.rare = 2;
+        }
 
-		public override Vector2? HoldoutOrigin()
-		{
-			return new Vector2(10, 10);
-		}
-	}
+        public override Vector2? HoldoutOrigin()
+        {
+            return new Vector2(10, 10);
+        }
+    }
 
     public class EchoStaffProjectile : ModProjectile
     {

@@ -194,18 +194,25 @@ namespace Polarities.NPCs.Enemies.Fractal
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            //if (Subworld.IsActive<FractalSubworld>())
-            //{
-            //    return 0.3f * FractalSubworld.SpawnConditionFractalWaters(spawnInfo) * (1 - FractalSubworld.SpawnConditionFractalSky(spawnInfo));
-            //}
+            if (FractalSubworld.Active)
+            {
+                return 0.3f * FractalSubworld.SpawnConditionFractalWaters(spawnInfo) * (1 - FractalSubworld.SpawnConditionFractalSky(spawnInfo));
+            }
             return 0f;
+        }
+
+        public override void HitEffect(int hitDirection, double damage)
+        {
+            if (NPC.life <= 0)
+            {
+                GoreHelper.DeathGore(NPC, "SeaAnomalyGore1");
+                GoreHelper.DeathGore(NPC, segmentPositions[23], "SeaAnomalyGore2");
+                GoreHelper.DeathGore(NPC, segmentPositions[39], "SeaAnomalyGore3");
+            }
         }
 
         public override bool CheckDead()
         {
-            //Gore.NewGore(NPC.Center, NPC.velocity, Mod.GetGoreSlot("Gores/SeaAnomalyGore1"));
-            //Gore.NewGore(segmentPositions[23], NPC.velocity, Mod.GetGoreSlot("Gores/SeaAnomalyGore2"));
-            //Gore.NewGore(segmentPositions[39], NPC.velocity, Mod.GetGoreSlot("Gores/SeaAnomalyGore3"));
 
             return true;
         }

@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -8,31 +8,31 @@ using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Items.Weapons.Ranged.Ammo
 {
-	public class BatArrow : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			SacrificeTotal = (99);
-		}
+    public class BatArrow : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            SacrificeTotal = (99);
+        }
 
-		public override void SetDefaults()
-		{
-			Item.SetWeaponValues(6, 1f, 0);
-			Item.DamageType = DamageClass.Ranged;
-			Item.consumable = true;
-			Item.maxStack = 9999;
-			Item.ammo = AmmoID.Arrow;
+        public override void SetDefaults()
+        {
+            Item.SetWeaponValues(6, 1f, 0);
+            Item.DamageType = DamageClass.Ranged;
+            Item.consumable = true;
+            Item.maxStack = 9999;
+            Item.ammo = AmmoID.Arrow;
 
-			Item.width = 12 * 2;
-			Item.height = 20 * 2;
+            Item.width = 12 * 2;
+            Item.height = 20 * 2;
 
-			Item.shoot = ProjectileType<BatArrowProjectile>();
-			Item.shootSpeed = 3f;
+            Item.shoot = ProjectileType<BatArrowProjectile>();
+            Item.shootSpeed = 3f;
 
-			Item.value = 10;
-			Item.rare = 2;
-		}
-	}
+            Item.value = 10;
+            Item.rare = 2;
+        }
+    }
 
     public class BatArrowProjectile : ModProjectile
     {
