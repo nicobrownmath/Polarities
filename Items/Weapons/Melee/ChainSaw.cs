@@ -1,48 +1,46 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
+using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Polarities.Projectiles;
-using System;
-using Terraria.Audio;
-using ReLogic.Content;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Polarities.Items.Weapons.Melee
 {
-	public class ChainSaw : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
+    public class ChainSaw : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
             SacrificeTotal = (1);
-		}
+        }
 
-		public override void SetDefaults()
-		{
-			Item.SetWeaponValues(15, 1f, 0);
-			Item.DamageType = DamageClass.Melee;
+        public override void SetDefaults()
+        {
+            Item.SetWeaponValues(15, 1f, 0);
+            Item.DamageType = DamageClass.Melee;
 
-			Item.width = 40;
-			Item.height = 36;
+            Item.width = 40;
+            Item.height = 36;
 
-			Item.useTime = 20;
-			Item.useAnimation = 20;
-			Item.useStyle = 5;
-			Item.noMelee = true;
-			Item.noUseGraphic = true;
-			Item.UseSound = SoundID.Item23;
-			Item.autoReuse = true;
-			Item.channel = true;
+            Item.useTime = 20;
+            Item.useAnimation = 20;
+            Item.useStyle = 5;
+            Item.noMelee = true;
+            Item.noUseGraphic = true;
+            Item.UseSound = SoundID.Item23;
+            Item.autoReuse = true;
+            Item.channel = true;
 
-			Item.shoot = ProjectileType<ChainSawProjectile>();
-			Item.shootSpeed = 16f;
+            Item.shoot = ProjectileType<ChainSawProjectile>();
+            Item.shootSpeed = 16f;
 
-			Item.value = 10000;
-			Item.rare = ItemRarityID.Green;
-		}
-	}
+            Item.value = 10000;
+            Item.rare = ItemRarityID.Green;
+        }
+    }
 
     public class ChainSawProjectile : ModProjectile
     {

@@ -1,5 +1,4 @@
-﻿using SubworldLibrary;
-using Terraria;
+﻿using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
 
@@ -20,6 +19,8 @@ namespace Polarities.Biomes.Fractal
         public override string MapBackground => "Polarities/Biomes/Fractal/FractalMapBackground";
         public override string BackgroundPath => MapBackground;
         public override string BestiaryIcon => "Polarities/Biomes/Fractal/FractalBestiaryIcon";
+
+        public override int Music => MusicLoader.GetMusicSlot(Mod, "Sounds/Music/FractalPalace");
 
         public override void Load()
         {

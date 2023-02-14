@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Mono.Cecil.Cil;
@@ -10,40 +8,40 @@ using Polarities.Biomes;
 using Polarities.Items;
 using Polarities.Items.Armor.Vanity;
 using Polarities.Items.Pets;
+using Polarities.Items.Placeable.MusicBoxes;
 using Polarities.Items.Placeable.Relics;
 using Polarities.Items.Placeable.Trophies;
 using Polarities.Items.Weapons.Magic;
 using Polarities.Items.Weapons.Melee;
 using Polarities.Items.Weapons.Ranged;
 using Polarities.Items.Weapons.Summon.Minions;
-using Polarities.NPCs;
-using Polarities.NPCs.Critters;
 using Polarities.NPCs.ConvectiveWanderer;
+using Polarities.NPCs.Critters;
+using Polarities.NPCs.Enemies.HallowInvasion;
+using Polarities.NPCs.Enemies.WorldEvilInvasion;
 using Polarities.NPCs.Esophage;
 using Polarities.NPCs.Gigabat;
 using Polarities.NPCs.StarConstruct;
 using Polarities.NPCs.StormCloudfish;
 using Polarities.NPCs.SunPixie;
 using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Polarities.NPCs.Enemies.HallowInvasion;
-using Polarities.NPCs.Enemies.WorldEvilInvasion;
-using Microsoft.Xna.Framework;
-using Terraria.Graphics.Effects;
-using Terraria.Graphics.Shaders;
-using Polarities.NPCs.Eclipxie;
-using Terraria.Audio;
-using Polarities.Items.Placeable.MusicBoxes;
 
 namespace Polarities
 {
     public class Polarities : Mod
-	{
+    {
         public static bool AprilFools => (DateTime.Now.Day == 1) && (DateTime.Now.Month == 4);
         public static bool SnakeDay => (DateTime.Now.Day == 16) && (DateTime.Now.Month == 7);
 
@@ -170,7 +168,8 @@ namespace Polarities
                     new List<int> { ItemType<PestilenceMusicBox>() }, //collection
                     ItemType<WorldEvilInvasionSummonItem>(), //spawning
                     "Use a [i:" + ItemType<WorldEvilInvasionSummonItem>() + "], or wait after defeating every mechanical boss.",
-                    (SpriteBatch sb, Rectangle rect, Color color) => {
+                    (SpriteBatch sb, Rectangle rect, Color color) =>
+                    {
                         Texture2D texture = Request<Texture2D>("Polarities/Textures/BossChecklist/WorldEvilInvasion").Value;
                         Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
                         sb.Draw(texture, centered, color);
@@ -182,7 +181,8 @@ namespace Polarities
                     ItemType<StormCloudfishSummonItem>(), //spawning
                     "Fly a [i:" + ItemType<StormCloudfishSummonItem>() + " as high as you can at the surface.",
                     null,
-                    (SpriteBatch sb, Rectangle rect, Color color) => {
+                    (SpriteBatch sb, Rectangle rect, Color color) =>
+                    {
                         Texture2D texture = Request<Texture2D>("Polarities/Textures/BossChecklist/StormCloudfish").Value;
                         Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
                         sb.Draw(texture, centered, color);
@@ -193,7 +193,8 @@ namespace Polarities
                     ItemType<StarConstructSummonItem>(), //spawning
                     "Wait for a dormant construct to spawn at night while the player has at least 300 maximum life, or use a [i:" + ItemType<StarConstructSummonItem>() + " at the surface.",
                     null,
-                    (SpriteBatch sb, Rectangle rect, Color color) => {
+                    (SpriteBatch sb, Rectangle rect, Color color) =>
+                    {
                         Texture2D texture = Request<Texture2D>("Polarities/Textures/BossChecklist/StarConstruct").Value;
                         Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
                         sb.Draw(texture, centered, color);
@@ -209,7 +210,8 @@ namespace Polarities
                     ItemType<SunPixieSummonItem>(), //spawning
                     "Reach the end of the Rapture, or use a [i:" + ItemType<SunPixieSummonItem>() + "] anywhere.",
                     null,
-                    (SpriteBatch sb, Rectangle rect, Color color) => {
+                    (SpriteBatch sb, Rectangle rect, Color color) =>
+                    {
                         Texture2D texture = Request<Texture2D>("Polarities/Textures/BossChecklist/SunPixie").Value;
                         Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
                         sb.Draw(texture, centered, color);
@@ -220,7 +222,8 @@ namespace Polarities
                     ItemType<EsophageSummonItem>(), //spawning
                     "Reach the end of the Pestilence, or use a [i:" + ItemType<EsophageSummonItem>() + "] anywhere.",
                     null,
-                    (SpriteBatch sb, Rectangle rect, Color color) => {
+                    (SpriteBatch sb, Rectangle rect, Color color) =>
+                    {
                         Texture2D texture = Request<Texture2D>("Polarities/Textures/BossChecklist/Esophage").Value;
                         Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
                         sb.Draw(texture, centered, color);
@@ -231,7 +234,8 @@ namespace Polarities
                     new List<int> { ItemType<BabyWandererItem>(), ItemType<ConvectiveWandererSummonItem>() }, //spawning
                     "Kill a baby wanderer, or use a [i:" + ItemType<ConvectiveWandererSummonItem>() + "], at the lava ocean.",
                     null,
-                    (SpriteBatch sb, Rectangle rect, Color color) => {
+                    (SpriteBatch sb, Rectangle rect, Color color) =>
+                    {
                         Texture2D texture = Request<Texture2D>("Polarities/Textures/BossChecklist/ConvectiveWanderer").Value;
                         Vector2 centered = new Vector2(rect.X + (rect.Width / 2), rect.Y + (rect.Height / 2));
                         sb.Draw(texture, centered, texture.Frame(), color, 0f, texture.Size() / 2, 0.2f, SpriteEffects.None, 0f);

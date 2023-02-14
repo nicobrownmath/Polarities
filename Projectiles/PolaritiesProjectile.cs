@@ -1,29 +1,19 @@
-﻿using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Graphics.Shaders;
-using static Terraria.ModLoader.ModContent;
-using Terraria.GameInput;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using System.Collections.Generic;
-using Polarities.Items;
-using Polarities.NPCs;
-using MonoMod.Cil;
-using Terraria.ModLoader.IO;
-using Terraria.Enums;
-using Terraria.Utilities;
-using System.Reflection;
+﻿using Microsoft.Xna.Framework;
 using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using Polarities.Items.Books;
+using Polarities.NPCs;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using Terraria;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Projectiles
 {
-	public class PolaritiesProjectile : GlobalProjectile
-	{
+    public class PolaritiesProjectile : GlobalProjectile
+    {
         public override bool InstancePerEntity => true;
 
         public override void Load()
@@ -168,7 +158,7 @@ namespace Polarities.Projectiles
         public bool ForceDraw = false;
 
         private bool hookSpeedModified = false;
-		private int baseHookExtraUpdates = 0;
+        private int baseHookExtraUpdates = 0;
 
         public float turretSlots = 1f;
 

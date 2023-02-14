@@ -1,33 +1,26 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
 using Polarities.Items;
-using Polarities.Items.Placeable;
 using Polarities.Items.Accessories;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Trophies;
-using Terraria.Audio;
-using Terraria.GameContent;
-using ReLogic.Content;
 using Polarities.Items.Armor.Vanity;
 using Polarities.Items.Consumables.TreasureBags;
 using Polarities.Items.Hooks;
 using Polarities.Items.Materials;
-using Polarities.Items.Placeable.Relics;
-using Polarities.Items.Weapons.Ranged;
-using Polarities.Items.Weapons.Summon.Minions;
-using Terraria.GameContent.ItemDropRules;
 using Polarities.Items.Pets;
-using Terraria.GameContent.Bestiary;
-using Polarities.Buffs;
-using Terraria.DataStructures;
+using Polarities.Items.Placeable.Relics;
+using Polarities.Items.Placeable.Trophies;
 using Polarities.Items.Weapons.Magic;
+using ReLogic.Content;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.NPCs.StormCloudfish
 {
@@ -41,7 +34,7 @@ namespace Polarities.NPCs.StormCloudfish
             Main.npcFrameCount[Type] = 8;
             NPCID.Sets.TrailCacheLength[Type] = 3;
             NPCID.Sets.TrailingMode[Type] = 0;
-            
+
             //group with other bosses
             NPCID.Sets.BossBestiaryPriority.Add(Type);
 
@@ -718,10 +711,10 @@ namespace Polarities.NPCs.StormCloudfish
                 for (int k = 0; k < NPC.oldPos.Length; k++)
                 {
                     drawPos = NPC.Center - NPC.position + NPC.oldPos[k] - screenPos + new Vector2(0f, NPC.gfxOffY);
-                    color = NPC.GetAlpha(NPC.GetNPCColorTintedByBuffs(lightColor)) * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
+                    color = NPC.GetAlpha(NPC.GetNPCColorTintedByBuffs(lightColor)) * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
 
                     spriteBatch.Draw(TextureAssets.Npc[Type].Value, drawPos, NPC.frame, color, NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
-                    spriteBatch.Draw(GlowTexture.Value, drawPos, NPC.frame, Color.White * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length), NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
+                    spriteBatch.Draw(GlowTexture.Value, drawPos, NPC.frame, Color.White * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length), NPC.rotation, drawOrigin, scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
                 }
             }
             drawPos = NPC.Center - screenPos + new Vector2(0f, NPC.gfxOffY);

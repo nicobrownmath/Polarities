@@ -1,27 +1,16 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Terraria.ID;
-using System.Collections.Generic;
-using Terraria.ObjectData;
-using Terraria.DataStructures;
-using Terraria.Enums;
-using Microsoft.Xna.Framework;
-using Polarities.NPCs;
-using Terraria.ModLoader.IO;
-using Terraria.Localization;
-using Microsoft.Xna.Framework.Graphics;
-using Polarities.Items.Placeable.Blocks;
+﻿using Polarities.Items.Accessories;
 using Polarities.Items.Placeable;
 using Polarities.Items.Weapons.Melee;
 using Polarities.Items.Weapons.Summon.Sentries;
-using Polarities.Items.Accessories;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Items.Consumables.Crates
 {
-	public class SaltCrate : CrateBase
-	{
+    public class SaltCrate : CrateBase
+    {
         public override int CrateIndex => 0;
 
         public override void ModifyItemLoot(ItemLoot itemLoot)
@@ -35,7 +24,7 @@ namespace Polarities.Items.Consumables.Crates
             };
             itemLoot.Add(new OneFromRulesRule(1, saltGear));
 
-			//salt and crystals
+            //salt and crystals
             itemLoot.Add(ItemDropRule.Common(ItemType<SaltCrystals>(), 2, 6, 10));
             itemLoot.Add(ItemDropRule.Common(ItemType<SaltCrystals>(), 2, 30, 40));
 
@@ -91,6 +80,6 @@ namespace Polarities.Items.Consumables.Crates
             };
             itemLoot.Add(new OneFromRulesRule(2, highendBait));
         }
-	}
+    }
 }
 

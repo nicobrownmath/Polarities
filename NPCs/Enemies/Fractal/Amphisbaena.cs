@@ -4,7 +4,6 @@ using Polarities.Items.Armor.Vanity;
 using Polarities.Items.Materials;
 using Polarities.Items.Placeable.Banners;
 using Polarities.Items.Placeable.Blocks.Fractal;
-using SubworldLibrary;
 using System.IO;
 using Terraria;
 using Terraria.GameContent.Bestiary;
@@ -20,7 +19,7 @@ namespace Polarities.NPCs.Enemies.Fractal
         private int attackCooldown
         {
             get => attackCooldown = (int)NPC.ai[0];
-            set => NPC.ai[0] = (float)value;
+            set => NPC.ai[0] = value;
         }
 
         public override void SetStaticDefaults()

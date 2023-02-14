@@ -1,13 +1,11 @@
-﻿using Polarities.Projectiles;
+﻿using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
 
 namespace Polarities.Items.Weapons.Melee
 {
@@ -175,12 +173,12 @@ namespace Polarities.Items.Weapons.Melee
             if (!Projectile.counterweight)
             {
                 int num371 = -1;
-                if (Projectile.position.X + (float)(Projectile.width / 2) < Main.player[Projectile.owner].position.X + (float)(Main.player[Projectile.owner].width / 2))
+                if (Projectile.position.X + Projectile.width / 2 < Main.player[Projectile.owner].position.X + Main.player[Projectile.owner].width / 2)
                 {
                     num371 = 1;
                 }
                 num371 *= -1;
-                Main.player[Projectile.owner].itemRotation = (float)Math.Atan2(num361 * (float)num371, num354 * (float)num371);
+                Main.player[Projectile.owner].itemRotation = (float)Math.Atan2(num361 * num371, num354 * num371);
             }
             bool flag = true;
             if (num354 == 0f && num361 == 0f)
@@ -195,8 +193,8 @@ namespace Polarities.Items.Weapons.Melee
                 num361 *= num373;
                 vector48.X -= num354 * 0.1f;
                 vector48.Y -= num361 * 0.1f;
-                num354 = Projectile.position.X + (float)Projectile.width * 0.5f - vector48.X;
-                num361 = Projectile.position.Y + (float)Projectile.height * 0.5f - vector48.Y;
+                num354 = Projectile.position.X + Projectile.width * 0.5f - vector48.X;
+                num361 = Projectile.position.Y + Projectile.height * 0.5f - vector48.Y;
             }
             while (flag)
             {
@@ -218,8 +216,8 @@ namespace Polarities.Items.Weapons.Melee
                 num361 *= num380;
                 vector48.X += num354;
                 vector48.Y += num361;
-                num354 = Projectile.position.X + (float)Projectile.width * 0.5f - vector48.X;
-                num361 = Projectile.position.Y + (float)Projectile.height * 0.1f - vector48.Y;
+                num354 = Projectile.position.X + Projectile.width * 0.5f - vector48.X;
+                num361 = Projectile.position.Y + Projectile.height * 0.1f - vector48.Y;
                 if (num381 > 12f)
                 {
                     float num385 = 0.3f;
@@ -295,11 +293,11 @@ namespace Polarities.Items.Weapons.Melee
                         oldColor = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB);
                         break;
                 }
-                oldColor.A = (byte)((float)(int)oldColor.A * 0.4f);
+                oldColor.A = (byte)(oldColor.A * 0.4f);
                 float num409 = 0.5f;
                 oldColor = Lighting.GetColor((int)vector48.X / 16, (int)(vector48.Y / 16f), oldColor);
-                oldColor = new Color((int)(byte)((float)(int)oldColor.R * num409), (int)(byte)((float)(int)oldColor.G * num409), (int)(byte)((float)(int)oldColor.B * num409), (int)(byte)((float)(int)oldColor.A * num409));
-                Main.EntitySpriteDraw(TextureAssets.FishingLine.Value, new Vector2(vector48.X - Main.screenPosition.X + (float)TextureAssets.FishingLine.Value.Width * 0.5f, vector48.Y - Main.screenPosition.Y + (float)TextureAssets.FishingLine.Value.Height * 0.5f) - new Vector2(6f, 0f), (Rectangle?)new Rectangle(0, 0, TextureAssets.FishingLine.Value.Width, (int)num377), oldColor, num369, new Vector2((float)TextureAssets.FishingLine.Value.Width * 0.5f, 0f), 1f, (SpriteEffects)0, 0);
+                oldColor = new Color((byte)(oldColor.R * num409), (byte)(oldColor.G * num409), (byte)(oldColor.B * num409), (byte)(oldColor.A * num409));
+                Main.EntitySpriteDraw(TextureAssets.FishingLine.Value, new Vector2(vector48.X - Main.screenPosition.X + TextureAssets.FishingLine.Value.Width * 0.5f, vector48.Y - Main.screenPosition.Y + TextureAssets.FishingLine.Value.Height * 0.5f) - new Vector2(6f, 0f), (Rectangle?)new Rectangle(0, 0, TextureAssets.FishingLine.Value.Width, (int)num377), oldColor, num369, new Vector2(TextureAssets.FishingLine.Value.Width * 0.5f, 0f), 1f, 0, 0);
             }
 
             return true;

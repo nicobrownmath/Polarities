@@ -1,15 +1,13 @@
-﻿using Terraria.ModLoader;
-using Terraria.ID;
-using Polarities.NPCs;
-using static Terraria.ModLoader.ModContent;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
-using Terraria;
-using Terraria.GameContent;
-using ReLogic.Content;
 using Polarities.Items.Armor;
-using Polarities.Effects;
+using ReLogic.Content;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Items.Accessories.Wings
 {
@@ -117,8 +115,10 @@ namespace Polarities.Items.Accessories.Wings
                                     break;
                             }
 
-                            DrawData drawData = new DrawData(texture, drawPlayer.position - drawPlayer.oldPosition + pulsePosition - Main.screenPosition, frame, color * alpha * ((4.5f - pulseScale) / 4.5f), rotation + pulseRotation, origin, pulseScale, spriteEffects, 0);
-                            drawData.shader = drawInfo.cWings;
+                            DrawData drawData = new DrawData(texture, drawPlayer.position - drawPlayer.oldPosition + pulsePosition - Main.screenPosition, frame, color * alpha * ((4.5f - pulseScale) / 4.5f), rotation + pulseRotation, origin, pulseScale, spriteEffects, 0)
+                            {
+                                shader = drawInfo.cWings
+                            };
                             drawInfo.DrawDataCache.Add(drawData);
                         }
                     }
@@ -129,10 +129,12 @@ namespace Polarities.Items.Accessories.Wings
             int num4 = 0;
             int num5 = 4;
             Color color6 = drawInfo.colorArmorBody;
-            Vector2 vector = drawInfo.Position - Main.screenPosition + new Vector2((float)(drawInfo.drawPlayer.width / 2), (float)(drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height / 2)) + new Vector2(0, 7);
-            Vector2 vector5 = vector + new Vector2((float)(num4 - 9), (float)(num3 + 2)) * drawPlayer.Directions;
-            DrawData drawData2 = new DrawData(TextureAssets.Wings[drawPlayer.wings].Value, vector5.Floor(), (Rectangle?)new Rectangle(0, TextureAssets.Wings[drawPlayer.wings].Height() / num5 * drawPlayer.wingFrame, TextureAssets.Wings[drawPlayer.wings].Width(), TextureAssets.Wings[drawPlayer.wings].Height() / num5), color6, drawPlayer.bodyRotation, new Vector2((float)(TextureAssets.Wings[drawPlayer.wings].Width() / 2), (float)(TextureAssets.Wings[drawPlayer.wings].Height() / num5 / 2)), 1f, drawInfo.playerEffect, 0);
-            drawData2.shader = drawInfo.cWings;
+            Vector2 vector = drawInfo.Position - Main.screenPosition + new Vector2(drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height / 2) + new Vector2(0, 7);
+            Vector2 vector5 = vector + new Vector2(num4 - 9, num3 + 2) * drawPlayer.Directions;
+            DrawData drawData2 = new DrawData(TextureAssets.Wings[drawPlayer.wings].Value, vector5.Floor(), (Rectangle?)new Rectangle(0, TextureAssets.Wings[drawPlayer.wings].Height() / num5 * drawPlayer.wingFrame, TextureAssets.Wings[drawPlayer.wings].Width(), TextureAssets.Wings[drawPlayer.wings].Height() / num5), color6, drawPlayer.bodyRotation, new Vector2(TextureAssets.Wings[drawPlayer.wings].Width() / 2, TextureAssets.Wings[drawPlayer.wings].Height() / num5 / 2), 1f, drawInfo.playerEffect, 0)
+            {
+                shader = drawInfo.cWings
+            };
             drawInfo.DrawDataCache.Add(drawData2);
         }
     }

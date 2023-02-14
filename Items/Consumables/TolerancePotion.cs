@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using System;
-using Terraria.DataStructures;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
 
 namespace Polarities.Items.Consumables
 {
@@ -82,13 +80,13 @@ namespace Polarities.Items.Consumables
                 float num10 = 1f;
                 if (rectangle2.Width > 32 || rectangle2.Height > 32)
                 {
-                    num10 = ((rectangle2.Width <= rectangle2.Height) ? (32f / (float)rectangle2.Height) : (32f / (float)rectangle2.Width));
+                    num10 = ((rectangle2.Width <= rectangle2.Height) ? (32f / rectangle2.Height) : (32f / rectangle2.Width));
                 }
                 num10 *= inventoryScale;
 
                 Vector2 position3 = position + value.Size() * inventoryScale / 2f - TextureAssets.Cd.Value.Size() * inventoryScale / 2f;
-                Color color3 = item.GetAlpha(color) * ((float)player.buffTime[player.FindBuffIndex(BuffType<TolerancePotionCooldownBuff>())] / (float)player.GetModPlayer<PolaritiesPlayer>().tolerancePotionDelayTime);
-                spriteBatch.Draw(TextureAssets.Cd.Value, position3, (Rectangle?)null, color3, 0f, default(Vector2), num10, (SpriteEffects)0, 0f);
+                Color color3 = item.GetAlpha(color) * (player.buffTime[player.FindBuffIndex(BuffType<TolerancePotionCooldownBuff>())] / (float)player.GetModPlayer<PolaritiesPlayer>().tolerancePotionDelayTime);
+                spriteBatch.Draw(TextureAssets.Cd.Value, position3, null, color3, 0f, default(Vector2), num10, 0, 0f);
             }
         }
     }

@@ -1,14 +1,14 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using Terraria.DataStructures;
 
 namespace Polarities.Items.Placeable.Blocks.Fractal
 {
@@ -68,7 +68,7 @@ namespace Polarities.Items.Placeable.Blocks.Fractal
         }
 
         // This progression matches vanilla tiles, you don't have to follow it if you don't want. Some vanilla traps don't have 6 states, only 4. This can be implemented with different logic in Slope. Making 8 directions is also easily done in a similar manner.
-        static int[] frameXCycle = { 1, 2, 3, 0 };
+        private static int[] frameXCycle = { 1, 2, 3, 0 };
         // We can use the Slope method to override what happens when this tile is hammered.
         public override bool Slope(int i, int j)
         {

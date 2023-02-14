@@ -1,16 +1,14 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Polarities.Projectiles;
-using System;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.Audio;
-using Terraria.GameContent;
-using ReLogic.Content;
-using Terraria.DataStructures;
 
 namespace Polarities.Items.Weapons.Magic
 {
@@ -207,8 +205,8 @@ namespace Polarities.Items.Weapons.Magic
                     continue;
                 }
 
-                float gradient = ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                mainColor = new Color((int)((int)mainColorA.R * gradient + (int)mainColorB.R * (1 - gradient)), (int)((int)mainColorA.G * gradient + (int)mainColorB.G * (1 - gradient)), (int)((int)mainColorA.B * gradient + (int)mainColorB.B * (1 - gradient)));
+                float gradient = ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                mainColor = new Color((int)(mainColorA.R * gradient + mainColorB.R * (1 - gradient)), (int)(mainColorA.G * gradient + mainColorB.G * (1 - gradient)), (int)(mainColorA.B * gradient + mainColorB.B * (1 - gradient)));
 
                 Color color = mainColor * gradient * alpha;
                 float scale = Projectile.scale * gradient * alpha;
@@ -285,8 +283,8 @@ namespace Polarities.Items.Weapons.Magic
             Projectile.direction = projOwner.direction;
             projOwner.heldProj = Projectile.whoAmI;
             projOwner.itemTime = projOwner.itemAnimation;
-            Projectile.position.X = ownerMountedCenter.X - (float)(Projectile.width / 2);
-            Projectile.position.Y = ownerMountedCenter.Y - (float)(Projectile.height / 2);
+            Projectile.position.X = ownerMountedCenter.X - Projectile.width / 2;
+            Projectile.position.Y = ownerMountedCenter.Y - Projectile.height / 2;
             // As long as the player isn't frozen, the spear can move
             if (!projOwner.frozen)
             {
@@ -353,8 +351,8 @@ namespace Polarities.Items.Weapons.Magic
                     continue;
                 }
 
-                float gradient = ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                mainColor = new Color((int)((int)mainColorA.R * gradient + (int)mainColorB.R * (1 - gradient)), (int)((int)mainColorA.G * gradient + (int)mainColorB.G * (1 - gradient)), (int)((int)mainColorA.B * gradient + (int)mainColorB.B * (1 - gradient)));
+                float gradient = ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                mainColor = new Color((int)(mainColorA.R * gradient + mainColorB.R * (1 - gradient)), (int)(mainColorA.G * gradient + mainColorB.G * (1 - gradient)), (int)(mainColorA.B * gradient + mainColorB.B * (1 - gradient)));
 
                 Color color = mainColor * gradient * alpha;
                 float scale = Projectile.scale * gradient * alpha;

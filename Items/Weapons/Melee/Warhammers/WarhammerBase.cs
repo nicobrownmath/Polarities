@@ -1,20 +1,16 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.ObjectData;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Polarities.NPCs;
 using System;
 using System.Collections.Generic;
-using Terraria.DataStructures;
+using Terraria;
 using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace Polarities.Items.Weapons.Melee.Warhammers
 {
-	public abstract class WarhammerBase : ModItem
-	{
+    public abstract class WarhammerBase : ModItem
+    {
         public abstract int HammerLength { get; }
         public abstract int HammerHeadSize { get; }
         public abstract int DefenseLoss { get; }
@@ -30,10 +26,10 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 
         public virtual SoundStyle? SwingSound => SoundID.Item1;
 
-        static Vector2 oldHitboxPosition;
-        static bool hasHitTile;
-        static float oldRot;
-        static float mostRecentRotation;
+        private static Vector2 oldHitboxPosition;
+        private static bool hasHitTile;
+        private static float oldRot;
+        private static float mostRecentRotation;
 
         public const int WarhammerUseStyle = 1728;
 
@@ -165,15 +161,15 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 
             float num23 = (player.itemRotation - player.fullRotation) * player.direction * player.gravDir - MathHelper.PiOver4;
             player.bodyFrame.Y = player.bodyFrame.Height * 3;
-            if ((double)num23 < -0.75)
+            if (num23 < -0.75)
             {
                 player.bodyFrame.Y = player.bodyFrame.Height * 2;
             }
-            if ((double)num23 > 0.6)
+            if (num23 > 0.6)
             {
                 player.bodyFrame.Y = player.bodyFrame.Height * 4;
             }
-            if ((double)num23 < -1.5)
+            if (num23 < -1.5)
             {
                 player.bodyFrame.Y = player.bodyFrame.Height;
             }
@@ -221,9 +217,9 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
         {
             Vector2 vector = Position + Velocity;
             int num = (int)(Position.X / 16f) - 1;
-            int num2 = (int)((Position.X + (float)Width) / 16f) + 2;
+            int num2 = (int)((Position.X + Width) / 16f) + 2;
             int num3 = (int)(Position.Y / 16f) - 1;
-            int num4 = (int)((Position.Y + (float)Height) / 16f) + 2;
+            int num4 = (int)((Position.Y + Height) / 16f) + 2;
             if (num < 0)
             {
                 num = 0;
@@ -255,7 +251,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
                             vector2.Y += 8f;
                             num5 -= 8;
                         }
-                        if (vector.X + (float)Width >= vector2.X && vector.X <= vector2.X + 16f && vector.Y + (float)Height >= vector2.Y && vector.Y <= vector2.Y + (float)num5)
+                        if (vector.X + Width >= vector2.X && vector.X <= vector2.X + 16f && vector.Y + Height >= vector2.Y && vector.Y <= vector2.Y + num5)
                         {
                             WorldGen.KillTile_PlaySounds(i, j, true, Main.tile[i, j]);
                         }

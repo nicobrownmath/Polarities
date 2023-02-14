@@ -1,14 +1,13 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Effects;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Polarities.Buffs;
-using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-using Polarities.Effects;
-using System.Collections.Generic;
 
 namespace Polarities.Items.Books
 {
@@ -22,7 +21,7 @@ namespace Polarities.Items.Books
     {
         public override int ItemType => ItemType<SunPixieBook>();
 
-        static int trailTimer;
+        private static int trailTimer;
 
         public override void Update(Player player, ref int buffIndex)
         {
@@ -93,7 +92,7 @@ namespace Polarities.Items.Books
             for (int i = 0; i < numDraws; i++)
             {
                 float scale = (1 + (float)Math.Sin(Projectile.frameCounter * 0.1f + (MathHelper.TwoPi * i) / numDraws)) / 2f;
-                Color color = new Color((int)255, (int)(195 * scale + 512 * (1 - scale)), (int)(32 * scale + 512 * (1 - scale))).MultiplyRGB(ftwColor);
+                Color color = new Color(255, (int)(195 * scale + 512 * (1 - scale)), (int)(32 * scale + 512 * (1 - scale))).MultiplyRGB(ftwColor);
                 float alpha = 0.2f * alphaMult;
                 float rotation = Projectile.frameCounter * 0.2f;
 
@@ -108,7 +107,7 @@ namespace Polarities.Items.Books
             {
                 float scale = (1 + (float)Math.Sin(Projectile.frameCounter * 0.1f + (MathHelper.TwoPi * i) / numDraws)) / 2f;
                 scale *= 0.75f;
-                Color color = new Color((int)255, (int)(195 * scale + 512 * (1 - scale)), (int)(32 * scale + 512 * (1 - scale))).MultiplyRGB(ftwColor);
+                Color color = new Color(255, (int)(195 * scale + 512 * (1 - scale)), (int)(32 * scale + 512 * (1 - scale))).MultiplyRGB(ftwColor);
                 float alpha = 0.2f * alphaMult;
                 float rotation = Projectile.frameCounter * 0.3f;
 

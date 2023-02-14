@@ -195,7 +195,7 @@ namespace Polarities
 
                     float zoom = Main.GameZoomTarget;
 
-                    Texture2D cloudTexture = ModContent.Request<Texture2D>("Polarities/Biomes/Fractal/notcloud_" + (int)clouds[i, 4]).Value;
+                    Texture2D cloudTexture = ModContent.Request<Texture2D>("Polarities/Biomes/Fractal/notcloud_" + (int)Math.Max(clouds[i, 4], 1)).Value;
                     Vector2 drawPos = new Vector2(clouds[i, 0], clouds[i, 1]) + Main.screenPosition * clouds[i, 2] - Main.screenPosition;
 
                     drawPos -= new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);

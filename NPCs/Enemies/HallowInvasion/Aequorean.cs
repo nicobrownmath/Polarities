@@ -1,28 +1,19 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Dusts;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Weapons.Summon.Minions;
+using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Tiles;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using System.Collections.Generic;
-using Polarities.Biomes;
-using Terraria.GameContent.Bestiary;
-using Terraria.DataStructures;
-using Terraria.GameContent.ItemDropRules;
-using Polarities.Dusts;
-using Terraria.GameContent;
-using ReLogic.Content;
-using Polarities.Items.Weapons.Summon.Minions;
 
 namespace Polarities.NPCs.Enemies.HallowInvasion
 {
@@ -234,8 +225,8 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
             return true;
         }
 
-		public override void ModifyNPCLoot(NPCLoot npcLoot)
-		{
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
             npcLoot.Add(ItemDropRule.Common(ItemType<LuminousSlimeStaff>(), 8));
         }
 

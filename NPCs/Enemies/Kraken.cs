@@ -1,27 +1,19 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MultiHitboxNPCLibrary;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Banners;
+using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Tiles;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using System.Collections.Generic;
 using Terraria.ModLoader.Utilities;
-using Terraria.GameContent;
-using ReLogic.Content;
-using Terraria.DataStructures;
-using Terraria.GameContent.Bestiary;
-using Polarities.Items.Materials;
-using MultiHitboxNPCLibrary;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.NPCs.Enemies
 {
@@ -32,12 +24,12 @@ namespace Polarities.NPCs.Enemies
         private int attackPattern
         {
             get => (int)NPC.ai[0];
-            set => NPC.ai[0] = (float)value;
+            set => NPC.ai[0] = value;
         }
         private int attackCooldown
         {
             get => (int)NPC.ai[1];
-            set => NPC.ai[1] = (float)value;
+            set => NPC.ai[1] = value;
         }
 
         public override void SetStaticDefaults()
@@ -86,7 +78,7 @@ namespace Polarities.NPCs.Enemies
             BannerItem = ItemType<KrakenBanner>();
         }
 
-        const int numSegments = 5;
+        private const int numSegments = 5;
 
         public override bool PreAI()
         {
@@ -330,7 +322,7 @@ namespace Polarities.NPCs.Enemies
         private int kraken
         {
             get => (int)NPC.ai[0];
-            set => NPC.ai[0] = (float)value;
+            set => NPC.ai[0] = value;
         }
 
         public override void SetStaticDefaults()
@@ -548,8 +540,8 @@ namespace Polarities.NPCs.Enemies
 
             for (int k = 0; k < Math.Min(Projectile.oldPos.Length, 358 - Projectile.timeLeft); k++)
             {
-                Color color = mainColor * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                float scale = Projectile.scale * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                Color color = mainColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                float scale = Projectile.scale * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
 
                 float rotation;
                 if (k + 1 >= Projectile.oldPos.Length)

@@ -1,23 +1,7 @@
-﻿using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Graphics.Shaders;
-using static Terraria.ModLoader.ModContent;
-using Terraria.GameInput;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using System.Collections.Generic;
-using Polarities.Items;
-using Polarities.NPCs;
-using MonoMod.Cil;
-using Terraria.ModLoader.IO;
-using Terraria.Enums;
+﻿using System.Collections.Generic;
+using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
-using static Terraria.GameContent.ItemDropRules.Chains;
 
 namespace Polarities.NPCs
 {
@@ -41,7 +25,7 @@ namespace Polarities.NPCs
 
     public class FlawlessOrRandomDropRule : CommonDrop
     {
-        IItemDropRuleCondition condition;
+        private IItemDropRuleCondition condition;
 
         public FlawlessOrRandomDropRule(int itemId, int chanceDenominator, int amountDroppedMinimum = 1, int amountDroppedMaximum = 1, int chanceNumerator = 1, IItemDropRuleCondition condition = null) : base(itemId, chanceDenominator, amountDroppedMinimum, amountDroppedMaximum, chanceNumerator)
         {
@@ -74,9 +58,9 @@ namespace Polarities.NPCs
     {
         public List<IItemDropRuleChainAttempt> ChainedRules { get; }
 
-        int chanceDenominator;
-        int chanceNumerator;
-        (int itemID, int minAmount, int maxAmount)[] itemData;
+        private int chanceDenominator;
+        private int chanceNumerator;
+        private (int itemID, int minAmount, int maxAmount)[] itemData;
 
         public OneFromOptionsWithCountsNotScaledWithLuckDropRule(int chanceDenominator, int chanceNumerator = 1, params (int itemID, int minAmount, int maxAmount)[] itemData)
         {
@@ -94,9 +78,9 @@ namespace Polarities.NPCs
 
         public void ReportDroprates(List<DropRateInfo> drops, DropRateInfoChainFeed ratesInfo)
         {
-            float num = (float)chanceNumerator / (float)chanceDenominator;
+            float num = chanceNumerator / (float)chanceDenominator;
             float num2 = num * ratesInfo.parentDroprateChance;
-            float dropRate = 1f / (float)itemData.Length * num2;
+            float dropRate = 1f / itemData.Length * num2;
             for (int i = 0; i < itemData.Length; i++)
             {
                 drops.Add(new DropRateInfo(itemData[i].itemID, itemData[i].minAmount, itemData[i].maxAmount, dropRate, ratesInfo.conditions));

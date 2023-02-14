@@ -1,17 +1,12 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using System.Collections.Generic;
-using System;
-using Polarities.Buffs;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
-using Microsoft.Xna.Framework;
-using Microsoft.CodeAnalysis;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Polarities.Effects;
 using ReLogic.Content;
+using System;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace Polarities.Items.Accessories
 {
@@ -76,7 +71,7 @@ namespace Polarities.Items.Accessories
 
         public override void AI()
         {
-            Scale += ScaleIncrement / (float)MaxTimeLeft;
+            Scale += ScaleIncrement / MaxTimeLeft;
             Alpha = 1 - (float)Math.Pow(TimeLeft / (float)MaxTimeLeft, 2);
 
             Rotation = Main.rand.NextFloat(MathHelper.TwoPi);

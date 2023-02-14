@@ -1088,6 +1088,8 @@
 			"BookTile": "Book"
 		},
 		"BuffName": {
+			"Fractalizing": "Fractalizing",
+			"Turbulence": "Turbulence",
 			"Desiccating": "Desiccating",
 			"PiercingPotionBuff": "Piercing",
 			"TolerancePotionCooldownBuff": "Tolerance Potion Cooldown",
@@ -1125,6 +1127,11 @@
 			"StrangeObituaryBuff": "Strange Obituary"
 		},
 		"BuffDescription": {
+			"Fractalizing": "Chaotic forces tear at you, reducing your maximum life",
+			"Fractalizing.PreDendriticEnergy": "You cannot yet mine dendritic energy",
+			"Fractalizing.PostDendriticEnergy": "You can now mine dendritic energy, given a powerful enough pickaxe",
+			"Fractalizing.PostSentinel": "You are attracting stronger fractal enemies",
+			"Turbulence": "You are experiencing some turbulence",
 			"Desiccating": "You are drying out",
 			"PiercingPotionBuff": "Armor penetration is increased by 6",
 			"TolerancePotionCooldownBuff": "Your tolerance is limited",
@@ -1186,6 +1193,10 @@
 			"LunaticCultistBookBuff": "Class damage is increased when near the celestial pillar corresponding to that class",
 			"MoonLordBook": "Your attacks have lifesteal"
 		},
+
+		SubworldName: {
+			FractalSubworld: Fractal Dimension
+		}
 
 	# Accessories
 		ItemName.ChaosFlower: Chaos Flower

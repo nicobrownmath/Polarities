@@ -1,37 +1,31 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MultiHitboxNPCLibrary;
+using Polarities.Biomes;
+using Polarities.Effects;
+using Polarities.Items;
+using Polarities.Items.Armor.Vanity;
+using Polarities.Items.Consumables.TreasureBags;
+using Polarities.Items.Hooks;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Relics;
+using Polarities.Items.Placeable.Trophies;
+using Polarities.Items.Weapons.Ranged;
+using Polarities.Items.Weapons.Summon.Minions;
+using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Accessories;
-using Polarities.Items.Placeable.Trophies;
-using System.Collections.Generic;
-using Terraria.DataStructures;
-using Terraria.Audio;
-using Terraria.GameContent;
-using ReLogic.Content;
-using Terraria.Localization;
-using Terraria.GameContent.Bestiary;
-using Polarities.Biomes;
-using Terraria.GameContent.ItemDropRules;
-using Polarities.Effects;
-using Polarities.Items.Placeable.Relics;
-using Polarities.Items.Consumables.TreasureBags;
-using Polarities.Items.Materials;
-using Polarities.Items.Weapons.Summon.Minions;
-using Polarities.Items.Hooks;
-using Polarities.Items.Armor.Vanity;
-using Polarities.Items.Weapons.Ranged;
-using MultiHitboxNPCLibrary;
 
 namespace Polarities.NPCs.Esophage
 {
@@ -162,7 +156,7 @@ namespace Polarities.NPCs.Esophage
             }, player.position);
         }
 
-        const int numSegments = 2;
+        private const int numSegments = 2;
 
         public override void AI()
         {
@@ -228,7 +222,7 @@ namespace Polarities.NPCs.Esophage
                 targetPosition = player.Center;
             }
 
-            float playerWeight = 0.75f * (1 - 0.8f * (float)NPC.life / (float)NPC.lifeMax) + (player.Center - NPC.Center).Length() / 1800f;
+            float playerWeight = 0.75f * (1 - 0.8f * NPC.life / NPC.lifeMax) + (player.Center - NPC.Center).Length() / 1800f;
 
             targetPosition += player.Center * playerWeight;
             targetPosition /= (1 + playerWeight);
@@ -1113,16 +1107,16 @@ namespace Polarities.NPCs.Esophage
             }
 
             float num246 = Main.NPCAddHeight(NPC);
-            SpriteEffects spriteEffects = (SpriteEffects)0;
+            SpriteEffects spriteEffects = 0;
             if (NPC.spriteDirection == 1)
             {
                 spriteEffects = (SpriteEffects)1;
             }
-            Vector2 halfSize = new Vector2((float)(TextureAssets.Npc[Type].Width() / 2), (float)(TextureAssets.Npc[Type].Height() / Main.npcFrameCount[NPC.type] / 2));
+            Vector2 halfSize = new Vector2(TextureAssets.Npc[Type].Width() / 2, TextureAssets.Npc[Type].Height() / Main.npcFrameCount[NPC.type] / 2);
 
             Color color = owner.GetNPCColorTintedByBuffs(bestiaryDummy ? Color.White : Lighting.GetColor(NPC.Center.ToTileCoordinates()));
 
-            spriteBatch.Draw(TextureAssets.Npc[Type].Value, center + new Vector2(0, NPC.height / 2) - screenPos + new Vector2((float)(-TextureAssets.Npc[Type].Width()) * NPC.scale / 2f + halfSize.X * NPC.scale, (float)(-TextureAssets.Npc[Type].Height()) * NPC.scale / (float)Main.npcFrameCount[Type] + 4f + halfSize.Y * NPC.scale + num246 + NPC.gfxOffY), TextureAssets.Npc[Type].Frame(), color, NPC.rotation, halfSize, NPC.scale, spriteEffects, 0f);
+            spriteBatch.Draw(TextureAssets.Npc[Type].Value, center + new Vector2(0, NPC.height / 2) - screenPos + new Vector2(-TextureAssets.Npc[Type].Width() * NPC.scale / 2f + halfSize.X * NPC.scale, -TextureAssets.Npc[Type].Height() * NPC.scale / Main.npcFrameCount[Type] + 4f + halfSize.Y * NPC.scale + num246 + NPC.gfxOffY), TextureAssets.Npc[Type].Frame(), color, NPC.rotation, halfSize, NPC.scale, spriteEffects, 0f);
         }
 
         public void DrawChain(NPC owner, Vector2 startPoint, Vector2 endPoint, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor, bool bestiaryDummy)
@@ -1207,10 +1201,10 @@ namespace Polarities.NPCs.Esophage
             {
                 if (Main.rand.NextBool(3))
                 {
-                    float num69 = Projectile.velocity.X / 3f * (float)num68;
-                    float num70 = Projectile.velocity.Y / 3f * (float)num68;
+                    float num69 = Projectile.velocity.X / 3f * num68;
+                    float num70 = Projectile.velocity.Y / 3f * num68;
                     int num71 = 2;
-                    int num72 = Dust.NewDust(new Vector2(Projectile.position.X + (float)num71, Projectile.position.Y + (float)num71), Projectile.width - num71 * 2, Projectile.height - num71 * 2, 170, 0f, 0f, 100);
+                    int num72 = Dust.NewDust(new Vector2(Projectile.position.X + num71, Projectile.position.Y + num71), Projectile.width - num71 * 2, Projectile.height - num71 * 2, 170, 0f, 0f, 100);
                     Main.dust[num72].noGravity = true;
                     Dust dust79 = Main.dust[num72];
                     Dust dust195 = dust79;
@@ -1225,7 +1219,7 @@ namespace Polarities.NPCs.Esophage
             if (Main.rand.NextBool(24))
             {
                 int num73 = 4;
-                int num75 = Dust.NewDust(new Vector2(Projectile.position.X + (float)num73, Projectile.position.Y + (float)num73), Projectile.width - num73 * 2, Projectile.height - num73 * 2, 170, 0f, 0f, 100, default(Color), 0.5f);
+                int num75 = Dust.NewDust(new Vector2(Projectile.position.X + num73, Projectile.position.Y + num73), Projectile.width - num73 * 2, Projectile.height - num73 * 2, 170, 0f, 0f, 100, default(Color), 0.5f);
                 Dust dust78 = Main.dust[num75];
                 Dust dust195 = dust78;
                 dust195.velocity *= 0.25f;
@@ -1250,7 +1244,7 @@ namespace Polarities.NPCs.Esophage
 
             for (int k = 0; k < Projectile.oldPos.Length - 1; k++)
             {
-                float amount = ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                float amount = ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
 
                 Color color = mainColor * (1 - Projectile.alpha / 255f);
                 float scale = 2f * Projectile.scale * amount;
@@ -1761,7 +1755,7 @@ namespace Polarities.NPCs.Esophage
 
             for (int k = 1; k < Projectile.oldPos.Length; k++)
             {
-                Color color = mainColor * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                Color color = mainColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
                 float scale = Projectile.scale;
 
                 float rotation = Projectile.rotation;
@@ -1823,7 +1817,7 @@ namespace Polarities.NPCs.Esophage
 
             for (int k = 1; k < Projectile.oldPos.Length; k++)
             {
-                Color color = mainColor * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                Color color = mainColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
                 float scale = Projectile.scale;
 
                 float rotation = (Projectile.oldPos[k - 1] - Projectile.oldPos[k]).ToRotation() + MathHelper.PiOver2;

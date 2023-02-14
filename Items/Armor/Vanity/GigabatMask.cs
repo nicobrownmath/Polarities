@@ -1,20 +1,18 @@
-﻿using Terraria.ModLoader;
-using Terraria.ID;
-using Polarities.NPCs;
-using static Terraria.ModLoader.ModContent;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
-using Terraria;
-using Terraria.GameContent;
 using ReLogic.Content;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Items.Armor.Vanity
 {
     [AutoloadEquip(EquipType.Head)]
     public class GigabatMask : ModItem, IDrawArmor
     {
-        Asset<Texture2D> GlowTexture;
+        private Asset<Texture2D> GlowTexture;
 
         public override void Load()
         {
@@ -61,8 +59,10 @@ namespace Polarities.Items.Armor.Vanity
                     bodyFrame3.Height -= 4;
                 }
                 Vector2 helmetOffset = drawInfo.helmetOffset;
-                DrawData data = new DrawData(GlowTexture.Value, helmetOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect, bodyFrame3, Color.White, drawInfo.drawPlayer.headRotation, headVect2, 1f, drawInfo.playerEffect, 0);
-                data.shader = drawInfo.cHead;
+                DrawData data = new DrawData(GlowTexture.Value, helmetOffset + new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - drawInfo.drawPlayer.bodyFrame.Width / 2 + drawInfo.drawPlayer.width / 2), (int)(drawInfo.Position.Y - Main.screenPosition.Y + drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect, bodyFrame3, Color.White, drawInfo.drawPlayer.headRotation, headVect2, 1f, drawInfo.playerEffect, 0)
+                {
+                    shader = drawInfo.cHead
+                };
                 drawInfo.DrawDataCache.Add(data);
             }
         }

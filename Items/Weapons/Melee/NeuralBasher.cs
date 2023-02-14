@@ -1,18 +1,13 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Polarities.Projectiles;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using Terraria.DataStructures;
-using ReLogic.Content;
-using Microsoft.CodeAnalysis;
-using static Terraria.ModLoader.PlayerDrawLayer;
-using Terraria.Audio;
-using static Humanizer.In;
 
 namespace Polarities.Items.Weapons.Melee
 {
@@ -123,7 +118,7 @@ namespace Polarities.Items.Weapons.Melee
             num17 *= num7;
             num18 *= num7;
             num19 *= num7;
-            float num8 = num12 * (float)num;
+            float num8 = num12 * num;
             float num9 = num8 + 160f;
             Projectile.localNPCHitCooldown = num3;
             switch ((int)Projectile.ai[0])
@@ -134,7 +129,7 @@ namespace Polarities.Items.Weapons.Melee
                         if (Projectile.owner == Main.myPlayer)
                         {
                             Vector2 mouseWorld = Main.MouseWorld;
-                            Vector2 value3 = mountedCenter.DirectionTo(mouseWorld).SafeNormalize(Vector2.UnitX * (float)player.direction);
+                            Vector2 value3 = mountedCenter.DirectionTo(mouseWorld).SafeNormalize(Vector2.UnitX * player.direction);
                             player.ChangeDir((value3.X > 0f) ? 1 : (-1));
                             if (!player.channel)
                             {
@@ -149,7 +144,7 @@ namespace Polarities.Items.Weapons.Melee
                             }
                         }
                         Projectile.localAI[1] += 1f;
-                        Vector2 value4 = Utils.RotatedBy(new Vector2((float)player.direction), (float)Math.PI * 10f * (Projectile.localAI[1] / 60f) * (float)player.direction);
+                        Vector2 value4 = Utils.RotatedBy(new Vector2(player.direction), (float)Math.PI * 10f * (Projectile.localAI[1] / 60f) * player.direction);
                         value4.Y *= 0.8f;
                         if (value4.Y * player.gravDir > 0f)
                         {
@@ -163,7 +158,7 @@ namespace Polarities.Items.Weapons.Melee
                 case 1:
                     {
                         doFastThrowDust = true;
-                        bool flag4 = Projectile.ai[1]++ >= (float)num;
+                        bool flag4 = Projectile.ai[1]++ >= num;
                         flag4 |= Projectile.Distance(mountedCenter) >= num15;
                         if (player.controlUseItem && attachToPlayer)
                         {
@@ -225,7 +220,7 @@ namespace Polarities.Items.Weapons.Melee
                             Projectile.ai[1] = (Projectile.tileCollide ? 1 : 0);
                             Projectile.netUpdate = true;
                         }
-                        if (num10 > (float)num2)
+                        if (num10 > num2)
                         {
                             if (num10 >= num8)
                             {
@@ -272,7 +267,7 @@ namespace Polarities.Items.Weapons.Melee
                         break;
                     }
                 case 5:
-                    if (Projectile.ai[1]++ >= (float)num6 && attachToPlayer)
+                    if (Projectile.ai[1]++ >= num6 && attachToPlayer)
                     {
                         Projectile.ai[0] = 6f;
                         Projectile.ai[1] = 0f;

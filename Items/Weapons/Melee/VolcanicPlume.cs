@@ -1,17 +1,14 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Effects;
+using Polarities.Items.Placeable.Bars;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Polarities.Projectiles;
-using System;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using Polarities.Items.Placeable.Bars;
-using Terraria.Audio;
-using Polarities.Effects;
-using Terraria.GameContent;
 
 namespace Polarities.Items.Weapons.Melee
 {
@@ -328,7 +325,7 @@ namespace Polarities.Items.Weapons.Melee
             Projectile.extraUpdates = 1;
         }
 
-        const int FADE_TIME = 10;
+        private const int FADE_TIME = 10;
 
         public override void AI()
         {
@@ -341,7 +338,7 @@ namespace Polarities.Items.Weapons.Melee
             }
         }
 
-        void TryExplode()
+        private void TryExplode()
         {
             if (Projectile.localAI[1] == 0)
             {
@@ -381,7 +378,7 @@ namespace Polarities.Items.Weapons.Melee
         public override bool PreDraw(ref Color lightColor)
         {
             float drawAlpha = 0.5f;
-            if (Projectile.timeLeft < FADE_TIME) drawAlpha = 0.5f * Projectile.timeLeft / (float)FADE_TIME;
+            if (Projectile.timeLeft < FADE_TIME) drawAlpha = 0.5f * Projectile.timeLeft / FADE_TIME;
 
             Texture2D texture = Textures.Glow256.Value;
             Rectangle frame = texture.Frame();

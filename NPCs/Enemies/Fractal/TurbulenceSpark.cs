@@ -77,12 +77,12 @@ namespace Polarities.NPCs.Enemies.Fractal
             Explode();
         }
 
-        public override bool CheckDead()
+        public override void HitEffect(int hitDirection, double damage)
         {
-            //explode
-            Explode();
-
-            return true;
+            if (NPC.life <= 0)
+            {
+                Explode();
+            }
         }
 
         private void Explode()

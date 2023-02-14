@@ -1,17 +1,11 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using Terraria;
-using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using System;
-using System.IO;
-using Microsoft.Xna.Framework;
 
 namespace Polarities
 {
-	public class Textures : ILoadable
-	{
+    public class Textures : ILoadable
+    {
         public static Asset<Texture2D> PixelTexture;
         public static Asset<Texture2D> Glow58;
         public static Asset<Texture2D> Glow256;

@@ -1,97 +1,91 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using System;
-using System.IO;
-using Polarities.Buffs;
-using Terraria.DataStructures;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-using ReLogic.Content;
-using Terraria.Graphics.Shaders;
 
 namespace Polarities.Items.Weapons.Summon.Minions
 {
-	public class LuminousSlimeStaff : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			SacrificeTotal = (1);
+    public class LuminousSlimeStaff : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            SacrificeTotal = (1);
 
             ItemID.Sets.StaffMinionSlotsRequired[Type] = 0;
         }
 
-		public override void SetDefaults()
-		{
-			Item.SetWeaponValues(36, 1f, 0);
-			Item.DamageType = DamageClass.Summon;
-			Item.mana = 10;
+        public override void SetDefaults()
+        {
+            Item.SetWeaponValues(36, 1f, 0);
+            Item.DamageType = DamageClass.Summon;
+            Item.mana = 10;
 
-			Item.width = 26;
-			Item.height = 34;
+            Item.width = 26;
+            Item.height = 34;
 
-			Item.useTime = 30;
-			Item.useAnimation = 30;
-			Item.useStyle = 1;
-			Item.noMelee = true;
-			Item.UseSound = SoundID.Item44;
-			Item.autoReuse = true;
+            Item.useTime = 30;
+            Item.useAnimation = 30;
+            Item.useStyle = 1;
+            Item.noMelee = true;
+            Item.UseSound = SoundID.Item44;
+            Item.autoReuse = true;
 
-			Item.value = Item.sellPrice(gold: 5);
-			Item.rare = ItemRarityID.LightPurple;
+            Item.value = Item.sellPrice(gold: 5);
+            Item.rare = ItemRarityID.LightPurple;
 
-			Item.buffType = BuffType<LuminousSlimeMinionBuff>();
-			Item.shoot = ProjectileType<LuminousSlimeMinion>();
-		}
+            Item.buffType = BuffType<LuminousSlimeMinionBuff>();
+            Item.shoot = ProjectileType<LuminousSlimeMinion>();
+        }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-		{
-			if (player.ownedProjectileCounts[type] == 0)
-			{
-				player.AddBuff(Item.buffType, 18000, true);
-				player.SpawnMinionOnCursor(source, player.whoAmI, type, damage, knockback);
-				return false;
-			}
-			else
-			{
-				for (int i = 0; i < Main.maxProjectiles; i++)
-				{
-					if (Main.projectile[i].type == type && Main.projectile[i].active && Main.projectile[i].owner == player.whoAmI)
-					{
-						Main.projectile[i].ai[1]++;
-						return false;
-					}
-				}
-			}
-			return false;
-		}
-	}
+        {
+            if (player.ownedProjectileCounts[type] == 0)
+            {
+                player.AddBuff(Item.buffType, 18000, true);
+                player.SpawnMinionOnCursor(source, player.whoAmI, type, damage, knockback);
+                return false;
+            }
+            else
+            {
+                for (int i = 0; i < Main.maxProjectiles; i++)
+                {
+                    if (Main.projectile[i].type == type && Main.projectile[i].active && Main.projectile[i].owner == player.whoAmI)
+                    {
+                        Main.projectile[i].ai[1]++;
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+    }
 
-	public class LuminousSlimeMinionBuff : ModBuff
-	{
-		public override void SetStaticDefaults()
-		{
-			Main.buffNoTimeDisplay[Type] = true;
-			Main.buffNoSave[Type] = true;
-		}
+    public class LuminousSlimeMinionBuff : ModBuff
+    {
+        public override void SetStaticDefaults()
+        {
+            Main.buffNoTimeDisplay[Type] = true;
+            Main.buffNoSave[Type] = true;
+        }
 
-		public override void Update(Player player, ref int buffIndex)
-		{
-			if (player.ownedProjectileCounts[ProjectileType<LuminousSlimeMinion>()] > 0)
-			{
-				player.buffTime[buffIndex] = 18000;
-			}
-			else
-			{
-				player.DelBuff(buffIndex);
-				buffIndex--;
-			}
-		}
-	}
+        public override void Update(Player player, ref int buffIndex)
+        {
+            if (player.ownedProjectileCounts[ProjectileType<LuminousSlimeMinion>()] > 0)
+            {
+                player.buffTime[buffIndex] = 18000;
+            }
+            else
+            {
+                player.DelBuff(buffIndex);
+                buffIndex--;
+            }
+        }
+    }
 
     public class LuminousSlimeMinion : ModProjectile
     {
@@ -122,10 +116,10 @@ namespace Polarities.Items.Weapons.Summon.Minions
             Projectile.localNPCHitCooldown = 30;
         }
 
-        const float yAcceleration = 0.3f;
-        const int groundTime = 30;
-        const int jumpTime = 30;
-        const float extraHeight = 128f;
+        private const float yAcceleration = 0.3f;
+        private const int groundTime = 30;
+        private const int jumpTime = 30;
+        private const float extraHeight = 128f;
 
         public override void AI()
         {
@@ -355,8 +349,8 @@ namespace Polarities.Items.Weapons.Summon.Minions
             damage = (int)(damage * (float)(Math.Sqrt(1 + Projectile.ai[1]) + (1 + Projectile.ai[1])) / 2f);
         }
 
-        Vector2 eyeOffset;
-        Vector2 squishing;
+        private Vector2 eyeOffset;
+        private Vector2 squishing;
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
@@ -390,7 +384,7 @@ namespace Polarities.Items.Weapons.Summon.Minions
             }
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+            Main.spriteBatch.Begin(0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, componentColor, Projectile.rotation, center, squishing * Projectile.scale * 0.8f, effects, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, componentColor, Projectile.rotation, center, squishing * Projectile.scale * 0.9f, effects, 0);
@@ -417,7 +411,7 @@ namespace Polarities.Items.Weapons.Summon.Minions
             }
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+            Main.spriteBatch.Begin(0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
             //eye draw
             Color eyeColor = new Color(255, 240, 168).MultiplyRGBA(new Color(0.5f, 0.5f, 0.5f, 0.6f));

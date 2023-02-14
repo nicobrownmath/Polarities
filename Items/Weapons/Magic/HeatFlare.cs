@@ -1,17 +1,15 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Effects;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using System;
-using Polarities.Projectiles;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-using Terraria.Audio;
-using System.Collections.Generic;
-using Polarities.Effects;
-using Terraria.DataStructures;
 
 namespace Polarities.Items.Weapons.Magic
 {
@@ -87,10 +85,10 @@ namespace Polarities.Items.Weapons.Magic
         }
 
         //trail stuff
-        const int trailLength = 128;
-        Vector2[] trailPositions;
-        Vector2[] trailVelocities;
-        float[] trailScale;
+        private const int trailLength = 128;
+        private Vector2[] trailPositions;
+        private Vector2[] trailVelocities;
+        private float[] trailScale;
 
         public override void SetDefaults()
         {

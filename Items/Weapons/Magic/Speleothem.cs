@@ -1,17 +1,14 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Polarities.Projectiles;
-using System;
-using Polarities.Buffs;
-using Terraria.DataStructures;
-using Terraria.Audio;
-using System.Collections.Generic;
-using Terraria.GameContent;
 
 namespace Polarities.Items.Weapons.Magic
 {
@@ -249,7 +246,7 @@ namespace Polarities.Items.Weapons.Magic
 
             SpriteEffects effects = Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0, - frameCutoff / 2), frame, lightColor, Projectile.rotation, origin, Projectile.scale, effects, 0f);
+            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0, -frameCutoff / 2), frame, lightColor, Projectile.rotation, origin, Projectile.scale, effects, 0f);
 
             return false;
         }

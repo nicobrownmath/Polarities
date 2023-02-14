@@ -1,12 +1,9 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Polarities.Projectiles;
+using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria.DataStructures;
-using Polarities.Projectiles;
 
 namespace Polarities.Items.Weapons.Ranged.Atlatls
 {

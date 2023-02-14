@@ -1,20 +1,14 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Polarities.NPCs;
-using System;
-using System.Collections.Generic;
-using Terraria.DataStructures;
-using Terraria.Audio;
-using Terraria.GameContent;
 
 namespace Polarities.Items.Weapons.Ranged.Atlatls
 {
-	public abstract class AtlatlBase : ModItem, IDrawHeldItem
+    public abstract class AtlatlBase : ModItem, IDrawHeldItem
     {
         public abstract Vector2[] ShotDistances { get; }
         public virtual float SpriteRotationOffset => 0;
@@ -103,12 +97,12 @@ namespace Polarities.Items.Weapons.Ranged.Atlatls
             return false;
         }
 
-        bool IsShotAvailable(Player player, Vector2 shotPosition)
+        private bool IsShotAvailable(Player player, Vector2 shotPosition)
         {
             return player.itemAnimation == 0 || ((player.itemRotation + MathHelper.PiOver4 - MathHelper.PiOver4 * player.direction + MathHelper.PiOver4 * player.direction * player.gravDir) % MathHelper.TwoPi * player.direction * player.gravDir > (3 * MathHelper.PiOver4 - 3 * MathHelper.PiOver4 * player.direction + (Main.MouseWorld - shotPosition).ToRotation() - player.fullRotation) % MathHelper.TwoPi * player.direction * player.gravDir);
         }
 
-        Vector2 GetShotPosition(Player player, Vector2 shotDistance)
+        private Vector2 GetShotPosition(Player player, Vector2 shotDistance)
         {
             return player.position + player.fullRotationOrigin + (player.itemLocation - (player.position + player.fullRotationOrigin) + new Vector2(player.direction * shotDistance.X, -shotDistance.Y).RotatedBy(player.itemRotation).RotatedBy(player.gravDir == 1 ? 0 : player.direction * MathHelper.PiOver2)).RotatedBy(player.fullRotation);
         }

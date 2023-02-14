@@ -1,26 +1,20 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes;
+using Polarities.Buffs;
+using Polarities.Items.Consumables;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks;
+using System;
+using Terraria;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Tiles;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using Terraria.GameContent;
-using Polarities.Items.Placeable.Blocks;
-using Polarities.Biomes;
-using Terraria.GameContent.ItemDropRules;
-using Polarities.Items.Materials;
-using Polarities.Items.Consumables;
-using Terraria.GameContent.Bestiary;
 
 namespace Polarities.NPCs.Enemies.Salt
 {

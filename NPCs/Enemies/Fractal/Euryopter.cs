@@ -55,9 +55,9 @@ namespace Polarities.NPCs.Enemies.Fractal
             }
             float num36 = 4f;
             float num39 = 0.02f;
-            Vector2 vector = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
-            float num54 = Main.player[NPC.target].position.X + (float)(Main.player[NPC.target].width / 2);
-            float num53 = Main.player[NPC.target].position.Y + (float)(Main.player[NPC.target].height / 2);
+            Vector2 vector = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
+            float num54 = Main.player[NPC.target].position.X + Main.player[NPC.target].width / 2;
+            float num53 = Main.player[NPC.target].position.Y + Main.player[NPC.target].height / 2;
             num54 = (int)(num54 / 8f) * 8;
             num53 = (int)(num53 / 8f) * 8;
             vector.X = (int)(vector.X / 8f) * 8;

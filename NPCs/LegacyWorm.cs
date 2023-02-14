@@ -60,20 +60,20 @@ namespace Polarities.NPCs
                         NPC.ai[3] = NPC.whoAmI;
                         NPC.realLife = NPC.whoAmI;
                         NPC.ai[2] = Main.rand.Next(minLength, maxLength + 1);
-                        NPC.ai[0] = NPC.NewNPC(NPC.GetSource_FromThis(), (int)(NPC.position.X + (float)(NPC.width / 2)), (int)(NPC.position.Y + (float)NPC.height) + 2, bodyType, NPC.whoAmI);
+                        NPC.ai[0] = NPC.NewNPC(NPC.GetSource_FromThis(), (int)(NPC.position.X + NPC.width / 2), (int)(NPC.position.Y + NPC.height) + 2, bodyType, NPC.whoAmI);
                     }
                     else if (NPC.ai[2] > 0f)
                     {
-                        NPC.ai[0] = NPC.NewNPC(NPC.GetSource_FromThis(), (int)(NPC.position.X + (float)(NPC.width / 2)), (int)(NPC.position.Y + (float)NPC.height) + 2, bodyType, NPC.whoAmI);
+                        NPC.ai[0] = NPC.NewNPC(NPC.GetSource_FromThis(), (int)(NPC.position.X + NPC.width / 2), (int)(NPC.position.Y + NPC.height) + 2, bodyType, NPC.whoAmI);
                     }
                     else
                     {
-                        NPC.ai[0] = NPC.NewNPC(NPC.GetSource_FromThis(), (int)(NPC.position.X + (float)(NPC.width / 2)), (int)(NPC.position.Y + (float)NPC.height) + 2, tailType, NPC.whoAmI);
+                        NPC.ai[0] = NPC.NewNPC(NPC.GetSource_FromThis(), (int)(NPC.position.X + NPC.width / 2), (int)(NPC.position.Y + NPC.height) + 2, tailType, NPC.whoAmI);
                     }
 
                     Main.npc[(int)NPC.ai[0]].ai[3] = NPC.ai[3];
                     Main.npc[(int)NPC.ai[0]].realLife = NPC.realLife;
-                    Main.npc[(int)NPC.ai[0]].ai[1] = (float)NPC.whoAmI;
+                    Main.npc[(int)NPC.ai[0]].ai[1] = NPC.whoAmI;
                     Main.npc[(int)NPC.ai[0]].ai[2] = NPC.ai[2] - 1f;
                     NPC.netUpdate = true;
                 }
@@ -93,9 +93,9 @@ namespace Polarities.NPCs
                 }
             }
             int num180 = (int)(NPC.position.X / 16f) - 1;
-            int num181 = (int)((NPC.position.X + (float)NPC.width) / 16f) + 2;
+            int num181 = (int)((NPC.position.X + NPC.width) / 16f) + 2;
             int num182 = (int)(NPC.position.Y / 16f) - 1;
-            int num183 = (int)((NPC.position.Y + (float)NPC.height) / 16f) + 2;
+            int num183 = (int)((NPC.position.Y + NPC.height) / 16f) + 2;
             if (num180 < 0)
             {
                 num180 = 0;
@@ -119,12 +119,12 @@ namespace Polarities.NPCs
                 {
                     for (int num185 = num182; num185 < num183; num185++)
                     {
-                        if (Main.tile[num184, num185] != null && (Main.tile[num184, num185].HasUnactuatedTile && (Main.tileSolid[(int)Main.tile[num184, num185].TileType] || Main.tileSolidTop[(int)Main.tile[num184, num185].TileType] && Main.tile[num184, num185].TileFrameY == 0) || Main.tile[num184, num185].LiquidAmount > 64))
+                        if (Main.tile[num184, num185] != null && (Main.tile[num184, num185].HasUnactuatedTile && (Main.tileSolid[Main.tile[num184, num185].TileType] || Main.tileSolidTop[Main.tile[num184, num185].TileType] && Main.tile[num184, num185].TileFrameY == 0) || Main.tile[num184, num185].LiquidAmount > 64))
                         {
                             Vector2 vector17;
                             vector17.X = num184 * 16;
                             vector17.Y = num185 * 16;
-                            if (NPC.position.X + (float)NPC.width > vector17.X && NPC.position.X < vector17.X + 16f && NPC.position.Y + (float)NPC.height > vector17.Y && NPC.position.Y < vector17.Y + 16f)
+                            if (NPC.position.X + NPC.width > vector17.X && NPC.position.X < vector17.X + 16f && NPC.position.Y + NPC.height > vector17.Y && NPC.position.Y < vector17.Y + 16f)
                             {
                                 flag18 = true;
                                 if (digSounds && Main.rand.NextBool(100) && NPC.behindTiles && Main.tile[num184, num185].HasUnactuatedTile)
@@ -169,9 +169,9 @@ namespace Polarities.NPCs
                     NPC.spriteDirection = -1;
                 }
             }
-            Vector2 vector18 = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
-            float num191 = Main.player[NPC.target].position.X + (float)(Main.player[NPC.target].width / 2);
-            float num192 = Main.player[NPC.target].position.Y + (float)(Main.player[NPC.target].height / 2);
+            Vector2 vector18 = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
+            float num191 = Main.player[NPC.target].position.X + Main.player[NPC.target].width / 2;
+            float num192 = Main.player[NPC.target].position.Y + Main.player[NPC.target].height / 2;
             num191 = (int)(num191 / 16f) * 16;
             num192 = (int)(num192 / 16f) * 16;
             vector18.X = (int)(vector18.X / 16f) * 16;
@@ -179,7 +179,7 @@ namespace Polarities.NPCs
             num191 -= vector18.X;
             num192 -= vector18.Y;
             float num193 = (float)Math.Sqrt(num191 * num191 + num192 * num192);
-            if (NPC.ai[1] > 0f && NPC.ai[1] < (float)Main.npc.Length)
+            if (NPC.ai[1] > 0f && NPC.ai[1] < Main.npc.Length)
             {
                 try
                 {
@@ -225,7 +225,7 @@ namespace Polarities.NPCs
                     {
                         NPC.velocity.Y = speed;
                     }
-                    if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < speed * 0.4)
+                    if (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y) < speed * 0.4)
                     {
                         if (NPC.velocity.X < 0f)
                         {
@@ -297,7 +297,7 @@ namespace Polarities.NPCs
                         }
                         if (flag20)
                         {
-                            if (Main.netMode != 1 && (double)(NPC.position.Y / 16f) > (Main.rockLayer + Main.maxTilesY) / 2.0)
+                            if (Main.netMode != 1 && NPC.position.Y / 16f > (Main.rockLayer + Main.maxTilesY) / 2.0)
                             {
                                 NPC.active = false;
                                 int num200 = (int)NPC.ai[0];
@@ -332,14 +332,14 @@ namespace Polarities.NPCs
                                 NPC.velocity *= 1.1f;
                             }
                         }
-                        if (NPC.position.Y > Main.player[NPC.target].position.Y || (double)(Main.player[NPC.target].position.Y / 16f) > Main.worldSurface || Main.player[NPC.target].dead)
+                        if (NPC.position.Y > Main.player[NPC.target].position.Y || Main.player[NPC.target].position.Y / 16f > Main.worldSurface || Main.player[NPC.target].dead)
                         {
                             flag21 = true;
                             if (Math.Abs(NPC.velocity.X) < speed / 2f)
                             {
                                 if (NPC.velocity.X == 0f)
                                 {
-                                    NPC.velocity.X = NPC.velocity.X - (float)NPC.direction;
+                                    NPC.velocity.X = NPC.velocity.X - NPC.direction;
                                 }
                                 NPC.velocity.X = NPC.velocity.X * 1.1f;
                             }
@@ -413,7 +413,7 @@ namespace Polarities.NPCs
                                 {
                                     NPC.velocity.X = NPC.velocity.X - turnSpeed * 1.1f;
                                 }
-                                if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < speed * 0.5)
+                                if (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y) < speed * 0.5)
                                 {
                                     if (NPC.velocity.Y > 0f)
                                     {
@@ -435,7 +435,7 @@ namespace Polarities.NPCs
                                 {
                                     NPC.velocity.Y = NPC.velocity.Y - turnSpeed * 1.1f;
                                 }
-                                if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < speed * 0.5)
+                                if (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y) < speed * 0.5)
                                 {
                                     if (NPC.velocity.X > 0f)
                                     {
@@ -450,7 +450,7 @@ namespace Polarities.NPCs
                         }
                     }
                 }
-                NPC.rotation = (float)Math.Atan2((double)NPC.velocity.Y, (double)NPC.velocity.X) + 1.57f;
+                NPC.rotation = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + 1.57f;
                 if (head)
                 {
                     if (flag18)

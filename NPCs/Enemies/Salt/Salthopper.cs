@@ -1,27 +1,17 @@
-﻿using Terraria;
+﻿using Polarities.Biomes;
+using Polarities.Buffs;
+using Polarities.Items.Accessories;
+using Polarities.Items.Consumables;
+using Polarities.Items.Placeable;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks;
+using System;
+using Terraria;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Tiles;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using Terraria.GameContent.Bestiary;
-using Terraria.Audio;
-using Polarities.Items.Placeable.Blocks;
-using Terraria.GameContent.ItemDropRules;
-using Polarities.Items.Consumables;
-using Polarities.Biomes;
-using Polarities.Items.Weapons.Summon.Sentries;
-using Polarities.Items.Accessories;
 
 namespace Polarities.NPCs.Enemies.Salt
 {
@@ -81,7 +71,7 @@ namespace Polarities.NPCs.Enemies.Salt
             {
                 if (NPC.collideY && NPC.oldVelocity.Y != 0f && Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
                 {
-                    NPC.position.X -= NPC.velocity.X + (float)NPC.direction;
+                    NPC.position.X -= NPC.velocity.X + NPC.direction;
                 }
                 if (NPC.ai[3] == NPC.position.X)
                 {
@@ -90,7 +80,7 @@ namespace Polarities.NPCs.Enemies.Salt
                 }
                 NPC.ai[3] = 0f;
                 NPC.velocity.X *= 0.8f;
-                if ((double)NPC.velocity.X > -0.1 && (double)NPC.velocity.X < 0.1)
+                if (NPC.velocity.X > -0.1 && NPC.velocity.X < 0.1)
                 {
                     NPC.velocity.X = 0f;
                 }
@@ -118,14 +108,14 @@ namespace Polarities.NPCs.Enemies.Salt
                     if (num19 == 3)
                     {
                         NPC.velocity.Y = -8f;
-                        NPC.velocity.X += (float)(2 * NPC.direction);
+                        NPC.velocity.X += 2 * NPC.direction;
                         NPC.ai[0] = -200f;
                         NPC.ai[3] = NPC.position.X;
                     }
                     else
                     {
                         NPC.velocity.Y = -4f;
-                        NPC.velocity.X += (float)(8 * NPC.direction);
+                        NPC.velocity.X += 8 * NPC.direction;
                         NPC.ai[0] = -120f;
                         if (num19 == 1)
                         {
@@ -146,15 +136,15 @@ namespace Polarities.NPCs.Enemies.Salt
             {
                 if (NPC.collideX && Math.Abs(NPC.velocity.X) == 0.2f)
                 {
-                    NPC.position.X -= 1.4f * (float)NPC.direction;
+                    NPC.position.X -= 1.4f * NPC.direction;
                 }
                 if (NPC.collideY && NPC.oldVelocity.Y != 0f && Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
                 {
-                    NPC.position.X -= NPC.velocity.X + (float)NPC.direction;
+                    NPC.position.X -= NPC.velocity.X + NPC.direction;
                 }
-                if ((NPC.direction == -1 && (double)NPC.velocity.X < 0.01) || (NPC.direction == 1 && (double)NPC.velocity.X > -0.01))
+                if ((NPC.direction == -1 && NPC.velocity.X < 0.01) || (NPC.direction == 1 && NPC.velocity.X > -0.01))
                 {
-                    NPC.velocity.X += 0.2f * (float)NPC.direction;
+                    NPC.velocity.X += 0.2f * NPC.direction;
                 }
                 else
                 {

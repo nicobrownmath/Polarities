@@ -57,7 +57,7 @@ namespace Polarities
             try
             {
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                 for (int i = 0; i < projCache.Count; i++)
                 {
                     try
@@ -71,7 +71,7 @@ namespace Polarities
                     }
                 }
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
             }
             catch (Exception e)
             {
@@ -476,7 +476,7 @@ namespace Polarities
             }*/
         }
 
-        static bool NonReplaceableTileForBiomes(Tile tile)
+        private static bool NonReplaceableTileForBiomes(Tile tile)
         {
             int tileType = tile.TileType;
             int wallType = tile.WallType;
@@ -485,7 +485,7 @@ namespace Polarities
                 || (tileType == TileID.JungleGrass && !WorldGen.notTheBees);
         }
 
-        void AddSkyIslandLoot(GenerationProgress progress, GameConfiguration configuration)
+        private void AddSkyIslandLoot(GenerationProgress progress, GameConfiguration configuration)
         {
             progress.Message = Language.GetTextValue("Mods.Polarities.WorldGenPass.AddSkyIslandLoot");
 
@@ -928,8 +928,10 @@ namespace Polarities
                         if (Main.rand.NextBool(3))
                         {
                             int holeSize = WorldGen.genRand.Next(40, 64);
-                            List<Point> holePoints = new List<Point>();
-                            holePoints.Add(point);
+                            List<Point> holePoints = new List<Point>
+                            {
+                                point
+                            };
                             Framing.GetTileSafely(point).HasTile = false;
 
                             int i = 0;
@@ -975,8 +977,10 @@ namespace Polarities
                             float spikeShapeIndex = WorldGen.genRand.NextFloat(0.05f, 0.15f);
                             float spikeHorizontalSlant = WorldGen.genRand.NextFloat(0.45f, 0.55f);
 
-                            List<Point> spikePoints = new List<Point>();
-                            spikePoints.Add(point);
+                            List<Point> spikePoints = new List<Point>
+                            {
+                                point
+                            };
 
                             int i = 0;
                             while (i < spikeSize)
@@ -1043,8 +1047,10 @@ namespace Polarities
                             float spikeShapeIndex = WorldGen.genRand.NextFloat(0.15f, 0.3f);
                             float spikeHorizontalSlant = WorldGen.genRand.NextFloat(0.4f, 0.6f);
 
-                            List<Point> spikePoints = new List<Point>();
-                            spikePoints.Add(point);
+                            List<Point> spikePoints = new List<Point>
+                            {
+                                point
+                            };
 
                             int i = 0;
                             while (i < spikeSize)
@@ -1398,14 +1404,14 @@ namespace Polarities
                 x = WorldGen.genRand.Next(20, maxLakeX - 20);
                 WorldGen.TileRunner(GetX(), WorldGen.genRand.Next(Main.maxTilesY - 180, Main.maxTilesY - 10), WorldGen.genRand.Next(2, 7), WorldGen.genRand.Next(2, 7), -2);
             }
-            for (int num554 = 0; num554 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008 * (maxLakeX / (double)Main.maxTilesX)); num554++)
+            for (int num554 = 0; num554 < (int)(Main.maxTilesX * Main.maxTilesY * 0.0008 * (maxLakeX / (double)Main.maxTilesX)); num554++)
             {
                 x = WorldGen.genRand.Next(0, maxLakeX);
                 WorldGen.TileRunner(GetX(), WorldGen.genRand.Next(Main.maxTilesY - 140, Main.maxTilesY), WorldGen.genRand.Next(2, 7), WorldGen.genRand.Next(3, 7), TileID.Hellstone);
             }
         }
 
-        void GenAshIslandAt(int atX, int atY, int width, float verticalScale)
+        private void GenAshIslandAt(int atX, int atY, int width, float verticalScale)
         {
             int halfWidth = width / 2;
 
@@ -1440,7 +1446,7 @@ namespace Polarities
             }
         }
 
-        void GenLavaLakeFissureAt(int atX, int atY, float width)
+        private void GenLavaLakeFissureAt(int atX, int atY, float width)
         {
             int x;
             int y;
@@ -1665,7 +1671,7 @@ namespace Polarities
         }
 
         public static bool timeAccelerate = true;
-        float timeRateMultiplier;
+        private float timeRateMultiplier;
         public override void ModifyTimeRate(ref double timeRate, ref double tileUpdateRate, ref double eventUpdateRate)
         {
             if (!timeAccelerate)
@@ -1686,6 +1692,26 @@ namespace Polarities
             if (SkyManager.Instance["Polarities: Rift Denizen"].IsActive() && !NPC.AnyNPCs(ModContent.NPCType<RiftDenizen>()))
                 SkyManager.Instance["Polarities: Rift Denizen"].Deactivate();
             LoopedSound.UpdateLoopedSounds();
+            if (FractalSubworld.subworldSyncedData != null) // Dunno if this works in multiplayer, probably not
+            {
+                FractalSubworld.LoadUniversalData();
+                if (Main.netMode == NetmodeID.Server)
+                {
+                    NetMessage.SendData(MessageID.WorldData);
+                }
+            }
+            if (FractalSubworld.Active)
+            {
+                Main.dayTime = true;
+                Main.time = Main.dayLength / 2f;
+                Main.windSpeedCurrent = 0f;
+                Main.windSpeedTarget = 0f;
+                Main.raining = false;
+                Main.slimeRain = false;
+                Main.invasionType = 0;
+                Main.invasionSize = 0;
+                Main.invasionSizeStart = 0;
+            }
         }
 
         public static bool ranGemflyAmbience;
@@ -1805,9 +1831,9 @@ namespace Polarities
                 {
                     num13 += value.X - 200f;
                 }
-                Rectangle r3 = Utils.CenteredRectangle(new Vector2((float)Main.screenWidth - num13, (float)(Main.screenHeight - 80)), (value + new Vector2((float)(texture2D4.Width + 12), 6f)) * num18);
+                Rectangle r3 = Utils.CenteredRectangle(new Vector2(Main.screenWidth - num13, Main.screenHeight - 80), (value + new Vector2(texture2D4.Width + 12, 6f)) * num18);
                 Utils.DrawInvBG(spriteBatch, r3, c);
-                spriteBatch.Draw(texture2D4, r3.Left() + Vector2.UnitX * num18 * 8f, (Rectangle?)null, Color.White * Main.invasionProgressAlpha, 0f, new Vector2(0f, (float)(texture2D4.Height / 2)), num18 * 0.8f, (SpriteEffects)0, 0f);
+                spriteBatch.Draw(texture2D4, r3.Left() + Vector2.UnitX * num18 * 8f, null, Color.White * Main.invasionProgressAlpha, 0f, new Vector2(0f, texture2D4.Height / 2), num18 * 0.8f, 0, 0f);
                 Utils.DrawBorderString(spriteBatch, text7, r3.Right() + Vector2.UnitX * num18 * -22f, Color.White * Main.invasionProgressAlpha, num18 * 0.9f, 1f, 0.4f);
             }
         }

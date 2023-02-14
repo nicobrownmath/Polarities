@@ -1,14 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.Enums;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using Terraria.DataStructures;
-using static Terraria.ModLoader.ModContent;
-using Terraria.Audio;
 using static Terraria.WorldGen;
 
 namespace Polarities.Items.Placeable.Furniture
@@ -120,17 +116,17 @@ namespace Polarities.Items.Placeable.Furniture
                             Projectile.NewProjectile(new EntitySource_TileBreak(i, j), i * 16 + 16, j * 16 + 16, 0f, -12f, ProjectileID.CoinPortal, 0, 0f, Main.myPlayer);
                         }
                     }
-                    else if (WorldGen.genRand.NextBool(35)&& Main.wallDungeon[Main.tile[i, j].WallType] && (double)j > Main.worldSurface)
+                    else if (WorldGen.genRand.NextBool(35) && Main.wallDungeon[Main.tile[i, j].WallType] && j > Main.worldSurface)
                     {
                         Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, 327);
                     }
                     else if (Main.getGoodWorld && WorldGen.genRand.NextBool(4))
                     {
-                        Projectile.NewProjectile(new EntitySource_TileBreak(i, j), i * 16 + 16, j * 16 + 8, (float)Main.rand.Next(-100, 101) * 0.002f, 0f, ProjectileID.Bomb, 0, 0f, Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16));
+                        Projectile.NewProjectile(new EntitySource_TileBreak(i, j), i * 16 + 16, j * 16 + 8, Main.rand.Next(-100, 101) * 0.002f, 0f, ProjectileID.Bomb, 0, 0f, Player.FindClosest(new Vector2(i * 16, j * 16), 16, 16));
                     }
-                    else if (WorldGen.genRand.NextBool(45)|| (Main.rand.NextBool(45)&& Main.expertMode))
+                    else if (WorldGen.genRand.NextBool(45) || (Main.rand.NextBool(45) && Main.expertMode))
                     {
-                        if ((double)j < Main.worldSurface)
+                        if (j < Main.worldSurface)
                         {
                             int num21 = WorldGen.genRand.Next(10);
                             if (num21 == 0)
@@ -166,7 +162,7 @@ namespace Polarities.Items.Placeable.Furniture
                                 Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, 2350, WorldGen.genRand.Next(1, 3));
                             }
                         }
-                        else if ((double)j < Main.rockLayer)
+                        else if (j < Main.rockLayer)
                         {
                             int num22 = WorldGen.genRand.Next(11);
                             if (num22 == 0)
@@ -350,7 +346,7 @@ namespace Polarities.Items.Placeable.Furniture
                         {
                             num2--;
                         }
-                        Player player = Main.player[Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16)];
+                        Player player = Main.player[Player.FindClosest(new Vector2(i * 16, j * 16), 16, 16)];
                         int num3 = 0;
                         int num4 = 20;
                         for (int num5 = 0; num5 < 50; num5++)
@@ -428,7 +424,7 @@ namespace Polarities.Items.Placeable.Furniture
                         {
                             int stack = Main.rand.Next(10, 21);
                             int type4 = 40;
-                            if ((double)j < Main.rockLayer && WorldGen.genRand.NextBool(2))
+                            if (j < Main.rockLayer && WorldGen.genRand.NextBool(2))
                             {
                                 type4 = ((!Main.hardMode) ? 42 : 168);
                             }
@@ -456,7 +452,7 @@ namespace Polarities.Items.Placeable.Furniture
                             }
                             Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, type5, num7);
                         }
-                        else if (num2 == 4 && (flag2 || (double)j > Main.rockLayer))
+                        else if (num2 == 4 && (flag2 || j > Main.rockLayer))
                         {
                             int type6 = 166;
                             if (flag2)
@@ -478,11 +474,11 @@ namespace Polarities.Items.Placeable.Furniture
                         else
                         {
                             float num10 = 200 + WorldGen.genRand.Next(-100, 101);
-                            if ((double)j < Main.worldSurface)
+                            if (j < Main.worldSurface)
                             {
                                 num10 *= 0.5f;
                             }
-                            else if ((double)j < Main.rockLayer)
+                            else if (j < Main.rockLayer)
                             {
                                 num10 *= 0.75f;
                             }
@@ -490,26 +486,26 @@ namespace Polarities.Items.Placeable.Furniture
                             {
                                 num10 *= 1.25f;
                             }
-                            num10 *= 1f + (float)Main.rand.Next(-20, 21) * 0.01f;
+                            num10 *= 1f + Main.rand.Next(-20, 21) * 0.01f;
                             if (Main.rand.NextBool(4))
                             {
-                                num10 *= 1f + (float)Main.rand.Next(5, 11) * 0.01f;
+                                num10 *= 1f + Main.rand.Next(5, 11) * 0.01f;
                             }
                             if (Main.rand.NextBool(8))
                             {
-                                num10 *= 1f + (float)Main.rand.Next(10, 21) * 0.01f;
+                                num10 *= 1f + Main.rand.Next(10, 21) * 0.01f;
                             }
                             if (Main.rand.NextBool(12))
                             {
-                                num10 *= 1f + (float)Main.rand.Next(20, 41) * 0.01f;
+                                num10 *= 1f + Main.rand.Next(20, 41) * 0.01f;
                             }
                             if (Main.rand.NextBool(16))
                             {
-                                num10 *= 1f + (float)Main.rand.Next(40, 81) * 0.01f;
+                                num10 *= 1f + Main.rand.Next(40, 81) * 0.01f;
                             }
                             if (Main.rand.NextBool(20))
                             {
-                                num10 *= 1f + (float)Main.rand.Next(50, 101) * 0.01f;
+                                num10 *= 1f + Main.rand.Next(50, 101) * 0.01f;
                             }
                             if (Main.expertMode)
                             {
@@ -589,7 +585,7 @@ namespace Polarities.Items.Placeable.Furniture
                                     {
                                         num11 /= Main.rand.Next(3) + 1;
                                     }
-                                    num10 -= (float)(1000000 * num11);
+                                    num10 -= 1000000 * num11;
                                     Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, 74, num11);
                                     continue;
                                 }
@@ -604,7 +600,7 @@ namespace Polarities.Items.Placeable.Furniture
                                     {
                                         num12 /= Main.rand.Next(3) + 1;
                                     }
-                                    num10 -= (float)(10000 * num12);
+                                    num10 -= 10000 * num12;
                                     Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, 73, num12);
                                     continue;
                                 }
@@ -619,7 +615,7 @@ namespace Polarities.Items.Placeable.Furniture
                                     {
                                         num13 /= Main.rand.Next(3) + 1;
                                     }
-                                    num10 -= (float)(100 * num13);
+                                    num10 -= 100 * num13;
                                     Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, 72, num13);
                                     continue;
                                 }
@@ -636,7 +632,7 @@ namespace Polarities.Items.Placeable.Furniture
                                 {
                                     num14 = 1;
                                 }
-                                num10 -= (float)num14;
+                                num10 -= num14;
                                 Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, 71, num14);
                             }
                         }

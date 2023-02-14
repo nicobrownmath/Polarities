@@ -1,26 +1,18 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MultiHitboxNPCLibrary;
+using Polarities.Items.Placeable.Banners;
+using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using Terraria.DataStructures;
-using Terraria.GameContent.Bestiary;
-using System.Collections.Generic;
-using MultiHitboxNPCLibrary;
-using Terraria.GameContent;
-using Terraria.GameContent.ItemDropRules;
-using ReLogic.Content;
-using Polarities.Items.Materials;
 
 namespace Polarities.NPCs.Enemies.Granite
 {
@@ -73,7 +65,7 @@ namespace Polarities.NPCs.Enemies.Granite
             BannerItem = ItemType<GraniteCrawlerBanner>();
         }
 
-        const int numSegments = 30;
+        private const int numSegments = 30;
         private Vector2[] segmentPositions = new Vector2[numSegments * 9 - 4];
         private int[] hitBoxSegmentIds = new int[numSegments];
 

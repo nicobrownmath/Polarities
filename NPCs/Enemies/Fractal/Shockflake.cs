@@ -195,17 +195,18 @@ namespace Polarities.NPCs.Enemies.Fractal
             }
         }
 
-        public override bool CheckDead()
+        public override void HitEffect(int hitDirection, double damage)
         {
-            for (int i = 0; i < 6; i++)
+            if (NPC.life <= 0)
             {
-                for (int j = -5; j < 5; j++)
+                for (int i = 0; i < 6; i++)
                 {
-                    Dust.NewDustPerfect(NPC.Center + new Vector2((float)Math.Sqrt(3) / 2, j / 10f).RotatedBy(NPC.rotation + MathHelper.TwoPi * i / 6f) * 24f, DustID.Electric, Velocity: new Vector2((float)Math.Sqrt(3) / 2, j / 10f).RotatedBy(NPC.rotation + MathHelper.TwoPi * i / 6f) * 1f, Scale: 1f).noGravity = true;
+                    for (int j = -5; j < 5; j++)
+                    {
+                        Dust.NewDustPerfect(NPC.Center + new Vector2((float)Math.Sqrt(3) / 2, j / 10f).RotatedBy(NPC.rotation + MathHelper.TwoPi * i / 6f) * 24f, DustID.Electric, Velocity: new Vector2((float)Math.Sqrt(3) / 2, j / 10f).RotatedBy(NPC.rotation + MathHelper.TwoPi * i / 6f) * 1f, Scale: 1f).noGravity = true;
+                    }
                 }
             }
-
-            return true;
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -239,7 +240,7 @@ namespace Polarities.NPCs.Enemies.Fractal
             for (int k = 0; k < NPC.oldPos.Length; k++)
             {
                 drawPos = NPC.Center - NPC.position + NPC.oldPos[k] - screenPos;
-                color = Color.White * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
+                color = Color.White * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
                 if (NPC.spriteDirection == -1)
                 {
                     spriteBatch.Draw(TextureAssets.Npc[NPC.type].Value, drawPos, NPC.frame, color, NPC.rotation, drawOrigin, NPC.scale, SpriteEffects.None, 0f);
@@ -308,8 +309,8 @@ namespace Polarities.NPCs.Enemies.Fractal
 
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
-                Color color = mainColor * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                float scale = Projectile.scale * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                Color color = mainColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                float scale = Projectile.scale * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
 
                 float rotation;
                 if (k + 1 >= Projectile.oldPos.Length)

@@ -1,11 +1,6 @@
-﻿using Terraria;
-using Terraria.ID;
+﻿using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Polarities.Items.Placeable.Banners;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using System;
 
 namespace Polarities.Dusts
 {

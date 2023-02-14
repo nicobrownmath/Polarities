@@ -86,15 +86,16 @@ namespace Polarities.NPCs.Enemies.Fractal
             return 0f;
         }
 
-        public override bool CheckDead()
+        public override void HitEffect(int hitDirection, double damage)
         {
-            for (int i = 0; i < 6; i++)
+            if (NPC.life <= 0)
             {
-                Main.dust[Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.t_Slime, 0, 0, 64, newColor: new Color(192, 192, 384), Scale: 1.5f)].noGravity = true;
+                for (int i = 0; i < 6; i++)
+                {
+                    Main.dust[Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.t_Slime, 0, 0, 64, newColor: new Color(192, 192, 384), Scale: 1.5f)].noGravity = true;
+                }
             }
-            return true;
         }
-
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {

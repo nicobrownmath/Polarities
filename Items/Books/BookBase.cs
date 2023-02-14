@@ -1,15 +1,14 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Polarities.Buffs;
-using Terraria.ObjectData;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.ObjectData;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Items.Books
 {
@@ -61,7 +60,7 @@ namespace Polarities.Items.Books
             if (!allowConsuming)
             {
                 //vanilla code to check tile range
-                if (!(!(player.position.X / 16f - (float)Player.tileRangeX - (float)player.inventory[player.selectedItem].tileBoost - (float)player.blockRange <= (float)Player.tileTargetX) || !((player.position.X + (float)player.width) / 16f + (float)Player.tileRangeX + (float)player.inventory[player.selectedItem].tileBoost - 1f + (float)player.blockRange >= (float)Player.tileTargetX) || !(player.position.Y / 16f - (float)Player.tileRangeY - (float)player.inventory[player.selectedItem].tileBoost - (float)player.blockRange <= (float)Player.tileTargetY) || !((player.position.Y + (float)player.height) / 16f + (float)Player.tileRangeY + (float)player.inventory[player.selectedItem].tileBoost - 2f + (float)player.blockRange >= (float)Player.tileTargetY)))
+                if (!(!(player.position.X / 16f - Player.tileRangeX - player.inventory[player.selectedItem].tileBoost - player.blockRange <= Player.tileTargetX) || !((player.position.X + player.width) / 16f + Player.tileRangeX + player.inventory[player.selectedItem].tileBoost - 1f + player.blockRange >= Player.tileTargetX) || !(player.position.Y / 16f - Player.tileRangeY - player.inventory[player.selectedItem].tileBoost - player.blockRange <= Player.tileTargetY) || !((player.position.Y + player.height) / 16f + Player.tileRangeY + player.inventory[player.selectedItem].tileBoost - 2f + player.blockRange >= Player.tileTargetY)))
                 {
                     Tile targetTile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
                     if (targetTile.HasTile && targetTile.TileType == TileType<BookTile>())
@@ -218,7 +217,7 @@ namespace Polarities.Items.Books
                         color *= 0.5f;
                         if (i >= op.ObjectStart.X && i < op.ObjectStart.X + tileData.Width && j >= op.ObjectStart.Y && j < op.ObjectStart.Y + tileData.Height)
                         {
-                            SpriteEffects spriteEffects = (SpriteEffects)0;
+                            SpriteEffects spriteEffects = 0;
                             if (tileData.DrawFlipHorizontal && num12 % 2 == 0)
                             {
                                 spriteEffects = (SpriteEffects)((int)spriteEffects | 1);
@@ -234,7 +233,7 @@ namespace Polarities.Items.Books
                                 num4 += 2;
                             }
                             Rectangle? val = new Rectangle(x, num11, coordinateWidth, num4);
-                            sb.Draw(value, new Vector2((float)(num12 * 16 - (int)(position.X + (float)(coordinateWidth - 16) / 2f) + drawXOffset), (float)(num2 * 16 - (int)position.Y + num8)), val, color, 0f, Vector2.Zero, 1f, spriteEffects, 0f);
+                            sb.Draw(value, new Vector2(num12 * 16 - (int)(position.X + (coordinateWidth - 16) / 2f) + drawXOffset, num2 * 16 - (int)position.Y + num8), val, color, 0f, Vector2.Zero, 1f, spriteEffects, 0f);
                             num11 += num4 + tileData.CoordinatePadding;
                         }
                     }
@@ -354,7 +353,7 @@ namespace Polarities.Items.Books
 
             Texture2D texture = TextureAssets.Tile[Type].Value;
 
-            int style1 = t.TileFrameX / 18; 
+            int style1 = t.TileFrameX / 18;
             int style2 = t.TileFrameY / 18;
 
             if (style1 > 0 && (style2 <= 0 || !leanLeft))

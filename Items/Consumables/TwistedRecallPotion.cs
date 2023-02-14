@@ -1,12 +1,9 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Blocks.Fractal;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Polarities.Buffs;
-using Microsoft.Xna.Framework;
-using Polarities.Items.Placeable.Blocks.Fractal;
-using Polarities.Items.Materials;
-using SubworldLibrary;
 
 namespace Polarities.Items.Consumables
 {

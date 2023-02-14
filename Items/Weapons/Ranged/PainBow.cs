@@ -1,16 +1,14 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.ObjectData;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using System;
-using Polarities.Projectiles;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Polarities.Effects;
+using System;
+using System.Collections.Generic;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using System.Collections.Generic;
-using Polarities.Effects;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Items.Weapons.Ranged
 {
@@ -67,7 +65,7 @@ namespace Polarities.Items.Weapons.Ranged
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
 
-        Color color
+        private Color color
         {
             get
             {

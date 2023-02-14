@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Polarities.Items.Placeable.Blocks.Fractal;
-using SubworldLibrary;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;

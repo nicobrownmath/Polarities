@@ -348,7 +348,7 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (FractalSubworld.Active && spawnInfo.Player.GetFractalization() > FractalSubworld.POST_GOLEM_TIME)
+            if (FractalSubworld.Active && spawnInfo.Player.GetFractalization() > FractalSubworld.POST_SENTINEL_TIME)
             {
                 return 0.15f * FractalSubworld.SpawnConditionFractalWastes(spawnInfo) * FractalSubworld.SpawnConditionFractalUnderground(spawnInfo);
             }
@@ -588,8 +588,8 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
 
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
-                Color color = mainColor * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                float scale = Projectile.scale * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                Color color = mainColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                float scale = Projectile.scale * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
 
                 float rotation;
                 if (k + 1 >= Projectile.oldPos.Length)

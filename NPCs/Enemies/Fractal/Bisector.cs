@@ -4,7 +4,6 @@ using Polarities.Biomes.Fractal;
 using Polarities.Items.Materials;
 using Polarities.Items.Placeable.Banners;
 using Polarities.Items.Placeable.Blocks.Fractal;
-using SubworldLibrary;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;

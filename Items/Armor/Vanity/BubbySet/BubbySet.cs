@@ -1,15 +1,11 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
-using Terraria.GameContent;
-using Polarities.Items.Accessories.Wings;
-using ReLogic.Content;
 
 namespace Polarities.Items.Armor.Vanity.BubbySet
 {
@@ -73,10 +69,12 @@ namespace Polarities.Items.Armor.Vanity.BubbySet
                     bodyFrame3.Height -= 4;
                 }
                 Vector2 helmetOffset = drawInfo.helmetOffset;
-                Vector2 position = helmetOffset + new Vector2((float)(int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (float)(int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect;
+                Vector2 position = helmetOffset + new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - drawInfo.drawPlayer.bodyFrame.Width / 2 + drawInfo.drawPlayer.width / 2), (int)(drawInfo.Position.Y - Main.screenPosition.Y + drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect;
 
-                DrawData drawData = new DrawData(texture, position, bodyFrame3, drawInfo.colorArmorHead, drawInfo.drawPlayer.headRotation, headVect2, 1f, drawInfo.playerEffect, 0);
-                drawData.shader = drawInfo.cHead;
+                DrawData drawData = new DrawData(texture, position, bodyFrame3, drawInfo.colorArmorHead, drawInfo.drawPlayer.headRotation, headVect2, 1f, drawInfo.playerEffect, 0)
+                {
+                    shader = drawInfo.cHead
+                };
                 drawInfo.DrawDataCache.Add(drawData);
 
                 if (drawPlayer.HeldItem.damage > 0)
@@ -95,8 +93,10 @@ namespace Polarities.Items.Armor.Vanity.BubbySet
                         color = new Color(255, 198, 98);
                     }
 
-                    drawData = new DrawData(HeadClosedGlowTexture.Value, position, bodyFrame3, color, drawInfo.drawPlayer.headRotation, headVect2, 1f, drawInfo.playerEffect, 0);
-                    drawData.shader = drawInfo.cHead;
+                    drawData = new DrawData(HeadClosedGlowTexture.Value, position, bodyFrame3, color, drawInfo.drawPlayer.headRotation, headVect2, 1f, drawInfo.playerEffect, 0)
+                    {
+                        shader = drawInfo.cHead
+                    };
                     drawInfo.DrawDataCache.Add(drawData);
                 }
             }

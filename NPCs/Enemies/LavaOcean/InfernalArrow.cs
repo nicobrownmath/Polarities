@@ -1,34 +1,15 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Polarities.Buffs;
+using Polarities.Effects;
+using Polarities.Items.Placeable.Banners;
+using System;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Tiles;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using Terraria.GameContent.Bestiary;
-using Polarities.Biomes;
-using Polarities.Items.Placeable.Blocks;
-using Terraria.Audio;
-using Polarities.Items.Placeable.Walls;
-using Terraria.GameContent.ItemDropRules;
-using Polarities.Items.Consumables;
-using Terraria.GameContent;
-using ReLogic.Content;
-using Polarities.Items.Accessories;
-using Terraria.DataStructures;
-using Polarities.Items.Materials;
-using Terraria.ModLoader.Utilities;
-using System.Collections.Generic;
-using Polarities.Effects;
 
 namespace Polarities.NPCs.Enemies.LavaOcean
 {
@@ -169,7 +150,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             //adapted from the vanilla weapon eneimies
             if (NPC.life > 0)
             {
-                for (int num473 = 0; (double)num473 < damage / (double)NPC.lifeMax * 50.0; num473++)
+                for (int num473 = 0; num473 < damage / NPC.lifeMax * 50.0; num473++)
                 {
                     int num474 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 31, 0f, 0f, 0, default(Color), 1.5f);
                     Main.dust[num474].noGravity = true;
@@ -184,15 +165,15 @@ namespace Polarities.NPCs.Enemies.LavaOcean
                 dust187.velocity *= 2f;
                 Main.dust[num476].noGravity = true;
             }
-            int num477 = Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + (float)(NPC.height / 2) - 10f), new Vector2((float)Main.rand.Next(-2, 3), (float)Main.rand.Next(-2, 3)), 61, NPC.scale);
+            int num477 = Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + NPC.height / 2 - 10f), new Vector2(Main.rand.Next(-2, 3), Main.rand.Next(-2, 3)), 61, NPC.scale);
             Gore gore4 = Main.gore[num477];
             Gore gore28 = gore4;
             gore28.velocity *= 0.5f;
-            num477 = Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + (float)(NPC.height / 2) - 10f), new Vector2((float)Main.rand.Next(-2, 3), (float)Main.rand.Next(-2, 3)), 61, NPC.scale);
+            num477 = Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + NPC.height / 2 - 10f), new Vector2(Main.rand.Next(-2, 3), Main.rand.Next(-2, 3)), 61, NPC.scale);
             gore4 = Main.gore[num477];
             gore28 = gore4;
             gore28.velocity *= 0.5f;
-            num477 = Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + (float)(NPC.height / 2) - 10f), new Vector2((float)Main.rand.Next(-2, 3), (float)Main.rand.Next(-2, 3)), 61, NPC.scale);
+            num477 = Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + NPC.height / 2 - 10f), new Vector2(Main.rand.Next(-2, 3), Main.rand.Next(-2, 3)), 61, NPC.scale);
             gore4 = Main.gore[num477];
             gore28 = gore4;
             gore28.velocity *= 0.5f;

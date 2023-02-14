@@ -1,22 +1,15 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Items.Placeable.Banners;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.GameContent;
-using Terraria.GameContent.Bestiary;
-using Terraria.Audio;
 
 namespace Polarities.NPCs.Enemies
 {
@@ -115,7 +108,7 @@ namespace Polarities.NPCs.Enemies
                     {
                         for (int i = 0; i < 3; i++)
                         {
-                            Vector2 value34 = new Vector2((float)Main.screenWidth, (float)Main.screenHeight);
+                            Vector2 value34 = new Vector2(Main.screenWidth, Main.screenHeight);
                             if (NPC.Hitbox.Intersects(Utils.CenteredRectangle(Main.screenPosition + value34 / 2f, value34 + new Vector2(400f))) && Main.rand.NextBool(6))
                             {
                                 int[] array6 = new int[4] { 16, 17, 17, 17 };
@@ -127,7 +120,7 @@ namespace Polarities.NPCs.Enemies
                                 }
                                 Gore.NewGore(NPC.GetSource_FromAI(), NPC.position, NPC.velocity * 0.2f, num855);
                             }
-                            if (Main.rand.NextBool(20)|| (Main.tenthAnniversaryWorld && Main.rand.NextBool(15)))
+                            if (Main.rand.NextBool(20) || (Main.tenthAnniversaryWorld && Main.rand.NextBool(15)))
                             {
                                 Dust.NewDust(NPC.position, NPC.width, NPC.height, 58, NPC.velocity.X * 0.5f, NPC.velocity.Y * 0.5f, 150, default(Color), 1.2f);
                             }
@@ -154,7 +147,7 @@ namespace Polarities.NPCs.Enemies
             {
                 if (NPC.collideY && NPC.oldVelocity.Y != 0f && Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
                 {
-                    NPC.position.X -= NPC.velocity.X + (float)NPC.direction;
+                    NPC.position.X -= NPC.velocity.X + NPC.direction;
                 }
                 if (NPC.ai[3] == NPC.position.X)
                 {
@@ -163,7 +156,7 @@ namespace Polarities.NPCs.Enemies
                 }
                 NPC.ai[3] = 0f;
                 NPC.velocity.X *= 0.8f;
-                if ((double)NPC.velocity.X > -0.1 && (double)NPC.velocity.X < 0.1)
+                if (NPC.velocity.X > -0.1 && NPC.velocity.X < 0.1)
                 {
                     NPC.velocity.X = 0f;
                 }
@@ -193,7 +186,7 @@ namespace Polarities.NPCs.Enemies
                         hasUsedShotgun = false;
 
                         NPC.velocity.Y = -32f;
-                        NPC.velocity.X += (float)(3 * NPC.direction);
+                        NPC.velocity.X += 3 * NPC.direction;
                         NPC.ai[0] = -200f;
                         NPC.ai[3] = NPC.position.X;
                     }
@@ -202,7 +195,7 @@ namespace Polarities.NPCs.Enemies
                         shotTimer = 0;
 
                         NPC.velocity.Y = -24f;
-                        NPC.velocity.X += (float)(3 * NPC.direction);
+                        NPC.velocity.X += 3 * NPC.direction;
                         NPC.ai[0] = -120f;
                         if (jumpState == 1)
                         {
@@ -223,15 +216,15 @@ namespace Polarities.NPCs.Enemies
             {
                 if (NPC.collideX && Math.Abs(NPC.velocity.X) == 0.2f)
                 {
-                    NPC.position.X -= 1.4f * (float)NPC.direction;
+                    NPC.position.X -= 1.4f * NPC.direction;
                 }
                 if (NPC.collideY && NPC.oldVelocity.Y != 0f && Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
                 {
-                    NPC.position.X -= NPC.velocity.X + (float)NPC.direction;
+                    NPC.position.X -= NPC.velocity.X + NPC.direction;
                 }
-                if ((NPC.direction == -1 && (double)NPC.velocity.X < 0.01) || (NPC.direction == 1 && (double)NPC.velocity.X > -0.01))
+                if ((NPC.direction == -1 && NPC.velocity.X < 0.01) || (NPC.direction == 1 && NPC.velocity.X > -0.01))
                 {
-                    NPC.velocity.X += 0.2f * (float)NPC.direction;
+                    NPC.velocity.X += 0.2f * NPC.direction;
                 }
                 else
                 {
@@ -368,7 +361,7 @@ namespace Polarities.NPCs.Enemies
 
                 Texture2D value175 = TextureAssets.Extra[91].Value;
                 Rectangle value176 = value175.Frame();
-                Vector2 origin10 = new Vector2((float)value176.Width / 2f, 10f);
+                Vector2 origin10 = new Vector2(value176.Width / 2f, 10f);
                 Vector2 spinningpoint = new Vector2(0f, -10f);
                 float num184 = (float)Main.timeForVisualEffects / 60f;
                 Vector2 value178 = NPC.Center + NPC.velocity;
@@ -393,17 +386,17 @@ namespace Polarities.NPCs.Enemies
                 Vector2 spinningpoint17 = spinningpoint;
                 double radians6 = (float)Math.PI * 2f * num184;
                 Vector2 val2 = default(Vector2);
-                Main.EntitySpriteDraw(value175, val8 + spinningpoint17.RotatedBy(radians6, val2), value176, color43, NPC.velocity.ToRotation() + (float)Math.PI / 2f, origin10, (1.5f + num185) * scaleMultiplier, (SpriteEffects)0, 0);
+                Main.EntitySpriteDraw(value175, val8 + spinningpoint17.RotatedBy(radians6, val2), value176, color43, NPC.velocity.ToRotation() + (float)Math.PI / 2f, origin10, (1.5f + num185) * scaleMultiplier, 0, 0);
                 Vector2 val9 = value178 - Main.screenPosition;
                 Vector2 spinningpoint18 = spinningpoint;
                 double radians7 = (float)Math.PI * 2f * num184 + (float)Math.PI * 2f / 3f;
                 val2 = default(Vector2);
-                Main.EntitySpriteDraw(value175, val9 + spinningpoint18.RotatedBy(radians7, val2), value176, color44, NPC.velocity.ToRotation() + (float)Math.PI / 2f, origin10, (1.1f + num185) * scaleMultiplier, (SpriteEffects)0, 0);
+                Main.EntitySpriteDraw(value175, val9 + spinningpoint18.RotatedBy(radians7, val2), value176, color44, NPC.velocity.ToRotation() + (float)Math.PI / 2f, origin10, (1.1f + num185) * scaleMultiplier, 0, 0);
                 Vector2 val10 = value178 - Main.screenPosition;
                 Vector2 spinningpoint19 = spinningpoint;
                 double radians8 = (float)Math.PI * 2f * num184 + 4.1887903f;
                 val2 = default(Vector2);
-                Main.EntitySpriteDraw(value175, val10 + spinningpoint19.RotatedBy(radians8, val2), value176, color45, NPC.velocity.ToRotation() + (float)Math.PI / 2f, origin10, (1.3f + num185) * scaleMultiplier, (SpriteEffects)0, 0);
+                Main.EntitySpriteDraw(value175, val10 + spinningpoint19.RotatedBy(radians8, val2), value176, color45, NPC.velocity.ToRotation() + (float)Math.PI / 2f, origin10, (1.3f + num185) * scaleMultiplier, 0, 0);
                 Vector2 value180 = NPC.Center - NPC.velocity * 0.5f;
                 for (float num186 = 0f; num186 < 1f; num186 += 0.5f)
                 {
@@ -414,7 +407,7 @@ namespace Polarities.NPCs.Enemies
                     {
                         num188 = 2f - num188;
                     }
-                    Main.EntitySpriteDraw(value175, value180 - screenPos, value176, value179 * num188, NPC.velocity.ToRotation() + (float)Math.PI / 2f, origin10, (0.3f + num187 * 0.5f) * scaleMultiplier, (SpriteEffects)0, 0);
+                    Main.EntitySpriteDraw(value175, value180 - screenPos, value176, value179 * num188, NPC.velocity.ToRotation() + (float)Math.PI / 2f, origin10, (0.3f + num187 * 0.5f) * scaleMultiplier, 0, 0);
                 }
             }
 
@@ -438,11 +431,11 @@ namespace Polarities.NPCs.Enemies
                 globalTimeWrappedHourly2 = globalTimeWrappedHourly2 * 0.5f + 0.5f;
                 for (float num11 = 0f; num11 < 1f; num11 += 0.25f)
                 {
-                    spriteBatch.Draw(star, drawPos + Utils.RotatedBy(new Vector2(0f, 8f), (num11 + num10) * ((float)Math.PI * 2f)) * scale * globalTimeWrappedHourly2, frame, new Color(50, 50, 255, 50), 0f, drawOrigin, scale, (SpriteEffects)0, 0f);
+                    spriteBatch.Draw(star, drawPos + Utils.RotatedBy(new Vector2(0f, 8f), (num11 + num10) * ((float)Math.PI * 2f)) * scale * globalTimeWrappedHourly2, frame, new Color(50, 50, 255, 50), 0f, drawOrigin, scale, 0, 0f);
                 }
                 for (float num12 = 0f; num12 < 1f; num12 += 0.34f)
                 {
-                    spriteBatch.Draw(star, drawPos + Utils.RotatedBy(new Vector2(0f, 4f), (num12 + num10) * ((float)Math.PI * 2f)) * scale * globalTimeWrappedHourly2, frame, new Color(120, 120, 255, 127), 0f, drawOrigin, scale, (SpriteEffects)0, 0f);
+                    spriteBatch.Draw(star, drawPos + Utils.RotatedBy(new Vector2(0f, 4f), (num12 + num10) * ((float)Math.PI * 2f)) * scale * globalTimeWrappedHourly2, frame, new Color(120, 120, 255, 127), 0f, drawOrigin, scale, 0, 0f);
                 }
 
                 spriteBatch.Draw(star, drawPos, frame, Color.White, NPC.rotation, drawOrigin, NPC.scale * 0.5f, SpriteEffects.None, 0f);
@@ -499,9 +492,9 @@ namespace Polarities.NPCs.Enemies
                 Projectile.alpha = 0;
                 Projectile.localAI[0] = 1f;
             }
-            Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.01f * (float)Projectile.direction;
+            Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.01f * Projectile.direction;
 
-            Vector2 value34 = new Vector2((float)Main.screenWidth, (float)Main.screenHeight);
+            Vector2 value34 = new Vector2(Main.screenWidth, Main.screenHeight);
             if (Projectile.Hitbox.Intersects(Utils.CenteredRectangle(Main.screenPosition + value34 / 2f, value34 + new Vector2(400f))) && Main.rand.NextBool(6))
             {
                 int[] array6 = new int[4] { 16, 17, 17, 17 };
@@ -514,7 +507,7 @@ namespace Polarities.NPCs.Enemies
                 Gore.NewGore(Projectile.GetSource_FromAI(), Projectile.position, Projectile.velocity * 0.2f, num855);
             }
             Projectile.light = 0.9f;
-            if (Main.rand.NextBool(20)|| (Main.tenthAnniversaryWorld && Main.rand.NextBool(15)))
+            if (Main.rand.NextBool(20) || (Main.tenthAnniversaryWorld && Main.rand.NextBool(15)))
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Enchanted_Pink, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 150, default(Color), 1.2f);
             }
@@ -549,7 +542,7 @@ namespace Polarities.NPCs.Enemies
                 Vector2 center2 = default(Vector2);
                 Dust.NewDustPerfect(center26, 278, unitY12.RotatedBy(radians37, center2) * (2f + Main.rand.NextFloat() * 3f), 150, Color.Gold).noGravity = true;
             }
-            Vector2 value15 = new Vector2((float)Main.screenWidth, (float)Main.screenHeight);
+            Vector2 value15 = new Vector2(Main.screenWidth, Main.screenHeight);
             if (Projectile.Hitbox.Intersects(Utils.CenteredRectangle(Main.screenPosition + value15 / 2f, value15 + new Vector2(400f))))
             {
                 for (int num576 = 0; num576 < 7; num576++)
@@ -566,7 +559,7 @@ namespace Polarities.NPCs.Enemies
         {
             lightColor = Color.White;
 
-            SpriteEffects spriteEffects = (SpriteEffects)0;
+            SpriteEffects spriteEffects = 0;
             if (Projectile.spriteDirection == -1)
             {
                 spriteEffects = (SpriteEffects)1;
@@ -578,7 +571,7 @@ namespace Polarities.NPCs.Enemies
             Color alpha13 = Projectile.GetAlpha(lightColor);
             Texture2D value175 = TextureAssets.Extra[91].Value;
             Rectangle value176 = value175.Frame();
-            Vector2 origin10 = new Vector2((float)value176.Width / 2f, 10f);
+            Vector2 origin10 = new Vector2(value176.Width / 2f, 10f);
             Vector2 value177 = new Vector2(0f, Projectile.gfxOffY);
             Vector2 spinningpoint = new Vector2(0f, -10f);
             float num184 = (float)Main.timeForVisualEffects / 60f;
@@ -604,17 +597,17 @@ namespace Polarities.NPCs.Enemies
             Vector2 spinningpoint17 = spinningpoint;
             double radians6 = (float)Math.PI * 2f * num184;
             Vector2 val2 = default(Vector2);
-            Main.EntitySpriteDraw(value175, val8 + spinningpoint17.RotatedBy(radians6, val2), value176, color43, Projectile.velocity.ToRotation() + (float)Math.PI / 2f, origin10, 1.5f + num185, (SpriteEffects)0, 0);
+            Main.EntitySpriteDraw(value175, val8 + spinningpoint17.RotatedBy(radians6, val2), value176, color43, Projectile.velocity.ToRotation() + (float)Math.PI / 2f, origin10, 1.5f + num185, 0, 0);
             Vector2 val9 = value178 - Main.screenPosition + value177;
             Vector2 spinningpoint18 = spinningpoint;
             double radians7 = (float)Math.PI * 2f * num184 + (float)Math.PI * 2f / 3f;
             val2 = default(Vector2);
-            Main.EntitySpriteDraw(value175, val9 + spinningpoint18.RotatedBy(radians7, val2), value176, color44, Projectile.velocity.ToRotation() + (float)Math.PI / 2f, origin10, 1.1f + num185, (SpriteEffects)0, 0);
+            Main.EntitySpriteDraw(value175, val9 + spinningpoint18.RotatedBy(radians7, val2), value176, color44, Projectile.velocity.ToRotation() + (float)Math.PI / 2f, origin10, 1.1f + num185, 0, 0);
             Vector2 val10 = value178 - Main.screenPosition + value177;
             Vector2 spinningpoint19 = spinningpoint;
             double radians8 = (float)Math.PI * 2f * num184 + 4.1887903f;
             val2 = default(Vector2);
-            Main.EntitySpriteDraw(value175, val10 + spinningpoint19.RotatedBy(radians8, val2), value176, color45, Projectile.velocity.ToRotation() + (float)Math.PI / 2f, origin10, 1.3f + num185, (SpriteEffects)0, 0);
+            Main.EntitySpriteDraw(value175, val10 + spinningpoint19.RotatedBy(radians8, val2), value176, color45, Projectile.velocity.ToRotation() + (float)Math.PI / 2f, origin10, 1.3f + num185, 0, 0);
             Vector2 value180 = Projectile.Center - Projectile.velocity * 0.5f;
             for (float num186 = 0f; num186 < 1f; num186 += 0.5f)
             {
@@ -625,7 +618,7 @@ namespace Polarities.NPCs.Enemies
                 {
                     num188 = 2f - num188;
                 }
-                Main.EntitySpriteDraw(value175, value180 - Main.screenPosition + value177, value176, value179 * num188, Projectile.velocity.ToRotation() + (float)Math.PI / 2f, origin10, 0.3f + num187 * 0.5f, (SpriteEffects)0, 0);
+                Main.EntitySpriteDraw(value175, value180 - Main.screenPosition + value177, value176, value179 * num188, Projectile.velocity.ToRotation() + (float)Math.PI / 2f, origin10, 0.3f + num187 * 0.5f, 0, 0);
             }
             Main.EntitySpriteDraw(value174, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), rectangle24, alpha13, Projectile.rotation, origin33, Projectile.scale + 0.1f, spriteEffects, 0);
 

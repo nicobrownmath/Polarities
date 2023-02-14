@@ -1,13 +1,11 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Polarities.Projectiles;
-using System;
-using Terraria.DataStructures;
-using Terraria.Audio;
 
 namespace Polarities.Items.Weapons.Magic
 {
@@ -212,7 +210,7 @@ namespace Polarities.Items.Weapons.Magic
 
         public override bool? CanCutTiles()
         {
-            return false; 
+            return false;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

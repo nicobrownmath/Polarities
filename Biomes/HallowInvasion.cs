@@ -1,12 +1,10 @@
-﻿using System;
-using System.Reflection;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Polarities.NPCs;
 using Polarities.NPCs.SunPixie;
 using ReLogic.Content;
+using System;
 using Terraria;
-using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Graphics.Effects;
@@ -18,15 +16,15 @@ using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.Biomes
 {
-	public class HallowInvasion : ModBiome
-	{
-		public override SceneEffectPriority Priority => SceneEffectPriority.Event;
+    public class HallowInvasion : ModBiome
+    {
+        public override SceneEffectPriority Priority => SceneEffectPriority.Event;
 
-		public override int Music => MusicID.TheTowers;
+        public override int Music => MusicID.TheTowers;
 
         public override string BestiaryIcon => (GetType().Namespace + "." + Name).Replace('.', '/') + "_BestiaryIcon";
         public override string BackgroundPath => base.BackgroundPath; //this doesn't need to be the vanilla BG because all rapture enemies are also hallow enemies
-		public override Color? BackgroundColor => base.BackgroundColor;
+        public override Color? BackgroundColor => base.BackgroundColor;
 
         public static Asset<Texture2D> EventIcon;
 
@@ -41,9 +39,9 @@ namespace Polarities.Biomes
         }
 
         public override bool IsBiomeActive(Player player)
-		{
-			return player.ZoneHallow && player.ZoneOverworldHeight && PolaritiesSystem.hallowInvasion;
-		}
+        {
+            return player.ZoneHallow && player.ZoneOverworldHeight && PolaritiesSystem.hallowInvasion;
+        }
 
         public override void SpecialVisuals(Player player, bool isActive)
         {
@@ -80,7 +78,7 @@ namespace Polarities.Biomes
             PolaritiesSystem.hallowInvasionSize = 100 * numPlayers;
             PolaritiesSystem.hallowInvasionSizeStart = PolaritiesSystem.hallowInvasionSize;
 
-            String text = Language.GetTextValue("Mods.Polarities.StatusMessage.SpawnHallowInvasion");
+            string text = Language.GetTextValue("Mods.Polarities.StatusMessage.SpawnHallowInvasion");
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
                 Main.NewText(text, 175, 75, 255);
@@ -172,7 +170,7 @@ namespace Polarities.Biomes
             //Syncing start of invasion
             foreach (Player p in Main.player)
             {
-                NetMessage.SendData(MessageID.InvasionProgressReport, p.whoAmI, -1, null, PolaritiesSystem.hallowInvasionSizeStart - PolaritiesSystem.hallowInvasionSize, (float)PolaritiesSystem.hallowInvasionSizeStart, (float)Main.invasionType, 0f, 0, 0, 0);
+                NetMessage.SendData(MessageID.InvasionProgressReport, p.whoAmI, -1, null, PolaritiesSystem.hallowInvasionSizeStart - PolaritiesSystem.hallowInvasionSize, PolaritiesSystem.hallowInvasionSizeStart, Main.invasionType, 0f, 0, 0, 0);
             }
         }
     }
@@ -199,9 +197,9 @@ namespace Polarities.Biomes
     //TODO: Needs to take into account pausing better
     public class HallowInvasionSky : CustomSky, ILoadable
     {
-        bool isActive;
-        float fadeOpacity;
-        HallowInvasionLightPillar[] pillars;
+        private bool isActive;
+        private float fadeOpacity;
+        private HallowInvasionLightPillar[] pillars;
 
         private struct HallowInvasionLightPillar
         {

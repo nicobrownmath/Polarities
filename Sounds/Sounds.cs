@@ -1,21 +1,11 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.GameContent;
-using Terraria.DataStructures;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.GameContent.Bestiary;
-using Terraria.Localization;
+﻿using Microsoft.Xna.Framework;
 using ReLogic.Utilities;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Reflection;
+using System.Threading.Tasks;
+using Terraria;
+using Terraria.Audio;
+using Terraria.ModLoader;
 
 namespace Polarities
 {
@@ -79,7 +69,7 @@ namespace Polarities
             {
                 return SlotId.Invalid;
             }
-            if (position.HasValue && Vector2.DistanceSquared(Main.screenPosition + new Vector2((float)(Main.screenWidth / 2), (float)(Main.screenHeight / 2)), position.Value) > 100000000f)
+            if (position.HasValue && Vector2.DistanceSquared(Main.screenPosition + new Vector2(Main.screenWidth / 2, Main.screenHeight / 2), position.Value) > 100000000f)
             {
                 return SlotId.Invalid;
             }
@@ -91,7 +81,7 @@ namespace Polarities
             {
                 TaskCompletionSource<SlotId> taskCompletionSource = new TaskCompletionSource<SlotId>();
                 SoundStyle styleCopy = style;
-                Main.QueueMainThreadAction((Action)delegate
+                Main.QueueMainThreadAction(delegate
                 {
                     taskCompletionSource.SetResult(PlayWith_Inner(styleCopy, position, volume));
                 });
@@ -101,7 +91,7 @@ namespace Polarities
             return PlayWith_Inner(in style, position, volume);
         }
 
-        static SlotId PlayWith_Inner(in SoundStyle style, Vector2? position, float volume)
+        private static SlotId PlayWith_Inner(in SoundStyle style, Vector2? position, float volume)
         {
             SlotVector<ActiveSound> trackedSounds = (SlotVector<ActiveSound>)typeof(SoundPlayer).GetField("_trackedSounds", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(SoundEngine.SoundPlayer);
 
@@ -109,7 +99,7 @@ namespace Polarities
             if (maxInstances > 0)
             {
                 int instanceCount = 0;
-                foreach(SlotVector<ActiveSound>.ItemPair activeSoundPair in trackedSounds)
+                foreach (SlotVector<ActiveSound>.ItemPair activeSoundPair in trackedSounds)
                 {
                     ActiveSound activeSound = activeSoundPair.Value;
                     if (activeSound.IsPlaying && style.IsTheSameAs(activeSound.Style) && ++instanceCount >= maxInstances)
@@ -153,7 +143,7 @@ namespace Polarities
             loopedSounds.Add(this);
         }
 
-        void Reset()
+        private void Reset()
         {
             if (!Active && SlotId.IsValid)
             {
@@ -197,7 +187,7 @@ namespace Polarities
             }
         }
 
-        static HashSet<LoopedSound> loopedSounds = new HashSet<LoopedSound>();
+        private static HashSet<LoopedSound> loopedSounds = new HashSet<LoopedSound>();
 
         public void Load(Mod mod)
         {
@@ -211,7 +201,7 @@ namespace Polarities
 
         public static void UpdateLoopedSounds()
         {
-            foreach(LoopedSound loopedSound in loopedSounds)
+            foreach (LoopedSound loopedSound in loopedSounds)
             {
                 loopedSound.Reset();
             }

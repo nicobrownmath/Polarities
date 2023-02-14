@@ -1,29 +1,21 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Polarities.Biomes;
+using Polarities.Items.Accessories;
+using Polarities.Items.Consumables;
+using Polarities.Items.Materials;
+using Polarities.Items.Placeable.Banners;
+using Polarities.Items.Placeable.Blocks;
+using ReLogic.Content;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using Polarities.Projectiles;
-using Polarities.Buffs;
-using Polarities.Items;
-using Polarities.Items.Placeable;
-using Polarities.Tiles;
-using Polarities.Items.Weapons;
-using Polarities.Items.Armor;
-using Polarities.Items.Placeable.Banners;
-using Terraria.GameContent.Bestiary;
-using Polarities.Biomes;
-using Terraria.Audio;
-using Polarities.Items.Placeable.Blocks;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.GameContent;
-using Polarities.Items.Consumables;
-using ReLogic.Content;
-using Polarities.Items.Materials;
-using Polarities.Items.Accessories;
 
 namespace Polarities.NPCs.Enemies.Limestone
 {
@@ -247,11 +239,11 @@ namespace Polarities.NPCs.Enemies.Limestone
             npcLoot.Add(ItemDropRule.Common(ItemType<KeyLimePie>(), 50));
         }
 
-        static Asset<Texture2D> BackTexture;
-        static Asset<Texture2D> MaskTexture;
-        static Asset<Texture2D> TopTexture;
-        static Asset<Texture2D> TrailTexture;
-        static Asset<Texture2D> BottomTexture;
+        private static Asset<Texture2D> BackTexture;
+        private static Asset<Texture2D> MaskTexture;
+        private static Asset<Texture2D> TopTexture;
+        private static Asset<Texture2D> TrailTexture;
+        private static Asset<Texture2D> BottomTexture;
 
         public override void Load()
         {
@@ -302,7 +294,7 @@ namespace Polarities.NPCs.Enemies.Limestone
             {
                 for (int i = 1; i < NPC.oldPos.Length; i++)
                 {
-                    spriteBatch.Draw(texture4, NPC.oldPos[i] - NPC.position + drawPos, frame, color * ((float)(NPC.oldPos.Length - i) / (float)NPC.oldPos.Length), NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
+                    spriteBatch.Draw(texture4, NPC.oldPos[i] - NPC.position + drawPos, frame, color * ((NPC.oldPos.Length - i) / (float)NPC.oldPos.Length), NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
                 }
 
                 capVector.Y = 0;

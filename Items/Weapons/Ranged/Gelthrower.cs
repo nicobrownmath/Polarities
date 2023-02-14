@@ -1,16 +1,11 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Polarities.NPCs;
-using System;
-using System.Collections.Generic;
-using Terraria.DataStructures;
-using Terraria.GameContent.Creative;
-using Terraria.GameContent;
 
 namespace Polarities.Items.Weapons.Ranged
 {

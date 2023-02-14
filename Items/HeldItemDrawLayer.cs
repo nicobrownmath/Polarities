@@ -1,20 +1,5 @@
-﻿using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
+﻿using Terraria.DataStructures;
 using Terraria.ModLoader;
-using Terraria.Graphics.Shaders;
-using static Terraria.ModLoader.ModContent;
-using Terraria.GameInput;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using System.Collections.Generic;
-using Polarities.Items;
-using Polarities.NPCs;
-using MonoMod.Cil;
-using Terraria.ModLoader.IO;
-using Terraria.Enums;
 
 namespace Polarities.Items
 {

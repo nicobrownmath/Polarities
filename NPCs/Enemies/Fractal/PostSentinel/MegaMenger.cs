@@ -333,7 +333,7 @@ namespace Polarities.NPCs.Enemies.Fractal.PostSentinel
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (FractalSubworld.Active && spawnInfo.Player.GetFractalization() > FractalSubworld.POST_GOLEM_TIME)
+            if (FractalSubworld.Active && spawnInfo.Player.GetFractalization() > FractalSubworld.POST_SENTINEL_TIME)
             {
                 return 1.5f * FractalSubworld.SpawnConditionFractalUnderground(spawnInfo);
             }

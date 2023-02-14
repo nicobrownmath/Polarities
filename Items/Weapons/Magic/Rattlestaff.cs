@@ -1,15 +1,11 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Polarities.Projectiles;
-using System;
-using Polarities.Buffs;
-using Terraria.DataStructures;
-using Terraria.Audio;
 
 namespace Polarities.Items.Weapons.Magic
 {

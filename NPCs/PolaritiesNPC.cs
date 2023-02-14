@@ -1,41 +1,31 @@
-﻿using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Graphics.Shaders;
-using static Terraria.ModLoader.ModContent;
-using Terraria.GameInput;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using System.Collections.Generic;
-using Polarities.Items;
-using Polarities.NPCs;
-using MonoMod.Cil;
-using Terraria.ModLoader.IO;
-using Terraria.Enums;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.Localization;
-using static Terraria.GameContent.ItemDropRules.Chains;
-using System.Reflection;
 using Mono.Cecil.Cil;
-using Polarities.Items.Books;
+using MonoMod.Cil;
 using MonoMod.RuntimeDetour.HookGen;
 using Polarities.Biomes;
-using Polarities.Items.Accessories;
-using Polarities.Items.Weapons.Ranged;
-using Polarities.Items.Weapons.Summon.Orbs;
-using Polarities.Projectiles;
-using Terraria.Audio;
-using Polarities.Items.Weapons.Magic;
+using Polarities.Biomes.Fractal;
 using Polarities.Buffs;
-using Polarities.Items.Weapons.Melee;
-using Polarities.Items.Weapons.Ranged.Atlatls;
+using Polarities.Items;
+using Polarities.Items.Accessories;
 using Polarities.Items.Armor.MechaMayhemArmor;
-using Polarities.Items.Materials;
-using Terraria.Utilities;
+using Polarities.Items.Books;
+using Polarities.Items.Weapons.Magic;
+using Polarities.Items.Weapons.Melee;
 using Polarities.Items.Weapons.Melee.Warhammers;
+using Polarities.Items.Weapons.Ranged;
+using Polarities.Items.Weapons.Ranged.Atlatls;
+using Polarities.Items.Weapons.Summon.Orbs;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.GameContent.ItemDropRules.Chains;
+using static Terraria.ModLoader.ModContent;
 
 namespace Polarities.NPCs
 {
@@ -279,8 +269,8 @@ namespace Polarities.NPCs
                 //don't remove vanilla spawns from pillars
                 if (spawnInfo.Player.ZoneTowerSolar || spawnInfo.Player.ZoneTowerStardust || spawnInfo.Player.ZoneTowerNebula || spawnInfo.Player.ZoneTowerVortex) return;
 
-                //remove vanilla spawns if in pestilence/rapture
-                if (spawnInfo.Player.InModBiome(GetInstance<HallowInvasion>()) || spawnInfo.Player.InModBiome(GetInstance<HallowInvasion>()))
+                //remove vanilla spawns if in pestilence/rapture/fractal
+                if (spawnInfo.Player.InModBiome(GetInstance<HallowInvasion>()) || spawnInfo.Player.InModBiome(GetInstance<HallowInvasion>()) || spawnInfo.Player.InModBiome<FractalBiome>())
                 {
                     pool.Remove(0);
                 }
@@ -408,7 +398,7 @@ namespace Polarities.NPCs
         }
 
         //true forces a bestiary critter, false forces not a critter, null uses vanilla logic
-        static bool? IsBestiaryCritter(int npcType)
+        private static bool? IsBestiaryCritter(int npcType)
         {
             return bestiaryCritter.ContainsKey(npcType) ? bestiaryCritter[npcType] : null;
         }
@@ -493,7 +483,8 @@ namespace Polarities.NPCs
             c.Index += 3;
 
             c.Emit(OpCodes.Ldarg, 0);
-            c.EmitDelegate<Func<NPC, int>>((NPC npc) => {
+            c.EmitDelegate<Func<NPC, int>>((NPC npc) =>
+            {
                 int defense = npc.defense;
                 npc.GetGlobalNPC<PolaritiesNPC>().ModifyDefense(npc, ref defense);
                 return defense;
@@ -754,7 +745,7 @@ namespace Polarities.NPCs
                     continue;
                 }
                 Vector2 val = npc.Center - Main.player[i].position;
-                if (val.Length() < (float)num3 && Main.player[i].ownedProjectileCounts[ProjectileType<LifeGrasperAura>()] > 0)
+                if (val.Length() < num3 && Main.player[i].ownedProjectileCounts[ProjectileType<LifeGrasperAura>()] > 0)
                 {
                     if (i == Main.myPlayer)
                     {
@@ -763,13 +754,13 @@ namespace Polarities.NPCs
                     if (!Main.rand.NextBool(3))
                     {
                         Vector2 center = npc.Center;
-                        center.X += (float)Main.rand.Next(-100, 100) * 0.05f;
-                        center.Y += (float)Main.rand.Next(-100, 100) * 0.05f;
+                        center.X += Main.rand.Next(-100, 100) * 0.05f;
+                        center.Y += Main.rand.Next(-100, 100) * 0.05f;
                         center += npc.velocity;
                         int num2 = Dust.NewDust(center, 1, 1, DustID.LifeDrain);
                         Dust obj = Main.dust[num2];
                         obj.velocity *= 0f;
-                        Main.dust[num2].scale = (float)Main.rand.Next(70, 85) * 0.01f;
+                        Main.dust[num2].scale = Main.rand.Next(70, 85) * 0.01f;
                         Main.dust[num2].fadeIn = i + 1;
                     }
                 }
@@ -780,7 +771,7 @@ namespace Polarities.NPCs
         {
             if (player.InModBiome(GetInstance<HallowInvasion>()))
             {
-                spawnRate = (int)(spawnRate / 2);
+                spawnRate = spawnRate / 2;
             }
 
             spawnRate = (int)(spawnRate * player.GetModPlayer<PolaritiesPlayer>().spawnRate);
@@ -810,16 +801,16 @@ namespace Polarities.NPCs
             if (Polarities.customNPCGlowMasks.ContainsKey(npc.type))
             {
                 float num246 = Main.NPCAddHeight(npc);
-                SpriteEffects spriteEffects = (SpriteEffects)0;
+                SpriteEffects spriteEffects = 0;
                 if (npc.spriteDirection == 1)
                 {
                     spriteEffects = (SpriteEffects)1;
                 }
-                Vector2 halfSize = new Vector2((float)(Polarities.customNPCGlowMasks[npc.type].Width() / 2), (float)(Polarities.customNPCGlowMasks[npc.type].Height() / Main.npcFrameCount[npc.type] / 2));
+                Vector2 halfSize = new Vector2(Polarities.customNPCGlowMasks[npc.type].Width() / 2, Polarities.customNPCGlowMasks[npc.type].Height() / Main.npcFrameCount[npc.type] / 2);
 
                 Color color = npc.GetAlpha(npc.GetNPCColorTintedByBuffs(Color.White));
 
-                spriteBatch.Draw(Polarities.customNPCGlowMasks[npc.type].Value, npc.Bottom - screenPos + new Vector2((float)(-Polarities.customNPCGlowMasks[npc.type].Width()) * npc.scale / 2f + halfSize.X * npc.scale, (float)(-Polarities.customNPCGlowMasks[npc.type].Height()) * npc.scale / (float)Main.npcFrameCount[npc.type] + 4f + halfSize.Y * npc.scale + num246 + npc.gfxOffY), (Rectangle?)npc.frame, color, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
+                spriteBatch.Draw(Polarities.customNPCGlowMasks[npc.type].Value, npc.Bottom - screenPos + new Vector2(-Polarities.customNPCGlowMasks[npc.type].Width() * npc.scale / 2f + halfSize.X * npc.scale, -Polarities.customNPCGlowMasks[npc.type].Height() * npc.scale / Main.npcFrameCount[npc.type] + 4f + halfSize.Y * npc.scale + num246 + npc.gfxOffY), (Rectangle?)npc.frame, color, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
             }
         }
 
@@ -895,7 +886,7 @@ namespace Polarities.NPCs
 
         public override void OnKill(NPC npc)
         {
-            switch(npc.type)
+            switch (npc.type)
             {
                 case NPCID.EaterofWorldsBody:
                 case NPCID.EaterofWorldsHead:
@@ -933,7 +924,7 @@ namespace Polarities.NPCs
                 npcLoot.Add(ItemDropRule.NormalvsExpert(ItemID.SlimeStaff, 10000, 7000));
             }
 
-            switch(npc.type)
+            switch (npc.type)
             {
                 case NPCID.GraniteFlyer:
                 case NPCID.GraniteGolem:
@@ -1024,7 +1015,7 @@ namespace Polarities.NPCs
 
             //replace trophies and master pets
             List<IItemDropRule> originalLoot = npcLoot.Get(includeGlobalDrops: false);
-            for(int index = 0; index < originalLoot.Count; index++)
+            for (int index = 0; index < originalLoot.Count; index++)
             {
                 IItemDropRule rule = originalLoot[index];
 
