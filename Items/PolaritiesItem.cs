@@ -151,12 +151,6 @@ namespace Polarities.Items
         {
         }
 
-        public override void UpdateEquip(Item item, Player player)
-        {
-            if (item.ModItem is EquipItem equip)
-                player.Polarities().equips[item.type] = equip;
-        }
-
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             try

@@ -1,3 +1,8 @@
+C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.csproj.AssemblyReference.cache
+C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.AssemblyInfoInputs.cache
+C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.AssemblyInfo.cs
+C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.csproj.CoreCompileInputs.cache
 C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\bin\Debug\net6.0\Polarities.deps.json
 C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\bin\Debug\net6.0\Polarities.dll
 C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\bin\Debug\net6.0\ref\Polarities.dll
@@ -159,11 +164,6 @@ C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\bi
 C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\bin\Debug\net6.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\bin\Debug\net6.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\bin\Debug\net6.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
-C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.csproj.AssemblyReference.cache
-C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.AssemblyInfoInputs.cache
-C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.AssemblyInfo.cs
-C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.csproj.CoreCompileInputs.cache
 C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.csproj.CopyComplete
 C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\Polarities.dll
 C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\obj\Debug\net6.0\ref\Polarities.dll

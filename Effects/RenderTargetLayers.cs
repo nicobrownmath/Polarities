@@ -319,4 +319,3 @@ namespace Polarities.Effects
         }
     }
 }
-
