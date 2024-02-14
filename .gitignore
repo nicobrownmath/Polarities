@@ -1,0 +1,12 @@
+*.user
+.vs/
+.cache/
+# same as .vs/ but for rider
+.idea/
+bin/
+obj/
+Assets/Shaders/.compiler
+*.ase
+*.ini
+*.Temp
+*.Temp.*
