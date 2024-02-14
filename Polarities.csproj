@@ -15,13 +15,4 @@
       <HintPath>..\..\ModReader\MultiHitboxNPCLibrary\MultiHitboxNPCLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <EditorConfigFiles Remove="C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\.editorconfig" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Localization\en-US_Mods.Polarities.Condition.hjson" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="C:\Users\nalyddd\Documents\My Games\Terraria\tModLoader\ModSources\Polarities\.editorconfig" />
-  </ItemGroup>
 </Project>
