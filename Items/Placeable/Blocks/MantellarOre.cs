@@ -2,6 +2,7 @@
 using Polarities.Dusts;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -46,12 +47,11 @@ namespace Polarities.Items.Placeable.Blocks
 			Main.tileSolid[Type] = true;
 			Main.tileBlockLight[Type] = true;
 
-			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("{$Mods.Polarities.ItemName.MantellarOre}");
+			LocalizedText name = CreateMapEntryName();
+			// name.SetDefault("{$Mods.Polarities.ItemName.MantellarOre}");
 			AddMapEntry(new Color(255, 200, 0), name);
 
 			DustType = DustType<MantellarDust>();
-			ItemDrop = ItemType<MantellarOre>();
 
 			HitSound = SoundID.Tink;
 

@@ -45,19 +45,10 @@ namespace Polarities.NPCs.StormCloudfish
             //group with other bosses
             NPCID.Sets.BossBestiaryPriority.Add(Type);
 
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.Confused,
-                }
-            };
-            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
-
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, new()
             {
                 SpriteDirection = 1
-            };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifiers);
+            });
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -682,13 +673,9 @@ namespace Polarities.NPCs.StormCloudfish
             return NPC.ai[0] == 1 || NPC.ai[0] == 2;
         }
 
-        public override bool? CanHitNPC(NPC target)
+        public override bool CanHitNPC(NPC target)
         {
-            if (NPC.ai[0] == 1 || NPC.ai[0] == 2)
-            {
-                return null;
-            }
-            return false;
+            return NPC.ai[0] == 1 || NPC.ai[0] == 2;
         }
 
         public static Asset<Texture2D> GlowTexture;
@@ -803,7 +790,7 @@ namespace Polarities.NPCs.StormCloudfish
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (Main.netMode != 1)
             {
@@ -883,7 +870,7 @@ namespace Polarities.NPCs.StormCloudfish
             Projectile.velocity *= 0.98f;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (Projectile.ai[1] == 0)
             {

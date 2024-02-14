@@ -30,16 +30,11 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 		{
 			Main.npcFrameCount[NPC.type] = 9;
 
-			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-			{
-				SpecificallyImmuneTo = new int[] {
-					BuffID.Confused,
-					BuffID.OnFire
-				}
-			};
-			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire3] = true;
 
-			PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.HallowInvasion;
+            PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.HallowInvasion;
 			PolaritiesNPC.npcTypeCap[Type] = 1;
 		}
 
@@ -269,19 +264,19 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			}
 		}
 
-		public override void ModifyHitByProjectile(Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
 		{
 			if (NPC.localAI[2] != 0)
 			{
-				damage /= 2;
+                modifiers.FinalDamage /= 2;
 			}
 		}
 
-		public override void ModifyHitByItem(Player player, Item item, ref int damage, ref float knockback, ref bool crit)
+		public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers)
 		{
 			if (NPC.localAI[2] != 0)
 			{
-				damage /= 2;
+				modifiers.FinalDamage /= 2;
 			}
 		}
 
@@ -412,7 +407,7 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarites.ItemName.Sunblade}");
+			// DisplayName.SetDefault("{$Mods.Polarites.ItemName.Sunblade}");
 
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 15;
 			ProjectileID.Sets.TrailingMode[Projectile.type] = 2;

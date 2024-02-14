@@ -82,7 +82,7 @@ namespace Polarities.Items.Weapons.Melee
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.Sunblade}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ItemName.Sunblade}");
 
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 15;
 			ProjectileID.Sets.TrailingMode[Projectile.type] = 2;

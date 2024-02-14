@@ -58,7 +58,7 @@ namespace Polarities.Items.Armor.AerogelArmor
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Aerogel Hood");
+			// DisplayName.SetDefault("Aerogel Hood");
 
 			this.SetResearch(1);
 		}

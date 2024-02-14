@@ -134,7 +134,7 @@ namespace Polarities.Items.Weapons.Magic
             Projectile.velocity = Projectile.velocity.RotatedBy(Projectile.ai[1] * MathHelper.Pi / 30);
             Dust.NewDustPerfect(Projectile.Center, DustID.Smoke, Velocity: Vector2.Zero, newColor: new Color(96, 96, 128), Scale: 1.5f).noGravity = true;
         }
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (Projectile.ai[0] == 0 && Main.myPlayer == Projectile.owner)
             {

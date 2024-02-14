@@ -349,7 +349,7 @@ namespace Polarities.Items.Weapons.Melee
             if (parent != -1) Projectile.localAI[1] = Main.rand.NextFloat(60f);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (numChildren < 3 && Main.player[Projectile.owner].ownedProjectileCounts[Projectile.type] < 13)
             {
@@ -359,7 +359,7 @@ namespace Polarities.Items.Weapons.Melee
             Projectile.timeLeft = 240;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (parent != -1 && Main.projectile[parent].active && Main.projectile[parent].type == Projectile.type)
             {

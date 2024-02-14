@@ -39,19 +39,14 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             Polarities.customNPCGlowMasks[Type] = TextureAssets.Npc[Type];
             PolaritiesNPC.canSpawnInLava.Add(Type);
 
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.Confused,
-                    BuffID.OnFire,
-                    BuffID.Frostburn,
-                    BuffID.OnFire3,
-                    BuffID.ShadowFlame,
-                    BuffID.CursedInferno,
-                    BuffType<Incinerating>()
-                }
-            };
-            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire3] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frostburn] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frostburn2] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.ShadowFlame] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.CursedInferno] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][ModContent.BuffType<Incinerating>()] = true;
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -343,7 +338,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             }
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             target.AddBuff(BuffType<Incinerating>(), 60, true);
         }
@@ -422,7 +417,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Lava, Scale: 1.5f)].noGravity = true;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffType<Incinerating>(), 60, true);
         }
@@ -439,7 +434,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             return true;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.NPCHit9, Projectile.Center);
             for (int i = 0; i < 16; i++)
@@ -475,7 +470,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             Projectile.hide = true;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffType<Incinerating>(), 60, true);
         }

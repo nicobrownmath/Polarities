@@ -184,7 +184,7 @@ namespace Polarities.NPCs.Enemies
             return true;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             target.AddBuff(BuffID.Poisoned, 300);
         }
@@ -238,7 +238,7 @@ namespace Polarities.NPCs.Enemies
             return false;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             NPC.NewNPC(Projectile.GetSource_Death(), (int)Projectile.Center.X, (int)Projectile.Center.Y, NPCType<Rattler>());
             SoundEngine.PlaySound(SoundID.Item17, Projectile.Center);

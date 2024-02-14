@@ -148,7 +148,7 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 			return false;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			Player player = Main.player[Projectile.owner];
 			Vector2 startPos = player.Center + new Vector2(player.direction * 8, -24);
@@ -245,12 +245,12 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 			return false;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffType<Buffs.Corroding>(), 60 * 5);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			for (int i = 0; i < 10; i++)
 			{

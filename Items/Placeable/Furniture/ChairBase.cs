@@ -43,105 +43,109 @@ namespace Polarities.Items.Placeable.Furniture
             {
 				StaticLoaded = true;
 
-                On.Terraria.GameContent.PlayerSittingHelper.GetSittingTargetInfo += PlayerSittingHelper_GetSittingTargetInfo;
+                Terraria.GameContent.On_PlayerSittingHelper.GetSittingTargetInfo += On_PlayerSittingHelper_GetSittingTargetInfo; ;
 			}
+        }
+
+        private static bool On_PlayerSittingHelper_GetSittingTargetInfo(Terraria.GameContent.On_PlayerSittingHelper.orig_GetSittingTargetInfo orig, Player player, int x, int y, out int targetDirection, out Vector2 playerSittingPosition, out Vector2 seatDownOffset, out Terraria.GameContent.ExtraSeatInfo extraInfo)
+        {
+            Tile tileSafely = Framing.GetTileSafely(x, y);
+            if (IsChairTileBase[tileSafely.TileType])
+            {
+                if (!TileID.Sets.CanBeSatOnForPlayers[tileSafely.TileType] || !tileSafely.HasTile)
+                {
+                    targetDirection = 1;
+                    seatDownOffset = Vector2.Zero;
+                    playerSittingPosition = default(Vector2);
+                    extraInfo = default;
+                    return false;
+                }
+                int num = x;
+                int num2 = y;
+                targetDirection = 1;
+                seatDownOffset = Vector2.Zero;
+                int num3 = 6;
+                Vector2 zero = Vector2.Zero;
+
+                seatDownOffset.Y = 0;//(tileSafely.TileFrameY / 40 == 27).ToInt() * 4; this is only used for the dynasty chair so ignore
+                if (tileSafely.TileFrameY % 40 != 0)
+                {
+                    num2--;
+                }
+                targetDirection = -1;
+                if (tileSafely.TileFrameX != 0)
+                {
+                    targetDirection = 1;
+                }
+
+                playerSittingPosition = Utils.ToWorldCoordinates(new Point(num, num2 + 1), 8f, 16f);
+                playerSittingPosition.X += targetDirection * num3;
+                playerSittingPosition += zero;
+                extraInfo = default;
+                return true;
+            }
+            else if (SofaTileBase.IsSofaTileBase[tileSafely.TileType])
+            {
+                if (!TileID.Sets.CanBeSatOnForPlayers[tileSafely.TileType] || !tileSafely.HasTile)
+                {
+                    targetDirection = 1;
+                    seatDownOffset = Vector2.Zero;
+                    playerSittingPosition = default(Vector2);
+                    extraInfo = default;
+                    return false;
+                }
+                int num = x;
+                int num2 = y;
+                targetDirection = 1;
+                seatDownOffset = Vector2.Zero;
+                int num3 = 6;
+                Vector2 zero = Vector2.Zero;
+
+                targetDirection = player.direction;
+                num3 = 0;
+                Vector2 vector = new Vector2(-4f, 2f);
+                Vector2 vector2 = new Vector2(4f, 2f);
+                Vector2 vector3 = new Vector2(0f, 2f);
+                Vector2 zero2 = Vector2.Zero;
+                zero2.X = 1f;
+                zero.X = -1f;
+
+                (TileLoader.GetTile(tileSafely.TileType) as SofaTileBase).ModifySittingPosition(ref vector, ref vector2, ref vector3);
+
+                if (tileSafely.TileFrameY % 40 != 0)
+                {
+                    num2--;
+                }
+                if ((tileSafely.TileFrameX % 54 == 0 && targetDirection == -1) || (tileSafely.TileFrameX % 54 == 36 && targetDirection == 1))
+                {
+                    seatDownOffset = vector;
+                }
+                else if ((tileSafely.TileFrameX % 54 == 0 && targetDirection == 1) || (tileSafely.TileFrameX % 54 == 36 && targetDirection == -1))
+                {
+                    seatDownOffset = vector2;
+                }
+                else
+                {
+                    seatDownOffset = vector3;
+                }
+                seatDownOffset += zero2;
+
+                playerSittingPosition = Utils.ToWorldCoordinates(new Point(num, num2 + 1), 8f, 16f);
+                playerSittingPosition.X += targetDirection * num3;
+                playerSittingPosition += zero;
+                extraInfo = default;
+                return true;
+            }
+            else
+            {
+                return orig(player, x, y, out targetDirection, out playerSittingPosition, out seatDownOffset, out extraInfo);
+            }
         }
 
         public override void Unload()
         {
 			IsChairTileBase = null;
 		}
-
-        private bool PlayerSittingHelper_GetSittingTargetInfo(On.Terraria.GameContent.PlayerSittingHelper.orig_GetSittingTargetInfo orig, Player player, int x, int y, out int targetDirection, out Vector2 playerSittingPosition, out Vector2 seatDownOffset)
-        {
-			Tile tileSafely = Framing.GetTileSafely(x, y);
-			if (IsChairTileBase[tileSafely.TileType])
-			{
-				if (!TileID.Sets.CanBeSatOnForPlayers[tileSafely.TileType] || !tileSafely.HasTile)
-				{
-					targetDirection = 1;
-					seatDownOffset = Vector2.Zero;
-					playerSittingPosition = default(Vector2);
-					return false;
-				}
-				int num = x;
-				int num2 = y;
-				targetDirection = 1;
-				seatDownOffset = Vector2.Zero;
-				int num3 = 6;
-				Vector2 zero = Vector2.Zero;
-
-				seatDownOffset.Y = 0;//(tileSafely.TileFrameY / 40 == 27).ToInt() * 4; this is only used for the dynasty chair so ignore
-				if (tileSafely.TileFrameY % 40 != 0)
-				{
-					num2--;
-				}
-				targetDirection = -1;
-				if (tileSafely.TileFrameX != 0)
-				{
-					targetDirection = 1;
-				}
-
-				playerSittingPosition = Utils.ToWorldCoordinates(new Point(num, num2 + 1), 8f, 16f);
-				playerSittingPosition.X += targetDirection * num3;
-				playerSittingPosition += zero;
-				return true;
-			}
-			else if (SofaTileBase.IsSofaTileBase[tileSafely.TileType])
-            {
-				if (!TileID.Sets.CanBeSatOnForPlayers[tileSafely.TileType] || !tileSafely.HasTile)
-				{
-					targetDirection = 1;
-					seatDownOffset = Vector2.Zero;
-					playerSittingPosition = default(Vector2);
-					return false;
-				}
-				int num = x;
-				int num2 = y;
-				targetDirection = 1;
-				seatDownOffset = Vector2.Zero;
-				int num3 = 6;
-				Vector2 zero = Vector2.Zero;
-
-				targetDirection = player.direction;
-				num3 = 0;
-				Vector2 vector = new Vector2(-4f, 2f);
-				Vector2 vector2 = new Vector2(4f, 2f);
-				Vector2 vector3 = new Vector2(0f, 2f);
-				Vector2 zero2 = Vector2.Zero;
-				zero2.X = 1f;
-				zero.X = -1f;
-
-				(TileLoader.GetTile(tileSafely.TileType) as SofaTileBase).ModifySittingPosition(ref vector, ref vector2, ref vector3);
-
-				if (tileSafely.TileFrameY % 40 != 0)
-				{
-					num2--;
-				}
-				if ((tileSafely.TileFrameX % 54 == 0 && targetDirection == -1) || (tileSafely.TileFrameX % 54 == 36 && targetDirection == 1))
-				{
-					seatDownOffset = vector;
-				}
-				else if ((tileSafely.TileFrameX % 54 == 0 && targetDirection == 1) || (tileSafely.TileFrameX % 54 == 36 && targetDirection == -1))
-				{
-					seatDownOffset = vector2;
-				}
-				else
-				{
-					seatDownOffset = vector3;
-				}
-				seatDownOffset += zero2;
-
-				playerSittingPosition = Utils.ToWorldCoordinates(new Point(num, num2 + 1), 8f, 16f);
-				playerSittingPosition.X += targetDirection * num3;
-				playerSittingPosition += zero;
-				return true;
-			}
-			else
-			{
-				return orig(player, x, y, out targetDirection, out playerSittingPosition, out seatDownOffset);
-			}
-        }
 
         public override void SetStaticDefaults()
 		{

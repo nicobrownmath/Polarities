@@ -54,7 +54,7 @@ namespace Polarities.Items.Placeable.Furniture
 
 			DustType = MyDustType;
 			AdjTiles = new int[] { TileID.ClosedDoor };
-			OpenDoorID = OpenVersion;
+            TileID.Sets.OpenDoorID[Type] = OpenVersion;
 
 			// Names
 			AddMapEntry(MapColor, Language.GetText("MapObject.Door"));
@@ -127,7 +127,7 @@ namespace Polarities.Items.Placeable.Furniture
 
 			DustType = MyDustType;
 			AdjTiles = new int[] { TileID.OpenDoor };
-			CloseDoorID = ClosedVersion;
+            TileID.Sets.CloseDoorID[Type] = ClosedVersion;
 
 			// Names
 			AddMapEntry(MapColor, Language.GetText("MapObject.Door"));

@@ -189,7 +189,7 @@ namespace Polarities.NPCs.Critters
         {
             this.SetResearch(5);
 
-            DisplayName.SetDefault("{$Mods.Polarities.NPCName.BabyWanderer}");
+            // DisplayName.SetDefault("{$Mods.Polarities.NPCName.BabyWanderer}");
 
             ItemID.Sets.IsLavaBait[Type] = true;
         }

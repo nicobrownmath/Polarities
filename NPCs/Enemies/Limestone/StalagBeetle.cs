@@ -157,7 +157,7 @@ namespace Polarities.NPCs.Enemies.Limestone
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Boiling Fluid");
+            // DisplayName.SetDefault("Boiling Fluid");
         }
 
         public override void SetDefaults()
@@ -179,7 +179,7 @@ namespace Polarities.NPCs.Enemies.Limestone
             Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 74, Scale: 1f)].velocity = new Vector2(0.5f, 0).RotatedByRandom(MathHelper.TwoPi);
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffType<Buffs.Corroding>(), 15 * 60);
         }

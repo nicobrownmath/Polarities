@@ -329,7 +329,7 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.ProjectileName.GlobusCrucigerMinionBlade}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ProjectileName.GlobusCrucigerMinionBlade}");
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
@@ -386,7 +386,7 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.ProjectileName.GlobusCrucigerMinionBlade}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ProjectileName.GlobusCrucigerMinionBlade}");
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 

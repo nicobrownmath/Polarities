@@ -82,7 +82,7 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
 
         public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.WoodenDart}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ItemName.WoodenDart}");
         }
 
         public override void SetDefaults()

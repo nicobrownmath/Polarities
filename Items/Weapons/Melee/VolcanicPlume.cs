@@ -19,8 +19,8 @@ namespace Polarities.Items.Weapons.Melee
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Volcanic Plume");
-            Tooltip.SetDefault("Flies to the cursor and produces an explosion of volcanic fireballs");
+            // DisplayName.SetDefault("Volcanic Plume");
+            // Tooltip.SetDefault("Flies to the cursor and produces an explosion of volcanic fireballs");
 
             this.SetResearch(1);
         }
@@ -74,7 +74,7 @@ namespace Polarities.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Volcanic Plume");
+            // DisplayName.SetDefault("Volcanic Plume");
 
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
@@ -163,7 +163,7 @@ namespace Polarities.Items.Weapons.Melee
             Projectile.rotation += 0.5f * Projectile.spriteDirection;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Projectile.ai[0] == 0)
             {
@@ -172,7 +172,7 @@ namespace Polarities.Items.Weapons.Melee
             target.AddBuff(BuffID.OnFire, 1200);
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             if (Projectile.ai[0] == 0)
             {
@@ -232,7 +232,7 @@ namespace Polarities.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Volcanic Blast");
+            // DisplayName.SetDefault("Volcanic Blast");
         }
 
         public override void SetDefaults()
@@ -271,12 +271,12 @@ namespace Polarities.Items.Weapons.Melee
             DrawLayer.AddProjectile<DrawLayerAdditiveAfterProjectiles>(index);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 1200);
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.OnFire, 1200);
         }
@@ -306,7 +306,7 @@ namespace Polarities.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Volcanic Fireball");
+            // DisplayName.SetDefault("Volcanic Fireball");
 
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
@@ -354,7 +354,7 @@ namespace Polarities.Items.Weapons.Melee
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 1200);
             TryExplode();
@@ -367,7 +367,7 @@ namespace Polarities.Items.Weapons.Melee
             return false;
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.OnFire, 1200);
             TryExplode();

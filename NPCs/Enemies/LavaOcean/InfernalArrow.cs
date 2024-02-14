@@ -39,25 +39,19 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             Polarities.customNPCGlowMasks[Type] = TextureAssets.Npc[Type];
             PolaritiesNPC.canSpawnInLava.Add(Type);
 
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.Confused,
-                    BuffID.OnFire,
-                    BuffID.Frostburn,
-                    BuffID.OnFire3,
-                    BuffID.ShadowFlame,
-                    BuffID.CursedInferno,
-                    BuffType<Incinerating>()
-                }
-            };
-            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire3] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frostburn] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frostburn2] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.ShadowFlame] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.CursedInferno] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][ModContent.BuffType<Incinerating>()] = true;
 
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, new()
             {
                 Rotation = -3 * MathHelper.PiOver4
-            };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifiers);
+            });
 
             Main.npcFrameCount[Type] = 5;
         }
@@ -164,12 +158,12 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             }
         }
 
-        public override void HitEffect(int hitDirection, double damage)
+        public override void HitEffect(NPC.HitInfo hit)
         {
             //adapted from the vanilla weapon eneimies
             if (NPC.life > 0)
             {
-                for (int num473 = 0; (double)num473 < damage / (double)NPC.lifeMax * 50.0; num473++)
+                for (int num473 = 0; (double)num473 < hit.Damage / (double)NPC.lifeMax * 50.0; num473++)
                 {
                     int num474 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 31, 0f, 0f, 0, default(Color), 1.5f);
                     Main.dust[num474].noGravity = true;
@@ -198,7 +192,7 @@ namespace Polarities.NPCs.Enemies.LavaOcean
             gore28.velocity *= 0.5f;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             target.AddBuff(BuffID.OnFire, 60);
         }

@@ -57,7 +57,6 @@ namespace Polarities.Items.Placeable.Furniture
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
 			DustType = MyDustType;
-			ItemDrop = DropItem;
 
 			AddMapEntry(MapColor, Lang.GetItemName(ItemID.Candle));
 		}

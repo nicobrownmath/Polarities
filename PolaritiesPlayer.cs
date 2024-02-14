@@ -56,15 +56,14 @@ namespace Polarities
         public override void Load()
         {
 			//allow crits from enemies
-            IL.Terraria.Player.Update_NPCCollision += Player_Update_NPCCollision;
-            //modify color of damage text for crits from enemies
-            IL.Terraria.Player.Hurt += Player_Hurt;
+            Terraria.IL_Player.Update_NPCCollision += Player_Update_NPCCollision;
+
             //modify damage numbers for negative life regen effects
-            IL.Terraria.Player.UpdateLifeRegen += Player_UpdateLifeRegen;
+            Terraria.IL_Player.UpdateLifeRegen += Player_UpdateLifeRegen;
             //dev armor
-            On.Terraria.Player.TryGettingDevArmor += Player_TryGettingDevArmor;
+            Terraria.On_Player.TryGettingDevArmor += Player_TryGettingDevArmor;
 			//customskies
-			IL.Terraria.Player.UpdateBiomes += Player_UpdateBiomes;
+			Terraria.IL_Player.UpdateBiomes += Player_UpdateBiomes;
         }
 
 		public int warhammerDefenseBoost = 0;
@@ -97,7 +96,11 @@ namespace Polarities
 		public int moonLordLifestealCooldown;
 		public int wingTimeBoost;
 		public float critDamageBoostMultiplier;
-		public int ignoreCritDefenseAmount;
+        [Obsolete("Replaced with statFlatCritDamage. Since armor penetration on crit is really stupid to implement now.")]
+		public int ignoreCritDefenseAmount { get => statFlatCritDamage; set => statFlatCritDamage = value; }
+
+        public int statFlatCritDamage;
+
 		public bool snakescaleSetBonus;
 		public int desiccation;
 		public int incineration;
@@ -195,7 +198,7 @@ namespace Polarities
 			skeletronBook = false;
 			wingTimeBoost = 0;
 			critDamageBoostMultiplier = 1f;
-			ignoreCritDefenseAmount = 0;
+			statFlatCritDamage = 0;
 			snakescaleSetBonus = false;
 			desiccation = 0;
 			incineration = 0;
@@ -516,8 +519,8 @@ namespace Polarities
 			canJumpAgain_Sail_Extra = false;
 			if (Player.HasBuff(BuffType<KingSlimeBookBuff>()))
 			{
-				if (Player.hasJumpOption_Sail) { canJumpAgain_Sail_Extra = true; }
-				Player.hasJumpOption_Sail = true;
+				if (Player.GetJumpState(ExtraJump.TsunamiInABottle).Enabled) { canJumpAgain_Sail_Extra = true; }
+				Player.GetJumpState(ExtraJump.TsunamiInABottle).Enable();
 			}
 
 			if (stargelAmulet)
@@ -612,10 +615,10 @@ namespace Polarities
 				{
 					jumpAgain_Sail_Extra = true;
 				}
-				if (!Player.canJumpAgain_Sail && jumpAgain_Sail_Extra)
+				if (!Player.GetJumpState(ExtraJump.TsunamiInABottle).Available && jumpAgain_Sail_Extra)
 				{
 					jumpAgain_Sail_Extra = false;
-					Player.canJumpAgain_Sail = true;
+					Player.GetJumpState(ExtraJump.TsunamiInABottle).Available = true;
 				}
 			}
 
@@ -688,7 +691,7 @@ namespace Polarities
 
 			if (limestoneSetBonusHitCooldown > 0)
 			{
-				Player.statDefense = 0;
+				Player.statDefense *= 0;
 			}
 
             //update bubby vanity wing frames
@@ -863,19 +866,19 @@ namespace Polarities
 			}
         }
 
-        public override bool? CanHitNPC(Item item, NPC target)
+        public override bool? CanHitNPCWithItem(Item item, NPC target)
 		{
 			if (target.GetGlobalNPC<PolaritiesNPC>().usesProjectileHitCooldowns && itemHitCooldown > 0)
 			{
 				return false;
 			}
 
-			return base.CanHitNPC(item, target);
+			return base.CanHitNPCWithItem(item, target);
 		}
 
-        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)/* tModPorter If you don't need the Item, consider using OnHitNPC instead */
 		{
-			OnHitNPCWithAnything(target, damage, knockback, crit, item.DamageType);
+			OnHitNPCWithAnything(target, hit);
 
 			if (target.GetGlobalNPC<PolaritiesNPC>().usesProjectileHitCooldowns)
 			{
@@ -888,9 +891,9 @@ namespace Polarities
 			}
 		}
 
-        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)/* tModPorter If you don't need the Projectile, consider using OnHitNPC instead */
 		{
-			OnHitNPCWithAnything(target, damage, knockback, crit, proj.DamageType);
+			OnHitNPCWithAnything(target, hit);
 
 			if (proj.IsTypeSummon())
 			{
@@ -904,16 +907,16 @@ namespace Polarities
 			}
 		}
 
-		public void OnHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, DamageClass damageClass)
+		public void OnHitNPCWithAnything(NPC target, NPC.HitInfo hit)
 		{
-			if (snakescaleSetBonus && crit)
+			if (snakescaleSetBonus && hit.Crit)
 			{
 				target.AddBuff(BuffID.Venom, 5 * 60);
 			}
 
 			if (moonLordLifestealCooldown == 0 && Player.HasBuff(BuffType<MoonLordBookBuff>()) && !Player.moonLeech)
 			{
-				float baseLifestealAmount = (float)Math.Log(damage * Math.Pow(Main.rand.NextFloat(1f), 4));
+				float baseLifestealAmount = (float)Math.Log(hit.Damage * Math.Pow(Main.rand.NextFloat(1f), 4));
 				if (baseLifestealAmount >= 1)
 				{
 					moonLordLifestealCooldown = 10;
@@ -922,20 +925,27 @@ namespace Polarities
 				}
 			}
 
-			if (damageClass != DamageClass.Magic && !damageClass.GetEffectInheritance(DamageClass.Magic) && solarEnergizer)
+			if (hit.DamageType != DamageClass.Magic && !hit.DamageType.GetEffectInheritance(DamageClass.Magic) && solarEnergizer)
             {
 				Player.statMana ++;
 			}
 		}
 
-        public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
+        public override void OnHurt(Player.HurtInfo info)
 		{
+            if (_critByEnemyEffects)
+            {
+                // TODO: Crit effects
+            }
+
 			//TODO: (MAYBE) Replace with source propagation system once supported/if it doesn't end up being trivially supported, also move terraprisma to be obtained on any flawless run if/when this system is added
 			for (int i = 0; i < Main.maxNPCs; i++)
             {
 				if (Main.npc[i].active)
-					Main.npc[i].GetGlobalNPC<PolaritiesNPC>().flawless = false;
-			}
+                {
+                    Main.npc[i].GetGlobalNPC<PolaritiesNPC>().flawless = false;
+                }
+            }
 
 			if (strangeObituary)
 			{
@@ -1092,56 +1102,44 @@ namespace Polarities
 			return Player.dashType == 0 && !Player.setSolar && !Player.mount.Active;
 		}
 
-        public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
+        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Item, consider using ModifyHitNPC instead */
 		{
-			ModifyHitNPCWithAnything(target, item.DamageType, ref damage, ref knockback, ref crit);
+			ModifyHitNPCWithAnything(target, ref modifiers);
 		}
 
-        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Projectile, consider using ModifyHitNPC instead */
 		{
-			ModifyHitNPCWithAnything(target, proj.DamageType, ref damage, ref knockback, ref crit);
+			ModifyHitNPCWithAnything(target, ref modifiers);
 		}
 
-		public void ModifyHitNPCWithAnything(NPC target, DamageClass damageType, ref int damage, ref float knockback, ref bool crit)
+		public void ModifyHitNPCWithAnything(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			if (damageType != DamageClass.Magic && damageType.GetModifierInheritance(DamageClass.Magic).damageInheritance == 0f && damageType.GetModifierInheritance(DamageClass.Generic).Equals(StatInheritanceData.Full))
+			if (modifiers.DamageType != DamageClass.Magic && modifiers.DamageType.GetModifierInheritance(DamageClass.Magic).damageInheritance == 0f && modifiers.DamageType.GetModifierInheritance(DamageClass.Generic).Equals(StatInheritanceData.Full))
             {
-				damage = (int)(damage * nonMagicDamage.Additive * nonMagicDamage.Multiplicative);
+                modifiers.FinalDamage *= nonMagicDamage.Additive * nonMagicDamage.Multiplicative;
             }
 
-			if (target.HasBuff(BuffType<Pinpointed>()) && Main.rand.NextBool()) crit = true;
+			if (target.HasBuff(BuffType<Pinpointed>()) && Main.rand.NextBool())
+            {
+                modifiers.SetCrit();
+            }
 
 			target.GetGlobalNPC<PolaritiesNPC>().ignoredDefenseFromCritAmount = 0;
-			if (crit)
-			{
-				damage = Math.Max(damage, (int)(damage * critDamageBoostMultiplier));
-				target.GetGlobalNPC<PolaritiesNPC>().ignoredDefenseFromCritAmount = ignoreCritDefenseAmount;
-			}
+            modifiers.CritDamage += critDamageBoostMultiplier;
+            modifiers.CritDamage.Flat += statFlatCritDamage;
 		}
 
-        public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
-		{
-			ModifyHitByAnything(ref damage, ref crit);
-		}
+        static readonly Color DamagedFriendlyCritFromEnemyColor = new Color(255, 0, 0);
+        private bool _critByEnemyEffects;
 
-		public override void ModifyHitByProjectile(Projectile projectile, ref int damage, ref bool crit)
-		{
-			ModifyHitByAnything(ref damage, ref crit);
-		}
-
-		public void ModifyHitByAnything(ref int damage, ref bool crit)
-		{
-			if (Player.HasBuff(BuffType<Pinpointed>()) && Main.rand.NextBool()) crit = true;
-		}
-
-        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
+        public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
-            if (crit && !pvp)
+            _critByEnemyEffects = false;
+            if (Player.HasBuff(BuffType<Pinpointed>()) && Main.rand.NextBool())
             {
-				damage = (int)(Main.CalculateDamagePlayersTake(damage, Player.statDefense)) * 2;
-				customDamage = true;
+                modifiers.FinalDamage *= 2;
+                _critByEnemyEffects = true;
             }
-			return true;
         }
 
         private void Player_Update_NPCCollision(ILContext il)
@@ -1151,7 +1149,7 @@ namespace Polarities
 			if (!c.TryGotoNext(MoveType.After,
 				i => i.MatchLdarg(0),
 				i => i.MatchLdloc(1),
-				i => i.MatchCall(typeof(Terraria.DataStructures.PlayerDeathReason).GetMethod("ByNPC", BindingFlags.Public | BindingFlags.Static)),
+				i => i.MatchCall(typeof(PlayerDeathReason).GetMethod("ByNPC", BindingFlags.Public | BindingFlags.Static)),
 				i => i.MatchLdloc(11),
 				i => i.MatchLdloc(10),
 				i => i.MatchLdcI4(0),
@@ -1168,7 +1166,6 @@ namespace Polarities
 			c.Emit(OpCodes.Ldloc, 14);
 		}
 
-		static readonly Color DamagedFriendlyCritFromEnemyColor = new Color(255, 0, 0);
 		private void Player_Hurt(ILContext il)
 		{
 			ILCursor c = new ILCursor(il);
@@ -1361,7 +1358,7 @@ namespace Polarities
         }
 
 		//modded dev items
-        private void Player_TryGettingDevArmor(On.Terraria.Player.orig_TryGettingDevArmor orig, Player self, IEntitySource source)
+        private void Player_TryGettingDevArmor(Terraria.On_Player.orig_TryGettingDevArmor orig, Player self, IEntitySource source)
         {
             orig(self, source);
 

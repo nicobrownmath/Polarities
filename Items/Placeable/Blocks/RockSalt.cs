@@ -50,7 +50,6 @@ namespace Polarities.Items.Placeable.Blocks
 			AddMapEntry(new Color(255, 200, 200));
 
 			DustType = DustType<Dusts.SaltDust>();
-			ItemDrop = ItemType<RockSalt>();
 
 			HitSound = SoundID.Dig;
 		}

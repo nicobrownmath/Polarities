@@ -23,14 +23,6 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 		{
 			Main.npcFrameCount[Type] = 19;
 
-			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-			{
-				SpecificallyImmuneTo = new int[] {
-					BuffID.Confused,
-				}
-			};
-			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
-
 			NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
 			{
 				Position = new Vector2(0, 4)

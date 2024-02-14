@@ -96,22 +96,17 @@ namespace Polarities.NPCs.StarConstruct
 			//group with other bosses
 			NPCID.Sets.BossBestiaryPriority.Add(Type);
 
-			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-			{
-				SpecificallyImmuneTo = new int[] {
-					BuffID.Poisoned,
-					BuffID.OnFire,
-					BuffID.Confused
-				}
-			};
-			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire3] = true;
 
-			var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
-			{
-				PortraitPositionYOverride = -0f,
-				Position = new Vector2(0f, 4f)
-			};
-			NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+			NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, new()
+            {
+                PortraitPositionYOverride = -0f,
+                Position = new Vector2(0f, 4f),
+                Scale = 1f
+            });
 
 			Main.npcFrameCount[NPC.type] = 2;
 
@@ -1023,13 +1018,9 @@ namespace Polarities.NPCs.StarConstruct
 			get => NPC.ai[0] == 4 && (NPC.localAI[0] == 1 || !Main.expertMode) && NPC.ai[1] >= 240 && NPC.ai[1] < 480;
 		}
 
-		public override bool? CanHitNPC(NPC target)
+		public override bool CanHitNPC(NPC target)
 		{
-			if (canDamage)
-			{
-				return null;
-			}
-			return false;
+			return canDamage;
 		}
 
 		public override bool CanHitPlayer(Player target, ref int cooldownSlot)
@@ -1305,9 +1296,9 @@ namespace Polarities.NPCs.StarConstruct
 			NPC.dontTakeDamage = true;
 		}
 
-		public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
+		public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
 		{
-			NPC.lifeMax = (int)(1000 * bossLifeScale);
+			NPC.lifeMax = (int)(1000 * balance);
 		}
 
 		public override void AI()
@@ -2043,20 +2034,14 @@ namespace Polarities.NPCs.StarConstruct
 		{
 			NPCID.Sets.CantTakeLunchMoney[Type] = true;
 
-			var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
-			{
-				//don't show up in bestiary
-				Hide = true
-			};
-			NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, new()
+            {
+                Hide = true
+            });
 
 			Main.npcFrameCount[NPC.type] = 11;
 
-			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-			{
-				ImmuneToAllBuffsThatAreNotWhips = true
-			};
-			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+            NPCID.Sets.ImmuneToRegularBuffs[Type] = true;
 
 			PolaritiesNPC.npcTypeCap[Type] = 1;
 		}
@@ -2421,7 +2406,7 @@ namespace Polarities.NPCs.StarConstruct
 			}
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
 			Color newColor7 = Color.CornflowerBlue;

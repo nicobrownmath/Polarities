@@ -67,11 +67,11 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 			return null;
 		}
 
-		public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+		public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
 			target.AddBuff(BuffID.OnFire, DebuffTime);
 
-			base.OnHitNPC(player, target, damage, knockBack, crit);
+			base.OnHitNPC(player, target, hit, damageDone);
         }
 
         public override void MeleeEffects(Player player, Rectangle hitbox)
@@ -109,7 +109,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.SkullMelter}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ItemName.SkullMelter}");
 		}
 
 		public override void SetDefaults()
@@ -177,7 +177,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 			Main.dust[Dust.NewDust(new Vector2(Projectile.Hitbox.X, Projectile.Hitbox.Y), Projectile.Hitbox.Width, Projectile.Hitbox.Height, 6, projOwner.velocity.X / 2, projOwner.velocity.Y / 2, 0, Color.White, 2)].noGravity = true;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockBack, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.OnFire, 1200);
 		}

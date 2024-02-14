@@ -51,7 +51,7 @@ namespace Polarities.Items.Weapons.Melee
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("{$Mods.Polarities.ItemName.Lernaean}");
+            // DisplayName.SetDefault("{$Mods.Polarities.ItemName.Lernaean}");
 
             // The following sets are only applicable to yoyo that use aiStyle 99.
             // YoyosLifeTimeMultiplier is how long in seconds the yoyo will stay out before automatically returning to the player. 
@@ -89,12 +89,12 @@ namespace Polarities.Items.Weapons.Melee
         // ai[0] being negative makes the yoyo move back towards the player
         // Any AI method can be used for dust, spawning projectiles, etc specific to your yoyo.
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Projectile.NewProjectile(Projectile.GetSource_OnHit(target), Projectile.Center, Projectile.velocity, ProjectileType<LernaeanOrbiter>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.whoAmI);
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             Projectile.NewProjectile(Projectile.GetSource_OnHit(target), Projectile.Center, Projectile.velocity, ProjectileType<LernaeanOrbiter>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.whoAmI);
         }

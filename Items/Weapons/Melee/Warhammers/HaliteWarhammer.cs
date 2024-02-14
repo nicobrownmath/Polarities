@@ -36,11 +36,11 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 			Item.rare = ItemRarityID.Blue;
 		}
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffType<Buffs.Desiccating>(), 300);
 
-			base.OnHitNPC(player, target, damage, knockBack, crit);
+			base.OnHitNPC(player, target, hit, damageDone);
         }
 
         public override void AddRecipes()

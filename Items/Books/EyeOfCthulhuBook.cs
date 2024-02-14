@@ -25,7 +25,7 @@ namespace Polarities.Items.Books
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.ProjectileName.EyeruptionProjectile}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ProjectileName.EyeruptionProjectile}");
 
 			Main.projFrames[Projectile.type] = 2;
 			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;

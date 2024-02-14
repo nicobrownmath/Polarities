@@ -49,7 +49,6 @@ namespace Polarities.Items.Placeable.Blocks
 			AddMapEntry(new Color(255, 220, 220));
 
 			DustType = DustType<Dusts.SaltDust>();
-			ItemDrop = ItemType<Salt>();
 
 			HitSound = SoundID.Dig;
 		}
@@ -212,7 +211,7 @@ namespace Polarities.Items.Placeable.Blocks
 			return false;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			if (Projectile.owner == Main.myPlayer && !Projectile.noDropItem)
 			{

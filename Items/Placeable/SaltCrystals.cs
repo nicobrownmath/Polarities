@@ -44,8 +44,6 @@ namespace Polarities.Items.Placeable
 			TileObjectData.newTile.RandomStyleRange = 7;
 			TileObjectData.addTile(Type);
 
-			ItemDrop = ItemType<SaltCrystals>();
-
 			HitSound = SoundID.Shatter;
 
 			AddMapEntry(new Color(255, 240, 240), CreateMapEntryName());

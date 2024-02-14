@@ -30,17 +30,16 @@ namespace Polarities.Items.Placeable.Bars
 			AddMapEntry(new Color(224, 194, 101), Language.GetText("MapObject.MetalBar"));
 		}
 
-		public override bool Drop(int i, int j)
-		{
-			Tile t = Main.tile[i, j];
-			int style = t.TileFrameX / 18;
-			int itemType = BarBase.barIndexToItemType[style];
-			if (itemType != 0)
-			{
-				Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, itemType);
-			}
-			return base.Drop(i, j);
-		}
+        //public override IEnumerable<Item> GetItemDrops(int i, int j)
+        //{
+        //    Tile t = Main.tile[i, j];
+        //    int style = t.TileFrameX / 18;
+        //    int itemType = BarBase.barIndexToItemType[style];
+        //    if (itemType != 0)
+        //    {
+        //        yield return new Item(itemType);
+        //    }
+        //}
 
 		public override bool CreateDust(int i, int j, ref int type)
 		{

@@ -20,14 +20,6 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 		{
 			Main.npcFrameCount[NPC.type] = 2;
 
-			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-			{
-				SpecificallyImmuneTo = new int[] {
-					BuffID.Confused,
-				}
-			};
-			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
-
 			NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
 			{
 				Rotation = 5 * MathHelper.PiOver4
@@ -300,7 +292,7 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 			}
 		}
 
-		public override void OnHitPlayer(Player target, int damage, bool crit)
+		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 		{
 			target.AddBuff(BuffID.Blackout, 60 * Main.rand.Next(2, 7));
 		}

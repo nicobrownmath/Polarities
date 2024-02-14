@@ -244,7 +244,7 @@ namespace Polarities.NPCs.Enemies.Salt
             return false;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             if (Main.expertMode)
             {

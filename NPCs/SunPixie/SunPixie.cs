@@ -58,14 +58,9 @@ namespace Polarities.NPCs.SunPixie
 			//group with other bosses
 			NPCID.Sets.BossBestiaryPriority.Add(Type);
 
-			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-			{
-				SpecificallyImmuneTo = new int[] {
-					BuffID.OnFire,
-					BuffID.Confused
-				}
-			};
-			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire3] = true;
 
 			Main.npcFrameCount[NPC.type] = 6;
 			NPCID.Sets.TrailCacheLength[NPC.type] = 5;
@@ -1047,7 +1042,7 @@ namespace Polarities.NPCs.SunPixie
 			}
 		}
 
-		public override void OnHitPlayer(Player target, int damage, bool crit)
+		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 		{
 			target.AddBuff(BuffID.OnFire, 300, true);
 		}
@@ -1202,7 +1197,7 @@ namespace Polarities.NPCs.SunPixie
 			return false;
 		}
 
-		public override void OnHitPlayer(Player target, int damage, bool crit)
+		public override void OnHitPlayer(Player target, Player.HurtInfo info)
 		{
 			target.AddBuff(BuffID.OnFire, 240, true);
 		}
@@ -1296,7 +1291,7 @@ namespace Polarities.NPCs.SunPixie
 			return false;
 		}
 
-		public override void OnHitPlayer(Player target, int damage, bool crit)
+		public override void OnHitPlayer(Player target, Player.HurtInfo info)
 		{
 			target.AddBuff(BuffID.OnFire, 240, true);
 		}
@@ -1393,7 +1388,7 @@ namespace Polarities.NPCs.SunPixie
 			return false;
 		}
 
-		public override void OnHitPlayer(Player target, int damage, bool crit)
+		public override void OnHitPlayer(Player target, Player.HurtInfo info)
 		{
 			target.AddBuff(BuffID.OnFire, 240, true);
 		}
@@ -1529,7 +1524,7 @@ namespace Polarities.NPCs.SunPixie
 			DrawLayer.AddProjectile<DrawLayerAdditiveAfterNPCs>(index);
 		}
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
 		{
 			target.AddBuff(BuffID.OnFire, 240, true);
 		}
@@ -1580,7 +1575,7 @@ namespace Polarities.NPCs.SunPixie
             }
 		}
 
-		public override void OnHitPlayer(Player target, int damage, bool crit)
+		public override void OnHitPlayer(Player target, Player.HurtInfo info)
 		{
 			target.AddBuff(BuffID.OnFire, 180, true);
 		}
@@ -1591,7 +1586,7 @@ namespace Polarities.NPCs.SunPixie
 			DrawLayer.AddProjectile<DrawLayerAdditiveAfterNPCs>(index);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			for (int i = 0; i < 8; i++)
 			{

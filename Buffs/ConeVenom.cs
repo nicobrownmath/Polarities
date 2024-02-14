@@ -13,8 +13,8 @@ namespace Polarities.Buffs
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Cone Venom");
-			Description.SetDefault("You cannot move\nThis includes your lungs");
+			// DisplayName.SetDefault("Cone Venom");
+			// Description.SetDefault("You cannot move\nThis includes your lungs");
 
 			Main.debuff[Type] = true;
 			Main.buffNoSave[Type] = true;

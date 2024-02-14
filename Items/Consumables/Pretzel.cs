@@ -18,7 +18,7 @@ namespace Polarities.Items.Consumables
 		{
 			this.SetResearch(10);
 
-			Tooltip.SetDefault(Lang.GetTooltip(ItemID.GoldenDelight).GetLine(0));
+			// Tooltip.SetDefault(Lang.GetTooltip(ItemID.GoldenDelight).GetLine(0));
 
 			DrawAnimationVertical animation = new DrawAnimationVertical(1, 3);
 			animation.NotActuallyAnimating = true;

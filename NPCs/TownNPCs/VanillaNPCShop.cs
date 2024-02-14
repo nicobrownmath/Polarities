@@ -21,73 +21,81 @@ namespace Polarities.NPCs
     {
         public override void Load()
         {
-            IL.Terraria.Main.HelpText += Main_HelpText;
+            Terraria.IL_Main.HelpText += Main_HelpText;
         }
 
-        public override void SetupShop(int type, Chest shop, ref int nextSlot)
-		{
-			switch (type)
-			{
-				case NPCID.WitchDoctor:
-					if (NPC.downedPlantBoss && Main.LocalPlayer.ZoneJungle)
-					{
-						shop.item[nextSlot].SetDefaults(ItemType<SymbioticSapling>());
-						nextSlot++;
-					}
-					break;
-				case NPCID.Painter:
-					/*TODO: if (Main.LocalPlayer.GetModPlayer<PolaritiesPlayer>().hasBeenInFractalSubworld)
-					{
-						shop.item[nextSlot].SetDefaults(ItemType<WarpedLandscape>());
-						nextSlot++;
-					}*/
-					break;
-				case NPCID.Demolitionist:
-					if (Main.LocalPlayer.HasItem(ItemType<Flarecaller>()))
-					{
-						shop.item[nextSlot].SetDefaults(ItemType<Flarecaller>());
-						nextSlot++;
-					}
-					break;
-				case NPCID.Dryad:
-                    if (Main.LocalPlayer.HasItem(ItemType<BatArrow>()))
+        public override void ModifyShop(NPCShop shop)
+        {
+            if (shop.Name != "Shop")
+            {
+                return;
+            }
+
+            switch (shop.NpcType) 
+            {
+                case NPCID.WitchDoctor:
                     {
-                        shop.item[nextSlot].SetDefaults(ItemType<BatArrow>());
-                        nextSlot++;
+                        shop.Add(ModContent.ItemType<SymbioticSapling>(), Condition.DownedPlantera, Condition.InJungle);
                     }
+                    break;
+                case NPCID.Demolitionist:
+                    {
+                        shop.Add(ModContent.ItemType<Flarecaller>(), Condition.PlayerCarriesItem(ModContent.ItemType<Flarecaller>()));
+                    }
+                    break;
+                case NPCID.Dryad:
+                    {
+                        shop.Add(ModContent.ItemType<BatArrow>(), Condition.PlayerCarriesItem(ModContent.ItemType<BatArrow>()));
+                    }
+                    break;
+                case NPCID.PartyBunny:
+                    {
+                        shop.Add(ModContent.ItemType<Discorb>());
+                    }
+                    break;
+                /*case NPCID.Painter:
+                    {
+                        shop.Add(ModContent.ItemType<WarpedLandscape>(), ...);
+                    }
+                    break;*/
+            }
+
+        }
+
+        public override void ModifyActiveShop(NPC npc, string shopName, Item[] items)
+		{
+			switch (npc.type)
+			{
+				case NPCID.Dryad:
 					//alt evil seeds in graveyard only unlock after esophage
 					if (!PolaritiesSystem.downedEsophage)
 					{
-						for (int i = 0; i < shop.item.Length; i++)
+						for (int i = 0; i < items.Length; i++)
 						{
-							if (shop.item[i].type == ItemID.CorruptSeeds && WorldGen.crimson)
+							if (items[i].type == ItemID.CorruptSeeds && WorldGen.crimson)
 							{
-								shop.item[i] = new Item();
-								shop.item[i].SetDefaults(ItemID.CrimsonSeeds);
+                                items[i] = new Item();
+                                items[i].SetDefaults(ItemID.CrimsonSeeds);
 								break;
 							}
-							else if (shop.item[i].type == ItemID.CrimsonSeeds && !WorldGen.crimson)
+							else if (items[i].type == ItemID.CrimsonSeeds && !WorldGen.crimson)
 							{
-								shop.item[i] = new Item();
-								shop.item[i].SetDefaults(ItemID.CorruptSeeds);
+                                items[i] = new Item();
+                                items[i].SetDefaults(ItemID.CorruptSeeds);
 								break;
 							}
 						}
 					}
 					break;
-                case NPCID.PartyGirl:
-                    shop.item[nextSlot].SetDefaults(ItemType<Discorb>());
-                    nextSlot++;
-                    break;
 				case NPCID.Steampunker:
 					if (PolaritiesSystem.downedEsophage && Main.LocalPlayer.ZoneGraveyard)
 					{
-						for (int i = 0; i < shop.item.Length; i++)
+						for (int i = 0; i < items.Length; i++)
 						{
-							if (shop.item[i].ammo == AmmoID.Solution)
+							if (items[i].ammo == AmmoID.Solution)
 							{
-								shop.item[i] = new Item();
-								shop.item[i].SetDefaults(WorldGen.crimson ? ItemID.PurpleSolution : ItemID.RedSolution);
+                                items[i] = new Item();
+                                items[i].SetDefaults(WorldGen.crimson ? ItemID.PurpleSolution : ItemID.RedSolution);
 								break;
 							}
 						}

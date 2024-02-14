@@ -42,7 +42,7 @@ namespace Polarities.Items.Books
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Bee");
+			// DisplayName.SetDefault("Bee");
 			Main.projFrames[Projectile.type] = Main.projFrames[ProjectileID.Bee];
 		}
 
@@ -90,7 +90,7 @@ namespace Polarities.Items.Books
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Bee");
+			// DisplayName.SetDefault("Bee");
 			Main.projFrames[Projectile.type] = Main.projFrames[ProjectileID.GiantBee];
 		}
 

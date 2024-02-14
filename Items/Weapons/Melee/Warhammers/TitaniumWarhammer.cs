@@ -94,7 +94,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.TitaniumWarhammer}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ItemName.TitaniumWarhammer}");
 		}
 
 		public override void SetDefaults()

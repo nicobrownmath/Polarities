@@ -59,7 +59,7 @@ namespace Polarities.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Shade Vortex");
+            // DisplayName.SetDefault("Shade Vortex");
 
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 
@@ -199,7 +199,7 @@ namespace Polarities.Items.Weapons.Magic
             return false;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (timeLeft > 0)
             {

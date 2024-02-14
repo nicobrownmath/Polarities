@@ -125,7 +125,7 @@ namespace Polarities.NPCs.Critters
         {
             this.SetResearch(5);
 
-            DisplayName.SetDefault("{$Mods.Polarities.NPCName.CloudCichlid}");
+            // DisplayName.SetDefault("{$Mods.Polarities.NPCName.CloudCichlid}");
         }
 
         public override void SetDefaults()
@@ -260,7 +260,7 @@ namespace Polarities.NPCs.Critters
         {
             this.SetResearch(5);
 
-            DisplayName.SetDefault("{$Mods.Polarities.NPCName.StormcloudCichlid}");
+            // DisplayName.SetDefault("{$Mods.Polarities.NPCName.StormcloudCichlid}");
         }
 
         public override void SetDefaults()

@@ -74,14 +74,6 @@ namespace Polarities.NPCs.Gigabat
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
 
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.Confused
-                }
-            };
-            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
-
             Polarities.customNPCGlowMasks[Type] = Request<Texture2D>(Texture + "_Mask");
         }
 
@@ -615,13 +607,9 @@ namespace Polarities.NPCs.Gigabat
             return dashing;
         }
 
-        public override bool? CanHitNPC(NPC target)
+        public override bool CanHitNPC(NPC target)
         {
-            if (dashing)
-            {
-                return null;
-            }
-            return false;
+            return dashing;
         }
 
         public override void BossLoot(ref string name, ref int potionType)
@@ -730,20 +718,12 @@ namespace Polarities.NPCs.Gigabat
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
 
-            var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, new()
             {
                 //draw offset on y a bit in the small portrait
-                Position = new Vector2(0f, 10f)
-            };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
-
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.Confused
-                }
-            };
-            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+                Position = new Vector2(0f, 10f),
+                Scale = 1f
+            });
 
             Polarities.customNPCGlowMasks[Type] = Request<Texture2D>(Texture + "_Mask");
         }

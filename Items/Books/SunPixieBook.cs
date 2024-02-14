@@ -67,7 +67,7 @@ namespace Polarities.Items.Books
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 450, true);
             Projectile.penetrate -= 1;

@@ -64,7 +64,7 @@ namespace Polarities.Items.Pets
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Goldfish Explorer");
+			// DisplayName.SetDefault("Goldfish Explorer");
 			Main.projFrames[Projectile.type] = 12;
 			Main.projPet[Projectile.type] = true;
 		}

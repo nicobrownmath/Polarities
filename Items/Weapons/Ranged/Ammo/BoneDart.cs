@@ -88,14 +88,14 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			Projectile.ai[0] = 1;
 		}
 
-		public override void OnHitPvp(Player target, int damage, bool crit)
-		{
-			Projectile.ai[0] = 1;
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            Projectile.ai[0] = 1;
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)

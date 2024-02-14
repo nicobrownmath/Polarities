@@ -94,7 +94,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.MythrilWarhammer}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ItemName.MythrilWarhammer}");
 		}
 
 		public override void SetDefaults()

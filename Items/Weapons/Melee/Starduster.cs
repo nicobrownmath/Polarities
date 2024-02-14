@@ -78,7 +78,7 @@ namespace Polarities.Items.Weapons.Melee
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.Starduster}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ItemName.Starduster}");
 		}
 
 		public override void SetDefaults()
@@ -166,7 +166,7 @@ namespace Polarities.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.Starduster}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ItemName.Starduster}");
 		}
 
         public override void SetDefaults()

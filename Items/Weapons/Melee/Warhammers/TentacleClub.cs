@@ -92,7 +92,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.TentacleClub}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ItemName.TentacleClub}");
 		}
 
 		public override void SetDefaults()
@@ -151,7 +151,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 			return projHitbox.Intersects(targetHitbox);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
 			Vector2 usePos = Projectile.position;
@@ -186,7 +186,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 		private const int MAX_STICKY_JAVELINS = 6;
 		private readonly Point[] _stickingJavelins = new Point[MAX_STICKY_JAVELINS];
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			IsStickingToTarget = true;
 			TargetWhoAmI = target.whoAmI;

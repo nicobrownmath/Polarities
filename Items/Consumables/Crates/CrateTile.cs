@@ -59,7 +59,7 @@ namespace Polarities.Items.Consumables.Crates
 		{
 			crateIndexToItemType.Add(CrateIndex, Type);
 
-            Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
+            // Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
 
             this.SetResearch(5);
 

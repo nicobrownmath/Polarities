@@ -81,7 +81,7 @@ namespace Polarities.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("{$Mods.Polarities.ItemName.Tentacle}");
+            // DisplayName.SetDefault("{$Mods.Polarities.ItemName.Tentacle}");
         }
 
         public override void SetDefaults()

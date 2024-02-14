@@ -32,9 +32,9 @@ namespace Polarities.NPCs.TownNPCs
 	{
         public override void Load()
         {
-            On.Terraria.GameContent.Personalities.AllPersonalitiesModifier.ModifyShopPrice_Relationships += AllPersonalitiesModifier_ModifyShopPrice_Relationships;
+            Terraria.GameContent.Personalities.On_AllPersonalitiesModifier.ModifyShopPrice_Relationships += AllPersonalitiesModifier_ModifyShopPrice_Relationships;
 
-            IL.Terraria.NPC.checkDead += NPC_checkDead;
+            Terraria.IL_NPC.checkDead += NPC_checkDead;
         }
 
 		//makes them leave rather than die
@@ -62,7 +62,7 @@ namespace Polarities.NPCs.TownNPCs
         }
 
 		//makes them not like the princess
-        private void AllPersonalitiesModifier_ModifyShopPrice_Relationships(On.Terraria.GameContent.Personalities.AllPersonalitiesModifier.orig_ModifyShopPrice_Relationships orig, HelperInfo info, Terraria.GameContent.ShopHelper shopHelperInstance)
+        private void AllPersonalitiesModifier_ModifyShopPrice_Relationships(Terraria.GameContent.Personalities.On_AllPersonalitiesModifier.orig_ModifyShopPrice_Relationships orig, HelperInfo info, Terraria.GameContent.ShopHelper shopHelperInstance)
         {
 			if (info.npc.type == NPCType<Ghostwriter>())
 			{
@@ -139,7 +139,7 @@ namespace Polarities.NPCs.TownNPCs
 			return NPC.downedSlimeKing || NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3 || NPC.downedQueenBee || NPC.downedDeerclops || Main.hardMode || PolaritiesSystem.downedStormCloudfish || PolaritiesSystem.downedStarConstruct || PolaritiesSystem.downedGigabat || PolaritiesSystem.downedRiftDenizen;
 		}
 
-        public override bool CanTownNPCSpawn(int numTownNPCs, int money)
+        public override bool CanTownNPCSpawn(int numTownNPCs)/* tModPorter Suggestion: Copy the implementation of NPC.SpawnAllowed_Merchant in vanilla if you to count money, and be sure to set a flag when unlocked, so you don't count every tick. */
         {
 			return SpawnCondition();
 		}
@@ -283,11 +283,11 @@ namespace Polarities.NPCs.TownNPCs
 			button = Language.GetTextValue("LegacyInterface.28");
 		}
 
-		public override void OnChatButtonClicked(bool firstButton, ref bool shop)
+		public override void OnChatButtonClicked(bool firstButton, ref string shopName)
 		{
 			if (firstButton)
 			{
-				shop = true;
+                shopName = "Shop";
 			}
 		}
 
@@ -301,172 +301,43 @@ namespace Polarities.NPCs.TownNPCs
 			return false;
 		}
 
-		//TODO: Fill this out
-		public override void SetupShop(Chest shop, ref int nextSlot)
-		{
-			if (Main.LocalPlayer.ZoneGraveyard)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<StrangeObituary>());
-				nextSlot++;
-			}
-			shop.item[nextSlot].SetDefaults(ItemID.Book);
-			nextSlot++;
-			if (Main.hardMode)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<ReadingGlasses>());
-				nextSlot++;
-			}
-			if (NPC.downedSlimeKing)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<KingSlimeBook>());
-				nextSlot++;
-			}
-			if (PolaritiesSystem.downedStormCloudfish)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<StormCloudfishBook>());
-				nextSlot++;
-			}
-			if (NPC.downedBoss1)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<EyeOfCthulhuBook>());
-				nextSlot++;
-			}
-			if (PolaritiesSystem.downedStarConstruct)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<StarConstructBook>());
-				nextSlot++;
-			}
-			if (PolaritiesSystem.downedEaterOfWorlds)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<EaterOfWorldsBook>());
-				nextSlot++;
-			}
-			if (PolaritiesSystem.downedBrainOfCthulhu)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<BrainOfCthulhuBook>());
-				nextSlot++;
-			}
-			if (PolaritiesSystem.downedGigabat)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<GigabatBook>());
-				nextSlot++;
-			}
-			if (NPC.downedQueenBee)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<QueenBeeBook>());
-				nextSlot++;
-			}
-			if (NPC.downedBoss3)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<SkeletronBook>());
-				nextSlot++;
-			}
-			if (NPC.downedDeerclops)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<DeerclopsBook>());
-				nextSlot++;
-			}
-			if (PolaritiesSystem.downedRiftDenizen)
-			{
-				//shop.item[nextSlot].SetDefaults(ItemType<RiftDenizenBook>());
-				nextSlot++;
-			}
-			if (Main.hardMode)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<WallOfFleshBook>());
-				nextSlot++;
-			}
-			if (NPC.downedQueenSlime)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<QueenSlimeBook>());
-				nextSlot++;
-			}
-			if (NPC.downedMechBoss1)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<DestroyerBook>());
-				nextSlot++;
-			}
-			if (NPC.downedMechBoss2)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<TwinsBook>());
-				nextSlot++;
-			}
-			if (NPC.downedMechBoss3)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<SkeletronPrimeBook>());
-				nextSlot++;
-			}
-			if (PolaritiesSystem.downedSunPixie)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<SunPixieBook>());
-				nextSlot++;
-			}
-			if (PolaritiesSystem.downedEsophage)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<EsophageBook>());
-				nextSlot++;
-			}
-			if (NPC.downedPlantBoss)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<PlanteraBook>());
-				nextSlot++;
-            }
-            if (PolaritiesSystem.downedConvectiveWanderer)
-            {
-                shop.item[nextSlot].SetDefaults(ItemType<ConvectiveWandererBook>());
-                nextSlot++;
-            }
-            if (PolaritiesSystem.downedSelfsimilarSentinel)
-			{
-				//shop.item[nextSlot].SetDefaults(ItemType<SelfsimilarSentinelBook>());
-				nextSlot++;
-			}
-			if (NPC.downedGolemBoss)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<GolemBook>());
-				nextSlot++;
-			}
-			if (NPC.downedFishron)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<DukeFishronBook>());
-				nextSlot++;
-			}
-			if (DD2Event.DownedInvasionT3)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<BetsyBook>());
-				nextSlot++;
-			}
-			if (NPC.downedEmpressOfLight)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<EmpressOfLightBook>());
-				nextSlot++;
-			}
-			if (PolaritiesSystem.downedEclipxie)
-			{
-				//shop.item[nextSlot].SetDefaults(ItemType<EclipxieBook>());
-				nextSlot++;
-			}
-			if (PolaritiesSystem.downedHemorrphage)
-			{
-				//shop.item[nextSlot].SetDefaults(ItemType<HemorrphageBook>());
-				nextSlot++;
-			}
-			if (NPC.downedAncientCultist)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<LunaticCultistBook>());
-				nextSlot++;
-			}
-			if (PolaritiesSystem.downedPolarities)
-			{
-				//shop.item[nextSlot].SetDefaults(ItemType<PolaritiesBook>());
-				nextSlot++;
-			}
-			if (NPC.downedMoonlord)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<MoonLordBook>());
-				nextSlot++;
-			}
-		}
+        public override void AddShops()
+        {
+            new NPCShop(Type)
+                .Add(ModContent.ItemType<StrangeObituary>(), Condition.InGraveyard)
+                .Add(ItemID.Book)
+                .Add(ModContent.ItemType<ReadingGlasses>(), Condition.Hardmode)
+                .Add(ModContent.ItemType<KingSlimeBook>(), Condition.DownedKingSlime)
+                .Add(ModContent.ItemType<StormCloudfishBook>(), Polarities.DownedStormCloudfish)
+                .Add(ModContent.ItemType<EyeOfCthulhuBook>(), Condition.DownedEyeOfCthulhu)
+                .Add(ModContent.ItemType<StarConstructBook>(), Polarities.DownedStarConstruct)
+                .Add(ModContent.ItemType<EaterOfWorldsBook>(), Polarities.DownedEaterOfWorlds)
+                .Add(ModContent.ItemType<BrainOfCthulhuBook>(), Polarities.DownedBrainOfCthulhu)
+                .Add(ModContent.ItemType<GigabatBook>(), Polarities.DownedGigabat)
+                .Add(ModContent.ItemType<QueenBeeBook>(), Condition.DownedQueenBee)
+                .Add(ModContent.ItemType<SkeletronBook>(), Condition.DownedSkeletron)
+                .Add(ModContent.ItemType<DeerclopsBook>(), Condition.DownedDeerclops)
+                //.Add(ModContent.ItemType<RiftDenizenBook>(), Polarities.DownedRiftDenizen)
+                .Add(ModContent.ItemType<WallOfFleshBook>(), Condition.Hardmode)
+                .Add(ModContent.ItemType<QueenSlimeBook>(), Condition.DownedQueenSlime)
+                .Add(ModContent.ItemType<DestroyerBook>(), Condition.DownedDestroyer)
+                .Add(ModContent.ItemType<TwinsBook>(), Condition.DownedTwins)
+                .Add(ModContent.ItemType<SkeletronPrimeBook>(), Condition.DownedSkeletronPrime)
+                .Add(ModContent.ItemType<SunPixieBook>(), Polarities.DownedSunPixie)
+                .Add(ModContent.ItemType<EsophageBook>(), Polarities.DownedEsophage)
+                .Add(ModContent.ItemType<PlanteraBook>(), Condition.DownedPlantera)
+                .Add(ModContent.ItemType<ConvectiveWandererBook>(), Polarities.DownedConvectiveWanderer)
+                //.Add(ModContent.ItemType<SelfsimilarSentinelBook>(), Polarities.DownedSelfsimilarSentinel)
+                .Add(ModContent.ItemType<GolemBook>(), Condition.DownedGolem)
+                .Add(ModContent.ItemType<DukeFishronBook>(), Condition.DownedDukeFishron)
+                .Add(ModContent.ItemType<BetsyBook>(), Condition.DownedOldOnesArmyT3)
+                .Add(ModContent.ItemType<EmpressOfLightBook>(), Condition.DownedEmpressOfLight)
+                //.Add(ModContent.ItemType<EclipxieBook>(), Polarities.DownedEclipxie)
+                //.Add(ModContent.ItemType<HemorrphageBook>(), Polarities.DownedHemorrphage)
+                .Add(ModContent.ItemType<LunaticCultistBook>(), Condition.DownedCultist)
+                //.Add(ModContent.ItemType<PolaritiesBook>(), Polarities.DownedPolarities)
+                .Add(ModContent.ItemType<MoonLordBook>(), Condition.DownedMoonLord);
+        }
 
         public override bool PreAI()
 		{
@@ -2085,7 +1956,7 @@ namespace Polarities.NPCs.TownNPCs
 			}
 		}
 
-        public override void HitEffect(int hitDirection, double damage)
+        public override void HitEffect(NPC.HitInfo hit)
         {
 			//produces a puff of dust on death
             if (NPC.life <= 0)

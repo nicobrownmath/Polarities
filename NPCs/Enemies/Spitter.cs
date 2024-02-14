@@ -201,7 +201,7 @@ namespace Polarities.NPCs.Enemies
             Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.ToxicBubble, Scale: 1.5f)].noGravity = true;
             Projectile.velocity.Y += 0.2f;
         }
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.Venom, 300);
         }

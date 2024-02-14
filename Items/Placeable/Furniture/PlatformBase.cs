@@ -53,8 +53,6 @@ namespace Polarities.Items.Placeable.Furniture
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
 			AddMapEntry(MapColor);
 
-			ItemDrop = DropItem;
-
 			DustType = MyDustType;
 			TileID.Sets.DisableSmartCursor[Type] = true;
 			AdjTiles = new int[] { TileID.Platforms };

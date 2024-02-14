@@ -22,14 +22,6 @@ namespace Polarities.NPCs.Enemies.WorldEvilInvasion
 		{
 			Main.npcFrameCount[Type] = 6;
 
-			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-			{
-				SpecificallyImmuneTo = new int[] {
-					BuffID.Confused,
-				}
-			};
-			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
-
 			PolaritiesNPC.npcTypeCap[Type] = 1;
 			PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.WorldEvilInvasion;
 		}

@@ -55,7 +55,7 @@ namespace Polarities.NPCs.Enemies
 			BannerItem = ItemType<ZombatBanner>();
 		}
 
-		public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
+		public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
 		{
 			NPC.lifeMax = 40;
 			NPC.damage = 20;

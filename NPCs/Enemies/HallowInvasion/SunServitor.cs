@@ -26,16 +26,11 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 		{
 			Main.npcFrameCount[Type] = 4;
 
-			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-			{
-				SpecificallyImmuneTo = new int[] {
-					BuffID.Confused,
-					BuffID.OnFire
-				}
-			};
-			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire3] = true;
 
-			PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.HallowInvasion;
+            PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.HallowInvasion;
 			PolaritiesNPC.npcTypeCap[Type] = 1;
 		}
 

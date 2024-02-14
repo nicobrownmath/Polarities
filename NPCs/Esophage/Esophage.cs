@@ -86,14 +86,6 @@ namespace Polarities.NPCs.Esophage
             //group with other bosses
             NPCID.Sets.BossBestiaryPriority.Add(Type);
 
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.Confused
-                }
-            };
-            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
-
             Main.npcFrameCount[NPC.type] = 6;
             NPCID.Sets.TrailCacheLength[NPC.type] = 5;
             NPCID.Sets.TrailingMode[NPC.type] = 0;
@@ -1237,7 +1229,7 @@ namespace Polarities.NPCs.Esophage
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.Ichor, 60 * 15);
         }
@@ -1328,13 +1320,13 @@ namespace Polarities.NPCs.Esophage
             Projectile.velocity += (goalVelocity - Projectile.velocity) / Projectile.timeLeft;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.CursedInferno, 60 * 4);
             Projectile.Kill();
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
 
@@ -1384,7 +1376,7 @@ namespace Polarities.NPCs.Esophage
             return CustomCollision.CheckAABBvDisc(targetHitbox, new Circle(Projectile.Center, Projectile.width / 2));
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.CursedInferno, 60 * 4);
         }
@@ -1408,7 +1400,7 @@ namespace Polarities.NPCs.Esophage
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("{$Mods.Polarities.ProjectileName.CrimagoSlash}");
+            // DisplayName.SetDefault("{$Mods.Polarities.ProjectileName.CrimagoSlash}");
             Main.projFrames[Projectile.type] = 1;
         }
 
@@ -1556,7 +1548,7 @@ namespace Polarities.NPCs.Esophage
             behindNPCs.Add(index);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Dust.NewDustPerfect(Projectile.Center + new Vector2(Projectile.width / 2, 0).RotatedBy(Projectile.rotation), 14, Vector2.Zero, Scale: 1.5f).noGravity = true;
         }
@@ -1733,7 +1725,7 @@ namespace Polarities.NPCs.Esophage
             behindNPCs.Add(index);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.NPCDeath19, Projectile.Center);
 

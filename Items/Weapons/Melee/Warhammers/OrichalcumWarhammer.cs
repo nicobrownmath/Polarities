@@ -94,7 +94,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.OrichalcumWarhammer}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ItemName.OrichalcumWarhammer}");
 		}
 
 		public override void SetDefaults()

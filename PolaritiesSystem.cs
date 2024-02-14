@@ -41,21 +41,21 @@ namespace Polarities
         public override void Load()
 		{
 			//prevent random clutter in limestone/salt caves
-			On.Terraria.WorldGen.PlaceTight += WorldGen_PlaceTight;
-            On.Terraria.WorldGen.PlaceSmallPile += WorldGen_PlaceSmallPile;
+			Terraria.On_WorldGen.PlaceTight += WorldGen_PlaceTight;
+            Terraria.On_WorldGen.PlaceSmallPile += WorldGen_PlaceSmallPile;
 
 			//for disabling world evil spread
-			IL.Terraria.WorldGen.hardUpdateWorld += WorldGen_hardUpdateWorld;
-			IL.Terraria.WorldGen.SpreadDesertWalls += WorldGen_SpreadDesertWalls;
+			Terraria.IL_WorldGen.hardUpdateWorld += WorldGen_hardUpdateWorld;
+			Terraria.IL_WorldGen.SpreadDesertWalls += WorldGen_SpreadDesertWalls;
 		}
 
-        private bool WorldGen_PlaceSmallPile(On.Terraria.WorldGen.orig_PlaceSmallPile orig, int i, int j, int X, int Y, ushort type)
+        private bool WorldGen_PlaceSmallPile(Terraria.On_WorldGen.orig_PlaceSmallPile orig, int i, int j, int X, int Y, ushort type)
         {
 			if (Main.tile[i, j + 1].TileType == TileType<SaltTile>() || Main.tile[i, j + 1].TileType == TileType<RockSaltTile>() || Main.tile[i, j + 1].TileType == TileType<LimestoneTile>()) return false;
 			return orig(i, j, X, Y, type);
 		}
 
-        private void WorldGen_PlaceTight(On.Terraria.WorldGen.orig_PlaceTight orig, int x, int y, bool spiders)
+        private void WorldGen_PlaceTight(Terraria.On_WorldGen.orig_PlaceTight orig, int x, int y, bool spiders)
         {
 			if (Main.tile[x, y - 1].TileType == TileType<SaltTile>() || Main.tile[x, y - 1].TileType == TileType<RockSaltTile>() || Main.tile[x, y - 1].TileType == TileType<LimestoneTile>()) return;
 			orig(x, y, spiders);
@@ -315,7 +315,7 @@ namespace Polarities
 			disabledEvilSpread = tag.ContainsKey("disabledEvilSpread");
 		}
 
-		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
+		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
 		{
 			int skyChestIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Floating Island Houses"));
 			if (skyChestIndex != -1)
@@ -1148,7 +1148,7 @@ namespace Polarities
             int x;
 			int y;
 
-			int direction = WorldGen.dungeonX < Main.maxTilesX / 2 ? 1 : -1;
+			int direction = GenVars.dungeonX < Main.maxTilesX / 2 ? 1 : -1;
 			int GetX()
 			{
 				if (WorldGen.drunkWorldGen)
@@ -1439,7 +1439,7 @@ namespace Polarities
 				int x;
 				int y;
 
-				int direction = WorldGen.dungeonX < Main.maxTilesX / 2 ? 1 : -1;
+				int direction = GenVars.dungeonX < Main.maxTilesX / 2 ? 1 : -1;
                 int GetX()
                 {
                     if (WorldGen.drunkWorldGen)

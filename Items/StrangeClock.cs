@@ -12,7 +12,7 @@ namespace Polarities.Items
         public override void SetStaticDefaults()
         {
             this.SetResearch(1);
-            DisplayName.SetDefault("Strange Clock");
+            // DisplayName.SetDefault("Strange Clock");
         }
 
         public override void SetDefaults()

@@ -328,7 +328,7 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 			return false;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.Venom, 60 * 12);
 		}
@@ -457,7 +457,7 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 			return false;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.Slow, 10);
 		}
@@ -535,7 +535,7 @@ namespace Polarities.Items.Weapons.Summon.Orbs
 			return false;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.Slow, 60);
 		}

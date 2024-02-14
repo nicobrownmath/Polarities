@@ -143,7 +143,7 @@ namespace Polarities.NPCs.Enemies.Marble
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("{$Mods.Polarities.NPCName.HydraBody}");
+            // DisplayName.SetDefault("{$Mods.Polarities.NPCName.HydraBody}");
 
             Main.npcFrameCount[NPC.type] = 2;
 
@@ -199,7 +199,7 @@ namespace Polarities.NPCs.Enemies.Marble
 
             if (!owner.active)
             {
-                NPC.StrikeNPC(1000, 0, 0);
+                NPC.StrikeInstantKill();
                 return;
             }
 
@@ -423,12 +423,12 @@ namespace Polarities.NPCs.Enemies.Marble
             return false;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             target.AddBuff(BuffID.Venom, 300);
         }
 
-        public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
+        public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
             List<int> hitboxIds = new List<int>();
             for (int i = 0; i < Main.npc.Length; i++)
@@ -463,7 +463,7 @@ namespace Polarities.NPCs.Enemies.Marble
             }
         }
 
-        public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
+        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
             List<int> hitboxIds = new List<int>();
             for (int i = 0; i < Main.npc.Length; i++)
@@ -600,7 +600,7 @@ namespace Polarities.NPCs.Enemies.Marble
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("{$Mods.Polarities.ProjectileName.SpitterVenom}");
+            // DisplayName.SetDefault("{$Mods.Polarities.ProjectileName.SpitterVenom}");
         }
 
         public override void SetDefaults()
@@ -623,7 +623,7 @@ namespace Polarities.NPCs.Enemies.Marble
             Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.ToxicBubble, Scale: 1.5f)].noGravity = true;
             Projectile.velocity.Y += 0.2f;
         }
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.Venom, 300);
         }

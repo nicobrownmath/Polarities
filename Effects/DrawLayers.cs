@@ -114,10 +114,10 @@ namespace Polarities.Effects
 
             blendState = BlendState.Additive;
 
-            On.Terraria.Main.DrawProjectiles += Main_DrawProjectiles;
+            Terraria.On_Main.DrawProjectiles += Main_DrawProjectiles;
         }
 
-        private void Main_DrawProjectiles(On.Terraria.Main.orig_DrawProjectiles orig, Main self)
+        private void Main_DrawProjectiles(Terraria.On_Main.orig_DrawProjectiles orig, Main self)
         {
             orig(self);
             Draw();
@@ -132,10 +132,10 @@ namespace Polarities.Effects
 
             blendState = BlendState.Additive;
 
-            On.Terraria.Main.DrawCachedProjs += Main_DrawCachedProjs;
+            Terraria.On_Main.DrawCachedProjs += Main_DrawCachedProjs;
         }
 
-        private void Main_DrawCachedProjs(On.Terraria.Main.orig_DrawCachedProjs orig, Main self, List<int> projCache, bool startSpriteBatch)
+        private void Main_DrawCachedProjs(Terraria.On_Main.orig_DrawCachedProjs orig, Main self, List<int> projCache, bool startSpriteBatch)
         {
             if (projCache == Main.instance.DrawCacheProjsBehindNPCsAndTiles)
             {
@@ -169,10 +169,10 @@ namespace Polarities.Effects
             blendState = BlendState.Additive;
             doWeResetSpritebatch = true;
 
-            On.Terraria.Main.DrawNPCs += Main_DrawNPCs;
+            Terraria.On_Main.DrawNPCs += Main_DrawNPCs;
         }
 
-        private void Main_DrawNPCs(On.Terraria.Main.orig_DrawNPCs orig, Main self, bool behindTiles)
+        private void Main_DrawNPCs(Terraria.On_Main.orig_DrawNPCs orig, Main self, bool behindTiles)
         {
             orig(self, behindTiles);
 

@@ -33,7 +33,7 @@ namespace Polarities.NPCs.Critters
 			//spawn gemflies and other misc loot from shaking gem trees
 			if (!hasAddedShakeTreeEdit)
 			{
-				On.Terraria.WorldGen.ShakeTree += WorldGen_ShakeTree;
+				Terraria.On_WorldGen.ShakeTree += WorldGen_ShakeTree;
 				hasAddedShakeTreeEdit = true;
 			}
 		}
@@ -77,7 +77,7 @@ namespace Polarities.NPCs.Critters
 			}
 		}
 
-        private void WorldGen_ShakeTree(On.Terraria.WorldGen.orig_ShakeTree orig, int i, int j)
+        private void WorldGen_ShakeTree(Terraria.On_WorldGen.orig_ShakeTree orig, int i, int j)
         {
 			List<int> gemTrees = new List<int> { TileID.TreeAmethyst, TileID.TreeTopaz, TileID.TreeSapphire, TileID.TreeEmerald, TileID.TreeRuby, TileID.TreeDiamond };
 
@@ -87,7 +87,8 @@ namespace Polarities.NPCs.Critters
 				return;
 			}
 
-			if (WorldGen.numTreeShakes == WorldGen.maxTreeShakes)
+#if !DEBUG
+            if (WorldGen.numTreeShakes == WorldGen.maxTreeShakes)
 			{
 				return;
 			}
@@ -104,6 +105,7 @@ namespace Polarities.NPCs.Critters
 			WorldGen.treeShakeX[WorldGen.numTreeShakes] = x;
 			WorldGen.treeShakeY[WorldGen.numTreeShakes] = y;
 			WorldGen.numTreeShakes++;
+            
 			y--;
 			while (y > 10 && Main.tile[x, y].HasTile && TileID.Sets.IsShakeable[Main.tile[x, y].TileType])
 			{
@@ -284,6 +286,7 @@ namespace Polarities.NPCs.Critters
 					WorldGen.TreeGrowFX(x, y, 1, passStyle, hitTree: true);
 				}
 			}
+#endif
 		}
 
         public override void Unload()
@@ -293,7 +296,7 @@ namespace Polarities.NPCs.Critters
 
         public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.NPCName.Gemfly}");
+			// DisplayName.SetDefault("{$Mods.Polarities.NPCName.Gemfly}");
 
 			Main.npcFrameCount[Type] = Main.npcFrameCount[NPCID.LightningBug] * 6;
 			Main.npcCatchable[Type] = true;
@@ -416,8 +419,8 @@ namespace Polarities.NPCs.Critters
 		{
 			this.SetResearch(5);
 
-			DisplayName.SetDefault(Lang.GetItemNameValue(GemItem) + "{$Mods.Polarities.ItemName.GemflyItem}");
-			Tooltip.SetDefault("{$Mods.Polarities.ItemTooltip.GemflyItem}");
+			// DisplayName.SetDefault(Lang.GetItemNameValue(GemItem) + "{$Mods.Polarities.ItemName.GemflyItem}");
+			// Tooltip.SetDefault("{$Mods.Polarities.ItemTooltip.GemflyItem}");
 		}
 
 		public override void SetDefaults()

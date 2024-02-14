@@ -36,14 +36,9 @@ namespace Polarities.NPCs.Enemies
 	{
 		public override void SetStaticDefaults()
 		{
-			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-			{
-				SpecificallyImmuneTo = new int[] {
-					BuffID.Confused,
-					BuffID.OnFire
-				}
-			};
-			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire3] = true;
 
             MultiHitboxNPC.MultiHitboxNPCTypes.Add(Type);
         }
@@ -204,7 +199,7 @@ namespace Polarities.NPCs.Enemies
 			NPC.GetGlobalNPC<MultiHitboxNPC>().AssignHitboxFrom(hitboxes);
 		}
 
-        public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
+        public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
 		{
 			if (NPC.GetGlobalNPC<MultiHitboxNPC>().mostRecentHitbox.index == 0)
 			{
@@ -212,11 +207,11 @@ namespace Polarities.NPCs.Enemies
 			}
 			else
 			{
-				damage /= 2;
-			}
-		}
+                modifiers.FinalDamage /= 2;
+            }
+        }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			if (NPC.GetGlobalNPC<MultiHitboxNPC>().mostRecentHitbox.index == 0)
 			{
@@ -224,7 +219,7 @@ namespace Polarities.NPCs.Enemies
 			}
 			else
 			{
-				damage /= 2;
+				modifiers.FinalDamage /= 2;
 			}
 		}
 

@@ -56,7 +56,7 @@ namespace Polarities.NPCs.Enemies
             BannerItem = ItemType<ConeShellBanner>();
         }
 
-        public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
+        public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
         {
             NPC.damage = 1;
             NPC.defense = 5;
@@ -83,7 +83,7 @@ namespace Polarities.NPCs.Enemies
             return true;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             target.AddBuff(BuffType<Buffs.ConeVenom>(), 3 * 60);
             attackCooldown = Main.expertMode ? 7 * 60 : 4 * 60;

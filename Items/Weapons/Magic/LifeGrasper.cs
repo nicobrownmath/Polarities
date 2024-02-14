@@ -112,12 +112,12 @@ namespace Polarities.Items.Weapons.Magic
 			}
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			knockback = 0f;
+            modifiers.Knockback *= 0f;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.SoulDrain, 30);
 		}
@@ -169,7 +169,7 @@ namespace Polarities.Items.Weapons.Magic
 			Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.LifeDrain, newColor: Color.Transparent, Scale: 1f)].noGravity = true;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.SoulDrain, 30);
 		}

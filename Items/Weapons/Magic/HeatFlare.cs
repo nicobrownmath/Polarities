@@ -83,7 +83,7 @@ namespace Polarities.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("{$Mods.Polarities.ItemName.HeatFlare}");
+            // DisplayName.SetDefault("{$Mods.Polarities.ItemName.HeatFlare}");
         }
 
         //trail stuff

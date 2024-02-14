@@ -41,7 +41,7 @@ using Polarities.NPCs.Eclipxie;
 
 namespace Polarities
 {
-	public class Polarities : Mod
+	public partial class Polarities : Mod
 	{
         public static bool AprilFools => (DateTime.Now.Day == 1) && (DateTime.Now.Month == 4);
         public static bool SnakeDay => (DateTime.Now.Day == 16) && (DateTime.Now.Month == 7);
@@ -62,12 +62,10 @@ namespace Polarities
             ModUtils.Load();
 
             //for handling custom NPC rarities
-            On.Terraria.ID.ContentSamples.FillNpcRarities += ContentSamples_FillNpcRarities;
+            Terraria.ID.On_ContentSamples.FillNpcRarities += ContentSamples_FillNpcRarities;
 
             //music edit
-            On.Terraria.Main.UpdateAudio_DecideOnNewMusic += Main_UpdateAudio_DecideOnNewMusic;
-
-            IL_ResizeArrays += Polarities_IL_ResizeArrays;
+            Terraria.On_Main.UpdateAudio_DecideOnNewMusic += Main_UpdateAudio_DecideOnNewMusic;
 
             //register hotkeys
             ArmorSetBonusHotkey = KeybindLoader.RegisterKeybind(this, "Convective Set Bonus", Keys.K);
@@ -102,40 +100,11 @@ namespace Polarities
             preGeneratedRand = null;
 
             //reset to vanilla size
-            Array.Resize<Asset<Texture2D>>(ref TextureAssets.GlowMask, Main.maxGlowMasks);
-
-            IL_ResizeArrays -= Polarities_IL_ResizeArrays;
+            Array.Resize(ref TextureAssets.GlowMask, GlowMaskID.Count);
 
             //unload hotkeys
             ArmorSetBonusHotkey = null;
             ConvectiveDashHotkey = null;
-        }
-
-        private void Polarities_IL_ResizeArrays(ILContext il)
-        {
-            ILCursor c = new ILCursor(il);
-
-            if (!c.TryGotoNext(MoveType.After,
-                i => i.MatchCall(typeof(LoaderManager).GetMethod("ResizeArrays", BindingFlags.Static | BindingFlags.NonPublic))
-                ))
-            {
-                GetInstance<Polarities>().Logger.Debug("Failed to find patch location");
-                return;
-            }
-
-            c.Emit(OpCodes.Ldarg, 0);
-            c.EmitDelegate<Action<bool>>((unloading) =>
-            {
-                //Currently unused, anything put in here will run after ResizeArrays
-                //Potentially useful for loading, to change the size of vanilla arrays or arrays from the mod
-            });
-        }
-
-        //I should not need to do this in order to have something run after ResizeArrays
-        private static event ILContext.Manipulator IL_ResizeArrays
-        {
-            add => HookEndpointManager.Modify(typeof(ModContent).GetMethod("ResizeArrays", BindingFlags.NonPublic | BindingFlags.Static), value);
-            remove => HookEndpointManager.Unmodify(typeof(ModContent).GetMethod("ResizeArrays", BindingFlags.NonPublic | BindingFlags.Static), value);
         }
 
         public override void PostSetupContent()
@@ -237,7 +206,7 @@ namespace Polarities
             }
         }
 
-        private void ContentSamples_FillNpcRarities(On.Terraria.ID.ContentSamples.orig_FillNpcRarities orig)
+        private void ContentSamples_FillNpcRarities(Terraria.ID.On_ContentSamples.orig_FillNpcRarities orig)
         {
             orig();
             foreach (int type in customNPCBestiaryStars.Keys)
@@ -246,7 +215,7 @@ namespace Polarities
             }
         }
 
-        private void Main_UpdateAudio_DecideOnNewMusic(On.Terraria.Main.orig_UpdateAudio_DecideOnNewMusic orig, Main self)
+        private void Main_UpdateAudio_DecideOnNewMusic(Terraria.On_Main.orig_UpdateAudio_DecideOnNewMusic orig, Main self)
         {
             orig(self);
 

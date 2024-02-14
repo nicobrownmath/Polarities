@@ -78,7 +78,7 @@ namespace Polarities.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("{$Mods.Polarities.ItemName.CrystalKnife}");
+            // DisplayName.SetDefault("{$Mods.Polarities.ItemName.CrystalKnife}");
         }
 
         public override void SetDefaults()
@@ -132,7 +132,7 @@ namespace Polarities.Items.Weapons.Melee
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.immune[Projectile.owner] = 0;
             atkCooldown = (int)Projectile.ai[1] / 4;

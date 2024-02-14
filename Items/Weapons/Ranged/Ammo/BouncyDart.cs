@@ -51,7 +51,7 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.BouncyDart}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ItemName.BouncyDart}");
 		}
 
 		public override void SetDefaults()

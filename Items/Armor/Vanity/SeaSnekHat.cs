@@ -19,7 +19,7 @@ namespace Polarities.Items.Armor.Vanity
 
 			int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 			ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = true;
-			ArmorIDs.Head.Sets.DrawBackHair[equipSlotHead] = true;
+			ArmorIDs.Head.Sets.DrawsBackHairWithoutHeadgear[equipSlotHead] = true;
 			ArmorIDs.Head.Sets.DrawHatHair[equipSlotHead] = true;
 			ArmorIDs.Head.Sets.DrawFullHair[equipSlotHead] = false;
 		}

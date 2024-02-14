@@ -29,13 +29,14 @@ namespace Polarities.Items.Placeable.Furniture
 
 		public override void SetStaticDefaults()
 		{
-			this.SetResearch(100);
+            Item.ResearchUnlockCount = 100;
+            ItemID.Sets.Torches[Type] = true;
+            ItemID.Sets.WaterTorches[Type] = !WaterDeath;
 		}
 
 		public override void SetDefaults()
 		{
-			Item.DefaultToTorch(0, !WaterDeath);
-			Item.createTile = PlaceTile;
+			Item.DefaultToTorch(PlaceTile, 0, !WaterDeath);
 			Item.value = Item.sellPrice(copper: 12);
 
 			Item.flame = Flame;
@@ -58,18 +59,6 @@ namespace Polarities.Items.Placeable.Furniture
 		{
 			Lighting.AddLight((int)((Item.position.X + Item.width / 2) / 16f), (int)((Item.position.Y + Item.height / 2) / 16f), LightColor.R / 255f, LightColor.G / 255f, LightColor.B / 255f);
 		}
-
-        public override void AutoLightSelect(ref bool dryTorch, ref bool wetTorch, ref bool glowstick)
-        {
-            if (WaterDeath)
-            {
-				dryTorch = true;
-            }
-			else
-            {
-				wetTorch = true;
-            }
-        }
     }
 
 	public abstract class TorchTileBase : ModTile
@@ -167,7 +156,6 @@ namespace Polarities.Items.Placeable.Furniture
 
 			AddMapEntry(MapColor, Lang.GetItemName(ItemID.Torch));
 			DustType = MyDustType;
-			ItemDrop = DropItem;
 			AdjTiles = new int[] { TileID.Torches };
 		}
 

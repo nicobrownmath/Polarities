@@ -203,7 +203,7 @@ namespace Polarities.Items.Weapons.Magic
 			DrawLayer.AddProjectile<DrawLayerAdditiveAfterProjectiles>(index);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.OnFire, 600, true);
 		}

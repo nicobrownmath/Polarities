@@ -40,7 +40,7 @@ namespace Polarities.Items.Books
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Hook");
+			// DisplayName.SetDefault("Hook");
 			Main.projFrames[Projectile.type] = Main.npcFrameCount[NPCID.PlanterasTentacle];
 			ProjectileID.Sets.CultistIsResistantTo[Type] = true;
 		}
@@ -139,7 +139,7 @@ namespace Polarities.Items.Books
 		public override string Texture => "Terraria/Images/NPC_" + NPCID.PlanterasTentacle;
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Hook");
+			// DisplayName.SetDefault("Hook");
 			Main.projFrames[Projectile.type] = Main.npcFrameCount[NPCID.PlanterasTentacle];
 			ProjectileID.Sets.CultistIsResistantTo[Type] = true;
 		}

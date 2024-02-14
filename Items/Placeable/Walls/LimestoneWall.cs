@@ -10,7 +10,7 @@ namespace Polarities.Items.Placeable.Walls
 	{
 		public override void SetDefaults()
 		{
-			Item.DefaultToPlacableWall((ushort)WallType<LimestoneWallPlaced>());
+			Item.DefaultToPlaceableWall((ushort)WallType<LimestoneWallPlaced>());
 
 			this.SetResearch(400);
 		}
@@ -29,7 +29,6 @@ namespace Polarities.Items.Placeable.Walls
 		public override void SetStaticDefaults()
 		{
 			Main.wallHouse[Type] = true;
-			ItemDrop = ItemType<LimestoneWall>();
 			AddMapEntry(new Color(34, 50, 30));
 
 			DustType = DustType<Dusts.LimestoneDust>();

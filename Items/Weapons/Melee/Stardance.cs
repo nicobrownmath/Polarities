@@ -19,8 +19,8 @@ namespace Polarities.Items.Weapons.Melee
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Stardance");
-            Tooltip.SetDefault("Fires a line of homing star lances");
+            // DisplayName.SetDefault("Stardance");
+            // Tooltip.SetDefault("Fires a line of homing star lances");
             Item.staff[Item.type] = true;
 
             this.SetResearch(1);
@@ -100,7 +100,7 @@ namespace Polarities.Items.Weapons.Melee
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Star Lance");
+            // DisplayName.SetDefault("Star Lance");
         }
         public override void SetDefaults()
         {

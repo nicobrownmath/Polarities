@@ -30,19 +30,19 @@ namespace Polarities.Projectiles
         {
             //completely overwrite UpdateMaxTurrets to allow for sentry slots
             //this probably isn't great for crossmod but in fairness the method is tiny and IL edits would be likely to conflict too
-            On.Terraria.Player.UpdateMaxTurrets += Player_UpdateMaxTurrets;
+            Terraria.On_Player.UpdateMaxTurrets += Player_UpdateMaxTurrets;
 
             //projectiles with forced drawing
-            IL.Terraria.Main.DrawProj += Main_DrawProj;
+            Terraria.IL_Main.DrawProj += Main_DrawProj;
 
             //prevents projectiles with doNotStrikeNPC true from damaging enemies
-            IL.Terraria.Projectile.Damage += Projectile_Damage;
+            Terraria.IL_Projectile.Damage += Projectile_Damage;
 
             //custom projectile shaders
-            On.Terraria.Main.GetProjectileDesiredShader += Main_GetProjectileDesiredShader;
+            Terraria.On_Main.GetProjectileDesiredShader += Main_GetProjectileDesiredShader;
 
             //prevent certain projectiles from despawning outside of the world
-            IL.Terraria.Projectile.Update += Projectile_Update;
+            Terraria.IL_Projectile.Update += Projectile_Update;
         }
 
         public bool canLeaveWorld;
@@ -85,16 +85,14 @@ namespace Polarities.Projectiles
 
         public int customShader = 0;
 
-        private int Main_GetProjectileDesiredShader(On.Terraria.Main.orig_GetProjectileDesiredShader orig, int i)
+        private int Main_GetProjectileDesiredShader(Terraria.On_Main.orig_GetProjectileDesiredShader orig, Projectile projectile)
         {
-            Projectile projectile = Main.projectile[i];
-
             if (projectile.GetGlobalProjectile<PolaritiesProjectile>().customShader != 0)
             {
                 return projectile.GetGlobalProjectile<PolaritiesProjectile>().customShader;
             }
 
-            return orig(i);
+            return orig(projectile);
         }
 
         public bool doNotStrikeNPC = false;
@@ -255,7 +253,7 @@ namespace Polarities.Projectiles
             return true;
         }
 
-        private void Player_UpdateMaxTurrets(On.Terraria.Player.orig_UpdateMaxTurrets orig, Player self)
+        private void Player_UpdateMaxTurrets(Terraria.On_Player.orig_UpdateMaxTurrets orig, Player self)
         {
             List<Projectile> list = new List<Projectile>();
             float occupiedTurretSlots = 0f;
@@ -298,7 +296,7 @@ namespace Polarities.Projectiles
             return base.CanHitNPC(projectile, target);
         }
 
-        public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (target.GetGlobalNPC<PolaritiesNPC>().usesProjectileHitCooldowns)
             {

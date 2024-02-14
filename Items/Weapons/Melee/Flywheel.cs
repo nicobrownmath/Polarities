@@ -59,7 +59,7 @@ namespace Polarities.Items.Weapons.Melee
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("{$Mods.Polarities.ItemName.Flywheel}");
+            // DisplayName.SetDefault("{$Mods.Polarities.ItemName.Flywheel}");
 
             ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 4.5f;
             ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 240f;
@@ -78,12 +78,12 @@ namespace Polarities.Items.Weapons.Melee
             Projectile.scale = 1f;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             MakeWave(target);
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             MakeWave(target);
         }

@@ -197,7 +197,7 @@ namespace Polarities.Items.Weapons.Summon.Sentries
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{Mods.Polarities.ProjectileName.IlluminantScourerLaser");
+			// DisplayName.SetDefault("{Mods.Polarities.ProjectileName.IlluminantScourerLaser");
 
 			ProjectileID.Sets.SentryShot[Projectile.type] = true;
 		}

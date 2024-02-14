@@ -273,7 +273,7 @@ namespace Polarities.Items.Weapons.Summon.Minions
 			return attackCooldown == 0;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.immune[Projectile.owner] = 0;
 			attackCooldown = 10;
@@ -366,7 +366,7 @@ namespace Polarities.Items.Weapons.Summon.Minions
 			Main.dust[dust].noGravity = true;
 		}
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.Ichor, 60, true);
 		}

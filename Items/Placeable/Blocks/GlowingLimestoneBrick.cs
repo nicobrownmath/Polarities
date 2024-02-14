@@ -59,7 +59,6 @@ namespace Polarities.Items.Placeable.Blocks
 			AddMapEntry(new Color(179, 191, 177));
 
 			DustType = DustType<Dusts.LimestoneDust>();
-			ItemDrop = ItemType<LimestoneBrick>();
 
 			HitSound = SoundID.Tink;
 

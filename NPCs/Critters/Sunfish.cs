@@ -21,22 +21,17 @@ namespace Polarities.NPCs.Critters
             Main.npcFrameCount[NPC.type] = 12;
             NPCID.Sets.CountsAsCritter[Type] = true;
 
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.Poisoned,
-                    BuffID.Venom,
-                    BuffID.BoneJavelin,
-                    BuffType<Desiccating>(),
-                }
-            };
-            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Venom] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.BoneJavelin] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffType<Desiccating>()] = true;
 
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
             {
                 PortraitPositionXOverride = 0,
                 Position = new Vector2(10, 0),
-                SpriteDirection = 1
+                SpriteDirection = 1,
+                Scale = 1f
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifiers);
 

@@ -15,10 +15,10 @@ namespace Polarities.Items
 	{
         public override void Load()
         {
-            On.Terraria.GameContent.Events.DD2Event.DropMedals += DD2Event_DropMedals;
+            Terraria.GameContent.Events.On_DD2Event.DropMedals += DD2Event_DropMedals;
         }
 
-        private void DD2Event_DropMedals(On.Terraria.GameContent.Events.DD2Event.orig_DropMedals orig, int numberOfMedals)
+        private void DD2Event_DropMedals(Terraria.GameContent.Events.On_DD2Event.orig_DropMedals orig, int numberOfMedals)
         {
 			orig(numberOfMedals);
 

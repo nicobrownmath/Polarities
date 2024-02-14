@@ -82,7 +82,7 @@ namespace Polarities.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("{$Mods.Polarities.ItemName.SaltKnife}");
+            // DisplayName.SetDefault("{$Mods.Polarities.ItemName.SaltKnife}");
         }
 
         public override void SetDefaults()
@@ -120,12 +120,12 @@ namespace Polarities.Items.Weapons.Melee
 			player.itemRotation = (float)Math.IEEERemainder((Main.MouseWorld - player.MountedCenter).ToRotation() + (player.direction == 1 ? 0 : MathHelper.Pi), MathHelper.TwoPi);
         }
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			hitDirection = Main.player[Projectile.owner].direction;
+			modifiers.HitDirectionOverride = Main.player[Projectile.owner].direction;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.immune[Projectile.owner] = 0;
 			atkCooldown = (int)Projectile.ai[1] / 2;

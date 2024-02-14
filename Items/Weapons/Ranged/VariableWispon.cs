@@ -465,7 +465,7 @@ namespace Polarities.Items.Weapons.Ranged
             return false;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.NPCDeath14, Projectile.Center);
             for (int i = 0; i < 80; i++)
@@ -474,7 +474,7 @@ namespace Polarities.Items.Weapons.Ranged
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Projectile.timeLeft > 1)
             {

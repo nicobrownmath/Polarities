@@ -43,9 +43,9 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
             Item.GetGlobalItem<PolaritiesItem>().flawless = true;
         }
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            base.OnHitNPC(player, target, damage, knockBack, crit);
+            base.OnHitNPC(player, target, hit, damageDone);
 
             for (int i = 0; i < 2; i++)
             {
@@ -101,7 +101,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
         private const int MAX_STICKY_JAVELINS = 32; // This is the max. amount of javelins being able to attach
         private readonly Point[] _stickingJavelins = new Point[MAX_STICKY_JAVELINS]; // The point array holding for sticking javelins
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             IsStickingToTarget = true;
             TargetWhoAmI = target.whoAmI;
@@ -115,7 +115,7 @@ namespace Polarities.Items.Weapons.Melee.Warhammers
             UpdateStickyJavelins(target);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Projectile.penetrate++;
             target.immune[Projectile.owner] = 0;

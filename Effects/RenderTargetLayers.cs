@@ -1,4 +1,5 @@
 ﻿using Terraria;
+using Terraria.GameContent.NetModules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -32,7 +33,6 @@ using Terraria.Graphics.Effects;
 using Polarities.NPCs.ConvectiveWanderer;
 using Terraria.Graphics.Shaders;
 using System.Net;
-using IL.Terraria.GameContent.NetModules;
 
 namespace Polarities.Effects
 {
@@ -59,11 +59,11 @@ namespace Polarities.Effects
             {
 				patchesLoaded = true;
 
-                On.Terraria.Main.ClampScreenPositionToWorld += Main_ClampScreenPositionToWorld;
+                Terraria.On_Main.ClampScreenPositionToWorld += Main_ClampScreenPositionToWorld;
 			}
 		}
 
-        private void Main_ClampScreenPositionToWorld(On.Terraria.Main.orig_ClampScreenPositionToWorld orig)
+        private void Main_ClampScreenPositionToWorld(Terraria.On_Main.orig_ClampScreenPositionToWorld orig)
 		{
 			orig();
 
@@ -203,13 +203,13 @@ namespace Polarities.Effects
 		{
 			base.Load(mod);
 
-            On.Terraria.GameContent.Events.ScreenObstruction.Draw += ScreenObstruction_Draw;
-            On.Terraria.Main.DrawCachedNPCs += Main_DrawCachedNPCs;
+            Terraria.GameContent.Events.On_ScreenObstruction.Draw += ScreenObstruction_Draw;
+            Terraria.On_Main.DrawCachedNPCs += Main_DrawCachedNPCs;
 
 			targetScale = 0.5f;
 		}
 
-        private void Main_DrawCachedNPCs(On.Terraria.Main.orig_DrawCachedNPCs orig, Main self, List<int> npcCache, bool behindTiles)
+        private void Main_DrawCachedNPCs(Terraria.On_Main.orig_DrawCachedNPCs orig, Main self, List<int> npcCache, bool behindTiles)
         {
 			orig(self, npcCache, behindTiles);
 
@@ -251,7 +251,7 @@ namespace Polarities.Effects
 
 		public static float extraGlow = 0f;
 
-		private void ScreenObstruction_Draw(On.Terraria.GameContent.Events.ScreenObstruction.orig_Draw orig, SpriteBatch spriteBatch)
+		private void ScreenObstruction_Draw(Terraria.GameContent.Events.On_ScreenObstruction.orig_Draw orig, SpriteBatch spriteBatch)
 		{
 			spriteBatch.End();
 

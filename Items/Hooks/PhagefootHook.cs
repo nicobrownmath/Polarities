@@ -14,7 +14,7 @@ namespace Polarities.Items.Hooks
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Phagefoot Hook");
+            // DisplayName.SetDefault("Phagefoot Hook");
 
             this.SetResearch(1);
         }
@@ -44,7 +44,7 @@ namespace Polarities.Items.Hooks
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Phagefoot");
+            // DisplayName.SetDefault("Phagefoot");
         }
 
         public override void SetDefaults()

@@ -112,8 +112,8 @@ namespace Polarities.Items.Placeable.Banners
 			this.SetResearch(1);
 
 			string npcKey = "{$Mods.Polarities.NPCName." + NPCLoader.GetNPC(NPCType).Name + "}";
-			DisplayName.SetDefault(npcKey + "{$Mods.Polarities.ItemName.BannerBase}");
-			Tooltip.SetDefault("{$CommonItemTooltip.BannerBonus}" + npcKey);
+			// DisplayName.SetDefault(npcKey + "{$Mods.Polarities.ItemName.BannerBase}");
+			// Tooltip.SetDefault("{$CommonItemTooltip.BannerBonus}" + npcKey);
 
 			ItemID.Sets.KillsToBanner[Type] = BannerKills;
 		}

@@ -28,14 +28,6 @@ namespace Polarities.NPCs.Enemies.Granite
     {
         public override void SetStaticDefaults()
         {
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.Confused
-                }
-            };
-            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
-
             MultiHitboxNPC.MultiHitboxNPCTypes.Add(Type);
         }
 
@@ -338,19 +330,19 @@ namespace Polarities.NPCs.Enemies.Granite
             //TODO: npcLoot.Add(ItemDropRule.Common(ItemType<BlueQuartz>(), 2, 1, 2));
         }
 
-        public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
+        public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
         {
             if (NPC.GetGlobalNPC<MultiHitboxNPC>().mostRecentHitbox.index != 0)
             {
-                damage = (damage * 2) / 3;
+                modifiers.FinalDamage *= 0.66f;
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (NPC.GetGlobalNPC<MultiHitboxNPC>().mostRecentHitbox.index != 0)
             {
-                damage = (damage * 2) / 3;
+                modifiers.FinalDamage *= 0.66f;
             }
         }
     }

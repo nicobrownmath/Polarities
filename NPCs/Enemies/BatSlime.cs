@@ -225,7 +225,7 @@ namespace Polarities.NPCs.Enemies
             }
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             if (Main.expertMode && Main.rand.NextBool(10))
                 target.AddBuff(BuffID.Rabies, Main.rand.Next(1800, 5400));

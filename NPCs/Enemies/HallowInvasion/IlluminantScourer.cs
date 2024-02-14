@@ -27,20 +27,14 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 			NPCID.Sets.TrailCacheLength[Type] = 6;
 			NPCID.Sets.TrailingMode[Type] = 3;
 
-			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-			{
-				SpecificallyImmuneTo = new int[] {
-					BuffID.Confused,
-					BuffID.OnFire
-				}
-			};
-			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire3] = true;
 
-			NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
-			{
-				Velocity = 2,
-			};
-			NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifiers);
+			NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, new()
+            {
+                Velocity = 2,
+            });
 
 			PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.HallowInvasion;
 		}

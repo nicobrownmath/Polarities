@@ -121,10 +121,10 @@ namespace Polarities.Items.Books
     {
         public override void Load()
         {
-            On.Terraria.TileObject.DrawPreview += TileObject_DrawPreview;
+            Terraria.On_TileObject.DrawPreview += TileObject_DrawPreview;
         }
 
-        private void TileObject_DrawPreview(On.Terraria.TileObject.orig_DrawPreview orig, SpriteBatch sb, TileObjectPreviewData op, Vector2 position)
+        private void TileObject_DrawPreview(Terraria.On_TileObject.orig_DrawPreview orig, SpriteBatch sb, TileObjectPreviewData op, Vector2 position)
         {
             if (op.Type == TileType<BookTile>())
             {
@@ -382,7 +382,7 @@ namespace Polarities.Items.Books
             return false;
         }
 
-        public override bool Drop(int i, int j)
+        public override IEnumerable<Item> GetItemDrops(int i, int j)
         {
             Tile t = Main.tile[i, j];
             int style1 = t.TileFrameX / 18;
@@ -391,7 +391,7 @@ namespace Polarities.Items.Books
                 int itemType1 = BookBase.bookIndexToItemType[style1];
                 if (itemType1 != 0)
                 {
-                    Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 8, 16, itemType1);
+                    yield return new Item(itemType1);
                 }
             }
             int style2 = t.TileFrameY / 18;
@@ -400,10 +400,9 @@ namespace Polarities.Items.Books
                 int itemType2 = BookBase.bookIndexToItemType[style2];
                 if (itemType2 != 0)
                 {
-                    Item.NewItem(new EntitySource_TileBreak(i, j), i * 16 + 8, j * 16, 8, 16, itemType2);
+                    yield return new Item(itemType2);
                 }
             }
-            return true;
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num)
@@ -421,7 +420,7 @@ namespace Polarities.Items.Books
         public override void SetStaticDefaults()
         {
             string itemName = ItemLoader.GetItem(ItemType).Name;
-            DisplayName.SetDefault("{$Mods.Polarities.ItemName." + itemName + "}");
+            // DisplayName.SetDefault("{$Mods.Polarities.ItemName." + itemName + "}");
 
             Main.buffNoTimeDisplay[Type] = true;
             Main.persistentBuff[Type] = true;

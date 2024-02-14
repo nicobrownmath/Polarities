@@ -335,7 +335,7 @@ namespace Polarities.Items.Weapons.Summon.Minions
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             //if not grounded, bounce
             if (Projectile.ai[0] >= groundTime)
@@ -350,9 +350,9 @@ namespace Polarities.Items.Weapons.Summon.Minions
             return Projectile.localAI[1] != 0 && Projectile.ai[0] >= groundTime;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage = (int)(damage * (float)(Math.Sqrt(1 + Projectile.ai[1]) + (1 + Projectile.ai[1])) / 2f);
+            modifiers.SourceDamage *= (float)(Math.Sqrt(1 + Projectile.ai[1]) + (1 + Projectile.ai[1])) / 2f;
         }
 
         Vector2 eyeOffset;

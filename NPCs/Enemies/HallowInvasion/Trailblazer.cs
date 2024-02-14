@@ -24,16 +24,11 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 	{
 		public override void SetStaticDefaults()
 		{
-			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-			{
-				SpecificallyImmuneTo = new int[] {
-					BuffID.Confused,
-					BuffID.OnFire
-				}
-			};
-			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire3] = true;
 
-			PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.HallowInvasion;
+            PolaritiesNPC.customNPCCapSlot[Type] = NPCCapSlotID.HallowInvasion;
 		}
 
 		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -379,7 +374,7 @@ namespace Polarities.NPCs.Enemies.HallowInvasion
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Pixie Aura");
+			// DisplayName.SetDefault("Pixie Aura");
 
 			/*Texture2D texture = new Texture2D(Main.spriteBatch.GraphicsDevice, 256, 256, false, SurfaceFormat.Color);
 			System.Collections.Generic.List<Color> list = new System.Collections.Generic.List<Color>();

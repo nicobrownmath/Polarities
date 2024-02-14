@@ -55,7 +55,7 @@ namespace Polarities.Items.Weapons.Melee
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("{$Mods.Polarities.ItemName.LaserCutter}");
+			// DisplayName.SetDefault("{$Mods.Polarities.ItemName.LaserCutter}");
 
 			ProjectileID.Sets.TrailCacheLength[Type] = 16;
 			ProjectileID.Sets.TrailingMode[Type] = 2;
@@ -116,13 +116,13 @@ namespace Polarities.Items.Weapons.Melee
 			}
 		}
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage = (int)(damage * Projectile.localAI[1]);
+            modifiers.SourceDamage *= Projectile.localAI[1];
 			Projectile.localAI[1] *= 0.9f;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.OnFire, 300);
 		}

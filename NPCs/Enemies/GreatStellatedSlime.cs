@@ -520,7 +520,7 @@ namespace Polarities.NPCs.Enemies
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
             Color newColor7 = Color.CornflowerBlue;

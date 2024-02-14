@@ -216,7 +216,7 @@ namespace Polarities.Items.Weapons.Magic
             return false; 
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (!tail) { (Main.projectile[follower].ModProjectile as ConsumptionCannonProjectile).head = true; }
             if (!head) { (Main.projectile[following].ModProjectile as ConsumptionCannonProjectile).tail = true; }

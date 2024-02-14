@@ -15,7 +15,7 @@ namespace Polarities.Items.Placeable.Walls
 
         public override void SetDefaults()
 		{
-			Item.DefaultToPlacableWall((ushort)WallType<SaltBrickWallPlaced>());
+			Item.DefaultToPlaceableWall((ushort)WallType<SaltBrickWallPlaced>());
 		}
 
 		public override void AddRecipes()
@@ -32,7 +32,6 @@ namespace Polarities.Items.Placeable.Walls
 		public override void SetStaticDefaults()
 		{
 			Main.wallHouse[Type] = true;
-			ItemDrop = ItemType<SaltWall>();
 			AddMapEntry(new Color(204, 165, 205));
 
 			DustType = DustType<Dusts.SaltDust>();

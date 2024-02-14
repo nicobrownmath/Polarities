@@ -499,7 +499,7 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 			Main.EntitySpriteDraw(MaskTexture.Value, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, 16, 16), Color.White, Projectile.rotation, new Vector2(8, 8), Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			for (int i = 0; i < 6; i++)
 			{
@@ -544,7 +544,7 @@ namespace Polarities.Items.Armor.MechaMayhemArmor
 			return false;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			Dust.NewDustPerfect(Projectile.Center, 130, Vector2.Zero, Scale: 0.75f).noGravity = true;
 		}

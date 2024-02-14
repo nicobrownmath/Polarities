@@ -35,14 +35,6 @@ namespace Polarities.NPCs.Enemies.Limestone
 	{
 		public override void SetStaticDefaults()
 		{
-			NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-			{
-				SpecificallyImmuneTo = new int[] {
-					BuffID.Confused
-				}
-			};
-			NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
-
             MultiHitboxNPC.MultiHitboxNPCTypes.Add(Type);
         }
 

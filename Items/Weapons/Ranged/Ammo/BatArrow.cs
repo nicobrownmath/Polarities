@@ -38,7 +38,7 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("{$Mods.Polarities.ItemName.BatArrow}");
+            // DisplayName.SetDefault("{$Mods.Polarities.ItemName.BatArrow}");
 
             Main.projFrames[Projectile.type] = 4;
         }
@@ -90,24 +90,22 @@ namespace Polarities.Items.Weapons.Ranged.Ammo
                 Projectile.frame = (Projectile.frame + 1) % 4;
             }
         }
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Projectile.Kill();
         }
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             Projectile.Kill();
         }
-        public override void OnHitPvp(Player target, int damage, bool crit)
-        {
-            Projectile.Kill();
-        }
+
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             Projectile.Kill();
             return false;
         }
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
             SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
